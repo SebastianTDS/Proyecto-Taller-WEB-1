@@ -30,7 +30,9 @@ public class ServicioTetst {
     @Test
     public void  siElUsuarioExisteNoRegistrar(){
         //dado
+
         cargarDatos();
+        servicio.registrar(datos);
         //cuando
         String resultado = servicio.registrar(datos);
         //entonces
