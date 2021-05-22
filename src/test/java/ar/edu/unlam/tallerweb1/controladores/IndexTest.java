@@ -1,8 +1,5 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
-import ar.edu.unlam.tallerweb1.controladores.ControladorLogin;
-import ar.edu.unlam.tallerweb1.controladores.ControladorRegistro;
-
 import static ar.edu.unlam.tallerweb1.controladores.RegistroTest.servicio;
 
 import org.junit.Assert;
