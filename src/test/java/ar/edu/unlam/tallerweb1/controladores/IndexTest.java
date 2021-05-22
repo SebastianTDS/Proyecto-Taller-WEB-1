@@ -1,12 +1,13 @@
-package ar.edu.unlam.tallerweb1.ControladoresTest;
+package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.controladores.ControladorLogin;
 import ar.edu.unlam.tallerweb1.controladores.ControladorRegistro;
+
+import static ar.edu.unlam.tallerweb1.controladores.RegistroTest.servicio;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
-
-import static ar.edu.unlam.tallerweb1.ControladoresTest.RegistroTest.servicio;
 
 public class IndexTest {
 

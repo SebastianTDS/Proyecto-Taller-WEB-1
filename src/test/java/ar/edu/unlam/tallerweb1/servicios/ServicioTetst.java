@@ -1,4 +1,4 @@
-package ar.edu.unlam.tallerweb1.ServiciosTest;
+package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.modelo.DatosDeUsuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioUsuarios;
