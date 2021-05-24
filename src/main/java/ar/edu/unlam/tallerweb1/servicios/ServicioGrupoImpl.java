@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
-@Service
+@Service("servicioGrupos")
 @Transactional
 public class ServicioGrupoImpl implements ServicioGrupo{
 
@@ -29,14 +29,16 @@ public class ServicioGrupoImpl implements ServicioGrupo{
 
         if (grupoAPartirDeDatosDeGrupo != null) {
             repositorioParaElServicio.guardarGrupo(grupoAPartirDeDatosDeGrupo);
-            return grupoAPartirDeDatosDeGrupo;
         }
-        throw new CamposDelFormularioIncompletos();
+        return grupoAPartirDeDatosDeGrupo;
     }
 
 
+
+
+
         private Grupo crearGrupoAPartirDeDatosDeGrupo(DatosDeGrupo datosDeGrupo){
-        if (verificarDatosDeGrupo(datosDeGrupo)){
+        if (verificarDatosDeGrupoNoEstenVacios(datosDeGrupo)){
             return getGrupo(datosDeGrupo);
             }
             return null;
@@ -54,22 +56,42 @@ public class ServicioGrupoImpl implements ServicioGrupo{
                 return grupo;
             }
 
-        private boolean verificarDatosDeGrupo(DatosDeGrupo datosDeGrupo) {
-                final Integer CTD_USUARIO_MINIMO=2;
-                final Integer CTD_USUARIO_MAXIMO=8;
+        private boolean verificarDatosDeGrupoNoEstenVacios(DatosDeGrupo datosDeGrupo) {
+            final Integer CTD_USUARIO_MINIMO = 2;
+            final Integer CTD_USUARIO_MAXIMO = 8;
 
-                return !datosDeGrupo.getNombre().isBlank() && datosDeGrupo.getNombre() != null &&
-                        !datosDeGrupo.getCarrera().isBlank() &&
-                        datosDeGrupo.getCarrera() != null &&
-                        !datosDeGrupo.getMateria().isBlank() &&
-                        datosDeGrupo.getMateria() != null &&
-                        datosDeGrupo.getTurno() != null &&
-                        datosDeGrupo.getPrivado() != null &&
-                        datosDeGrupo.getCtdMaxima() >= CTD_USUARIO_MINIMO &&
-                        datosDeGrupo.getCtdMaxima() <= CTD_USUARIO_MAXIMO &&
-                        datosDeGrupo.getCtdMaxima() != null &&
-                        !datosDeGrupo.getDescripcion().isBlank() &&
-                        datosDeGrupo.getDescripcion() != null;
+                                if (verificarDatosDeGruposNoVacios(datosDeGrupo)) {
+                                                    return datosDeGrupo.getCtdMaxima() >= CTD_USUARIO_MINIMO &&
+                                                                 datosDeGrupo.getCtdMaxima() <= CTD_USUARIO_MAXIMO;
+
+                                }
+                                                     return false;
+
+        }
+
+        private boolean verificarDatosDeGruposNoVacios(DatosDeGrupo datosDeGrupo){
+
+                                if(verificarDatosDeGruposNoSeanNulos(datosDeGrupo)) {
+
+                                    return
+                                                   !datosDeGrupo.getNombre().isBlank() &&
+                                                    !datosDeGrupo.getCarrera().isBlank() &&
+                                                    !datosDeGrupo.getMateria().isBlank() &&
+                                                    !datosDeGrupo.getDescripcion().isBlank();
+
+                                }
+                                return false ;
+        }
+
+                 private boolean verificarDatosDeGruposNoSeanNulos(DatosDeGrupo datosDeGrupo){
+
+        return         datosDeGrupo.getNombre() != null &&
+                             datosDeGrupo.getCarrera() != null &&
+                             datosDeGrupo.getMateria() != null &&
+                             datosDeGrupo.getTurno() != null &&
+                             datosDeGrupo.getPrivado() != null &&
+                             datosDeGrupo.getCtdMaxima() != null &&
+                             datosDeGrupo.getDescripcion() != null;
                  }
 
 }

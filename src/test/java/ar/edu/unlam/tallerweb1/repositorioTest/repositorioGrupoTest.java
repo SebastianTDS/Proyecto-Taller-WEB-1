@@ -21,14 +21,33 @@ public class repositorioGrupoTest extends SpringTest {
         thenLoPuedoBuscarPorId(idDelGrupo);
     }
 
+
+    @Test @Transactional @Rollback
+    public void  queSePuedaBuscarUnGrupoYDevolverlo(){
+            Grupo losPicatecla = givenQueExisteUnGrupo();
+              Long idDeLosPicateclas=givenqueGuardoElGrupoEnElRepositorio(losPicatecla);
+              thenVerificoQueSeaElQueBuscabaMedianteSusId(idDeLosPicateclas);
+        }
+
+    private void thenVerificoQueSeaElQueBuscabaMedianteSusId(Long idDelObjetoRecuperado) {
+        assertThat(1L).isEqualTo(idDelObjetoRecuperado);
+    }
+
+
+
+    private Long givenqueGuardoElGrupoEnElRepositorio(Grupo losPicatecla) {
+        repositorio.guardarGrupo(losPicatecla);
+        return losPicatecla.getId();
+    }
+
+
     private Grupo givenQueExisteUnGrupo() {
         return new Grupo();
     }
 
-
     private Long whenGuardoElGrupoEnElRepositorio(Grupo losPicatecla) {
-        repositorio.guardarGrupo(losPicatecla);
-        return losPicatecla.getId();
+                        repositorio.guardarGrupo(losPicatecla);
+                        return losPicatecla.getId();
     }
 
     private void thenLoPuedoBuscarPorId( Long idDelGrupo) {

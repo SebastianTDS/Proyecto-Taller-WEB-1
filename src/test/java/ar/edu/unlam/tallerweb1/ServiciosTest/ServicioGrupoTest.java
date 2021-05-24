@@ -3,9 +3,12 @@ import ar.edu.unlam.tallerweb1.SpringTest;
 import ar.edu.unlam.tallerweb1.modelo.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.modelo.Turno;
-import ar.edu.unlam.tallerweb1.servicios.CamposDelFormularioIncompletos;
+import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupo;
+import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupoImpl;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
 
+import ar.edu.unlam.tallerweb1.servicios.ServicioGrupoImpl;
+import org.junit.Before;
 import org.junit.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,16 +17,21 @@ import org.springframework.test.annotation.Rollback;
 import javax.transaction.Transactional;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
-public class ServicioGrupoTest extends SpringTest{
+public class ServicioGrupoTest {
 
-    @Autowired
     private ServicioGrupo servicio ;
+    private RepositorioGrupo repositorio;
+    @Before
+    public void init(){
+               repositorio = mock(RepositorioGrupoImpl.class);
+                servicio = new ServicioGrupoImpl(repositorio);
+    }
 
 
-
-    @Test @Transactional @Rollback
+    @Test
     public void siElFormularioEstaCompletoQueSePuedaCrearElGrupo(){
         DatosDeGrupo losPicatecla=givenQueExisteUnGrupo();
          Grupo grupoGeneradoAPartirDeLosDatosDeGrupo = whenCreoElGrupoConAtributosCompletos(losPicatecla);
@@ -31,22 +39,19 @@ public class ServicioGrupoTest extends SpringTest{
     }
 
 
-    @Test (expected = NullPointerException.class)
-    @Rollback @Transactional
+    @Test
     public void siElFormularioEstaIncompletoQueNoSeCreeUnGrupo(){
-
                 DatosDeGrupo losPicatecla=givenQueExisteUnGrupoIncompleto();
                 Grupo grupo=whenCreoElGrupoConAtributosIncompletos(losPicatecla);
                 thenElGrupoNoSeCreo(grupo);
         }
 
-
     private void thenElGrupoNoSeCreo(Grupo losPicatecla) {
-        assertThat(losPicatecla).isNull();
+        verify(repositorio,times(0)).guardarGrupo(losPicatecla);
     }
 
     private Grupo whenCreoElGrupoConAtributosIncompletos(DatosDeGrupo losPicatecla) {
-          return servicio.crearGrupo(losPicatecla);
+            return servicio.crearGrupo(losPicatecla);
     }
 
 
@@ -98,7 +103,7 @@ public class ServicioGrupoTest extends SpringTest{
     }
 
     private void thenElGrupoSeCreo(Grupo grupoGenerado) {
-        assertThat(grupoGenerado).isNotNull();
+        verify(repositorio,times(1)).guardarGrupo(grupoGenerado);
     }
 
 

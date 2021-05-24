@@ -6,6 +6,6 @@ import ar.edu.unlam.tallerweb1.modelo.Grupo;
 public interface ServicioGrupo {
 
 
-    Grupo crearGrupo(DatosDeGrupo grupoNuevo) throws CamposDelFormularioIncompletos;
+    Grupo crearGrupo(DatosDeGrupo grupoNuevo);
     
 }
