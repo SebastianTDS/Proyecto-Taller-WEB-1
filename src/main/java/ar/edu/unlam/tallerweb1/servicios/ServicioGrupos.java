@@ -6,6 +6,8 @@ public interface ServicioGrupos {
 
 	Grupo buscarGrupoPorID(Long idBuscado);
 
-	Boolean modificarGrupo(Long id, Grupo formulario);
+	void modificarGrupo(Long id, Grupo formulario);
+
+	void eliminarGrupo(Long idBuscado);
 
 }

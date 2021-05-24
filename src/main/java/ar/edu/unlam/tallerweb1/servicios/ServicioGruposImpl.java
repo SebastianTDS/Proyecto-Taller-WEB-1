@@ -1,51 +1,47 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
+import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupos;
 
 @Service
+@Transactional
 public class ServicioGruposImpl implements ServicioGrupos {
 
-	private List<Grupo> repositorio;
-	private static Long autoIncrement = 1L;
+	private RepositorioGrupos repository;
 
-	public ServicioGruposImpl() {
-		repositorio = new ArrayList<Grupo>();
-		repositorio.add(cargarNuevoGrupo("A", "A", 2, true));
-		repositorio.add(cargarNuevoGrupo("B", "B", 3, false));
-		repositorio.add(cargarNuevoGrupo("C", "C", 4, false));
-		repositorio.add(cargarNuevoGrupo("D", "D", 5, true));
+	@Autowired
+	public ServicioGruposImpl(RepositorioGrupos repositorioGrupos) {
+		this.repository = repositorioGrupos;
 	}
 
 	@Override
 	public Grupo buscarGrupoPorID(Long idBuscado) {
-		Grupo encontrado = repositorio.stream().filter(p -> p.getId() == idBuscado).findFirst().orElse(null);
-		
+		Grupo encontrado = repository.getGrupoByID(idBuscado);
+
 		return encontrado;
 	}
-	
+
 	@Override
-	public Boolean modificarGrupo(Long id, Grupo formulario) {
-		// TODO Auto-generated method stub
-		return null;
+	public void modificarGrupo(Long id, Grupo formulario) {
+		Grupo objetivo = repository.getGrupoByID(id);
+
+		objetivo.actualizar(formulario);
+
+		if (formulario.getCtdMaxima() != null && objetivo.getCtdMaxima() != formulario.getCtdMaxima())
+			return;
+
+		repository.actualizarGrupo(objetivo);
 	}
 
-	private Grupo cargarNuevoGrupo(String nombre, String descripcion, Integer cantidad, Boolean privado) {
-		Grupo nuevo = new Grupo();
+	@Override
+	public void eliminarGrupo(Long idBuscado) {
+		Grupo objetivo = repository.getGrupoByID(idBuscado);
 
-		nuevo.setId(autoIncrement);
-		nuevo.setNombre(nombre);
-		nuevo.setDescripcion(descripcion);
-		nuevo.setCtdMaxima(cantidad);
-		nuevo.setPrivado(privado);
-
-		autoIncrement++;
-
-		return nuevo;
+		repository.eliminarGrupo(objetivo);
 	}
 
 }

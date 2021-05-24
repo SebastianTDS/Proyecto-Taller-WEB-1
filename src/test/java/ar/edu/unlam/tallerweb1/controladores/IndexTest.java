@@ -4,10 +4,10 @@ import static ar.edu.unlam.tallerweb1.controladores.RegistroTest.servicio;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.ModelAndView;
 
 public class IndexTest {
-
 
     @Test
     public void QueMePuedaMostrarLaPaginaDeLogin(){

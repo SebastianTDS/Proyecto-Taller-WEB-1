@@ -1,5 +1,18 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+import ar.edu.unlam.tallerweb1.util.auxClass.Check;
+import ar.edu.unlam.tallerweb1.util.enums.Turno;
+
+@Entity
 public class Grupo {
 	
 	private Long id;
@@ -8,41 +21,42 @@ public class Grupo {
 	private Boolean privado;
 	private Integer ctdMaxima;
 	
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!(obj instanceof Grupo))
-			return false;
-		Grupo other = (Grupo) obj;
-		if (ctdMaxima == null) {
-			if (other.ctdMaxima != null)
-				return false;
-		} else if (!ctdMaxima.equals(other.ctdMaxima))
-			return false;
-		if (descripcion == null) {
-			if (other.descripcion != null)
-				return false;
-		} else if (!descripcion.equals(other.descripcion))
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (nombre == null) {
-			if (other.nombre != null)
-				return false;
-		} else if (!nombre.equals(other.nombre))
-			return false;
-		if (privado == null) {
-			if (other.privado != null)
-				return false;
-		} else if (!privado.equals(other.privado))
-			return false;
-		return true;
+	private Turno turno;
+	private Carrera carrera;
+	private Materia materia;
+	
+	public Grupo() { }
+
+	@ManyToOne(optional = false, targetEntity = Materia.class)
+	public Materia getMateria() {
+		return materia;
 	}
 
+	public void setMateria(Materia materia) {
+		this.materia = materia;
+	}
+
+	@ManyToOne(optional = false, targetEntity = Carrera.class)
+	public Carrera getCarrera() {
+		return carrera;
+	}
+
+	public void setCarrera(Carrera carrera) {
+		this.carrera = carrera;
+	}
+
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	public Turno getTurno() {
+		return turno;
+	}
+
+	public void setTurno(Turno turno) {
+		this.turno = turno;
+	}
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long getId() {
 		return id;
 	}
@@ -67,6 +81,7 @@ public class Grupo {
 		this.descripcion = descripcion;
 	}
 
+	@Column(nullable = false)
 	public Boolean getPrivado() {
 		return privado;
 	}
@@ -75,6 +90,7 @@ public class Grupo {
 		this.privado = privado;
 	}
 
+	@Column(nullable = false)
 	public Integer getCtdMaxima() {
 		return ctdMaxima;
 	}
@@ -82,4 +98,14 @@ public class Grupo {
 	public void setCtdMaxima(Integer ctdMaxima) {
 		this.ctdMaxima = ctdMaxima;
 	}
+	
+	public Grupo actualizar(Grupo datos) {
+		nombre 		= !Check.empty(datos.nombre)			 ? datos.nombre 	: nombre;
+		descripcion = !Check.empty(datos.descripcion) 		 ? datos.descripcion: descripcion;
+		ctdMaxima 	= Check.isInRange(datos.ctdMaxima, 2, 7) ? datos.ctdMaxima 	: ctdMaxima;
+		privado 	= datos.privado 	!= null 			 ? datos.privado 	: privado;
+		
+		return this;
+	}
+
 }

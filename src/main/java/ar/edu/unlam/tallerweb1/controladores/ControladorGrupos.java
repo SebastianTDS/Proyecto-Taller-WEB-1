@@ -3,8 +3,11 @@ package ar.edu.unlam.tallerweb1.controladores;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
@@ -27,36 +30,33 @@ public class ControladorGrupos {
 		Grupo buscado = service.buscarGrupoPorID(id);
 
 		if (buscado != null) {
+			Grupo form = new Grupo();
+			modelo.put("formulario", form);
 			modelo.put("grupo", buscado);
-			return new ModelAndView("vistaGrupoEspecifico", modelo);
+			return new ModelAndView("vistaGrupo", modelo);
 		} else
 			return new ModelAndView("redirect:/");
 	}
 
-	@RequestMapping("/{id}/modificarGrupo")
-	public ModelAndView cambiarDatosGrupo(Long id, Grupo formulario) {
+	@RequestMapping(path = "/{id}/modificarGrupo", method = RequestMethod.POST)
+	public ModelAndView cambiarDatosGrupo(@PathVariable Long id, @ModelAttribute("formulario") Grupo form) {
 		ModelMap modelo = new ModelMap();
-		if(service.modificarGrupo(id, formulario))
-			modelo.put("mensaje", "Datos actualizados");
-		else
-			modelo.put("mensaje", "Error al actualizar los datos");
-		
+
+		service.modificarGrupo(id, form);
+		modelo.put("mensaje", "Datos actualizados");
+
 		return new ModelAndView("redirect:/grupos/" + id, modelo);
 	}
 
-	@RequestMapping("/eliminarGrupo")
-	public ModelAndView eliminarGrupo(Long id) {
+	@RequestMapping(path = "/eliminarGrupo")
+	public ModelAndView eliminarGrupo(@RequestParam(required = false) Long id) {
 		ModelMap modelo = new ModelMap();
 
-		if (eliminarGrupoPorID(id)) {
-			modelo.put("mensaje", "Grupo eliminado con exito!");
-			return new ModelAndView("redirect:/", modelo);
-		} else
-			return new ModelAndView("redirect:/grupos/" + id);
-	}
-
-	private Boolean eliminarGrupoPorID(Long id) {
-		return true;
+		if (id == null) return new ModelAndView("redirect:/");
+		
+		service.eliminarGrupo(id);
+		modelo.put("mensaje", "Grupo eliminado con exito!");
+		return new ModelAndView("redirect:/", modelo);
 	}
 
 }
