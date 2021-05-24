@@ -2,6 +2,8 @@ package ar.edu.unlam.tallerweb1.repositorios;
 
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
 
+import java.util.List;
+
 public interface RepositorioGrupo {
 
 
@@ -10,4 +12,5 @@ public interface RepositorioGrupo {
     Grupo buscarPorId(Long idDelGrupoABuscar);
 
 
+    List<Grupo> buscarTodos();
 }

@@ -1,12 +1,10 @@
 package ar.edu.unlam.tallerweb1.repositorios;
 
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import java.io.Serializable;
+import java.util.List;
 
 @Repository("repositorioGrupo")
 public class RepositorioGrupoImpl implements RepositorioGrupo{
@@ -26,9 +24,13 @@ private final SessionFactory sessionFactory;
     }
     @Override
     public Grupo buscarPorId(Long idDelGrupoABuscar) {
-                     return    sessionFactory.getCurrentSession().get(Grupo.class, idDelGrupoABuscar);
+        return sessionFactory.getCurrentSession().get(Grupo.class, idDelGrupoABuscar);
     }
 
+    @Override
+    public List buscarTodos() {
+        return sessionFactory.getCurrentSession().createQuery("from Grupo").getResultList();
+    }
 
 
 }
