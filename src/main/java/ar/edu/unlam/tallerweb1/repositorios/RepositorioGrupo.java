@@ -7,7 +7,6 @@ public interface RepositorioGrupo {
 
     void guardarGrupo(Grupo grupoNuevo) ;
 
-
     Grupo buscarPorId(Long idDelGrupoABuscar);
 
 
