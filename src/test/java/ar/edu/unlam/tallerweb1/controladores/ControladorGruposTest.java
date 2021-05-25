@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -11,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupos;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGruposImpl;
+import ar.edu.unlam.tallerweb1.util.exceptions.LimiteDeUsuariosIlegalException;
 
 public class ControladorGruposTest {
 
@@ -44,7 +46,7 @@ public class ControladorGruposTest {
 	@Test
 	public void testQuePodamosEditarDatosDelGrupo() {
 		Long idGrupoBuscado = 1L;
-		Grupo formulario = givenCreamosNuevoGrupo("Basica 1 pepe", "Grupo de basica 1 pepe", 3, false);
+		Grupo formulario = givenCompletamosFormularioConNombreYCantidad("Basica 1 pepe", 3);
 
 		ModelAndView cambiosRealizados = whenCargoLaModificacionDeLosDatos(idGrupoBuscado, formulario);
 
@@ -58,6 +60,20 @@ public class ControladorGruposTest {
 		ModelAndView postGrupoEliminado = whenEliminoElGrupo(idGrupoBuscado);
 
 		thenElGrupoYaNoExiste(postGrupoEliminado);
+	}
+
+	@Test(expected = LimiteDeUsuariosIlegalException.class)
+	public void testQueArrojeExcepcionAlModificarErroneamente() {
+		Long idGrupoBuscado = 1L;
+		Grupo formulario = givenCompletamosFormularioConNombreYCantidad("Basica 1 pepe", 8);
+
+		whenIntentamosModificarGrupoLanzaException(idGrupoBuscado, formulario);
+
+	}
+
+	private void whenIntentamosModificarGrupoLanzaException(Long idGrupoBuscado, Grupo formulario) {
+		doThrow(LimiteDeUsuariosIlegalException.class).when(service).modificarGrupo(idGrupoBuscado, formulario);
+		controller.cambiarDatosGrupo(idGrupoBuscado, formulario);
 	}
 
 	/* Metodos Auxiliares */
@@ -79,14 +95,11 @@ public class ControladorGruposTest {
 		return controller.cambiarDatosGrupo(idGrupoBuscado, formulario);
 	}
 
-	private Grupo givenCreamosNuevoGrupo(String nombre, String desc, Integer cantidad, Boolean privado) {
+	private Grupo givenCompletamosFormularioConNombreYCantidad(String nombre, Integer cantidad) {
 		Grupo nuevoGrupo = new Grupo();
 
-		nuevoGrupo.setId(1L);
 		nuevoGrupo.setNombre(nombre);
-		nuevoGrupo.setDescripcion(desc);
 		nuevoGrupo.setCtdMaxima(cantidad);
-		nuevoGrupo.setPrivado(privado);
 
 		return nuevoGrupo;
 	}

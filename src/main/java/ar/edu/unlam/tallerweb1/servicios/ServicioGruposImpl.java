@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupos;
+import ar.edu.unlam.tallerweb1.util.exceptions.LimiteDeUsuariosIlegalException;
 
 @Service
 @Transactional
@@ -32,7 +33,7 @@ public class ServicioGruposImpl implements ServicioGrupos {
 		objetivo.actualizar(formulario);
 
 		if (formulario.getCtdMaxima() != null && objetivo.getCtdMaxima() != formulario.getCtdMaxima())
-			return;
+			throw new LimiteDeUsuariosIlegalException(id);
 
 		repository.actualizarGrupo(objetivo);
 	}

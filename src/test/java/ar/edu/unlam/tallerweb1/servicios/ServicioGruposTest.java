@@ -12,6 +12,7 @@ import org.junit.Test;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupos;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioGruposImpl;
+import ar.edu.unlam.tallerweb1.util.exceptions.LimiteDeUsuariosIlegalException;
 
 public class ServicioGruposTest {
 
@@ -47,19 +48,17 @@ public class ServicioGruposTest {
 		Grupo buscado = givenExisteUnGrupo();
 		Grupo nuevosDatos = givenDatosAActualizar();
 
-		whenActualizamosLosDatos(buscado, nuevosDatos);
+		whenIntentamosActualizamosLosDatos(buscado, nuevosDatos);
 
 		thenLosDatosSeModifican(buscado);
 	}
 
-	@Test
+	@Test(expected = LimiteDeUsuariosIlegalException.class)
 	public void testQueSeRespetenElMaxYMinDeParticipantes() {
 		Grupo buscado = givenExisteUnGrupo();
 		Grupo nuevosDatos = givenDatosInvalidosAActualizar();
 
-		whenActualizamosLosDatos(buscado, nuevosDatos);
-
-		thenLosDatosNoSeModifican();
+		whenIntentamosActualizarLanzaExcepcion(buscado, nuevosDatos);
 	}
 	
 	@Test
@@ -86,10 +85,6 @@ public class ServicioGruposTest {
 		service.eliminarGrupo(buscado.getId());
 	}
 
-	private void thenLosDatosNoSeModifican() {
-		verify(repository, times(0)).actualizarGrupo(new Grupo());
-	}
-
 	private Grupo givenDatosInvalidosAActualizar() {
 		Grupo nuevosDatos = new Grupo();
 
@@ -97,12 +92,17 @@ public class ServicioGruposTest {
 
 		return nuevosDatos;
 	}
+	
+	private void whenIntentamosActualizamosLosDatos(Grupo buscado, Grupo nuevosDatos) {
+		when(repository.getGrupoByID(buscado.getId())).thenReturn(buscado);
+		service.modificarGrupo(buscado.getId(), nuevosDatos);
+	}
 
 	private void thenLosDatosSeModifican(Grupo buscado) {
 		verify(repository, times(1)).actualizarGrupo(buscado);
 	}
 
-	private void whenActualizamosLosDatos(Grupo buscado, Grupo nuevosDatos) {
+	private void whenIntentamosActualizarLanzaExcepcion(Grupo buscado, Grupo nuevosDatos) {
 		when(repository.getGrupoByID(buscado.getId())).thenReturn(buscado);
 		service.modificarGrupo(buscado.getId(), nuevosDatos);
 	}

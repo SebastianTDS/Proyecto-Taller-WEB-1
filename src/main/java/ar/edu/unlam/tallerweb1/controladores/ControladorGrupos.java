@@ -30,8 +30,7 @@ public class ControladorGrupos {
 		Grupo buscado = service.buscarGrupoPorID(id);
 
 		if (buscado != null) {
-			Grupo form = new Grupo();
-			modelo.put("formulario", form);
+			modelo.put("formulario", new Grupo());
 			modelo.put("grupo", buscado);
 			return new ModelAndView("vistaGrupo", modelo);
 		} else

@@ -50,7 +50,11 @@ public class ControladorRegistro {
 
     @RequestMapping(path="/home", method = RequestMethod.GET)
     public ModelAndView inicio(){
-        return new ModelAndView( "home");
+    	ModelMap model = new ModelMap();
+    	
+    	model.put("saludo", "Hola mundo");
+    	
+        return new ModelAndView("home", model);
     }
 
 }
