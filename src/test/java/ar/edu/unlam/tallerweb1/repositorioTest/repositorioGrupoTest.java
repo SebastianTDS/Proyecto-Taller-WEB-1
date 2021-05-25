@@ -8,12 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import static org.assertj.core.api.Assertions.*;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 public class repositorioGrupoTest extends SpringTest {
 
     @Autowired
     private RepositorioGrupoImpl repositorio;
+
 
     @Test @Transactional @Rollback
     public void  queSePuedaAgregarUnGrupoAlRepositorio(){
@@ -46,7 +48,7 @@ public class repositorioGrupoTest extends SpringTest {
         repositorio.guardarGrupo(losPicatecla2);
         repositorio.guardarGrupo(losPicatecla3);
     }
-    private List whenCuandoBuscoTodosLosGrupos() {
+    private List<Grupo> whenCuandoBuscoTodosLosGrupos() {
         return repositorio.buscarTodos();
     }
     private void thenVerificoTodosQueTodosLosGruposSeMuestren(List<Grupo> grupos) {
@@ -55,8 +57,9 @@ public class repositorioGrupoTest extends SpringTest {
     }
 
 
-    private void thenVerificoQueSeaElQueBuscabaMedianteSusId(Long idDelObjetoRecuperado) {
-        assertThat(1L).isEqualTo(idDelObjetoRecuperado);
+    private void thenVerificoQueSeaElQueBuscabaMedianteSusId(Long id) {
+        Grupo idAComparar= session().get(Grupo.class,id);
+        assertThat(idAComparar).isNotNull();
     }
 
 

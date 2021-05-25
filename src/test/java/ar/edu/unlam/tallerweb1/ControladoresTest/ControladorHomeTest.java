@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class HomeTest {
+public class ControladorHomeTest {
     private ControladorHome controladorHome;
     private ServicioGrupo servicioGrupo;
 
@@ -28,10 +28,7 @@ public class HomeTest {
     @Test
     public void QueMeRedirigaALaVistaCrearGrupo(){
 
-        ControladorHome controller=givenUnControladorDeHome();
-
-       ModelAndView mvc= whenDoyClickACrearGrupo(controller);
-
+       ModelAndView mvc= whenDoyClickACrearGrupo();
         thenMeMuestraLaPaginaDeCreacionDeGrupo(mvc);
     }
 
@@ -55,7 +52,7 @@ public class HomeTest {
         return servicioGrupo.buscarTodos();
     }
 
-    private ModelAndView whenGuardoLosGruposEnElModel(List grupos) {
+    private ModelAndView whenGuardoLosGruposEnElModel(List<Grupo> grupos) {
         ModelMap model=new ModelMap();
         model.put("grupos",grupos);
         return new ModelAndView("/home",model);
@@ -69,17 +66,15 @@ public class HomeTest {
 
     private void thenMeMuestraLaPaginaDeCreacionDeGrupo(ModelAndView mvc ) {
 
-        assertThat("crearGrupoDeTrabajo").isEqualTo(mvc.getModel());
+        assertThat("vistaParaCrearGrupo").isEqualTo(mvc.getViewName());
 
     }
 
-    private ModelAndView whenDoyClickACrearGrupo(ControladorHome controller) {
-      return controller.irAlFormulario();
+    private ModelAndView whenDoyClickACrearGrupo() {
+      return controladorHome.irAlFormulario();
     }
 
-    private ControladorHome givenUnControladorDeHome() {
-        return controladorHome;
-    }
+
 
 
 }

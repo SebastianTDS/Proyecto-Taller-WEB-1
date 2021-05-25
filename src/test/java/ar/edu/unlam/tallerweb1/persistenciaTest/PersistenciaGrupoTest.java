@@ -11,6 +11,7 @@ import javax.transaction.Transactional;
 public class PersistenciaGrupoTest extends SpringTest {
 
 
+
     @Test @Transactional @Rollback
     public void poderGuardarUnGrupo(){
 
