@@ -1,22 +1,18 @@
 package ar.edu.unlam.tallerweb1.ServiciosTest;
-import ar.edu.unlam.tallerweb1.SpringTest;
 import ar.edu.unlam.tallerweb1.modelo.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.modelo.Turno;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupo;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupoImpl;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
-
+import static org.assertj.core.api.Assertions.*;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupoImpl;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.transaction.Transactional;
-
-import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
@@ -33,7 +29,7 @@ public class ServicioGrupoTest {
 
     @Test
     public void siElFormularioEstaCompletoQueSePuedaCrearElGrupo(){
-        DatosDeGrupo losPicatecla=givenQueExisteUnGrupo();
+        DatosDeGrupo losPicatecla= givenQueExisteDatosDeGrupo();
          Grupo grupoGeneradoAPartirDeLosDatosDeGrupo = whenCreoElGrupoConAtributosCompletos(losPicatecla);
         thenElGrupoSeCreo(grupoGeneradoAPartirDeLosDatosDeGrupo);
     }
@@ -45,6 +41,43 @@ public class ServicioGrupoTest {
                 Grupo grupo=whenCreoElGrupoConAtributosIncompletos(losPicatecla);
                 thenElGrupoNoSeCreo(grupo);
         }
+
+    @Test
+    public void queSePuedaSolicitarTodosLosGrupos(){
+        Grupo losPicatecla1= givenDadoQueExisteUnGrupo();
+        Grupo losPicatecla2= givenDadoQueExisteUnGrupo();
+        Grupo losPicatecla3= givenDadoQueExisteUnGrupo();
+        List<Grupo> gruposPresistidos= givenQueSeGuardenTodosLosGruposExistentes(losPicatecla1,losPicatecla2,losPicatecla3);
+        List<Grupo> gruposEncontrados= whenBuscoTodosLosGrupos(gruposPresistidos);
+        thenVerificoQueSeMuestrenTodosLosGrupos(gruposEncontrados);
+    }
+
+
+
+
+
+
+    private void thenVerificoQueSeMuestrenTodosLosGrupos(List<Grupo> grupos) {
+        assertThat(grupos).hasSize(3);
+    }
+
+    private List<Grupo> whenBuscoTodosLosGrupos(List<Grupo> gruposPresistidos) {
+        when(repositorio.buscarTodos()).thenReturn(gruposPresistidos);
+        return servicio.buscarTodos();
+    }
+
+    private List<Grupo> givenQueSeGuardenTodosLosGruposExistentes(Grupo losPicatecla1, Grupo losPicatecla2, Grupo losPicatecla3) {
+        List<Grupo> grupo=new ArrayList<Grupo>();
+        grupo.add(losPicatecla1);
+        grupo.add(losPicatecla2);
+        grupo.add(losPicatecla3);
+        return grupo;
+    }
+
+    private Grupo givenDadoQueExisteUnGrupo() {
+        return new Grupo();
+    }
+
 
     private void thenElGrupoNoSeCreo(Grupo losPicatecla) {
         verify(repositorio,times(0)).guardarGrupo(losPicatecla);
@@ -77,7 +110,7 @@ public class ServicioGrupoTest {
     }
 
 
-    private DatosDeGrupo givenQueExisteUnGrupo() {
+    private DatosDeGrupo givenQueExisteDatosDeGrupo() {
         DatosDeGrupo datosdegrupo = new DatosDeGrupo();
         String nombre = "Los Picateclas";
         String carrera = "Desarrollo web";
@@ -105,6 +138,4 @@ public class ServicioGrupoTest {
     private void thenElGrupoSeCreo(Grupo grupoGenerado) {
         verify(repositorio,times(1)).guardarGrupo(grupoGenerado);
     }
-
-
 }

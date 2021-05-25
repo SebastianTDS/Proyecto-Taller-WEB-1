@@ -1,3 +1,6 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="placeholder" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
 
@@ -10,12 +13,25 @@
 	<div class = "container">
 		<h1>Bienvenidos a Taller Web 1</h1>
 	</div>
+	<div>
+		<c:if test="${not empty grupos}">
+			<h4><span>${grupos}</span></h4>
+			<c:if test="${empty grupos}">
+				<h4><span>No hay grupos disponibles</span></h4>
+			<br>
+		</c:if>
+	</div>
+	<div>
 
+	</div>
 
-	<a href="ir-a-crear-nuevo-grupo">
-		<button>Crear Grupo</button>
+	<div>
 
-	</a>
+		<a href="ir-a-crear-nuevo-grupo">
+			<button>Crear Grupo</button>
+		</a>
+	</div>
+
 
 </main>
 

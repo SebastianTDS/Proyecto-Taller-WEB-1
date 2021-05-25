@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service("servicioGrupos")
 @Transactional
@@ -33,11 +34,13 @@ public class ServicioGrupoImpl implements ServicioGrupo{
         return grupoAPartirDeDatosDeGrupo;
     }
 
+    @Override
+    public List<Grupo> buscarTodos() {
+        return repositorioParaElServicio.buscarTodos();
+    }
 
 
-
-
-        private Grupo crearGrupoAPartirDeDatosDeGrupo(DatosDeGrupo datosDeGrupo){
+    private Grupo crearGrupoAPartirDeDatosDeGrupo(DatosDeGrupo datosDeGrupo){
         if (verificarDatosDeGrupoNoEstenVacios(datosDeGrupo)){
             return getGrupo(datosDeGrupo);
             }
@@ -83,7 +86,7 @@ public class ServicioGrupoImpl implements ServicioGrupo{
                                 return false ;
         }
 
-                 private boolean verificarDatosDeGruposNoSeanNulos(DatosDeGrupo datosDeGrupo){
+        private boolean verificarDatosDeGruposNoSeanNulos(DatosDeGrupo datosDeGrupo){
 
         return         datosDeGrupo.getNombre() != null &&
                              datosDeGrupo.getCarrera() != null &&
