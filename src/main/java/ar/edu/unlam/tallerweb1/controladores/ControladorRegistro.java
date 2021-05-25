@@ -49,9 +49,4 @@ public class ControladorRegistro {
 
     }
 
-    @RequestMapping(path="/home", method = RequestMethod.GET)
-    public ModelAndView inicio(){
-        return new ModelAndView( "home");
-    }
-
 }

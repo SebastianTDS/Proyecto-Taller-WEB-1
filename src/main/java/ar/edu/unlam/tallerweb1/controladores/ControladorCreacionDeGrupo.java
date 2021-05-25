@@ -34,7 +34,7 @@ public class ControladorCreacionDeGrupo {
     }
 
     private ModelAndView CreacionExitosa(Grupo grupo) {
-        return new ModelAndView("vistaGrupo");
+        return new ModelAndView("VistaGrupo");
     }
 
     private ModelAndView creacionSinExito(ModelMap model) {

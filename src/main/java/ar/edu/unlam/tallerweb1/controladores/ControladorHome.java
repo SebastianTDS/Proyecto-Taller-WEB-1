@@ -21,8 +21,17 @@ public class ControladorHome {
         this.servicioGrupo=servicioGrupo;
     }
 
-    @RequestMapping("/home")
-    public ModelAndView irAHome() {
+
+    @RequestMapping(value = "/ir-a-crear-nuevo-grupo")
+    public ModelAndView irAlFormulario() {
+        ModelMap model = new ModelMap();
+        DatosDeGrupo datos= new DatosDeGrupo();
+        model.put("datos",datos);
+        return new ModelAndView("vistaParaCrearGrupo",model);
+    }
+
+    @RequestMapping("/ir-a-home")
+    public ModelAndView irATest(){
         ModelMap model= new ModelMap();
         List<Grupo> grupos=servicioGrupo.buscarTodos();
         if(grupos.size()>0)
@@ -33,11 +42,5 @@ public class ControladorHome {
     }
 
 
-    @RequestMapping(value = "/ir-a-crear-nuevo-grupo")
-    public ModelAndView irAlFormulario() {
-        ModelMap model = new ModelMap();
-        DatosDeGrupo datos= new DatosDeGrupo();
-        model.put("datos",datos);
-        return new ModelAndView("vistaParaCrearGrupo",model);
-    }
+
 }

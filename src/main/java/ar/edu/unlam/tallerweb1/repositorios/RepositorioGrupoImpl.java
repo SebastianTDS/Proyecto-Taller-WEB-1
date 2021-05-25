@@ -9,7 +9,6 @@ import java.util.List;
 @Repository("repositorioGrupo")
 public class RepositorioGrupoImpl implements RepositorioGrupo{
 
-
 private final SessionFactory sessionFactory;
 
     @Autowired
@@ -17,18 +16,18 @@ private final SessionFactory sessionFactory;
         this.sessionFactory = sessionFactory;
     }
 
-
     @Override
     public void guardarGrupo(Grupo grupoNuevo) {
         sessionFactory.getCurrentSession().save(grupoNuevo);
     }
+
     @Override
     public Grupo buscarPorId(Long idDelGrupoABuscar) {
         return sessionFactory.getCurrentSession().get(Grupo.class, idDelGrupoABuscar);
     }
 
     @Override
-    public List buscarTodos() {
+    public List<Grupo> buscarTodos() {
         return sessionFactory.getCurrentSession().createQuery("from Grupo").getResultList();
     }
 

@@ -10,19 +10,15 @@
 
 <main>
 
-	<div class = "container">
-		<h1>Bienvenidos a Taller Web 1</h1>
-	</div>
+
+
+
 	<div>
-		<c:if test="${not empty grupos}">
+
+
+			<c:if test="${not empty grupos}">
 			<h4><span>${grupos}</span></h4>
 		</c:if>
-	</div>
-	<div>
-
-	</div>
-
-	<div>
 
 		<a href="ir-a-crear-nuevo-grupo">
 			<button>Crear Grupo</button>
