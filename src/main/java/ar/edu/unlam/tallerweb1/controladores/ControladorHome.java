@@ -24,9 +24,12 @@ public class ControladorHome {
     @RequestMapping("/home")
     public ModelAndView irAHome() {
         ModelMap model= new ModelMap();
-    List<Grupo> grupos=servicioGrupo.buscarTodos();
-    model.put("grupos",grupos);
-    return new ModelAndView("home",model);
+        List<Grupo> grupos=servicioGrupo.buscarTodos();
+        if(grupos.size()>0)
+            model.put("grupos",grupos);
+        else
+            model.put("grupos","No nay grupos disponibles");
+        return new ModelAndView("home",model);
     }
 
 

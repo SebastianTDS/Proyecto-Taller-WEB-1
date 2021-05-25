@@ -16,9 +16,6 @@
 	<div>
 		<c:if test="${not empty grupos}">
 			<h4><span>${grupos}</span></h4>
-			<c:if test="${empty grupos}">
-				<h4><span>No hay grupos disponibles</span></h4>
-			<br>
 		</c:if>
 	</div>
 	<div>
