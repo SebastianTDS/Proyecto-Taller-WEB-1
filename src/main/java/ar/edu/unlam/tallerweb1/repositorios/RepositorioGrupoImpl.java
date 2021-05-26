@@ -6,9 +6,6 @@ import ar.edu.unlam.tallerweb1.modelo.Privacidad;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import javax.management.Query;
-import java.sql.PreparedStatement;
 import java.util.List;
 
 @Repository("repositorioGrupo")
@@ -43,9 +40,6 @@ public class RepositorioGrupoImpl implements RepositorioGrupo {
             int sentenciasUsadas = 0;
             int sentenciasTotales = camposCompletos(datosDeGrupo);
             String hql = generadorDeQueryBusqueda(datosDeGrupo, sentenciasUsadas, sentenciasTotales);
-           System.out.println(hql);
-          //  String q="select gr from Grupo gr where gr.turno=:TURNO";
-               // return sessionFactory.getCurrentSession().createQuery(q,Grupo.class).setParameter("TURNO",datosDeGrupo.getTurno()).getResultList();
             return sessionFactory.getCurrentSession().createQuery(hql,Grupo.class).getResultList();
         }
 
