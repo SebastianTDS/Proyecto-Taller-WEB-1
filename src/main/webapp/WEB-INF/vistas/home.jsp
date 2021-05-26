@@ -43,7 +43,7 @@
 							<option value="NOCHE">NOCHE</option>
 						</form:select>
 					</div>
-					<div class="col-5 col-sm-4 col-md-3 col-lg-2 p-2 border-warning row">
+					<div class="col-5 col-sm-4 col-md-3 col-lg-2 p-2 border-warning">
 						<form:select path="privacidad" id="privacidad" class="form-control form-control-sm">
 								<option value="TODO">TODO</option>
 								<option value="PUBLICO">PUBLICO</option>
