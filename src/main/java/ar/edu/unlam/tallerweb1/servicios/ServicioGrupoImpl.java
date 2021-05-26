@@ -60,7 +60,6 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 
 
     private Grupo crearGrupoAPartirDeDatosDeGrupo(DatosDeGrupo datosDeGrupo) {
-
         if (verificarQueCtdEsteEnElRango(datosDeGrupo)) {
             return getGrupo(datosDeGrupo);
         }

@@ -26,7 +26,7 @@ public class ServicioGrupoTest{
                repositorioGrupo = mock(RepositorioGrupoImpl.class);
                repositorioCarrera=mock(RepositorioCarreraImpl.class);
                repositorioMateria = mock(RepositorioMateriaImpl.class);
-                servicioGrupo = new ServicioGrupoImpl(repositorioGrupo, repositorioCarrera, repositorioMateria);
+               servicioGrupo = new ServicioGrupoImpl(repositorioGrupo, repositorioCarrera, repositorioMateria);
     }
 
     @Test
@@ -79,6 +79,29 @@ public class ServicioGrupoTest{
         DatosDeGrupo intentoDeGrupo = givenQueExistenDatosDeGrupoConUnIdInvalido();
         Grupo grupoNoGenerado=whenIntentoPersistirElGrupoConDatosDeGrupoConIdInvalido(intentoDeGrupo);
         thenElGrupoNoSeCreo(grupoNoGenerado);
+    }
+
+    @Test
+    public void queSeObtenganTodosLosGrupos(){
+
+        List<Grupo> listaDeGrupos = givenQueExisteUnaListaDeGrupos();
+
+        List<Grupo> listaDeGruposEncontrada= whenbuscoTodosLosGrupos(listaDeGrupos);
+
+        thenObtengoLaListaDeGruposYVerificoQueTengaElTamanoCorrespondiente(listaDeGruposEncontrada);
+    }
+
+    private List<Grupo> givenQueExisteUnaListaDeGrupos() {
+        return Arrays.asList(new Grupo(),new Grupo());
+    }
+
+    private List<Grupo> whenbuscoTodosLosGrupos(List<Grupo> listaDeGrupos) {
+        when(repositorioGrupo.buscarTodos()).thenReturn(listaDeGrupos);
+        return repositorioGrupo.buscarTodos();
+    }
+
+    private void thenObtengoLaListaDeGruposYVerificoQueTengaElTamanoCorrespondiente(List<Grupo> listaDeGruposEncontrada) {
+        assertThat(listaDeGruposEncontrada).hasSize(2);
     }
 
     private Grupo whenIntentoPersistirElGrupoConDatosDeGrupoConIdInvalido(DatosDeGrupo intentoDeGrupo) {
