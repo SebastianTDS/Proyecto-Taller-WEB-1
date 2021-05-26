@@ -4,6 +4,7 @@ import ar.edu.unlam.tallerweb1.controladores.ControladorHome;
 import ar.edu.unlam.tallerweb1.modelo.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.DatosDeGrupoParaBusqueda;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
+import ar.edu.unlam.tallerweb1.modelo.Materia;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
 import org.junit.Before;
 import org.junit.Test;
@@ -54,6 +55,29 @@ public class ControladorHomeTest {
         thenMeMuestreLosGrupos(mvc,grupos);
     }
 
+    @Test
+    public void QueMeMuestreTodasLasMaterias(){
+        List<Materia>materias=givenMateriasPersistidas();
+        ModelAndView mvc= whenGuardoLasMateriasEnElModel(materias);
+        thenMeMuestreLasMaterias(mvc,materias);
+    }
+
+    void thenMeMuestreLasMaterias(ModelAndView mvc, List<Materia>grupos){
+        assertThat(grupos).isEqualTo(mvc.getModel().get("materias"));
+    }
+
+    private List<Materia> givenMateriasPersistidas() {
+        Materia materia=new Materia();
+        List<Materia>materias=new ArrayList<>();
+        materias.add(materia);
+        return materias;
+    }
+
+    private ModelAndView whenGuardoLasMateriasEnElModel(List<Materia> materias){
+        DatosDeGrupoParaBusqueda datosDeGrupo=new DatosDeGrupoParaBusqueda();
+        when(servicioGrupo.buscarTodasLasMaterias()).thenReturn(materias);
+        return controladorHome.buscarGrupos(datosDeGrupo);
+    }
 
     private List<Grupo> givenGruposPersistidos() {
         List<Grupo>gruposPersistidos=new ArrayList<>();
@@ -70,7 +94,6 @@ public class ControladorHomeTest {
 
     private void thenMeMuestreLosGrupos(ModelAndView mvc, List<Grupo>grupos) {
         assertThat(grupos).isEqualTo(mvc.getModel().get("grupos"));
-
     }
 
     private void thenMeMuestraLaPaginaDeCreacionDeGrupo(ModelAndView mvc ) {
