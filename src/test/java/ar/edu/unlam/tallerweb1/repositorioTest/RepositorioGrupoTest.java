@@ -1,10 +1,7 @@
 package ar.edu.unlam.tallerweb1.repositorioTest;
 
 import ar.edu.unlam.tallerweb1.SpringTest;
-import ar.edu.unlam.tallerweb1.modelo.Carrera;
-import ar.edu.unlam.tallerweb1.modelo.Grupo;
-import ar.edu.unlam.tallerweb1.modelo.Materia;
-import ar.edu.unlam.tallerweb1.modelo.Turno;
+import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupoImpl;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +39,43 @@ public class RepositorioGrupoTest extends SpringTest {
         givenQueGuardoVariosGruposEnElRepositorio(losPicatecla1,losPicatecla2,losPicatecla3);
         List<Grupo> grupos= whenCuandoBuscoTodosLosGrupos();
         thenVerificoTodosQueTodosLosGruposSeMuestren(grupos);
+    }
+
+    @Test @Transactional @Rollback
+    public void  queSePuedaBuscarFiltrandoLosgruposPorCarrera(){
+        Grupo losPicatecla1 = givenQueExisteUnGrupoConCarreraYMateria();
+        givenQueGuardoUnGruposEnElRepositorio(losPicatecla1);
+        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda=givenQueExisteDatosParaLaBusquedaPorCarrera();
+        List<Grupo> grupos= whenCuandoBuscoFiltrandoLosGrupos(datosDeGrupoParaBusqueda);
+        thenVerificoQueLosGruposFiltradosSeMuestren(grupos);
+    }
+
+    private DatosDeGrupoParaBusqueda givenQueExisteDatosParaLaBusquedaPorCarrera() {
+        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda=new DatosDeGrupoParaBusqueda();
+        datosDeGrupoParaBusqueda.setCarrera(1L);
+        return  datosDeGrupoParaBusqueda;
+    }
+
+    private void thenVerificoQueLosGruposFiltradosSeMuestren(List<Grupo> grupos) {
+        assertThat(grupos).hasSize(1);
+    }
+
+    private List<Grupo> whenCuandoBuscoFiltrandoLosGrupos(DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda) {
+        return repositorio.buscarGrupoPorDatos(datosDeGrupoParaBusqueda);
+    }
+
+    private DatosDeGrupoParaBusqueda givenQueExisteDatosParaLaBusqueda() {
+        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda=new DatosDeGrupoParaBusqueda();
+        datosDeGrupoParaBusqueda.setCarrera(1L);
+        datosDeGrupoParaBusqueda.setMateria(1L);
+        datosDeGrupoParaBusqueda.setPrivacidad(Privacidad.PRIVADO);
+        datosDeGrupoParaBusqueda.setTurno(Turno.NOCHE);
+        datosDeGrupoParaBusqueda.setNombre("Basica I");
+        return  datosDeGrupoParaBusqueda;
+    }
+
+    private void givenQueGuardoUnGruposEnElRepositorio(Grupo losPicatecla1) {
+        repositorio.guardarGrupo(losPicatecla1);
     }
 
     private List<Grupo> whenCuandoBuscoTodosLosGrupos() {

@@ -64,7 +64,7 @@
 						<div class="bg-light text-dark col-6 col-sm-4 col-md-2 col-lg-1 col-xl-1 m-3 d-flex flex-wrap align-content-between" style="width:200px">
 							<div class="card-body">
 								<h5 class="card-title">${grupo.nombre}</h5>
-								<p class="card-text">${grupo.carrera.nombre}</p>
+								<p class="card-text text-center">${grupo.carrera.nombre}</p>
 								<p class="card-text">${grupo.materia.nombre}</p>
 								<p class="card-text">${grupo.turno}</p>
 								<c:if test="${grupo.privado==true}">
