@@ -39,9 +39,9 @@
 			<button class="btn btn-lg btn-primary btn-block" type="Submit" />Modificar</button>
 		</form:form>
 		
-		<form:form action="eliminarGrupo" method="GET">
-			<button class="btn btn-lg btn-primary btn-block" type="Submit" name="id" value="${grupo.getId()}"/>Eliminar</button>
-		</form:form>
+		<form action="eliminarGrupo" method="GET">
+			<button class="btn btn-lg btn-primary btn-block" type="Submit" name="id" value="${grupo.getId()}">Eliminar</button>
+		</form>
 	</div>
 </body>
 </html>
