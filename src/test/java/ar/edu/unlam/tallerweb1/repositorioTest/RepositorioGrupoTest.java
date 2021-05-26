@@ -57,7 +57,21 @@ public class RepositorioGrupoTest extends SpringTest {
         List<Grupo> grupos= whenCuandoBuscoFiltrandoLosGrupos(datosDeGrupoParaBusqueda);
         thenVerificoQueLosGruposFiltradosSeMuestren(grupos);
     }
+    @Test @Transactional @Rollback
+    public void  queSePuedaBuscarFiltrandoLosgruposPorNombre(){
+        Grupo losPicatecla1 = givenQueExisteUnGrupoConCarreraYMateria();
+        givenQueGuardoUnGruposEnElRepositorio(losPicatecla1);
+        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda=givenQueExisteDatosParaLaBusquedaPorNombre();
+        List<Grupo> grupos= whenCuandoBuscoFiltrandoLosGrupos(datosDeGrupoParaBusqueda);
+        thenVerificoQueLosGruposFiltradosSeMuestren(grupos);
+    }
 
+
+    private DatosDeGrupoParaBusqueda givenQueExisteDatosParaLaBusquedaPorNombre() {
+        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda=new DatosDeGrupoParaBusqueda();
+        datosDeGrupoParaBusqueda.setNombre("Hol");
+        return  datosDeGrupoParaBusqueda;
+    }
 
     private DatosDeGrupoParaBusqueda givenQueExisteDatosParaLaBusquedaPorTurno() {
         DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda=new DatosDeGrupoParaBusqueda();
@@ -79,15 +93,6 @@ public class RepositorioGrupoTest extends SpringTest {
         return repositorio.buscarGrupoPorDatos(datosDeGrupoParaBusqueda);
     }
 
-    private DatosDeGrupoParaBusqueda givenQueExisteDatosParaLaBusqueda() {
-        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda=new DatosDeGrupoParaBusqueda();
-        datosDeGrupoParaBusqueda.setCarrera(1L);
-        datosDeGrupoParaBusqueda.setMateria(1L);
-        datosDeGrupoParaBusqueda.setPrivacidad(Privacidad.PRIVADO);
-        datosDeGrupoParaBusqueda.setTurno(Turno.NOCHE);
-        datosDeGrupoParaBusqueda.setNombre("Basica I");
-        return  datosDeGrupoParaBusqueda;
-    }
 
     private void givenQueGuardoUnGruposEnElRepositorio(Grupo losPicatecla1) {
         repositorio.guardarGrupo(losPicatecla1);

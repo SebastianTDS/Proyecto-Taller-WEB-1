@@ -40,6 +40,7 @@ public class RepositorioGrupoImpl implements RepositorioGrupo {
             int sentenciasUsadas = 0;
             int sentenciasTotales = camposCompletos(datosDeGrupo);
             String hql = generadorDeQueryBusqueda(datosDeGrupo, sentenciasUsadas, sentenciasTotales);
+            System.out.println(hql);
             return sessionFactory.getCurrentSession().createQuery(hql,Grupo.class).getResultList();
         }
 
@@ -79,7 +80,7 @@ public class RepositorioGrupoImpl implements RepositorioGrupo {
                 }
             }
             if (datosDeGrupo.getNombre() != null && !datosDeGrupo.getNombre().isBlank()) {
-                hql += " gr.nombre LIKE"+ datosDeGrupo.getNombre() + "%";
+                hql += " gr.nombre LIKE '"+ datosDeGrupo.getNombre() + "%'";
                 }
             return hql;
         }
