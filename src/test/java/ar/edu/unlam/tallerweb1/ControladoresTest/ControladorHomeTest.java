@@ -1,6 +1,8 @@
 package ar.edu.unlam.tallerweb1.ControladoresTest;
 
 import ar.edu.unlam.tallerweb1.controladores.ControladorHome;
+import ar.edu.unlam.tallerweb1.modelo.DatosDeGrupo;
+import ar.edu.unlam.tallerweb1.modelo.DatosDeGrupoParaBusqueda;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
 import org.junit.Before;
@@ -34,12 +36,18 @@ public class ControladorHomeTest {
 
     @Test
     public void QueMeMuestreTodosLosGrupos(){
-
-        List<Grupo>gruposPresistidos=givenGruposPersistidos();
-        List<Grupo> grupos=givenPidoTodosLosGrupos(gruposPresistidos);
+        List<Grupo>grupos=givenGruposPersistidos();
         ModelAndView mvc= whenGuardoLosGruposEnElModel(grupos);
         thenMeMuestreLosGrupos(mvc,grupos);
     }
+
+    @Test
+    public void QueMeMuestreLosGruposFiltrados(){
+        List<Grupo>grupos=givenGruposPersistidos();
+        ModelAndView mvc= whenGuardoLosGruposEnElModel(grupos);
+        thenMeMuestreLosGrupos(mvc,grupos);
+    }
+
 
     private List<Grupo> givenGruposPersistidos() {
         List<Grupo>gruposPersistidos=new ArrayList<>();
@@ -47,22 +55,17 @@ public class ControladorHomeTest {
         return gruposPersistidos;
     }
 
-    private List<Grupo> givenPidoTodosLosGrupos(List<Grupo> gruposPresistidos) {
-        when(servicioGrupo.buscarTodos()).thenReturn(gruposPresistidos);
-        return servicioGrupo.buscarTodos();
-    }
 
     private ModelAndView whenGuardoLosGruposEnElModel(List<Grupo> grupos) {
-        ModelMap model=new ModelMap();
-        model.put("grupos",grupos);
-        return new ModelAndView("/home",model);
+        DatosDeGrupoParaBusqueda datosDeGrupo=new DatosDeGrupoParaBusqueda();
+        when(servicioGrupo.buscarGrupoPorDatos(datosDeGrupo)).thenReturn(grupos);
+        return controladorHome.buscarGrupos(datosDeGrupo);
     }
 
     private void thenMeMuestreLosGrupos(ModelAndView mvc, List<Grupo>grupos) {
         assertThat(grupos).isEqualTo(mvc.getModel().get("grupos"));
 
     }
-
 
     private void thenMeMuestraLaPaginaDeCreacionDeGrupo(ModelAndView mvc ) {
 
