@@ -91,13 +91,32 @@ public class ServicioGrupoTest{
         thenObtengoLaListaDeGruposYVerificoQueTengaElTamanoCorrespondiente(listaDeGruposEncontrada);
     }
 
+    @Test
+    public void queSeObtenganLosGruposFiltrados(){
+        List<Grupo> listaDeGrupos = givenQueExisteUnaListaDeGrupos();
+        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda=givenQueExisteDatosDeGrupoParaBusqueda();
+        List<Grupo> listaDeGruposEncontrada= whenbuscoLosGruposFiltrados(listaDeGrupos, datosDeGrupoParaBusqueda);
+        thenObtengoLaListaDeGruposYVerificoQueTengaElTamanoCorrespondiente(listaDeGruposEncontrada);
+    }
+
+    private DatosDeGrupoParaBusqueda givenQueExisteDatosDeGrupoParaBusqueda() {
+        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda=new DatosDeGrupoParaBusqueda();
+        datosDeGrupoParaBusqueda.setNombre("casa");
+        return datosDeGrupoParaBusqueda;
+    }
+
+    private List<Grupo> whenbuscoLosGruposFiltrados(List<Grupo> listaDeGrupos, DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda) {
+        when(repositorioGrupo.buscarGrupoPorDatos(datosDeGrupoParaBusqueda)).thenReturn(listaDeGrupos);
+        return servicioGrupo.buscarGrupoPorDatos(datosDeGrupoParaBusqueda);
+    }
+
     private List<Grupo> givenQueExisteUnaListaDeGrupos() {
         return Arrays.asList(new Grupo(),new Grupo());
     }
 
     private List<Grupo> whenbuscoTodosLosGrupos(List<Grupo> listaDeGrupos) {
         when(repositorioGrupo.buscarTodos()).thenReturn(listaDeGrupos);
-        return repositorioGrupo.buscarTodos();
+        return servicioGrupo.buscarTodos();
     }
 
     private void thenObtengoLaListaDeGruposYVerificoQueTengaElTamanoCorrespondiente(List<Grupo> listaDeGruposEncontrada) {
