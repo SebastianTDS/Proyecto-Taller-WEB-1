@@ -33,6 +33,12 @@ public class ControladorHomeTest {
        ModelAndView mvc= whenDoyClickACrearGrupo();
         thenMeMuestraLaPaginaDeCreacionDeGrupo(mvc);
     }
+    @Test
+    public void QueMeRedirigaALaVistaHomeAlFiltarGrupos(){
+
+        ModelAndView mvc= whenDoyClickAFiltar();
+        thenMeMuestraLaPaginaDeGruposFiltrados(mvc);
+    }
 
     @Test
     public void QueMeMuestreTodosLosGrupos(){
@@ -68,16 +74,18 @@ public class ControladorHomeTest {
     }
 
     private void thenMeMuestraLaPaginaDeCreacionDeGrupo(ModelAndView mvc ) {
-
         assertThat("vistaParaCrearGrupo").isEqualTo(mvc.getViewName());
-
     }
 
     private ModelAndView whenDoyClickACrearGrupo() {
       return controladorHome.irAlFormulario();
     }
 
+    private ModelAndView whenDoyClickAFiltar() {
+        return controladorHome.buscarGrupos(new DatosDeGrupoParaBusqueda());
+    }
 
-
-
+    private void thenMeMuestraLaPaginaDeGruposFiltrados(ModelAndView mvc ) {
+        assertThat("home").isEqualTo(mvc.getViewName());
+    }
 }
