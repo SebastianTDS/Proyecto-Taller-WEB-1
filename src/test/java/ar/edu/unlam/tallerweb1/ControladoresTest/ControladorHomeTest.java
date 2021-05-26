@@ -1,14 +1,10 @@
 package ar.edu.unlam.tallerweb1.ControladoresTest;
 
 import ar.edu.unlam.tallerweb1.controladores.ControladorHome;
-import ar.edu.unlam.tallerweb1.modelo.DatosDeGrupo;
-import ar.edu.unlam.tallerweb1.modelo.DatosDeGrupoParaBusqueda;
-import ar.edu.unlam.tallerweb1.modelo.Grupo;
-import ar.edu.unlam.tallerweb1.modelo.Materia;
+import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
@@ -61,9 +57,34 @@ public class ControladorHomeTest {
         ModelAndView mvc= whenGuardoLasMateriasEnElModel(materias);
         thenMeMuestreLasMaterias(mvc,materias);
     }
+    @Test
+    public void QueMeMuestreTodasLasCarreras(){
+        List<Carrera>carreras=givenCarrerasPersistidas();
+        ModelAndView mvc= whenGuardoLasCarrerasEnElModel(carreras);
+        thenMeMuestreLasCarreras(mvc,carreras);
+    }
 
-    void thenMeMuestreLasMaterias(ModelAndView mvc, List<Materia>grupos){
-        assertThat(grupos).isEqualTo(mvc.getModel().get("materias"));
+    void thenMeMuestreLasCarreras(ModelAndView mvc, List<Carrera>carreras){
+        assertThat(carreras).isEqualTo(mvc.getModel().get("carreras"));
+    }
+
+    private List<Carrera> givenCarrerasPersistidas() {
+        Carrera carrera=new Carrera();
+        List<Carrera>carreras=new ArrayList<>();
+        carreras.add(carrera);
+        return carreras;
+    }
+
+    private ModelAndView whenGuardoLasCarrerasEnElModel(List<Carrera> carreras){
+        DatosDeGrupoParaBusqueda datosDeGrupo=new DatosDeGrupoParaBusqueda();
+        when(servicioGrupo.buscarTodasLasCarreras()).thenReturn(carreras);
+        return controladorHome.buscarGrupos(datosDeGrupo);
+    }
+
+
+
+    void thenMeMuestreLasMaterias(ModelAndView mvc, List<Materia>materias){
+        assertThat(materias).isEqualTo(mvc.getModel().get("materias"));
     }
 
     private List<Materia> givenMateriasPersistidas() {
