@@ -1,9 +1,9 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
-import ar.edu.unlam.tallerweb1.modelo.DatosDeGrupo;
-import ar.edu.unlam.tallerweb1.modelo.Grupo;
-import ar.edu.unlam.tallerweb1.modelo.Turno;
+import ar.edu.unlam.tallerweb1.modelo.*;
+import ar.edu.unlam.tallerweb1.repositorios.RepositorioCarrera;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupo;
+import ar.edu.unlam.tallerweb1.repositorios.RepositorioMateria;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,13 +15,18 @@ import java.util.List;
 @Transactional
 public class ServicioGrupoImpl implements ServicioGrupo{
 
-    private final RepositorioGrupo repositorioParaElServicio;
+    private final RepositorioGrupo repositorioGrupoParaElServicio;
+    private final RepositorioCarrera repositorioCarreraParaElServicio;
+    private final RepositorioMateria repositorioMateriaParaElServicio;
+
+
 
     @Autowired
-    public ServicioGrupoImpl(RepositorioGrupo repositorioParaElServicio){
-        this.repositorioParaElServicio=repositorioParaElServicio;
+    public ServicioGrupoImpl(RepositorioGrupo repositorioGrupoParaElServicio, RepositorioCarrera repositorioCarreraParaElServicio, RepositorioMateria repositorioMateriaParaElServicio){
+        this.repositorioGrupoParaElServicio=repositorioGrupoParaElServicio;
+        this.repositorioCarreraParaElServicio = repositorioCarreraParaElServicio;
+        this.repositorioMateriaParaElServicio = repositorioMateriaParaElServicio;
     }
-
 
     @Override
     public Grupo crearGrupo(DatosDeGrupo datosDeGrupo) {
@@ -29,44 +34,59 @@ public class ServicioGrupoImpl implements ServicioGrupo{
         Grupo grupoAPartirDeDatosDeGrupo = crearGrupoAPartirDeDatosDeGrupo(datosDeGrupo);
 
         if (grupoAPartirDeDatosDeGrupo != null) {
-            repositorioParaElServicio.guardarGrupo(grupoAPartirDeDatosDeGrupo);
+            repositorioGrupoParaElServicio.guardarGrupo(grupoAPartirDeDatosDeGrupo);
         }
         return grupoAPartirDeDatosDeGrupo;
     }
 
     @Override
     public List<Grupo> buscarTodos() {
-        return repositorioParaElServicio.buscarTodos();
+        return repositorioGrupoParaElServicio.buscarTodos();
+    }
+
+    @Override
+    public List<Carrera> buscarTodasLasCarreras() {
+        return repositorioCarreraParaElServicio.buscarTodasLasCarreras();
+    }
+
+    @Override
+    public List<Materia> buscarTodasLasMaterias() {
+        return repositorioMateriaParaElServicio.buscarTodasLasMaterias();
     }
 
 
+
+
+
     private Grupo crearGrupoAPartirDeDatosDeGrupo(DatosDeGrupo datosDeGrupo){
-        if (verificarDatosDeGrupoNoEstenVacios(datosDeGrupo)){
+
+        if (verificarQueCtdEsteEnElRango(datosDeGrupo)){
             return getGrupo(datosDeGrupo);
             }
             return null;
         }
 
-        private Grupo getGrupo(DatosDeGrupo datosDeGrupo) {
+        private Grupo getGrupo(DatosDeGrupo datosDeGrupo){
                 Grupo grupo = new Grupo();
+                Materia materia = repositorioMateriaParaElServicio.buscarMateriaPorId(datosDeGrupo.getMateria());
+                Carrera carrera = repositorioCarreraParaElServicio.buscarCarreraPorId(datosDeGrupo.getCarrera());
                 grupo.setNombre(datosDeGrupo.getNombre());
-                grupo.setCarrera(datosDeGrupo.getCarrera());
-                grupo.setMateria(datosDeGrupo.getMateria());
                 grupo.setTurno(datosDeGrupo.getTurno());
                 grupo.setPrivado(datosDeGrupo.getPrivado());
                 grupo.setCtdMaxima(datosDeGrupo.getCtdMaxima());
                 grupo.setDescripcion(datosDeGrupo.getDescripcion());
+                grupo.setMateria(materia);
+                grupo.setCarrera(carrera);
                 return grupo;
             }
 
-        private boolean verificarDatosDeGrupoNoEstenVacios(DatosDeGrupo datosDeGrupo) {
+        private boolean verificarQueCtdEsteEnElRango(DatosDeGrupo datosDeGrupo) {
             final Integer CTD_USUARIO_MINIMO = 2;
             final Integer CTD_USUARIO_MAXIMO = 8;
 
-                                if (verificarDatosDeGruposNoVacios(datosDeGrupo)) {
+                                             if (verificarDatosDeGruposNoVacios(datosDeGrupo)) {
                                                     return datosDeGrupo.getCtdMaxima() >= CTD_USUARIO_MINIMO &&
                                                                  datosDeGrupo.getCtdMaxima() <= CTD_USUARIO_MAXIMO;
-
                                 }
                                                      return false;
 
@@ -75,26 +95,33 @@ public class ServicioGrupoImpl implements ServicioGrupo{
         private boolean verificarDatosDeGruposNoVacios(DatosDeGrupo datosDeGrupo){
 
                                 if(verificarDatosDeGruposNoSeanNulos(datosDeGrupo)) {
-
                                     return
-                                                   !datosDeGrupo.getNombre().isBlank() &&
-                                                    !datosDeGrupo.getCarrera().isBlank() &&
-                                                    !datosDeGrupo.getMateria().isBlank() &&
-                                                    !datosDeGrupo.getDescripcion().isBlank();
-
+                                                            !datosDeGrupo.getNombre().isBlank() &&
+                                                            !datosDeGrupo.getDescripcion().isBlank() &&
+                                                            verificarQueExistaLaMateriaEnElRepositorio(datosDeGrupo.getMateria()) &&
+                                                            verificarQueExistaLaCarreraEnElRepositorio(datosDeGrupo.getCarrera());
                                 }
                                 return false ;
         }
 
         private boolean verificarDatosDeGruposNoSeanNulos(DatosDeGrupo datosDeGrupo){
 
-        return         datosDeGrupo.getNombre() != null &&
-                             datosDeGrupo.getCarrera() != null &&
-                             datosDeGrupo.getMateria() != null &&
-                             datosDeGrupo.getTurno() != null &&
-                             datosDeGrupo.getPrivado() != null &&
-                             datosDeGrupo.getCtdMaxima() != null &&
-                             datosDeGrupo.getDescripcion() != null;
+                            return
+                                                 datosDeGrupo.getMateria()!=null &
+                                                 datosDeGrupo.getCarrera() != null &&
+                                                 datosDeGrupo.getNombre() != null &&
+                                                 datosDeGrupo.getTurno() != null      &&
+                                                 datosDeGrupo.getPrivado() != null  &&
+                                                 datosDeGrupo.getCtdMaxima() != null &&
+                                                 datosDeGrupo.getDescripcion() != null ;
                  }
+
+                 private boolean verificarQueExistaLaMateriaEnElRepositorio(Long id){
+                        return repositorioMateriaParaElServicio.buscarMateriaPorId(id)!=null;
+                 }
+
+                private boolean verificarQueExistaLaCarreraEnElRepositorio(Long id){
+                    return repositorioCarreraParaElServicio.buscarCarreraPorId(id)!=null;
+                }
 
 }
