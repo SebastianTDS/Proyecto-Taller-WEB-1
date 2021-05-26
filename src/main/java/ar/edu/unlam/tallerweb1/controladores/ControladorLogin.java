@@ -74,5 +74,11 @@ public class ControladorLogin {
 	@RequestMapping(path = "/", method = RequestMethod.GET)
 	public ModelAndView inicio() {
 		return new ModelAndView("/index");
+
+	}
+	@RequestMapping(path = "/ir-inicio", method = RequestMethod.GET)
+	public ModelAndView inicio2() {
+		return new ModelAndView("/index");
+
 	}
 }

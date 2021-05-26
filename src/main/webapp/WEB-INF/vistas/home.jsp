@@ -3,13 +3,13 @@
 <%@ taglib prefix="placeholder" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
+     <jsp:include page="../../templates/head.jsp"></jsp:include>
+                
 <body>
-<head>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-	<title>Vista del grupos</title>
-</head>
+  	<jsp:include page="../../templates/header.jsp"></jsp:include>
 
 <main >
+
 	<div class="container-fluid row ">
 		<div class="col-5 col-sm-4 col-md-3 col-lg-2 col-xl-2 border border-danger container-fluid">
 			<div class="m-3 d-flex justify-content-center">
@@ -87,5 +87,9 @@
 		</div>
 	</div>
 </main>
+
+  <jsp:include page="../../templates/footer.jsp"></jsp:include>
+
 </body>
+
 </html>
