@@ -99,6 +99,7 @@ public class ServicioGrupoTest{
         thenObtengoLaListaDeGruposYVerificoQueTengaElTamanoCorrespondiente(listaDeGruposEncontrada);
     }
 
+
     private DatosDeGrupoParaBusqueda givenQueExisteDatosDeGrupoParaBusqueda() {
         DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda=new DatosDeGrupoParaBusqueda();
         datosDeGrupoParaBusqueda.setNombre("casa");
