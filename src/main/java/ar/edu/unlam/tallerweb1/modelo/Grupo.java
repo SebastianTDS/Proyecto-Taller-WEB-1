@@ -1,30 +1,61 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
-import javax.management.ConstructorParameters;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
 @Entity
 public class Grupo {
 
-    public Grupo() {
-    }
-
-    @Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long id;
-
-   private String nombre ;
-    private String carrera;
-    private String materia;
-    @Enumerated(EnumType.STRING)
-    private Turno turno;
-
+    private String nombre;
+    private String descripcion;
     private Boolean privado;
     private Integer ctdMaxima;
-    private String descripcion;
 
+    private Turno turno;
+    private Carrera carrera;
+    private Materia materia;
+
+    public Grupo() {}
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
         return id;
+    }
+
+    @ManyToOne(optional = false, targetEntity = Materia.class)
+    public Materia getMateria() {
+        return materia;
+    }
+
+    public void setMateria(Materia materia) {
+        this.materia = materia;
+    }
+
+    @ManyToOne(optional = false, targetEntity = Carrera.class)
+    public Carrera getCarrera() {
+        return carrera;
+    }
+
+    public void setCarrera(Carrera carrera) {
+        this.carrera = carrera;
+    }
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    public Turno getTurno() {
+        return turno;
+    }
+
+    public void setTurno(Turno turno) {
+        this.turno = turno;
     }
 
     public void setId(Long id) {
@@ -39,30 +70,15 @@ public class Grupo {
         this.nombre = nombre;
     }
 
-    public String getCarrera() {
-        return carrera;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setCarrera(String carrera) {
-        this.carrera = carrera;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
-    public String getMateria() {
-        return materia;
-    }
-
-    public void setMateria(String materia) {
-        this.materia = materia;
-    }
-
-    public Turno getTurno() {
-        return turno;
-    }
-
-    public void setTurno(Turno turno) {
-        this.turno = turno;
-    }
-
+    @Column(nullable = false)
     public Boolean getPrivado() {
         return privado;
     }
@@ -71,19 +87,12 @@ public class Grupo {
         this.privado = privado;
     }
 
+    @Column(nullable = false)
     public Integer getCtdMaxima() {
         return ctdMaxima;
     }
 
     public void setCtdMaxima(Integer ctdMaxima) {
         this.ctdMaxima = ctdMaxima;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
     }
 }

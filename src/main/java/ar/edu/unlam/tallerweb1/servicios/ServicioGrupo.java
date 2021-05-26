@@ -1,9 +1,6 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
-import ar.edu.unlam.tallerweb1.modelo.Carrera;
-import ar.edu.unlam.tallerweb1.modelo.DatosDeGrupo;
-import ar.edu.unlam.tallerweb1.modelo.Grupo;
-import ar.edu.unlam.tallerweb1.modelo.Materia;
+import ar.edu.unlam.tallerweb1.modelo.*;
 
 
 import java.util.List;
@@ -19,4 +16,6 @@ public interface ServicioGrupo {
     List<Carrera> buscarTodasLasCarreras();
 
     List<Materia> buscarTodasLasMaterias();
+
+    List<Grupo> buscarGrupoPorDatos(DatosDeGrupoParaBusqueda datosParaBuscarUnGrupo);
 }

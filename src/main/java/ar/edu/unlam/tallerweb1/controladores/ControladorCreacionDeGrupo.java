@@ -26,10 +26,10 @@ public class ControladorCreacionDeGrupo {
     public ModelAndView irALaVistaDeGrupoCreado(@ModelAttribute DatosDeGrupo datos){
         ModelMap model = new ModelMap();
         Grupo grupo=servicioGrupo.crearGrupo(datos);
-           if(grupo!=null)
-               return CreacionExitosa(grupo);
-              else
-                  return creacionSinExito(model);
+        if(grupo!=null)
+            return CreacionExitosa(grupo);
+        else
+            return creacionSinExito(model);
 
     }
 
@@ -38,11 +38,10 @@ public class ControladorCreacionDeGrupo {
     }
 
     private ModelAndView creacionSinExito(ModelMap model) {
-       model.put("error", "Completa todos los campos del formulario");
+        model.put("error", "Completa todos los campos del formulario");
         return new ModelAndView("redirect:/ir-a-crear-nuevo-grupo", model);
     }
 }
-
 
 
 

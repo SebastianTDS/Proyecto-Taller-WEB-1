@@ -1,22 +1,15 @@
 package ar.edu.unlam.tallerweb1.ControladoresTest;
 
 import ar.edu.unlam.tallerweb1.controladores.ControladorCreacionDeGrupo;
-import ar.edu.unlam.tallerweb1.controladores.ControladorHome;
-import ar.edu.unlam.tallerweb1.modelo.DatosDeGrupo;
-import ar.edu.unlam.tallerweb1.modelo.Grupo;
-import ar.edu.unlam.tallerweb1.modelo.Turno;
+import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.transaction.Transactional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
 
 public class ControladorCreacionDeGrupoTest {
 
@@ -27,8 +20,6 @@ public class ControladorCreacionDeGrupoTest {
          servicioGrupo = mock(ServicioGrupo.class);
         controladorCreacionDeGrupo = new ControladorCreacionDeGrupo(servicioGrupo);
     }
-
-
     @Test
     public void queAlCrearElGrupoMedianteDatosCorrectosMeRedirigaALaVistaDelGrupoCreado(){
         DatosDeGrupo grupo = givenDatosDeGrupo();
@@ -43,8 +34,6 @@ public class ControladorCreacionDeGrupoTest {
         thenMeRedirigeALaVistaParaVolverALlenarElFormulario(mvc);
     }
 
-
-
     private ModelAndView whenDoyClickACrearGrupoIncompleto(DatosDeGrupo grupo) {
         when(servicioGrupo.crearGrupo(grupo)).thenReturn(null);
         return controladorCreacionDeGrupo.irALaVistaDeGrupoCreado(grupo);
@@ -57,15 +46,12 @@ public class ControladorCreacionDeGrupoTest {
     private DatosDeGrupo givenDatosDeGrupoIncompletos() {
         DatosDeGrupo datosdegrupo = new DatosDeGrupo();
         String nombre = "Los Picateclas";
-        String materia = "Taller web";
         Turno turno = Turno.NOCHE;
-        Boolean privado = false;
         Integer ctdMaxima = 5;
         String descripcion =  "Grupo de test para taller web";
         datosdegrupo.setNombre(nombre);
-        datosdegrupo.setMateria(materia);
-        datosdegrupo.setTurno(turno);
-        datosdegrupo.setPrivado(privado);
+        datosdegrupo.setMateria(123L);
+        datosdegrupo.setPrivado(false);
         datosdegrupo.setCtdMaxima(ctdMaxima);
         datosdegrupo.setDescripcion(descripcion);
         return datosdegrupo;
@@ -73,11 +59,10 @@ public class ControladorCreacionDeGrupoTest {
 
     private DatosDeGrupo givenDatosDeGrupo() {
         DatosDeGrupo datosdegrupo = new DatosDeGrupo();
+       Long materia = 1334L;
+        Long carrera = 1234L;
         String nombre = "Los Picateclas";
-        String carrera = "Desarrollo web";
-        String materia = "Taller web";
         Turno turno = Turno.NOCHE;
-        Boolean privado = false;
         Integer ctdMaxima = 5;
         String descripcion =  "Grupo de test para taller web";
 
@@ -85,7 +70,7 @@ public class ControladorCreacionDeGrupoTest {
         datosdegrupo.setCarrera(carrera);
         datosdegrupo.setMateria(materia);
         datosdegrupo.setTurno(turno);
-        datosdegrupo.setPrivado(privado);
+        datosdegrupo.setPrivado(false);
         datosdegrupo.setCtdMaxima(ctdMaxima);
         datosdegrupo.setDescripcion(descripcion);
 

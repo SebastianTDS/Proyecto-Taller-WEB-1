@@ -1,14 +1,21 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
-public class DatosDeGrupo {
+public class DatosDeGrupoParaBusqueda {
 
     private String nombre ;
     private Turno turno;
-    private Boolean privado;
-    private Integer ctdMaxima;
-    private String descripcion;
     private Long carrera;
     private Long materia;
+    private Privacidad privacidad;
+
+
+    public Privacidad getPrivacidad() {
+        return privacidad;
+    }
+
+    public void setPrivacidad(Privacidad privacidad) {
+        this.privacidad = privacidad;
+    }
 
     public Long getCarrera() {
         return carrera;
@@ -26,38 +33,12 @@ public class DatosDeGrupo {
         this.nombre = nombre;
     }
 
-
-
     public Turno getTurno() {
         return turno;
     }
 
     public void setTurno(Turno turno) {
         this.turno = turno;
-    }
-
-    public Boolean getPrivado() {
-        return privado;
-    }
-
-    public void setPrivado(Boolean privado) {
-        this.privado = privado;
-    }
-
-    public Integer getCtdMaxima() {
-        return ctdMaxima;
-    }
-
-    public void setCtdMaxima(Integer ctdMaxima) {
-        this.ctdMaxima = ctdMaxima;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
     }
 
     public void setCarrera(Long carrera) {
@@ -67,4 +48,5 @@ public class DatosDeGrupo {
     public void setMateria(Long materia) {
         this.materia=materia;
     }
+
 }

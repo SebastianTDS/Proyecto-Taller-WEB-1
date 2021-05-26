@@ -1,15 +1,20 @@
 package ar.edu.unlam.tallerweb1.repositorios;
 
+import ar.edu.unlam.tallerweb1.modelo.DatosDeGrupoParaBusqueda;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
+import ar.edu.unlam.tallerweb1.modelo.Privacidad;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import javax.management.Query;
+import java.sql.PreparedStatement;
 import java.util.List;
 
 @Repository("repositorioGrupo")
-public class RepositorioGrupoImpl implements RepositorioGrupo{
+public class RepositorioGrupoImpl implements RepositorioGrupo {
 
-private final SessionFactory sessionFactory;
+    private final SessionFactory sessionFactory;
 
     @Autowired
     public RepositorioGrupoImpl(SessionFactory sessionFactory) {
@@ -28,8 +33,73 @@ private final SessionFactory sessionFactory;
 
     @Override
     public List<Grupo> buscarTodos() {
-        return sessionFactory.getCurrentSession().createQuery("from Grupo").getResultList();
+        String s = "select g from Grupo g";
+        return sessionFactory.getCurrentSession().createQuery(s, Grupo.class).getResultList();
     }
 
+        @Override
+        public List<Grupo> buscarGrupoPorDatos(DatosDeGrupoParaBusqueda  datosDeGrupo) {
 
-}
+            int sentenciasUsadas = 0;
+            int sentenciasTotales = camposCompletos(datosDeGrupo);
+            String hql = generadorDeQueryBusqueda(datosDeGrupo, sentenciasUsadas, sentenciasTotales);
+           System.out.println(hql);
+          //  String q="select gr from Grupo gr where gr.turno=:TURNO";
+               // return sessionFactory.getCurrentSession().createQuery(q,Grupo.class).setParameter("TURNO",datosDeGrupo.getTurno()).getResultList();
+            return sessionFactory.getCurrentSession().createQuery(hql,Grupo.class).getResultList();
+        }
+
+        private String generadorDeQueryBusqueda(DatosDeGrupoParaBusqueda datosDeGrupo, int sentenciasUsadas, int sentenciasTotales) {
+            String hql = "from Grupo gr where";
+            if (datosDeGrupo.getPrivacidad() != null && datosDeGrupo.getPrivacidad()!=Privacidad.TODO) {
+                byte estado;
+                if (datosDeGrupo.getPrivacidad()== Privacidad.PRIVADO)
+                    estado = 1;
+                else
+                    estado = 0;
+                hql += " gr.privado="+estado;
+                if (sentenciasUsadas < sentenciasTotales) {
+                    hql += " and";
+                    sentenciasUsadas++;
+                }
+            }
+            if (datosDeGrupo.getTurno() != null) {
+                hql += " gr.turno='"+datosDeGrupo.getTurno()+"'";
+                if (sentenciasUsadas < sentenciasTotales) {
+                    hql += " and";
+                    sentenciasUsadas++;
+                }
+            }
+            if (datosDeGrupo.getCarrera() != null) {
+                hql += " gr.carrera="+datosDeGrupo.getCarrera();
+                if (sentenciasUsadas < sentenciasTotales) {
+                    hql += " and";
+                    sentenciasUsadas++;
+                }
+            }
+            if (datosDeGrupo.getMateria() != null){
+                hql += " gr.materia="+datosDeGrupo.getMateria();
+                if (sentenciasUsadas < sentenciasTotales) {
+                    hql += " and";
+                    sentenciasUsadas++;
+                }
+            }
+            if (datosDeGrupo.getNombre() != null && !datosDeGrupo.getNombre().isBlank()) {
+                hql += " gr.nombre LIKE"+ datosDeGrupo.getNombre() + "%";
+                }
+            return hql;
+        }
+
+        private int camposCompletos(DatosDeGrupoParaBusqueda datosDeGrupo) {
+            int sentenciasTotales = -1;
+            if (datosDeGrupo.getCarrera() != null)
+                sentenciasTotales++;
+            if (datosDeGrupo.getMateria() != null)
+                sentenciasTotales++;
+            if (datosDeGrupo.getPrivacidad() != null)
+                sentenciasTotales++;
+            if (datosDeGrupo.getNombre() != null && !datosDeGrupo.getNombre().isBlank())
+                sentenciasTotales++;
+            return sentenciasTotales;
+        }
+    }
