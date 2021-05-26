@@ -7,7 +7,6 @@ import javax.persistence.Id;
 
 @Entity
 public class Carrera {
-
 	private Long id;
 	private String nombre;
 	
