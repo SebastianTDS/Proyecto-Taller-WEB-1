@@ -8,7 +8,7 @@
 <body>
   	<jsp:include page="../../templates/headerLogueado.jsp"></jsp:include>
 
-<main style="min-height: 200px">
+<main style="min-height: 500px">
 
 	<div class="container-fluid row ">
 		<div class="col-5 col-sm-4 col-md-3 col-lg-2 col-xl-2 border-end container-fluid text-center "style="min-height: 200px">
@@ -52,6 +52,7 @@
 					</div>
 					<div class="col-5 col-sm-4 col-md-3 col-lg-2 p-2">
 						<form:select path="turno" id="turno" class="form-control form-control-sm">
+							<option value="">TODO</option>
 							<option value="MANIANA">MANIANA</option>
 							<option value="TARDE">TARDE</option>
 							<option value="NOCHE">NOCHE</option>

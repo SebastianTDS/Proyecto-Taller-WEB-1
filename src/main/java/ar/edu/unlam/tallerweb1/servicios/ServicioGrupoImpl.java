@@ -6,6 +6,7 @@ import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioCarrera;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupo;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioMateria;
+import ar.edu.unlam.tallerweb1.util.enums.Privacidad;
 import ar.edu.unlam.tallerweb1.util.exceptions.LimiteDeUsuariosIlegalException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,10 +85,27 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 
     @Override
     public List<Grupo> buscarGrupoPorDatos(DatosDeGrupoParaBusqueda datosParaBuscarUnGrupo) {
-        return repositorioGrupoParaElServicio.buscarGrupoPorDatos(datosParaBuscarUnGrupo);
+        if(camposCompletos(datosParaBuscarUnGrupo)!=0)
+            return repositorioGrupoParaElServicio.buscarGrupoPorDatos(datosParaBuscarUnGrupo);
+        else
+            return buscarTodos();
     }
 
 
+    private int camposCompletos(DatosDeGrupoParaBusqueda datosDeGrupo) {
+        int sentenciasTotales = 0;
+        if (datosDeGrupo.getTurno() != null)
+            sentenciasTotales++;
+        if (datosDeGrupo.getCarrera() != null && datosDeGrupo.getCarrera()!=999999)
+            sentenciasTotales++;
+        if (datosDeGrupo.getMateria() != null && datosDeGrupo.getMateria()!=999999)
+            sentenciasTotales++;
+        if (datosDeGrupo.getPrivacidad() != null && datosDeGrupo.getPrivacidad()!= Privacidad.TODO)
+            sentenciasTotales++;
+        if (datosDeGrupo.getNombre() != null && !datosDeGrupo.getNombre().isBlank())
+            sentenciasTotales++;
+        return sentenciasTotales;
+    }
 
     private Grupo crearGrupoAPartirDeDatosDeGrupo(DatosDeGrupo datosDeGrupo) {
         if (verificarQueCtdEsteEnElRango(datosDeGrupo)) {
