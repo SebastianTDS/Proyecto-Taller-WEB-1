@@ -4,9 +4,7 @@ import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupoParaBusqueda;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.repositorios.*;
-import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
 import static org.assertj.core.api.Assertions.*;
-import ar.edu.unlam.tallerweb1.servicios.ServicioGrupoImpl;
 import ar.edu.unlam.tallerweb1.util.enums.Turno;
 
 import org.junit.Before;

@@ -14,7 +14,7 @@ import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
 
 @Controller
-@RequestMapping("/grupos")
+//@RequestMapping("/grupos")
 public class ControladorGrupos {
 
 	private ServicioGrupo service;
@@ -24,7 +24,7 @@ public class ControladorGrupos {
 		this.service = service;
 	}
 
-	@RequestMapping("/{id}")
+	@RequestMapping("grupos/{id}")
 	public ModelAndView buscarGrupo(@PathVariable Long id) {
 		ModelMap modelo = new ModelMap();
 		Grupo buscado = service.buscarGrupoPorID(id);
@@ -37,7 +37,7 @@ public class ControladorGrupos {
 			return new ModelAndView("redirect:/");
 	}
 
-	@RequestMapping(path = "/{id}/modificarGrupo", method = RequestMethod.POST)
+	@RequestMapping(path = "grupos/{id}/modificarGrupo", method = RequestMethod.POST)
 	public ModelAndView cambiarDatosGrupo(@PathVariable Long id, @ModelAttribute("formulario") Grupo form) {
 		ModelMap modelo = new ModelMap();
 
@@ -47,7 +47,7 @@ public class ControladorGrupos {
 		return new ModelAndView("redirect:/grupos/" + id, modelo);
 	}
 
-	@RequestMapping(path = "/eliminarGrupo")
+	@RequestMapping(path = "grupos/eliminarGrupo")
 	public ModelAndView eliminarGrupo(@RequestParam(required = false) Long id) {
 		ModelMap modelo = new ModelMap();
 

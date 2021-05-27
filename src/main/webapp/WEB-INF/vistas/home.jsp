@@ -24,6 +24,7 @@
 					<h4 class="form-signin-heading">Busqueda de grupos</h4>
 					<div class="col-5 col-sm-4 col-md-3 col-lg-2 p-2 border-warning">
 						<form:select path="carrera" id="carrera" class="form-control form-control-sm">
+							<option value="">Todas las Carreras</option>
 							<c:forEach items="${carreras}" var ="carrera">
 								<option value="${carrera.id}">${carrera.nombre}</option>
 							</c:forEach>
@@ -31,6 +32,7 @@
 					</div>
 					<div class="col-5 col-sm-4 col-md-3 col-lg-2 p-2 border-warning">
 						<form:select path="materia" id="materia" class="form-control form-control-sm">
+							<option value="">Todas las Materias</option>
 							<c:forEach items="${materias}" var ="materia">
 								<option value="${materia.id}">${materia.nombre}</option>
 							</c:forEach>
@@ -46,8 +48,8 @@
 					<div class="col-5 col-sm-4 col-md-3 col-lg-2 p-2 border-warning">
 						<form:select path="privacidad" id="privacidad" class="form-control form-control-sm">
 								<option value="TODO">TODO</option>
-								<option value="PUBLICO">PUBLICO</option>
-								<option value="PRIVADO">PRIVADO</option>
+								<option value="PUBLICO">Publico</option>
+								<option value="PRIVADO">Privado</option>
 						</form:select>
 					</div>
 					<div class="col-5 col-sm-4 col-md-3 col-lg-2 p-2 border-warning">
