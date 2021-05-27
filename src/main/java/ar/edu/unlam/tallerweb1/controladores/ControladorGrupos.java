@@ -25,18 +25,18 @@ public class ControladorGrupos {
 	}
 
 	@RequestMapping("grupos/{id}")
-	public ModelAndView buscarGrupo(@PathVariable Long id) {
+	public ModelAndView buscarGrupo(@PathVariable Long id, @RequestParam(required = false) Long edit) {
 		ModelMap modelo = new ModelMap();
 		Grupo buscado = service.buscarGrupoPorID(id);
 
 		if (buscado != null) {
-			modelo.put("formulario", new Grupo());
+			if(edit != null) modelo.put("formulario", new Grupo());
 			modelo.put("grupo", buscado);
 			return new ModelAndView("vistaGrupo", modelo);
 		} else
 			return new ModelAndView("redirect:/");
 	}
-
+	
 	@RequestMapping(path = "grupos/{id}/modificarGrupo", method = RequestMethod.POST)
 	public ModelAndView cambiarDatosGrupo(@PathVariable Long id, @ModelAttribute("formulario") Grupo form) {
 		ModelMap modelo = new ModelMap();

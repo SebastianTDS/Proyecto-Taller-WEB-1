@@ -1,3 +1,6 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="placeholder" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,8 +12,6 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
-    <!-- MDB -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.5.0/mdb.min.css" rel="stylesheet" />
 
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
@@ -23,12 +24,13 @@
     <link rel="stylesheet" href="../css/estilos.css" type="text/CSS">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+    <title>Umatch</title>
 </head>
 
 <body>
 	<header class="container-fluid bg-dark text-warning">
 		<div class="row">
-			<div class="col col-sm-12 col-xl-9 p-2  text-left ">
+			<div class="col col-sm-12 col-xl-9 p-2 text-left ">
 				<a href="ir-inicio"><img src="../img/umatch.png" width="150px"></a>
 			</div>
 			<div
@@ -46,7 +48,7 @@
 	<main class="container-fluid">
 		<div id="main" class="row text-white">
 			<div class="info col-12 col-sm-3 bg-dark p-0">
-				<div class="mt-3 me-3 text-white text-end">
+				<div class="mt-3 mr-3 text-white text-right">
 					<button class="btn btn-outline-secondary rounded ">></button>
 				</div>
 
@@ -74,7 +76,12 @@
 				</ul>
 			</div>
 			<!--   Agregar Import  -->
-			<jsp:include page="../../templates/perfilInfo.jsp"></jsp:include>
+			<c:if test="${not empty formulario }">
+				<jsp:include page="../../templates/perfilMod.jsp"></jsp:include>
+			</c:if>
+			<c:if test="${empty formulario }">
+				<jsp:include page="../../templates/perfilInfo.jsp"></jsp:include>
+			</c:if>
 		</div>
 	</main>
 	<footer class="footer bg-dark ">
