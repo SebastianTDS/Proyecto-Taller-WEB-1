@@ -107,13 +107,13 @@ public class ControladorGruposTest {
 	private ModelAndView whenBuscoPorLaURLConElIDCorrecto(Long idGrupoBuscado) {
 		when(service.buscarGrupoPorID(idGrupoBuscado)).thenReturn(new Grupo());
 
-		return controller.buscarGrupo(idGrupoBuscado);
+		return controller.buscarGrupo(idGrupoBuscado, null);
 	}
 
 	private ModelAndView whenBuscoPorLaURLConElIDIncorrecto(Long idGrupoInexistente) {
 		when(service.buscarGrupoPorID(idGrupoInexistente)).thenReturn(null);
 
-		return controller.buscarGrupo(idGrupoInexistente);
+		return controller.buscarGrupo(idGrupoInexistente, null);
 	}
 
 	private void thenObtengoLaVistaYLosDatosDelGrupo(ModelAndView vistaObtenida) {
