@@ -8,10 +8,10 @@
 <body>
   	<jsp:include page="../../templates/headerLogueado.jsp"></jsp:include>
 
-<main >
+<main style="min-height: 200px">
 
 	<div class="container-fluid row ">
-		<div class="col-5 col-sm-4 col-md-3 col-lg-2 col-xl-2 border-end container-fluid text-center ">
+		<div class="col-5 col-sm-4 col-md-3 col-lg-2 col-xl-2 border-end container-fluid text-center "style="min-height: 200px">
 			<h3 class="form-signin-heading mt-3">Mis grupos</h3>
 			<div class="m-3 d-flex justify-content-center mt-5">
 				<a href="ir-a-crear-nuevo-grupo ">
@@ -36,6 +36,7 @@
 					<h3 class="form-signin-heading">Busqueda de grupos</h3>
 					<div class="col-5 col-sm-4 col-md-3 col-lg-2 p-2">
 						<form:select path="carrera" id="carrera" class="form-control form-control-sm">
+							<option value="999999">TODO</option>
 							<c:forEach items="${carreras}" var ="carrera">
 								<option value="${carrera.id}">${carrera.nombre}</option>
 							</c:forEach>
@@ -43,6 +44,7 @@
 					</div>
 					<div class="col-5 col-sm-4 col-md-3 col-lg-2 p-2">
 						<form:select path="materia" id="materia" class="form-control form-control-sm">
+							<option value="999999">TODO</option>
 							<c:forEach items="${materias}" var ="materia">
 								<option value="${materia.id}">${materia.nombre}</option>
 							</c:forEach>
@@ -50,7 +52,7 @@
 					</div>
 					<div class="col-5 col-sm-4 col-md-3 col-lg-2 p-2">
 						<form:select path="turno" id="turno" class="form-control form-control-sm">
-							<option value="MANANA">MANANA</option>
+							<option value="MANIANA">MANIANA</option>
 							<option value="TARDE">TARDE</option>
 							<option value="NOCHE">NOCHE</option>
 						</form:select>
@@ -66,7 +68,7 @@
 						<form:input path="nombre" id="nombre" type="text" class="form-control form-control-sm" placeholder="Nombre"/>
 					</div>
 					<div class="col-5 col-sm-4 col-md-3 col-lg-2 p-2">
-						<button class="btn btn-lg btn btn-primary btn-sm" Type="Submit">Buscar grupo</button>
+						<button class="btn btn-lg btn btn-primary btn-sm" Type="Submit">Buscar</button>
 					</div>
 				</form:form>
 			</div>

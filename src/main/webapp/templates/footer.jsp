@@ -52,10 +52,8 @@
                 </ul>
 
             </div>
-
-
-            <div class=" col-sm-4 col-md col-12 col ">
-                <h5 class="headin5_amrc col_white_amrc pt2 ">Repositorios</h5>
+            <div class=" col-sm-4 col-md col-12 col">
+                <h5 class="headin5_amrc col_white_amrc pt2">Repositorios</h5>
 
 
                 <ul class="footer_ul2_amrc ">
