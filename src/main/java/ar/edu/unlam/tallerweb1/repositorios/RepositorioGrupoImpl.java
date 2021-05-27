@@ -101,14 +101,14 @@ public class RepositorioGrupoImpl implements RepositorioGrupo {
                     sentenciasUsadas++;
                 }
             }
-            if (datosDeGrupo.getCarrera() != null) {
+            if (datosDeGrupo.getCarrera() != null && datosDeGrupo.getCarrera()!=999999) {
                 hql += " gr.carrera="+datosDeGrupo.getCarrera();
                 if (sentenciasUsadas < sentenciasTotales) {
                     hql += " and";
                     sentenciasUsadas++;
                 }
             }
-            if (datosDeGrupo.getMateria() != null){
+            if (datosDeGrupo.getMateria() != null && datosDeGrupo.getMateria()!=999999){
                 hql += " gr.materia="+datosDeGrupo.getMateria();
                 if (sentenciasUsadas < sentenciasTotales) {
                     hql += " and";
@@ -123,11 +123,13 @@ public class RepositorioGrupoImpl implements RepositorioGrupo {
 
         private int camposCompletos(DatosDeGrupoParaBusqueda datosDeGrupo) {
             int sentenciasTotales = -1;
-            if (datosDeGrupo.getCarrera() != null)
+            if (datosDeGrupo.getTurno() != null)
                 sentenciasTotales++;
-            if (datosDeGrupo.getMateria() != null)
+            if (datosDeGrupo.getCarrera() != null && datosDeGrupo.getCarrera()!=999999)
                 sentenciasTotales++;
-            if (datosDeGrupo.getPrivacidad() != null)
+            if (datosDeGrupo.getMateria() != null && datosDeGrupo.getMateria()!=999999)
+                sentenciasTotales++;
+            if (datosDeGrupo.getPrivacidad() != null && datosDeGrupo.getPrivacidad()!=Privacidad.TODO)
                 sentenciasTotales++;
             if (datosDeGrupo.getNombre() != null && !datosDeGrupo.getNombre().isBlank())
                 sentenciasTotales++;
