@@ -9,90 +9,103 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import ar.edu.unlam.tallerweb1.util.auxClass.Check;
+import ar.edu.unlam.tallerweb1.util.enums.Turno;
+
 @Entity
 public class Grupo {
+	
+	private Long id;
+	private String nombre;
+	private String descripcion;
+	private Boolean privado;
+	private Integer ctdMaxima;
+	
+	private Turno turno;
+	private Carrera carrera;
+	private Materia materia;
+	
+	public Grupo() { }
 
-    private Long id;
-    private String nombre;
-    private String descripcion;
-    private Boolean privado;
-    private Integer ctdMaxima;
+	@ManyToOne(optional = false, targetEntity = Materia.class)
+	public Materia getMateria() {
+		return materia;
+	}
 
-    private Turno turno;
-    private Carrera carrera;
-    private Materia materia;
+	public void setMateria(Materia materia) {
+		this.materia = materia;
+	}
 
-    public Grupo() {}
+	@ManyToOne(optional = false, targetEntity = Carrera.class)
+	public Carrera getCarrera() {
+		return carrera;
+	}
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long getId() {
-        return id;
-    }
+	public void setCarrera(Carrera carrera) {
+		this.carrera = carrera;
+	}
 
-    @ManyToOne(optional = false, targetEntity = Materia.class)
-    public Materia getMateria() {
-        return materia;
-    }
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	public Turno getTurno() {
+		return turno;
+	}
 
-    public void setMateria(Materia materia) {
-        this.materia = materia;
-    }
+	public void setTurno(Turno turno) {
+		this.turno = turno;
+	}
 
-    @ManyToOne(optional = false, targetEntity = Carrera.class)
-    public Carrera getCarrera() {
-        return carrera;
-    }
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	public Long getId() {
+		return id;
+	}
 
-    public void setCarrera(Carrera carrera) {
-        this.carrera = carrera;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    public Turno getTurno() {
-        return turno;
-    }
+	public String getNombre() {
+		return nombre;
+	}
 
-    public void setTurno(Turno turno) {
-        this.turno = turno;
-    }
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public String getDescripcion() {
+		return descripcion;
+	}
 
-    public String getNombre() {
-        return nombre;
-    }
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+	@Column(nullable = false)
+	public Boolean getPrivado() {
+		return privado;
+	}
 
-    public String getDescripcion() {
-        return descripcion;
-    }
+	public void setPrivado(Boolean privado) {
+		this.privado = privado;
+	}
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
+	@Column(nullable = false)
+	public Integer getCtdMaxima() {
+		return ctdMaxima;
+	}
 
-    @Column(nullable = false)
-    public Boolean getPrivado() {
-        return privado;
-    }
+	public void setCtdMaxima(Integer ctdMaxima) {
+		this.ctdMaxima = ctdMaxima;
+	}
+	
+	public Grupo actualizar(Grupo datos) {
+		nombre 		= !Check.empty(datos.nombre)			 ? datos.nombre 	: nombre;
+		descripcion = !Check.empty(datos.descripcion) 		 ? datos.descripcion: descripcion;
+		ctdMaxima 	= Check.isInRange(datos.ctdMaxima, 2, 7) ? datos.ctdMaxima 	: ctdMaxima;
+		privado 	= datos.privado 	!= null 			 ? datos.privado 	: privado;
+		
+		return this;
+	}
 
-    public void setPrivado(Boolean privado) {
-        this.privado = privado;
-    }
-
-    @Column(nullable = false)
-    public Integer getCtdMaxima() {
-        return ctdMaxima;
-    }
-
-    public void setCtdMaxima(Integer ctdMaxima) {
-        this.ctdMaxima = ctdMaxima;
-    }
 }

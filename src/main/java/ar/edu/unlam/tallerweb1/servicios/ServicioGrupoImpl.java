@@ -1,9 +1,13 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
+import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
+import ar.edu.unlam.tallerweb1.dto.DatosDeGrupoParaBusqueda;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioCarrera;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupo;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioMateria;
+import ar.edu.unlam.tallerweb1.util.exceptions.LimiteDeUsuariosIlegalException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +29,32 @@ public class ServicioGrupoImpl implements ServicioGrupo {
         this.repositorioCarreraParaElServicio = repositorioCarreraParaElServicio;
         this.repositorioMateriaParaElServicio = repositorioMateriaParaElServicio;
     }
+    
+    @Override
+	public Grupo buscarGrupoPorID(Long idBuscado) {
+		Grupo encontrado = repositorioGrupoParaElServicio.getGrupoByID(idBuscado);
+
+		return encontrado;
+	}
+
+	@Override
+	public void modificarGrupo(Long id, Grupo formulario) {
+		Grupo objetivo = repositorioGrupoParaElServicio.getGrupoByID(id);
+
+		objetivo.actualizar(formulario);
+
+		if (formulario.getCtdMaxima() != null && objetivo.getCtdMaxima() != formulario.getCtdMaxima())
+			throw new LimiteDeUsuariosIlegalException(id);
+
+		repositorioGrupoParaElServicio.actualizarGrupo(objetivo);
+	}
+
+	@Override
+	public void eliminarGrupo(Long idBuscado) {
+		Grupo objetivo = repositorioGrupoParaElServicio.getGrupoByID(idBuscado);
+
+		repositorioGrupoParaElServicio.eliminarGrupo(objetivo);
+	}
 
     @Override
     public Grupo crearGrupo(DatosDeGrupo datosDeGrupo) {

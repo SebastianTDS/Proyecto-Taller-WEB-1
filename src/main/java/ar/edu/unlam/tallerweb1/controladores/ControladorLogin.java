@@ -67,18 +67,9 @@ public class ControladorLogin {
 		return new ModelAndView("login", model);
 	}
 
-
-
-
 	// Escucha la url /, y redirige a la URL /login, es lo mismo que si se invoca la url /login directamente.
 	@RequestMapping(path = "/", method = RequestMethod.GET)
 	public ModelAndView inicio() {
-		return new ModelAndView("/index");
-
-	}
-	@RequestMapping(path = "/ir-inicio", method = RequestMethod.GET)
-	public ModelAndView inicio2() {
-		return new ModelAndView("/index");
-
+		return new ModelAndView("index");
 	}
 }

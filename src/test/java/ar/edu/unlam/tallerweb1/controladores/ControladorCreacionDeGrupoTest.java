@@ -1,8 +1,11 @@
-package ar.edu.unlam.tallerweb1.ControladoresTest;
+package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.controladores.ControladorCreacionDeGrupo;
+import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
+import ar.edu.unlam.tallerweb1.util.enums.Turno;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
@@ -46,7 +49,6 @@ public class ControladorCreacionDeGrupoTest {
     private DatosDeGrupo givenDatosDeGrupoIncompletos() {
         DatosDeGrupo datosdegrupo = new DatosDeGrupo();
         String nombre = "Los Picateclas";
-        Turno turno = Turno.NOCHE;
         Integer ctdMaxima = 5;
         String descripcion =  "Grupo de test para taller web";
         datosdegrupo.setNombre(nombre);
