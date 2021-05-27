@@ -38,9 +38,9 @@
 					</div>
 					<div class="col-5 col-sm-4 col-md-3 col-lg-2 p-2 border-warning">
 						<form:select path="turno" id="turno" class="form-control form-control-sm">
-							<option value="MANANA">MANANA</option>
-							<option value="TARDE">TARDE</option>
-							<option value="NOCHE">NOCHE</option>
+							<option value="MANIANA">Mañana</option>
+							<option value="TARDE">Tarde</option>
+							<option value="NOCHE">Noche</option>
 						</form:select>
 					</div>
 					<div class="col-5 col-sm-4 col-md-3 col-lg-2 p-2 border-warning">
