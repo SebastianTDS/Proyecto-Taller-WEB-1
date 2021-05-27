@@ -25,7 +25,7 @@
                         <p>Marcelo Andres Zelaya</p>
                     </li>
                     <li>
-                        <p>Angelo</p>
+                        <p>Angelo Salvador García Ordoñes</p>
                     </li>
                     <li>
                         <p>Sebastian Trillo Da Silva</p>
@@ -40,13 +40,13 @@
 
                 <ul class="footer_ul_amrc ">
                     <li>
-                        <p>Sebastian</p>
+                        <p>Sebastian Ismael</p>
                     </li>
                     <li>
-                        <p>Ruben</p>
+                        <p>Ruben Moreira</p>
                     </li>
                     <li>
-                        <p></p>
+                        <p>Florencia Martin</p>
                     </li>
 
                 </ul>
@@ -60,7 +60,7 @@
 
                 <ul class="footer_ul2_amrc ">
                     <li><i class="github fab fa-github fa-5x fleft padding-right "></i>
-                        <a href="# ">https://www.lipsum.com/</a>
+                        <a href="https://github.com/SebastianTDS/Umatch" class="link-light">https://github.com/SebastianTDS/Umatch</a>
                     </li>
 
                 </ul>

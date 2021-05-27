@@ -4,10 +4,10 @@
 <html>
 	<jsp:include page="../../templates/head.jsp"></jsp:include>
 
-	<body>
+	<body class="d-flex flex-wrap align-content-between">
 		  <jsp:include page="../../templates/header.jsp"></jsp:include>
 
-      <main>
+      <main >
 
               <a href="ir-a-home"><button class="btn btn-lg btn-primary btn-block">Sign in</button></a>
 
