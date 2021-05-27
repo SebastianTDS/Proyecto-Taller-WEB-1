@@ -87,7 +87,7 @@ public class ControladorCreacionDeGrupoTest {
     }
 
     private void thenMeRedirigeALaVistaDeGrupoCreado(ModelAndView mvc) {
-        assertThat("vistaGrupo").isEqualTo(mvc.getViewName());
+        assertThat("redirect:/grupos/null").isEqualTo(mvc.getViewName());
     }
 
 }

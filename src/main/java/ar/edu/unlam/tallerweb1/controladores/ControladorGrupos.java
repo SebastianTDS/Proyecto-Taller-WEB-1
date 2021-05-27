@@ -55,7 +55,7 @@ public class ControladorGrupos {
 		
 		service.eliminarGrupo(id);
 		modelo.put("mensaje", "Grupo eliminado con exito!");
-		return new ModelAndView("redirect:/", modelo);
+		return new ModelAndView("redirect:/ir-a-home", modelo);
 	}
 
 }

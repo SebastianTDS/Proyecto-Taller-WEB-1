@@ -14,34 +14,30 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ControladorCreacionDeGrupo {
 
-    private final ServicioGrupo servicioGrupo;
+	private final ServicioGrupo servicioGrupo;
 
-    @Autowired
-    public ControladorCreacionDeGrupo(ServicioGrupo servicioGrupo) {
-        this.servicioGrupo=servicioGrupo;
-    }
+	@Autowired
+	public ControladorCreacionDeGrupo(ServicioGrupo servicioGrupo) {
+		this.servicioGrupo = servicioGrupo;
+	}
 
+	@RequestMapping(value = "crear-grupo", method = RequestMethod.POST)
+	public ModelAndView irALaVistaDeGrupoCreado(@ModelAttribute DatosDeGrupo datos) {
+		ModelMap model = new ModelMap();
+		Grupo grupo = servicioGrupo.crearGrupo(datos);
+		if (grupo != null)
+			return CreacionExitosa(grupo);
+		else
+			return creacionSinExito(model);
 
-    @RequestMapping(value = "crear-grupo", method = RequestMethod.POST)
-    public ModelAndView irALaVistaDeGrupoCreado(@ModelAttribute DatosDeGrupo datos){
-        ModelMap model = new ModelMap();
-        Grupo grupo=servicioGrupo.crearGrupo(datos);
-        if(grupo!=null)
-            return CreacionExitosa(grupo);
-        else
-            return creacionSinExito(model);
+	}
 
-    }
+	private ModelAndView CreacionExitosa(Grupo grupo) {
+		return new ModelAndView("redirect:/grupos/" + grupo.getId());
+	}
 
-    private ModelAndView CreacionExitosa(Grupo grupo) {
-        return new ModelAndView("vistaGrupo");
-    }
-
-    private ModelAndView creacionSinExito(ModelMap model) {
-        model.put("error", "Completa todos los campos del formulario");
-        return new ModelAndView("redirect:/ir-a-crear-nuevo-grupo", model);
-    }
+	private ModelAndView creacionSinExito(ModelMap model) {
+		model.put("error", "Completa todos los campos del formulario");
+		return new ModelAndView("redirect:/ir-a-crear-nuevo-grupo", model);
+	}
 }
-
-
-

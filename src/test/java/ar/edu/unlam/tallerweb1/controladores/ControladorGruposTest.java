@@ -83,7 +83,7 @@ public class ControladorGruposTest {
 	}
 
 	private void thenElGrupoYaNoExiste(ModelAndView postGrupoEliminado) {
-		assertThat(postGrupoEliminado.getViewName()).isEqualTo("redirect:/");
+		assertThat(postGrupoEliminado.getViewName()).isEqualTo("redirect:/ir-a-home");
 		assertThat(postGrupoEliminado.getModel().get("mensaje")).isEqualTo("Grupo eliminado con exito!");
 	}
 
