@@ -1,9 +1,9 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
-import ar.edu.unlam.tallerweb1.controladores.ControladorCreacionDeGrupo;
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
+import ar.edu.unlam.tallerweb1.servicios.ServicioGrupoImpl;
 import ar.edu.unlam.tallerweb1.util.enums.Turno;
 
 import org.junit.Before;
@@ -18,11 +18,13 @@ public class ControladorCreacionDeGrupoTest {
 
     private ControladorCreacionDeGrupo controladorCreacionDeGrupo;
     private ServicioGrupo servicioGrupo;
+    
     @Before
     public void init(){
-         servicioGrupo = mock(ServicioGrupo.class);
+        servicioGrupo = mock(ServicioGrupoImpl.class);
         controladorCreacionDeGrupo = new ControladorCreacionDeGrupo(servicioGrupo);
     }
+    
     @Test
     public void queAlCrearElGrupoMedianteDatosCorrectosMeRedirigaALaVistaDelGrupoCreado(){
         DatosDeGrupo grupo = givenDatosDeGrupo();
@@ -85,9 +87,9 @@ public class ControladorCreacionDeGrupoTest {
     }
 
     private void thenMeRedirigeALaVistaDeGrupoCreado(ModelAndView mvc) {
-        assertThat("VistaGrupo").isEqualTo(mvc.getViewName());
+        assertThat("vistaGrupo").isEqualTo(mvc.getViewName());
     }
 
-    }
+}
 
 

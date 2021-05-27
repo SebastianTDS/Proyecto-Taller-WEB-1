@@ -3,7 +3,6 @@ package ar.edu.unlam.tallerweb1.repositorios;
 import ar.edu.unlam.tallerweb1.SpringTest;
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupoParaBusqueda;
 import ar.edu.unlam.tallerweb1.modelo.*;
-import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupoImpl;
 import ar.edu.unlam.tallerweb1.util.enums.Privacidad;
 import ar.edu.unlam.tallerweb1.util.enums.Turno;
 

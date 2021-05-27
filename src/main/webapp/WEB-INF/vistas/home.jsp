@@ -37,6 +37,7 @@
 					<div class="col-5 col-sm-4 col-md-3 col-lg-2 p-2">
 						<form:select path="carrera" id="carrera" class="form-control form-control-sm">
 							<option value="999999">TODO</option>
+
 							<c:forEach items="${carreras}" var ="carrera">
 								<option value="${carrera.id}">${carrera.nombre}</option>
 							</c:forEach>
@@ -45,6 +46,7 @@
 					<div class="col-5 col-sm-4 col-md-3 col-lg-2 p-2">
 						<form:select path="materia" id="materia" class="form-control form-control-sm">
 							<option value="999999">TODO</option>
+
 							<c:forEach items="${materias}" var ="materia">
 								<option value="${materia.id}">${materia.nombre}</option>
 							</c:forEach>
@@ -56,13 +58,14 @@
 							<option value="MANIANA">MANIANA</option>
 							<option value="TARDE">TARDE</option>
 							<option value="NOCHE">NOCHE</option>
+
 						</form:select>
 					</div>
 					<div class="col-5 col-sm-4 col-md-3 col-lg-2 p-2">
 						<form:select path="privacidad" id="privacidad" class="form-control form-control-sm">
 								<option value="TODO">TODO</option>
-								<option value="PUBLICO">PUBLICO</option>
-								<option value="PRIVADO">PRIVADO</option>
+								<option value="PUBLICO">Publico</option>
+								<option value="PRIVADO">Privado</option>
 						</form:select>
 					</div>
 					<div class="col-5 col-sm-4 col-md-3 col-lg-2 p-2">
