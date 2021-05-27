@@ -53,7 +53,7 @@
 				</div>
 
 				<div class="perfil mx-auto mb-2 ">
-					<img class="w-100 h-100 p-1" src="../img/profile.jpg">
+					<img class="w-100 h-100 p-1" src="../img/placeholder.png">
 				</div>
 
 				<div class="text-center text-white mb-5">

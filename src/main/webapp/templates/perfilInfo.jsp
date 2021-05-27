@@ -1,7 +1,7 @@
 <div class="window col-12 col-sm-9 text-dark text-right">
     <ul id="datos" class="mt-5 text-center">
         <li class="perfil mx-auto mb-2">
-            <img class="w-100 h-100 p-1 border-secondary" src="../img/profile.jpg">
+            <img class="w-100 h-100 p-1 border-secondary" src="../img/placeholder.png">
         </li>
         <li class="row justify-content-center">
             <label for="nombre" class="col-6" hidden>Nombre:</label>
