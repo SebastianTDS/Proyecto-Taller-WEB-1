@@ -16,7 +16,7 @@ import ar.edu.unlam.tallerweb1.util.enums.Turno;
 public class RepositorioGruposTest extends SpringTest{
 
 	@Autowired
-	private RepositorioGrupos repository;
+	private RepositorioGrupo repository;
 	
 	@Test @Transactional @Rollback
 	public void testQuePodamosObtenerUnGrupoPorSuID () {

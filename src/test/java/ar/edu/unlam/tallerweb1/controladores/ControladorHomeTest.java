@@ -1,6 +1,7 @@
-package ar.edu.unlam.tallerweb1.ControladoresTest;
+package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.controladores.ControladorHome;
+import ar.edu.unlam.tallerweb1.dto.DatosDeGrupoParaBusqueda;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
 import org.junit.Before;

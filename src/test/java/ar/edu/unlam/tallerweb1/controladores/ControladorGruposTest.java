@@ -10,18 +10,18 @@ import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
-import ar.edu.unlam.tallerweb1.servicios.ServicioGrupos;
-import ar.edu.unlam.tallerweb1.servicios.ServicioGruposImpl;
+import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
+import ar.edu.unlam.tallerweb1.servicios.ServicioGrupoImpl;
 import ar.edu.unlam.tallerweb1.util.exceptions.LimiteDeUsuariosIlegalException;
 
 public class ControladorGruposTest {
 
 	private static ControladorGrupos controller;
-	private static ServicioGrupos service;
+	private static ServicioGrupo service;
 
 	@Before
 	public void init() {
-		service = mock(ServicioGruposImpl.class);
+		service = mock(ServicioGrupoImpl.class);
 		controller = new ControladorGrupos(service);
 	}
 

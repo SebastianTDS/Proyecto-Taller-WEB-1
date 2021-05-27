@@ -1,6 +1,6 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
-import ar.edu.unlam.tallerweb1.modelo.DatosDeUsuario;
+import ar.edu.unlam.tallerweb1.dto.DatosDeUsuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioUsuario;
 
 import org.springframework.beans.factory.annotation.Autowired;

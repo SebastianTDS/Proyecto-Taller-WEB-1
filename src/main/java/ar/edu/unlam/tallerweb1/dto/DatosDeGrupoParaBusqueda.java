@@ -1,4 +1,7 @@
-package ar.edu.unlam.tallerweb1.modelo;
+package ar.edu.unlam.tallerweb1.dto;
+
+import ar.edu.unlam.tallerweb1.util.enums.Privacidad;
+import ar.edu.unlam.tallerweb1.util.enums.Turno;
 
 public class DatosDeGrupoParaBusqueda {
 
@@ -7,7 +10,6 @@ public class DatosDeGrupoParaBusqueda {
     private Long carrera;
     private Long materia;
     private Privacidad privacidad;
-
 
     public Privacidad getPrivacidad() {
         return privacidad;

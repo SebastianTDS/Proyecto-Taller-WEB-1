@@ -11,16 +11,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
-import ar.edu.unlam.tallerweb1.servicios.ServicioGrupos;
+import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
 
 @Controller
 @RequestMapping("/grupos")
 public class ControladorGrupos {
 
-	private ServicioGrupos service;
+	private ServicioGrupo service;
 
 	@Autowired
-	public ControladorGrupos(ServicioGrupos service) {
+	public ControladorGrupos(ServicioGrupo service) {
 		this.service = service;
 	}
 

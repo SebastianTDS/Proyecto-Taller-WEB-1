@@ -1,4 +1,6 @@
-package ar.edu.unlam.tallerweb1.modelo;
+package ar.edu.unlam.tallerweb1.dto;
+
+import ar.edu.unlam.tallerweb1.util.enums.Turno;
 
 public class DatosDeGrupo {
 

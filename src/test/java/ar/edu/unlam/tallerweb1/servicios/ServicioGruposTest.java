@@ -10,19 +10,19 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
-import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupos;
-import ar.edu.unlam.tallerweb1.repositorios.RepositorioGruposImpl;
+import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupo;
+import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupoImpl;
 import ar.edu.unlam.tallerweb1.util.exceptions.LimiteDeUsuariosIlegalException;
 
 public class ServicioGruposTest {
 
-	private static ServicioGrupos service;
-	private static RepositorioGrupos repository;
+	private static ServicioGrupo service;
+	private static RepositorioGrupo repository;
 
 	@Before
 	public void init() {
-		repository = mock(RepositorioGruposImpl.class);
-		service = new ServicioGruposImpl(repository);
+		repository = mock(RepositorioGrupoImpl.class);
+		service = new ServicioGrupoImpl(repository, null, null);
 	}
 
 	@Test
