@@ -9,10 +9,12 @@ import static org.mockito.Mockito.when;
 import org.junit.Before;
 import org.junit.Test;
 
+import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupo;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupoImpl;
-import ar.edu.unlam.tallerweb1.util.exceptions.LimiteDeUsuariosIlegalException;
+import ar.edu.unlam.tallerweb1.util.exceptions.GrupoInexistenteException;
+import ar.edu.unlam.tallerweb1.util.exceptions.LimiteDeUsuariosFueraDeRango;
 
 public class ServicioGruposTest {
 
@@ -34,40 +36,36 @@ public class ServicioGruposTest {
 		thenObtengoElGrupo(buscado);
 	}
 
-	@Test
+	@Test(expected = GrupoInexistenteException.class)
 	public void testQueNoDevuelvaNadaSiNoExisteElGrupo() {
 		Long idBuscado = 10L;
 
-		Grupo buscado = whenBuscoElGrupoPorSuID(idBuscado);
-
-		thenNoObtengoNingunGrupo(buscado);
+		whenBuscoElGrupoPorSuIDErroneoLanzaExepcion(idBuscado);
 	}
 
 	@Test
 	public void testQueSeModifiquenLosDatos() {
 		Grupo buscado = givenExisteUnGrupo();
-		Grupo nuevosDatos = givenDatosAActualizar();
+		DatosDeGrupo nuevosDatos = givenDatosAActualizar();
 
 		whenIntentamosActualizamosLosDatos(buscado, nuevosDatos);
 
 		thenLosDatosSeModifican(buscado);
 	}
 
-	@Test(expected = LimiteDeUsuariosIlegalException.class)
+	@Test(expected = LimiteDeUsuariosFueraDeRango.class)
 	public void testQueSeRespetenElMaxYMinDeParticipantes() {
 		Grupo buscado = givenExisteUnGrupo();
-		Grupo nuevosDatos = givenDatosInvalidosAActualizar();
+		DatosDeGrupo nuevosDatos = givenDatosInvalidosAActualizar();
 
 		whenIntentamosActualizarLanzaExcepcion(buscado, nuevosDatos);
 	}
 	
-	@Test
+	@Test(expected = GrupoInexistenteException.class)
 	public void testQueSePuedaEliminarUnGrupo() {
 		Grupo buscado = givenExisteUnGrupo();
 		
 		whenIntentoEliminarGrupoExistente(buscado);
-		
-		thenElGrupoYaNoExiste(buscado);
 	}
 
 	private Grupo givenExisteUnGrupo() {
@@ -76,24 +74,20 @@ public class ServicioGruposTest {
 		return nuevoGrupo;
 	}
 
-	private void thenElGrupoYaNoExiste(Grupo buscado) {
-		verify(repository, times(1)).eliminarGrupo(buscado);
-	}
-
 	private void whenIntentoEliminarGrupoExistente(Grupo buscado) {
-		when(repository.getGrupoByID(buscado.getId())).thenReturn(buscado);
+		when(repository.getGrupoByID(buscado.getId())).thenReturn(null);
 		service.eliminarGrupo(buscado.getId());
 	}
 
-	private Grupo givenDatosInvalidosAActualizar() {
-		Grupo nuevosDatos = new Grupo();
+	private DatosDeGrupo givenDatosInvalidosAActualizar() {
+		DatosDeGrupo nuevosDatos = new DatosDeGrupo();
 
-		nuevosDatos.setCtdMaxima(8);
+		nuevosDatos.setCantidadMax(8);
 
 		return nuevosDatos;
 	}
 	
-	private void whenIntentamosActualizamosLosDatos(Grupo buscado, Grupo nuevosDatos) {
+	private void whenIntentamosActualizamosLosDatos(Grupo buscado, DatosDeGrupo nuevosDatos) {
 		when(repository.getGrupoByID(buscado.getId())).thenReturn(buscado);
 		service.modificarGrupo(buscado.getId(), nuevosDatos);
 	}
@@ -102,13 +96,13 @@ public class ServicioGruposTest {
 		verify(repository, times(1)).actualizarGrupo(buscado);
 	}
 
-	private void whenIntentamosActualizarLanzaExcepcion(Grupo buscado, Grupo nuevosDatos) {
+	private void whenIntentamosActualizarLanzaExcepcion(Grupo buscado, DatosDeGrupo nuevosDatos) {
 		when(repository.getGrupoByID(buscado.getId())).thenReturn(buscado);
 		service.modificarGrupo(buscado.getId(), nuevosDatos);
 	}
 
-	private Grupo givenDatosAActualizar() {
-		Grupo nuevosDatos = new Grupo();
+	private DatosDeGrupo givenDatosAActualizar() {
+		DatosDeGrupo nuevosDatos = new DatosDeGrupo();
 
 		nuevosDatos.setNombre("Nuevo nombre de grupo");
 		nuevosDatos.setDescripcion("Nueva descripcion");
@@ -116,16 +110,17 @@ public class ServicioGruposTest {
 		return nuevosDatos;
 	}
 
-	private void thenNoObtengoNingunGrupo(Grupo buscado) {
-		assertThat(buscado).isNull();
-	}
-
 	private void thenObtengoElGrupo(Grupo buscado) {
 		assertThat(buscado).isNotNull();
 	}
 
 	private Grupo whenBuscoElGrupoPorSuID(Long idBuscado) {
-		when(service.buscarGrupoPorID(1L)).thenReturn(new Grupo());
+		when(repository.getGrupoByID(1L)).thenReturn(new Grupo());
+		return service.buscarGrupoPorID(idBuscado);
+	}
+	
+	private Grupo whenBuscoElGrupoPorSuIDErroneoLanzaExepcion(Long idBuscado) {
+		when(repository.getGrupoByID(1L)).thenReturn(null);
 		return service.buscarGrupoPorID(idBuscado);
 	}
 }

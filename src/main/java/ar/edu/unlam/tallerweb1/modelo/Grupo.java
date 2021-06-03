@@ -9,8 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.util.auxClass.Check;
 import ar.edu.unlam.tallerweb1.util.enums.Turno;
+import ar.edu.unlam.tallerweb1.util.exceptions.LimiteDeUsuariosFueraDeRango;
 
 @Entity
 public class Grupo {
@@ -18,8 +20,8 @@ public class Grupo {
 	private Long id;
 	private String nombre;
 	private String descripcion;
-	private Boolean privado;
-	private Integer ctdMaxima;
+	private Boolean cerrado;
+	private Integer cantidadMax;
 	
 	private Turno turno;
 	private Carrera carrera;
@@ -82,30 +84,30 @@ public class Grupo {
 	}
 
 	@Column(nullable = false)
-	public Boolean getPrivado() {
-		return privado;
+	public Boolean getCerrado() {
+		return cerrado;
 	}
 
-	public void setPrivado(Boolean privado) {
-		this.privado = privado;
+	public void setCerrado(Boolean privado) {
+		this.cerrado = privado;
 	}
 
 	@Column(nullable = false)
-	public Integer getCtdMaxima() {
-		return ctdMaxima;
+	public Integer getCantidadMax() {
+		return cantidadMax;
 	}
 
-	public void setCtdMaxima(Integer ctdMaxima) {
-		this.ctdMaxima = ctdMaxima;
+	public void setCantidadMax(Integer ctdMaxima) {
+		this.cantidadMax = ctdMaxima;
 	}
 	
-	public Grupo actualizar(Grupo datos) {
-		nombre 		= !Check.empty(datos.nombre)			 ? datos.nombre 	: nombre;
-		descripcion = !Check.empty(datos.descripcion) 		 ? datos.descripcion: descripcion;
-		ctdMaxima 	= Check.isInRange(datos.ctdMaxima, 2, 7) ? datos.ctdMaxima 	: ctdMaxima;
-		privado 	= datos.privado 	!= null 			 ? datos.privado 	: privado;
+	public void actualizar(DatosDeGrupo formulario) {
+		nombre 		= Check.empty(formulario.getNombre())		? nombre		: formulario.getNombre();
+		descripcion = Check.empty(formulario.getDescripcion())  ? descripcion	: formulario.getDescripcion();
+		cerrado 	= Check.isNull(formulario.getCerrado()) 	? cerrado		: formulario.getCerrado();
+		cantidadMax = formulario.getCantidadMax();
 		
-		return this;
+		if(!Check.isInRange(cantidadMax, 2, 7) && !Check.isNull(cantidadMax))
+			throw new LimiteDeUsuariosFueraDeRango(id);
 	}
-
 }

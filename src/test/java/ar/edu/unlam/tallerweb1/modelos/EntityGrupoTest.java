@@ -96,10 +96,10 @@ public class EntityGrupoTest extends SpringTest{
 	private Grupo givenExisteUnGrupo() {
 		Grupo nuevoGrupo = new Grupo();
 		
-		nuevoGrupo.setCtdMaxima(2);
+		nuevoGrupo.setCantidadMax(2);
 		nuevoGrupo.setDescripcion("Desc");
 		nuevoGrupo.setNombre("Hola");
-		nuevoGrupo.setPrivado(true);
+		nuevoGrupo.setCerrado(true);
 		nuevoGrupo.setTurno(Turno.NOCHE);
 		
 		return nuevoGrupo;

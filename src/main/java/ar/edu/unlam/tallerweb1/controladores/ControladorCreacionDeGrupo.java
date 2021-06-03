@@ -23,21 +23,8 @@ public class ControladorCreacionDeGrupo {
 
 	@RequestMapping(value = "crear-grupo", method = RequestMethod.POST)
 	public ModelAndView irALaVistaDeGrupoCreado(@ModelAttribute DatosDeGrupo datos) {
-		ModelMap model = new ModelMap();
-		Grupo grupo = servicioGrupo.crearGrupo(datos);
-		if (grupo != null)
-			return CreacionExitosa(grupo);
-		else
-			return creacionSinExito(model);
-
-	}
-
-	private ModelAndView CreacionExitosa(Grupo grupo) {
+		Grupo grupo=servicioGrupo.crearGrupo(datos);
 		return new ModelAndView("redirect:/grupos/" + grupo.getId());
 	}
 
-	private ModelAndView creacionSinExito(ModelMap model) {
-		model.put("error", "Completa todos los campos del formulario");
-		return new ModelAndView("redirect:/ir-a-crear-nuevo-grupo", model);
-	}
 }

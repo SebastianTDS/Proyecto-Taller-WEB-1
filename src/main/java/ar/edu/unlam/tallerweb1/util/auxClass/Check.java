@@ -9,4 +9,8 @@ public class Check {
 	public static Boolean isInRange(Integer valor, Integer min, Integer max) {
 		return valor != null && valor <= max && valor >= min;
 	}
+	
+	public static Boolean isNull(Object o) {
+		return o == null;
+	}
 }

@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.dto;
 
+import ar.edu.unlam.tallerweb1.util.enums.Disponibilidad;
 import ar.edu.unlam.tallerweb1.util.enums.Privacidad;
 import ar.edu.unlam.tallerweb1.util.enums.Turno;
 
@@ -10,6 +11,7 @@ public class DatosDeGrupoParaBusqueda {
     private Long carrera;
     private Long materia;
     private Privacidad privacidad;
+    private Disponibilidad disponibilidad;
 
     public Privacidad getPrivacidad() {
         return privacidad;
@@ -17,6 +19,14 @@ public class DatosDeGrupoParaBusqueda {
 
     public void setPrivacidad(Privacidad privacidad) {
         this.privacidad = privacidad;
+    }
+    
+    public Disponibilidad getDisponibilidad() {
+        return disponibilidad;
+    }
+
+    public void setDisponibilidad(Disponibilidad disponibilidad) {
+        this.disponibilidad = disponibilidad;
     }
 
     public Long getCarrera() {

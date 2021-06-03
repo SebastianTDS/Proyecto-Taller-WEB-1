@@ -2,7 +2,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
-	<jsp:include page="../../templates/head.jsp"></jsp:include>
+	<head>
+		<jsp:include page="../../templates/head.jsp"></jsp:include>
+	</head>
 
 	<body class="d-flex flex-wrap align-content-between">
 		  <jsp:include page="../../templates/header.jsp"></jsp:include>

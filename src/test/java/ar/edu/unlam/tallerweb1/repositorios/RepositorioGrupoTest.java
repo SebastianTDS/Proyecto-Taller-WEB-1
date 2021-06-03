@@ -3,6 +3,7 @@ package ar.edu.unlam.tallerweb1.repositorios;
 import ar.edu.unlam.tallerweb1.SpringTest;
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupoParaBusqueda;
 import ar.edu.unlam.tallerweb1.modelo.*;
+import ar.edu.unlam.tallerweb1.util.enums.Disponibilidad;
 import ar.edu.unlam.tallerweb1.util.enums.Privacidad;
 import ar.edu.unlam.tallerweb1.util.enums.Turno;
 
@@ -15,80 +16,163 @@ import java.util.List;
 
 public class RepositorioGrupoTest extends SpringTest {
 
+    private Materia nuevaMateria = new Materia();
+    private Carrera nuevaCarrera = new Carrera();
+
     @Autowired
     private RepositorioGrupoImpl repositorio;
 
-    @Test @Transactional @Rollback
-    public void  queSePuedaAgregarUnGrupoAlRepositorio(){
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedaAgregarUnGrupoAlRepositorio() {
         Grupo losPicatecla = givenQueExisteUnGrupoConCarreraYMateria();
-        Long idDelGrupo =  whenGuardoElGrupoEnElRepositorio(losPicatecla);
+        Long idDelGrupo = whenGuardoElGrupoEnElRepositorio(losPicatecla);
         thenLoPuedoBuscarPorId(idDelGrupo);
     }
 
-    @Test @Transactional @Rollback
-    public void  queSePuedaBuscarUnGrupoYDevolverlo(){
-            Grupo losPicatecla = givenQueExisteUnGrupoConCarreraYMateria();
-              Long idDeLosPicateclas=whenGuardoElGrupoEnElRepositorio(losPicatecla);
-              thenVerificoQueSeaElQueBuscabaMedianteSusId(idDeLosPicateclas);
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedaBuscarUnGrupoYDevolverlo() {
+        Grupo losPicatecla = givenQueExisteUnGrupoConCarreraYMateria();
+        Long idDeLosPicateclas = whenGuardoElGrupoEnElRepositorio(losPicatecla);
+        thenVerificoQueSeaElQueBuscabaMedianteSusId(idDeLosPicateclas);
 
-        }
+    }
 
-    @Test @Transactional @Rollback
-    public void  queSePuedaBuscarTodosLosgrupos(){
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedaBuscarTodosLosgrupos() {
         Grupo losPicatecla1 = givenQueExisteUnGrupoConCarreraYMateria();
         Grupo losPicatecla2 = givenQueExisteUnGrupoConCarreraYMateria();
         Grupo losPicatecla3 = givenQueExisteUnGrupoConCarreraYMateria();
 
-        givenQueGuardoVariosGruposEnElRepositorio(losPicatecla1,losPicatecla2,losPicatecla3);
-        List<Grupo> grupos= whenCuandoBuscoTodosLosGrupos();
+        givenQueGuardoVariosGruposEnElRepositorio(losPicatecla1, losPicatecla2, losPicatecla3);
+        List<Grupo> grupos = whenCuandoBuscoTodosLosGrupos();
         thenVerificoTodosQueTodosLosGruposSeMuestren(grupos);
     }
 
-    @Test @Transactional @Rollback
-    public void  queSePuedaBuscarFiltrandoLosgruposPorPrivacidad(){
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedaBuscarFiltrandoLosgruposPorPrivacidad() {
         Grupo losPicatecla1 = givenQueExisteUnGrupoConCarreraYMateria();
         givenQueGuardoUnGruposEnElRepositorio(losPicatecla1);
-        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda=givenQueExisteDatosParaLaBusquedaPorPrivacidad();
-        List<Grupo> grupos= whenCuandoBuscoFiltrandoLosGrupos(datosDeGrupoParaBusqueda);
+        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda = givenQueExisteDatosParaLaBusquedaPorPrivacidad();
+        List<Grupo> grupos = whenCuandoBuscoFiltrandoLosGrupos(datosDeGrupoParaBusqueda);
         thenVerificoQueLosGruposFiltradosSeMuestren(grupos);
     }
 
-    @Test @Transactional @Rollback
-    public void  queSePuedaBuscarFiltrandoLosgruposPorTurno(){
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedaBuscarFiltrandoLosgruposPorTurno() {
         Grupo losPicatecla1 = givenQueExisteUnGrupoConCarreraYMateria();
         givenQueGuardoUnGruposEnElRepositorio(losPicatecla1);
-        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda=givenQueExisteDatosParaLaBusquedaPorTurno();
-        List<Grupo> grupos= whenCuandoBuscoFiltrandoLosGrupos(datosDeGrupoParaBusqueda);
+        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda = givenQueExisteDatosParaLaBusquedaPorTurno();
+        List<Grupo> grupos = whenCuandoBuscoFiltrandoLosGrupos(datosDeGrupoParaBusqueda);
         thenVerificoQueLosGruposFiltradosSeMuestren(grupos);
     }
 
-    @Test @Transactional @Rollback
-    public void  queSePuedaBuscarFiltrandoLosgruposPorNombre(){
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedaBuscarFiltrandoLosgruposPorNombre() {
         Grupo losPicatecla1 = givenQueExisteUnGrupoConCarreraYMateria();
         givenQueGuardoUnGruposEnElRepositorio(losPicatecla1);
-        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda=givenQueExisteDatosParaLaBusquedaPorNombre();
-        List<Grupo> grupos= whenCuandoBuscoFiltrandoLosGrupos(datosDeGrupoParaBusqueda);
+        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda = givenQueExisteDatosParaLaBusquedaPorNombre();
+        List<Grupo> grupos = whenCuandoBuscoFiltrandoLosGrupos(datosDeGrupoParaBusqueda);
         thenVerificoQueLosGruposFiltradosSeMuestren(grupos);
     }
 
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedaBuscarFiltrandoLosgruposPorDisponibilidad() {
+        Grupo losPicatecla1 = givenQueExisteUnGrupoConCarreraYMateria();
+        givenQueGuardoUnGruposEnElRepositorio(losPicatecla1);
+        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda = givenQueExisteDatosParaLaBusquedaPorDisponibilidad();
+        List<Grupo> grupos = whenCuandoBuscoFiltrandoLosGrupos(datosDeGrupoParaBusqueda);
+        thenVerificoQueLosGruposFiltradosSeMuestren(grupos);
+    }
 
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedaBuscarFiltrandoLosgruposPorNombreYTurno() {
+        Grupo losPicatecla1 = givenQueExisteUnGrupoConCarreraYMateria();
+        givenQueGuardoUnGruposEnElRepositorio(losPicatecla1);
+        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda = givenQueExisteDatosParaLaBusquedaPorNombreYTurno();
+        List<Grupo> grupos = whenCuandoBuscoFiltrandoLosGrupos(datosDeGrupoParaBusqueda);
+        thenVerificoQueLosGruposFiltradosSeMuestren(grupos);
+    }
+/*
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedaBuscarFiltrandoLosgruposPorCarrera() {
+        Grupo losPicatecla1 = givenQueExisteUnGrupoConCarreraYMateria();
+        givenQueGuardoUnGruposEnElRepositorio(losPicatecla1);
+        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda = givenQueExisteDatosParaLaBusquedaPorCarrera();
+        List<Grupo> grupos = whenCuandoBuscoFiltrandoLosGrupos(datosDeGrupoParaBusqueda);
+        thenVerificoQueLosGruposFiltradosSeMuestren(grupos);
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedaBuscarFiltrandoLosgruposPorMateria() {
+        Grupo losPicatecla1 = givenQueExisteUnGrupoConCarreraYMateria();
+        givenQueGuardoUnGruposEnElRepositorio(losPicatecla1);
+        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda = givenQueExisteDatosParaLaBusquedaPorMateria();
+        List<Grupo> grupos = whenCuandoBuscoFiltrandoLosGrupos(datosDeGrupoParaBusqueda);
+        thenVerificoQueLosGruposFiltradosSeMuestren(grupos);
+    }
+*/
+
+
+    private DatosDeGrupoParaBusqueda givenQueExisteDatosParaLaBusquedaPorDisponibilidad() {
+        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda = new DatosDeGrupoParaBusqueda();
+        datosDeGrupoParaBusqueda.setDisponibilidad(Disponibilidad.DISPONIBLE);
+        return datosDeGrupoParaBusqueda;
+    }
+    private DatosDeGrupoParaBusqueda givenQueExisteDatosParaLaBusquedaPorMateria() {
+        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda = new DatosDeGrupoParaBusqueda();
+        datosDeGrupoParaBusqueda.setMateria(1l);
+        return datosDeGrupoParaBusqueda;
+    }
+
+    private DatosDeGrupoParaBusqueda givenQueExisteDatosParaLaBusquedaPorCarrera() {
+        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda = new DatosDeGrupoParaBusqueda();
+        datosDeGrupoParaBusqueda.setCarrera(1l);
+        return datosDeGrupoParaBusqueda;
+    }
+
+    private DatosDeGrupoParaBusqueda givenQueExisteDatosParaLaBusquedaPorNombreYTurno() {
+        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda = new DatosDeGrupoParaBusqueda();
+        datosDeGrupoParaBusqueda.setTurno(Turno.NOCHE);
+        datosDeGrupoParaBusqueda.setNombre("Hol");
+        return datosDeGrupoParaBusqueda;
+    }
 
     private DatosDeGrupoParaBusqueda givenQueExisteDatosParaLaBusquedaPorNombre() {
-        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda=new DatosDeGrupoParaBusqueda();
+        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda = new DatosDeGrupoParaBusqueda();
         datosDeGrupoParaBusqueda.setNombre("Hol");
-        return  datosDeGrupoParaBusqueda;
+        return datosDeGrupoParaBusqueda;
     }
 
     private DatosDeGrupoParaBusqueda givenQueExisteDatosParaLaBusquedaPorTurno() {
-        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda=new DatosDeGrupoParaBusqueda();
+        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda = new DatosDeGrupoParaBusqueda();
         datosDeGrupoParaBusqueda.setTurno(Turno.NOCHE);
-        return  datosDeGrupoParaBusqueda;
+        return datosDeGrupoParaBusqueda;
     }
 
     private DatosDeGrupoParaBusqueda givenQueExisteDatosParaLaBusquedaPorPrivacidad() {
-        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda=new DatosDeGrupoParaBusqueda();
-        datosDeGrupoParaBusqueda.setPrivacidad(Privacidad.PRIVADO);
-        return  datosDeGrupoParaBusqueda;
+        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda = new DatosDeGrupoParaBusqueda();
+        datosDeGrupoParaBusqueda.setPrivacidad(Privacidad.CERRADO);
+        return datosDeGrupoParaBusqueda;
     }
 
     private void thenVerificoQueLosGruposFiltradosSeMuestren(List<Grupo> grupos) {
@@ -115,23 +199,21 @@ public class RepositorioGrupoTest extends SpringTest {
     }
 
     private void thenVerificoTodosQueTodosLosGruposSeMuestren(List<Grupo> grupos) {
-        Integer tamano=grupos.size();
-       assertThat(3).isEqualTo(tamano);
+        Integer tamano = grupos.size();
+        assertThat(3).isEqualTo(tamano);
     }
 
     private void thenVerificoQueSeaElQueBuscabaMedianteSusId(Long id) {
-        Grupo idAComparar= session().get(Grupo.class,id);
+        Grupo idAComparar = session().get(Grupo.class, id);
         assertThat(idAComparar).isNotNull();
     }
 
     private Grupo givenQueExisteUnGrupoConCarreraYMateria() {
         Grupo nuevoGrupo = new Grupo();
-        Carrera nuevaCarrera = new Carrera();
-        Materia nuevaMateria = new Materia();
-        nuevoGrupo.setCtdMaxima(2);
+        nuevoGrupo.setCantidadMax(2);
         nuevoGrupo.setDescripcion("Desc");
         nuevoGrupo.setNombre("Hola");
-        nuevoGrupo.setPrivado(true);
+        nuevoGrupo.setCerrado(true);
         nuevoGrupo.setTurno(Turno.NOCHE);
         session().save(nuevaCarrera);
         session().save(nuevaMateria);
@@ -144,11 +226,11 @@ public class RepositorioGrupoTest extends SpringTest {
     }
 
     private Long whenGuardoElGrupoEnElRepositorio(Grupo losPicatecla) {
-                        repositorio.guardarGrupo(losPicatecla);
-                        return losPicatecla.getId();
+        repositorio.guardarGrupo(losPicatecla);
+        return losPicatecla.getId();
     }
 
-    private void thenLoPuedoBuscarPorId( Long idDelGrupo) {
+    private void thenLoPuedoBuscarPorId(Long idDelGrupo) {
         Grupo buscado = repositorio.buscarPorId(idDelGrupo);
         assertThat(buscado).isNotNull();
     }

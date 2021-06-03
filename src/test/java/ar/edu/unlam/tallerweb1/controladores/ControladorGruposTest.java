@@ -9,10 +9,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
 
+import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupoImpl;
-import ar.edu.unlam.tallerweb1.util.exceptions.LimiteDeUsuariosIlegalException;
+import ar.edu.unlam.tallerweb1.util.exceptions.GrupoInexistenteException;
+import ar.edu.unlam.tallerweb1.util.exceptions.LimiteDeUsuariosFueraDeRango;
 
 public class ControladorGruposTest {
 
@@ -34,19 +36,17 @@ public class ControladorGruposTest {
 		thenObtengoLaVistaYLosDatosDelGrupo(vistaObtenida);
 	}
 
-	@Test
+	@Test(expected = GrupoInexistenteException.class)
 	public void testQueAlBuscarUnGrupoInexistenteVolvamosAlIndex() {
 		Long idGrupoInexistente = 2L;
 
-		ModelAndView vistaObtenida = whenBuscoPorLaURLConElIDIncorrecto(idGrupoInexistente);
-
-		thenMeRedirigeAlIndex(vistaObtenida);
+		whenBuscoPorLaURLConElIDIncorrectoLanzaExcepcion(idGrupoInexistente);
 	}
 
 	@Test
 	public void testQuePodamosEditarDatosDelGrupo() {
 		Long idGrupoBuscado = 1L;
-		Grupo formulario = givenCompletamosFormularioConNombreYCantidad("Basica 1 pepe", 3);
+		DatosDeGrupo formulario = givenCompletamosFormulario(idGrupoBuscado);
 
 		ModelAndView cambiosRealizados = whenCargoLaModificacionDeLosDatos(idGrupoBuscado, formulario);
 
@@ -62,21 +62,56 @@ public class ControladorGruposTest {
 		thenElGrupoYaNoExiste(postGrupoEliminado);
 	}
 
-	@Test(expected = LimiteDeUsuariosIlegalException.class)
+	@Test(expected = LimiteDeUsuariosFueraDeRango.class)
 	public void testQueArrojeExcepcionAlModificarErroneamente() {
 		Long idGrupoBuscado = 1L;
-		Grupo formulario = givenCompletamosFormularioConNombreYCantidad("Basica 1 pepe", 8);
+		DatosDeGrupo formulario = givenCompletamosFormularioErroneamente(idGrupoBuscado);
 
 		whenIntentamosModificarGrupoLanzaException(idGrupoBuscado, formulario);
 
 	}
+	
+	@Test
+	public void testQuePodamosAccederAEdicionDeGrupo() {
+		Long idGrupoBuscado = 1L;
 
-	private void whenIntentamosModificarGrupoLanzaException(Long idGrupoBuscado, Grupo formulario) {
-		doThrow(LimiteDeUsuariosIlegalException.class).when(service).modificarGrupo(idGrupoBuscado, formulario);
-		controller.cambiarDatosGrupo(idGrupoBuscado, formulario);
+		ModelAndView vistaObtenida = whenBuscoPorLaURLConElIDCorrectoAEditar(idGrupoBuscado);
+
+		thenObtengoLaVistaYElModeloDelFormulario(vistaObtenida);
+	}
+	
+	@Test(expected = GrupoInexistenteException.class)
+	public void testQueNoPodamosAccederAEdicionDeGrupoInexistente() {
+		Long idGrupoBuscado = 1L;
+
+		whenBuscoPorLaURLDeEdicionConElIDIncorrectoLanzaExcepcion(idGrupoBuscado);
+
 	}
 
 	/* Metodos Auxiliares */
+	
+	private ModelAndView whenBuscoPorLaURLDeEdicionConElIDIncorrectoLanzaExcepcion(Long idGrupoBuscado) {
+		doThrow(GrupoInexistenteException.class).when(service).buscarGrupoPorID(idGrupoBuscado);
+
+		return controller.perfilDeGrupoEdicion(idGrupoBuscado);
+	}
+	
+	private void thenObtengoLaVistaYElModeloDelFormulario(ModelAndView vistaObtenida) {
+		assertThat(vistaObtenida.getViewName()).isEqualTo("vistaGrupo");
+		assertThat(vistaObtenida.getModel().get("formulario")).isNotNull();
+	}
+	
+	private ModelAndView whenBuscoPorLaURLConElIDCorrectoAEditar(Long idGrupoBuscado) {
+		when(service.buscarGrupoPorID(idGrupoBuscado)).thenReturn(new Grupo());
+
+		return controller.perfilDeGrupoEdicion(idGrupoBuscado);
+	}
+
+	
+	private void whenIntentamosModificarGrupoLanzaException(Long idGrupoBuscado, DatosDeGrupo formulario) {
+		doThrow(LimiteDeUsuariosFueraDeRango.class).when(service).modificarGrupo(idGrupoBuscado, formulario);
+		controller.cambiarDatosGrupo(formulario);
+	}
 
 	private ModelAndView whenEliminoElGrupo(Long idGrupoBuscado) {
 		return controller.eliminarGrupo(idGrupoBuscado);
@@ -91,15 +126,25 @@ public class ControladorGruposTest {
 		assertThat(cambiosRealizados.getModel().get("mensaje")).isEqualTo("Datos actualizados");
 	}
 
-	private ModelAndView whenCargoLaModificacionDeLosDatos(Long idGrupoBuscado, Grupo formulario) {
-		return controller.cambiarDatosGrupo(idGrupoBuscado, formulario);
+	private ModelAndView whenCargoLaModificacionDeLosDatos(Long idGrupoBuscado, DatosDeGrupo formulario) {
+		return controller.cambiarDatosGrupo(formulario);
 	}
 
-	private Grupo givenCompletamosFormularioConNombreYCantidad(String nombre, Integer cantidad) {
-		Grupo nuevoGrupo = new Grupo();
+	private DatosDeGrupo givenCompletamosFormulario(Long idGrupoBuscado) {
+		DatosDeGrupo nuevoGrupo = new DatosDeGrupo();
 
-		nuevoGrupo.setNombre(nombre);
-		nuevoGrupo.setCtdMaxima(cantidad);
+		nuevoGrupo.setId(idGrupoBuscado);
+		nuevoGrupo.setNombre("Grupo de pepe");
+		nuevoGrupo.setCantidadMax(2);
+
+		return nuevoGrupo;
+	}
+	
+	private DatosDeGrupo givenCompletamosFormularioErroneamente(Long idGrupoBuscado) {
+		DatosDeGrupo nuevoGrupo = new DatosDeGrupo();
+
+		nuevoGrupo.setId(idGrupoBuscado);
+		nuevoGrupo.setCantidadMax(8);
 
 		return nuevoGrupo;
 	}
@@ -107,22 +152,18 @@ public class ControladorGruposTest {
 	private ModelAndView whenBuscoPorLaURLConElIDCorrecto(Long idGrupoBuscado) {
 		when(service.buscarGrupoPorID(idGrupoBuscado)).thenReturn(new Grupo());
 
-		return controller.buscarGrupo(idGrupoBuscado, null);
+		return controller.perfilDeGrupo(idGrupoBuscado);
 	}
 
-	private ModelAndView whenBuscoPorLaURLConElIDIncorrecto(Long idGrupoInexistente) {
-		when(service.buscarGrupoPorID(idGrupoInexistente)).thenReturn(null);
+	private ModelAndView whenBuscoPorLaURLConElIDIncorrectoLanzaExcepcion(Long idGrupoInexistente) {
+		doThrow(GrupoInexistenteException.class).when(service).buscarGrupoPorID(idGrupoInexistente);
 
-		return controller.buscarGrupo(idGrupoInexistente, null);
+		return controller.perfilDeGrupo(idGrupoInexistente);
 	}
 
 	private void thenObtengoLaVistaYLosDatosDelGrupo(ModelAndView vistaObtenida) {
 		assertThat(vistaObtenida.getViewName()).isEqualTo("vistaGrupo");
 		assertThat(vistaObtenida.getModel()).isNotNull();
-	}
-
-	private void thenMeRedirigeAlIndex(ModelAndView vistaObtenida) {
-		assertThat(vistaObtenida.getViewName()).isEqualTo("redirect:/");
 	}
 
 }

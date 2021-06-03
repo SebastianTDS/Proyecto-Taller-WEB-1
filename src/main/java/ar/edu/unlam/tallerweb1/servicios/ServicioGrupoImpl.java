@@ -6,8 +6,9 @@ import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioCarrera;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupo;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioMateria;
-import ar.edu.unlam.tallerweb1.util.enums.Privacidad;
-import ar.edu.unlam.tallerweb1.util.exceptions.LimiteDeUsuariosIlegalException;
+import ar.edu.unlam.tallerweb1.util.auxClass.Check;
+import ar.edu.unlam.tallerweb1.util.exceptions.FormularioDeGrupoIncompleto;
+import ar.edu.unlam.tallerweb1.util.exceptions.GrupoInexistenteException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,92 +20,78 @@ import java.util.List;
 @Transactional
 public class ServicioGrupoImpl implements ServicioGrupo {
 
-    private final RepositorioGrupo repositorioGrupoParaElServicio;
-    private final RepositorioCarrera repositorioCarreraParaElServicio;
-    private final RepositorioMateria repositorioMateriaParaElServicio;
+    private final RepositorioGrupo repoGrupo;
+    private final RepositorioCarrera repoCarrera;
+    private final RepositorioMateria repoMateria;
 
 
     @Autowired
     public ServicioGrupoImpl(RepositorioGrupo repositorioGrupoParaElServicio, RepositorioCarrera repositorioCarreraParaElServicio, RepositorioMateria repositorioMateriaParaElServicio) {
-        this.repositorioGrupoParaElServicio = repositorioGrupoParaElServicio;
-        this.repositorioCarreraParaElServicio = repositorioCarreraParaElServicio;
-        this.repositorioMateriaParaElServicio = repositorioMateriaParaElServicio;
+        this.repoGrupo = repositorioGrupoParaElServicio;
+        this.repoCarrera = repositorioCarreraParaElServicio;
+        this.repoMateria = repositorioMateriaParaElServicio;
     }
     
     @Override
 	public Grupo buscarGrupoPorID(Long idBuscado) {
-		Grupo encontrado = repositorioGrupoParaElServicio.getGrupoByID(idBuscado);
+		Grupo encontrado = repoGrupo.getGrupoByID(idBuscado);
+		
+		if(Check.isNull(encontrado))
+			throw new GrupoInexistenteException("Grupo buscado no encontrado");
 
 		return encontrado;
 	}
 
 	@Override
-	public void modificarGrupo(Long id, Grupo formulario) {
-		Grupo objetivo = repositorioGrupoParaElServicio.getGrupoByID(id);
+	public void modificarGrupo(Long id, DatosDeGrupo formulario) {
+		Grupo objetivo = repoGrupo.getGrupoByID(id);
+		
+		if(Check.isNull(objetivo))
+			throw new GrupoInexistenteException("No se puede modificar un grupo inexistente");
 
 		objetivo.actualizar(formulario);
 
-		if (formulario.getCtdMaxima() != null && objetivo.getCtdMaxima() != formulario.getCtdMaxima())
-			throw new LimiteDeUsuariosIlegalException(id);
-
-		repositorioGrupoParaElServicio.actualizarGrupo(objetivo);
+		repoGrupo.actualizarGrupo(objetivo);
 	}
 
 	@Override
 	public void eliminarGrupo(Long idBuscado) {
-		Grupo objetivo = repositorioGrupoParaElServicio.getGrupoByID(idBuscado);
+		Grupo objetivo = repoGrupo.getGrupoByID(idBuscado);
+		
+		if(Check.isNull(objetivo))
+			throw new GrupoInexistenteException("No se puede eliminar un grupo inexistente");
 
-		repositorioGrupoParaElServicio.eliminarGrupo(objetivo);
+		repoGrupo.eliminarGrupo(objetivo);
 	}
 
-    @Override
+	@Override
     public Grupo crearGrupo(DatosDeGrupo datosDeGrupo) {
-
         Grupo grupoAPartirDeDatosDeGrupo = crearGrupoAPartirDeDatosDeGrupo(datosDeGrupo);
-
-        if (grupoAPartirDeDatosDeGrupo != null) {
-            repositorioGrupoParaElServicio.guardarGrupo(grupoAPartirDeDatosDeGrupo);
+        if (grupoAPartirDeDatosDeGrupo==null) {
+            throw new FormularioDeGrupoIncompleto();
         }
+        repoGrupo.guardarGrupo(grupoAPartirDeDatosDeGrupo);
         return grupoAPartirDeDatosDeGrupo;
     }
 
     @Override
     public List<Grupo> buscarTodos() {
-        return repositorioGrupoParaElServicio.buscarTodos();
+        return repoGrupo.buscarTodos();
     }
 
     @Override
     public List<Carrera> buscarTodasLasCarreras() {
-        return repositorioCarreraParaElServicio.buscarTodasLasCarreras();
+        return repoCarrera.buscarTodasLasCarreras();
     }
 
     @Override
     public List<Materia> buscarTodasLasMaterias() {
-        return repositorioMateriaParaElServicio.buscarTodasLasMaterias();
+        return repoMateria.buscarTodasLasMaterias();
     }
 
     @Override
     public List<Grupo> buscarGrupoPorDatos(DatosDeGrupoParaBusqueda datosParaBuscarUnGrupo) {
-        if(camposCompletos(datosParaBuscarUnGrupo)!=0)
-            return repositorioGrupoParaElServicio.buscarGrupoPorDatos(datosParaBuscarUnGrupo);
-        else
-            return buscarTodos();
-    }
-
-
-    private int camposCompletos(DatosDeGrupoParaBusqueda datosDeGrupo) {
-        int sentenciasTotales = 0;
-        if (datosDeGrupo.getTurno() != null)
-            sentenciasTotales++;
-        if (datosDeGrupo.getCarrera() != null && datosDeGrupo.getCarrera()!=999999)
-            sentenciasTotales++;
-        if (datosDeGrupo.getMateria() != null && datosDeGrupo.getMateria()!=999999)
-            sentenciasTotales++;
-        if (datosDeGrupo.getPrivacidad() != null && datosDeGrupo.getPrivacidad()!= Privacidad.TODO)
-            sentenciasTotales++;
-        if (datosDeGrupo.getNombre() != null && !datosDeGrupo.getNombre().isBlank())
-            sentenciasTotales++;
-        return sentenciasTotales;
+        return repoGrupo.buscarGrupoPorDatos(datosParaBuscarUnGrupo);
     }
 
     private Grupo crearGrupoAPartirDeDatosDeGrupo(DatosDeGrupo datosDeGrupo) {
@@ -116,12 +103,12 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 
     private Grupo getGrupo(DatosDeGrupo datosDeGrupo) {
         Grupo grupo = new Grupo();
-        Materia materia = repositorioMateriaParaElServicio.buscarMateriaPorId(datosDeGrupo.getMateria());
-        Carrera carrera = repositorioCarreraParaElServicio.buscarCarreraPorId(datosDeGrupo.getCarrera());
+        Materia materia = repoMateria.buscarMateriaPorId(datosDeGrupo.getMateria());
+        Carrera carrera = repoCarrera.buscarCarreraPorId(datosDeGrupo.getCarrera());
         grupo.setNombre(datosDeGrupo.getNombre());
         grupo.setTurno(datosDeGrupo.getTurno());
-        grupo.setPrivado(datosDeGrupo.getPrivado());
-        grupo.setCtdMaxima(datosDeGrupo.getCtdMaxima());
+        grupo.setCerrado(datosDeGrupo.getCerrado());
+        grupo.setCantidadMax(datosDeGrupo.getCantidadMax());
         grupo.setDescripcion(datosDeGrupo.getDescripcion());
         grupo.setMateria(materia);
         grupo.setCarrera(carrera);
@@ -130,11 +117,10 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 
     private boolean verificarQueCtdEsteEnElRango(DatosDeGrupo datosDeGrupo) {
         final Integer CTD_USUARIO_MINIMO = 2;
-        final Integer CTD_USUARIO_MAXIMO = 8;
+        final Integer CTD_USUARIO_MAXIMO = 7;
 
         if (verificarDatosDeGruposNoVacios(datosDeGrupo)) {
-            return datosDeGrupo.getCtdMaxima() >= CTD_USUARIO_MINIMO &&
-                    datosDeGrupo.getCtdMaxima() <= CTD_USUARIO_MAXIMO;
+            return Check.isInRange(datosDeGrupo.getCantidadMax(), CTD_USUARIO_MINIMO, CTD_USUARIO_MAXIMO);
         }
         return false;
 
@@ -159,17 +145,17 @@ public class ServicioGrupoImpl implements ServicioGrupo {
                         datosDeGrupo.getCarrera() != null &&
                         datosDeGrupo.getNombre() != null &&
                         datosDeGrupo.getTurno() != null &&
-                        datosDeGrupo.getPrivado() != null &&
-                        datosDeGrupo.getCtdMaxima() != null &&
+                        datosDeGrupo.getCerrado() != null &&
+                        datosDeGrupo.getCantidadMax() != null &&
                         datosDeGrupo.getDescripcion() != null;
     }
 
     private boolean verificarQueExistaLaMateriaEnElRepositorio(Long id) {
-        return repositorioMateriaParaElServicio.buscarMateriaPorId(id) != null;
+        return repoMateria.buscarMateriaPorId(id) != null;
     }
 
     private boolean verificarQueExistaLaCarreraEnElRepositorio(Long id) {
-        return repositorioCarreraParaElServicio.buscarCarreraPorId(id) != null;
+        return repoCarrera.buscarCarreraPorId(id) != null;
     }
 
 }

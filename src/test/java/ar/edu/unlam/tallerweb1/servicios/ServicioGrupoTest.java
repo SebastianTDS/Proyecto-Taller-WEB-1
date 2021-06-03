@@ -6,6 +6,7 @@ import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.repositorios.*;
 import static org.assertj.core.api.Assertions.*;
 import ar.edu.unlam.tallerweb1.util.enums.Turno;
+import ar.edu.unlam.tallerweb1.util.exceptions.FormularioDeGrupoIncompleto;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -38,12 +39,19 @@ public class ServicioGrupoTest{
              thenElGrupoSeCreo(grupoGeneradoAPartirDeLosDatosDeGrupo);
     }
 
-    @Test
-    public void siElFormularioEstaIncompletoQueNoSeCreeUnGrupo(){
+    @Test(expected = FormularioDeGrupoIncompleto.class)
+    public void siElFormularioEstaIncompletoQueNoSeCreeUnGrupoYLanzeExcepcion(){
                 DatosDeGrupo losPicatecla=givenQueExisteUnGrupoIncompleto();
                 Grupo grupo=whenCreoElGrupoConAtributosIncompletos(losPicatecla);
                 thenElGrupoNoSeCreo(grupo);
         }
+
+    @Test(expected = FormularioDeGrupoIncompleto.class)
+    public void siElFormularioEstaIncompletoQueSeLanzeUnaExcepcion(){
+        DatosDeGrupo losPicatecla=givenQueExisteUnGrupoIncompleto();
+        Grupo grupo=whenCreoElGrupoConAtributosIncompletos(losPicatecla);
+        thenElGrupoNoSeCreo(grupo);
+    }
 
     @Test
     public void queSePuedaSolicitarTodosLosGrupos(){
@@ -75,8 +83,8 @@ public class ServicioGrupoTest{
         thenObtengoLaListaDeMateriasYVerificoQueTengaElTamanoCorrespondiente(listaDeMateriasEncontrada);
     }
 
-    @Test
-    public void  queNoSePuedaCrearUnGrupoConMateriaInexistenteProvenienteDeDatosDeGrupo(){
+    @Test(expected = FormularioDeGrupoIncompleto.class)
+    public void  queNoSePuedaCrearUnGrupoConMateriaInexistenteProvenienteDeDatosDeGrupoYLanzeExcepcion(){
 
         DatosDeGrupo intentoDeGrupo = givenQueExistenDatosDeGrupoConUnIdInvalido();
         Grupo grupoNoGenerado=whenIntentoPersistirElGrupoConDatosDeGrupoConIdInvalido(intentoDeGrupo);
@@ -143,8 +151,8 @@ public class ServicioGrupoTest{
         datosdegrupo.setCarrera(carrera);
         datosdegrupo.setMateria(materia);
         datosdegrupo.setTurno(turno);
-        datosdegrupo.setPrivado(false);
-        datosdegrupo.setCtdMaxima(ctdMaxima);
+        datosdegrupo.setCerrado(false);
+        datosdegrupo.setCantidadMax(ctdMaxima);
         datosdegrupo.setDescripcion(descripcion);
         return datosdegrupo;
     }
@@ -212,8 +220,8 @@ public class ServicioGrupoTest{
         String descripcion =  "Grupo de test para taller web";
         datosdegrupo.setNombre(nombre);
         datosdegrupo.setTurno(turno);
-        datosdegrupo.setPrivado(false);
-        datosdegrupo.setCtdMaxima(ctdMaxima);
+        datosdegrupo.setCerrado(false);
+        datosdegrupo.setCantidadMax(ctdMaxima);
         datosdegrupo.setDescripcion(descripcion);
 
         return datosdegrupo;
@@ -232,8 +240,8 @@ public class ServicioGrupoTest{
         datosdegrupo.setCarrera(carrera);
         datosdegrupo.setMateria(materia);
         datosdegrupo.setTurno(turno);
-        datosdegrupo.setPrivado(false);
-        datosdegrupo.setCtdMaxima(ctdMaxima);
+        datosdegrupo.setCerrado(false);
+        datosdegrupo.setCantidadMax(ctdMaxima);
         datosdegrupo.setDescripcion(descripcion);
         return datosdegrupo;
     }
