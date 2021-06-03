@@ -1,4 +1,4 @@
-package ar.edu.unlam.tallerweb1.servicios;
+package ar.edu.unlam.tallerweb1.util.exceptions;
 
 public class FormularioDeGrupoIncompleto extends RuntimeException {
 

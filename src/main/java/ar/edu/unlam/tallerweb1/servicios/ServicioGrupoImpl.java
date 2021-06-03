@@ -7,6 +7,7 @@ import ar.edu.unlam.tallerweb1.repositorios.RepositorioCarrera;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupo;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioMateria;
 import ar.edu.unlam.tallerweb1.util.auxClass.Check;
+import ar.edu.unlam.tallerweb1.util.exceptions.FormularioDeGrupoIncompleto;
 import ar.edu.unlam.tallerweb1.util.exceptions.GrupoInexistenteException;
 
 import org.springframework.beans.factory.annotation.Autowired;

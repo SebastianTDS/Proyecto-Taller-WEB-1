@@ -2,10 +2,10 @@ package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.*;
-import ar.edu.unlam.tallerweb1.servicios.FormularioDeGrupoIncompleto;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupoImpl;
 import ar.edu.unlam.tallerweb1.util.enums.Turno;
+import ar.edu.unlam.tallerweb1.util.exceptions.FormularioDeGrupoIncompleto;
 
 import org.junit.Before;
 import org.junit.Test;

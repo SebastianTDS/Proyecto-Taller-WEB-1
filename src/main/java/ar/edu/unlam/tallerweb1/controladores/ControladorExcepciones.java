@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
-import ar.edu.unlam.tallerweb1.servicios.FormularioDeGrupoIncompleto;
+import ar.edu.unlam.tallerweb1.util.exceptions.FormularioDeGrupoIncompleto;
 import ar.edu.unlam.tallerweb1.util.exceptions.GrupoInexistenteException;
 import ar.edu.unlam.tallerweb1.util.exceptions.LimiteDeUsuariosFueraDeRango;
 

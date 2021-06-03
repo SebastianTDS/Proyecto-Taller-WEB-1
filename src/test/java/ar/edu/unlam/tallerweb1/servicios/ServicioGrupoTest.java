@@ -6,6 +6,7 @@ import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.repositorios.*;
 import static org.assertj.core.api.Assertions.*;
 import ar.edu.unlam.tallerweb1.util.enums.Turno;
+import ar.edu.unlam.tallerweb1.util.exceptions.FormularioDeGrupoIncompleto;
 
 import org.junit.Before;
 import org.junit.Test;
