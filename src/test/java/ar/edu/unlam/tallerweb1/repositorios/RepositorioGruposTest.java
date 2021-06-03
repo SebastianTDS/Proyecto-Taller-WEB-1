@@ -8,6 +8,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.unlam.tallerweb1.SpringTest;
+import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.Carrera;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.modelo.Materia;
@@ -31,7 +32,7 @@ public class RepositorioGruposTest extends SpringTest{
 	public void testQuePodamosModificarGrupo () {
 		Long id = givenUnGrupoPersistido();
 		
-		Grupo formulario = givenDatosAModificar();
+		DatosDeGrupo formulario = givenDatosAModificar();
 		
 		whenModificoLosDatosDelGrupo(id, formulario);
 		
@@ -56,8 +57,8 @@ public class RepositorioGruposTest extends SpringTest{
 		repository.eliminarGrupo(objetivo);
 	}
 
-	private Grupo givenDatosAModificar() {
-		Grupo datos = new Grupo();
+	private DatosDeGrupo givenDatosAModificar() {
+		DatosDeGrupo datos = new DatosDeGrupo();
 		datos.setNombre("Nuevo nombre de grupo");
 		return datos;
 	}
@@ -67,7 +68,7 @@ public class RepositorioGruposTest extends SpringTest{
 		assertThat(buscado.getNombre()).isEqualTo("Nuevo nombre de grupo");
 	}
 
-	private void whenModificoLosDatosDelGrupo(Long id, Grupo formulario) {
+	private void whenModificoLosDatosDelGrupo(Long id, DatosDeGrupo formulario) {
 		Grupo objetivo = session().get(Grupo.class, id);
 		objetivo.actualizar(formulario);
 		
@@ -114,10 +115,10 @@ public class RepositorioGruposTest extends SpringTest{
 	private Grupo givenExisteUnGrupo() {
 		Grupo nuevoGrupo = new Grupo();
 		
-		nuevoGrupo.setCtdMaxima(2);
+		nuevoGrupo.setCantidadMax(2);
 		nuevoGrupo.setDescripcion("Desc");
 		nuevoGrupo.setNombre("Hola");
-		nuevoGrupo.setPrivado(true);
+		nuevoGrupo.setCerrado(true);
 		nuevoGrupo.setTurno(Turno.NOCHE);
 		
 		return nuevoGrupo;

@@ -4,7 +4,9 @@ import ar.edu.unlam.tallerweb1.dto.DatosDeGrupoParaBusqueda;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.util.enums.Privacidad;
 
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import java.util.List;
@@ -12,14 +14,14 @@ import java.util.List;
 @Repository("repositorioGrupo")
 public class RepositorioGrupoImpl implements RepositorioGrupo {
 
-    private final SessionFactory sessionFactory;
+	private final SessionFactory sessionFactory;
 
-    @Autowired
-    public RepositorioGrupoImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-    
-    @Override
+	@Autowired
+	public RepositorioGrupoImpl(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	@Override
 	public Grupo getGrupoByID(Long id) {
 		return sessionFactory.getCurrentSession().get(Grupo.class, id);
 	}
@@ -34,105 +36,51 @@ public class RepositorioGrupoImpl implements RepositorioGrupo {
 		sessionFactory.getCurrentSession().remove(objetivo);
 	}
 
-//	@Override
-//	public List<Grupo> buscarPorFiltros(Grupo grupo) {
-//		String hql = "SELECT g FROM Grupo g JOIN g.carrera c JOIN g.materia m "
-//				+ "WHERE g.nombre LIKE :nom "
-//				+ "AND (c.nombre = :car OR :car = null) "
-//				+ "AND (m.nombre = :mat OR :mat = null) "
-//				+ "AND (g.turno = :trn OR :trn = null) "
-//				+ "AND (g.privado = :prv OR :prv = null)";
-//		
-//		Query<Grupo> query = sessionFactory.getCurrentSession().createQuery(hql, Grupo.class);
-//		
-//		query.setParameter("nom", grupo.getNombre() + "%");
-//		query.setParameter("car", grupo.getCarrera() == null ? null : grupo.getCarrera().getNombre());
-//		query.setParameter("mat", grupo.getMateria() == null ? null : grupo.getMateria().getNombre());
-//		query.setParameter("trn", grupo.getTurno());
-//		query.setParameter("prv", grupo.getPrivado());
-//		
-//		return query.list();
-//	}
+	@Override
+	public void guardarGrupo(Grupo grupoNuevo) {
+		sessionFactory.getCurrentSession().save(grupoNuevo);
+	}
 
-    @Override
-    public void guardarGrupo(Grupo grupoNuevo) {
-        sessionFactory.getCurrentSession().save(grupoNuevo);
-    }
-
-    @Override
-    public Grupo buscarPorId(Long idDelGrupoABuscar) {
-        return sessionFactory.getCurrentSession().get(Grupo.class, idDelGrupoABuscar);
-    }
-
-    @Override
+	@Override
+	public Grupo buscarPorId(Long idDelGrupoABuscar) {
+		return sessionFactory.getCurrentSession().get(Grupo.class, idDelGrupoABuscar);
+	}
+	
+	@Override
     public List<Grupo> buscarTodos() {
-        String s = "select g from Grupo g";
-        return sessionFactory.getCurrentSession().createQuery(s, Grupo.class).getResultList();
+        return  sessionFactory.getCurrentSession().createQuery("SELECT g FROM Grupo g", Grupo.class).getResultList();
     }
 
-        @Override
-        public List<Grupo> buscarGrupoPorDatos(DatosDeGrupoParaBusqueda  datosDeGrupo) {
+    @SuppressWarnings({ "unchecked", "deprecation" })
+	@Override
+    public List<Grupo> buscarGrupoPorDatos(DatosDeGrupoParaBusqueda datosDeGrupo) {
+        Criteria cr = sessionFactory.getCurrentSession().createCriteria(Grupo.class);
+        agregarCriteriosDeBusqueda(datosDeGrupo, cr);
+        return cr.list();
+    }
 
-            int sentenciasUsadas = 0;
-            int sentenciasTotales = camposCompletos(datosDeGrupo);
-            String hql = generadorDeQueryBusqueda(datosDeGrupo, sentenciasUsadas, sentenciasTotales);
-            System.out.println(hql);
-            return sessionFactory.getCurrentSession().createQuery(hql,Grupo.class).getResultList();
+    private void agregarCriteriosDeBusqueda(DatosDeGrupoParaBusqueda datosDeGrupo, Criteria cr) {
+        if (datosDeGrupo.getTurno() != null) {
+            cr.add(Restrictions.eq("turno", datosDeGrupo.getTurno()));
         }
-
-        private String generadorDeQueryBusqueda(DatosDeGrupoParaBusqueda datosDeGrupo, int sentenciasUsadas, int sentenciasTotales) {
-            String hql = "from Grupo gr where";
-            if (datosDeGrupo.getPrivacidad() != null && datosDeGrupo.getPrivacidad()!=Privacidad.TODO) {
-                byte estado;
-                if (datosDeGrupo.getPrivacidad()== Privacidad.PRIVADO)
-                    estado = 1;
-                else
-                    estado = 0;
-                hql += " gr.privado="+estado;
-                if (sentenciasUsadas < sentenciasTotales) {
-                    hql += " and";
-                    sentenciasUsadas++;
-                }
-            }
-            if (datosDeGrupo.getTurno() != null) {
-                hql += " gr.turno='"+datosDeGrupo.getTurno()+"'";
-                if (sentenciasUsadas < sentenciasTotales) {
-                    hql += " and";
-                    sentenciasUsadas++;
-                }
-            }
-            if (datosDeGrupo.getCarrera() != null && datosDeGrupo.getCarrera()!=999999) {
-                hql += " gr.carrera="+datosDeGrupo.getCarrera();
-                if (sentenciasUsadas < sentenciasTotales) {
-                    hql += " and";
-                    sentenciasUsadas++;
-                }
-            }
-            if (datosDeGrupo.getMateria() != null && datosDeGrupo.getMateria()!=999999){
-                hql += " gr.materia="+datosDeGrupo.getMateria();
-                if (sentenciasUsadas < sentenciasTotales) {
-                    hql += " and";
-                    sentenciasUsadas++;
-                }
-            }
-            if (datosDeGrupo.getNombre() != null && !datosDeGrupo.getNombre().isBlank()) {
-                hql += " gr.nombre LIKE '"+ datosDeGrupo.getNombre() + "%'";
-                }
-            return hql;
+        if (datosDeGrupo.getNombre() != null && !datosDeGrupo.getNombre().isBlank()) {
+            cr.add(Restrictions.like("nombre", datosDeGrupo.getNombre() + "%"));
         }
-
-        private int camposCompletos(DatosDeGrupoParaBusqueda datosDeGrupo) {
-            int sentenciasTotales = -1;
-            if (datosDeGrupo.getTurno() != null)
-                sentenciasTotales++;
-            if (datosDeGrupo.getCarrera() != null && datosDeGrupo.getCarrera()!=999999)
-                sentenciasTotales++;
-            if (datosDeGrupo.getMateria() != null && datosDeGrupo.getMateria()!=999999)
-                sentenciasTotales++;
-            if (datosDeGrupo.getPrivacidad() != null && datosDeGrupo.getPrivacidad()!=Privacidad.TODO)
-                sentenciasTotales++;
-            if (datosDeGrupo.getNombre() != null && !datosDeGrupo.getNombre().isBlank())
-                sentenciasTotales++;
-            return sentenciasTotales;
+        if (datosDeGrupo.getPrivacidad() != null) {
+            cr.add(Restrictions.eq("cerrado", busquedaPorPrivacidad(datosDeGrupo)));
+        }
+        if (datosDeGrupo.getMateria() != null) {
+            cr.createCriteria("materia").add(Restrictions.eq("id", datosDeGrupo.getMateria()));
+        }
+        if (datosDeGrupo.getCarrera() != null) {
+            cr.createCriteria("carrera").add(Restrictions.eq("id", datosDeGrupo.getCarrera()));
         }
     }
+
+    private boolean busquedaPorPrivacidad(DatosDeGrupoParaBusqueda datosDeGrupo) {
+        if (datosDeGrupo.getPrivacidad() == Privacidad.CERRADO)
+            return true;
+        else
+            return false;
+    }
+}

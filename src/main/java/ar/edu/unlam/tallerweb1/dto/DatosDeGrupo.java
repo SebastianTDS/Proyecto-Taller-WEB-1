@@ -4,10 +4,11 @@ import ar.edu.unlam.tallerweb1.util.enums.Turno;
 
 public class DatosDeGrupo {
 
-    private String nombre ;
+	private Long id;
+    private String nombre;
     private Turno turno;
-    private Boolean privado;
-    private Integer ctdMaxima;
+    private Boolean cerrado;
+    private Integer cantidadMax;
     private String descripcion;
     private Long carrera;
     private Long materia;
@@ -28,8 +29,6 @@ public class DatosDeGrupo {
         this.nombre = nombre;
     }
 
-
-
     public Turno getTurno() {
         return turno;
     }
@@ -38,20 +37,20 @@ public class DatosDeGrupo {
         this.turno = turno;
     }
 
-    public Boolean getPrivado() {
-        return privado;
+    public Boolean getCerrado() {
+        return cerrado;
     }
 
-    public void setPrivado(Boolean privado) {
-        this.privado = privado;
+    public void setCerrado(Boolean cerrado) {
+        this.cerrado = cerrado;
     }
 
-    public Integer getCtdMaxima() {
-        return ctdMaxima;
+    public Integer getCantidadMax() {
+        return cantidadMax;
     }
-
-    public void setCtdMaxima(Integer ctdMaxima) {
-        this.ctdMaxima = ctdMaxima;
+    
+    public void setCantidadMax(Integer cantidadMax) {
+        this.cantidadMax = cantidadMax;
     }
 
     public String getDescripcion() {
@@ -69,4 +68,12 @@ public class DatosDeGrupo {
     public void setMateria(Long materia) {
         this.materia=materia;
     }
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 }

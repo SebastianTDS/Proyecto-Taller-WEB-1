@@ -3,9 +3,9 @@
 <%@ taglib prefix="placeholder" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
-    <jsp:include page="../../templates/head.jsp"></jsp:include>
-
-
+	<head>
+	    <jsp:include page="../../templates/head.jsp"></jsp:include>
+	</head>
 
     <body>
 

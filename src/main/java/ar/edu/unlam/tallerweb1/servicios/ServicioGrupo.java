@@ -22,7 +22,7 @@ public interface ServicioGrupo {
     
     Grupo buscarGrupoPorID(Long idBuscado);
 
-	void modificarGrupo(Long id, Grupo formulario);
+	void modificarGrupo(Long id, DatosDeGrupo formulario);
 
 	void eliminarGrupo(Long idBuscado);
 }
