@@ -10,7 +10,7 @@
             <div class=" btn-group-lg d-flex text-white ">
                 <!--DATOS DEL USUARIOS PROXIMAMENTE-->
                 <a href="modificar-datos-usuario"><img src="img/profile.png" width="40px"></a>
-                <a href="modificar-datos-usuario" class="m-1 link-light"><h5>Los 4 Fantásticos</h5></a>
+                <a href="modificar-datos-usuario" class="m-1 link-light"><h5>${usuario.email}</h5></a>
                 <a href="cerrar-sesion" class="m-1 ms-2 link-light">Salir</a>
             </div>
         </div>

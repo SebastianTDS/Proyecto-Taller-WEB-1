@@ -118,7 +118,7 @@ public void testQueAlIngresarAUnGrupoInexistenteLanzeException(){
         when(request.getSession().getAttribute("USUARIO")).thenReturn(usuario);
     }
     private void thenVerificoLaVista(ModelAndView mvc) {
-        assertThat(mvc.getViewName()).isEqualTo("redirect:/1");
+        assertThat(mvc.getViewName()).isEqualTo("redirect:/grupos/1");
     }
 
     private void thenVerificoLaVistaLuegoDeLaExcepcion(ModelAndView mvc) {
