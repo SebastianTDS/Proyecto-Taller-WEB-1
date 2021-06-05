@@ -23,6 +23,7 @@ public class ServicioGrupoTest{
     private RepositorioMateria repositorioMateria;
     private RepositorioCarrera repositorioCarrera;
     private RepositorioUsuario repositorioUsuario;
+    private static Usuario usuario=new Usuario();
 
     @Before
     public void init(){
@@ -142,7 +143,15 @@ public class ServicioGrupoTest{
         List<Grupo> listaDeGruposEncontrada= whenbuscoLosGruposFiltrados(listaDeGrupos, datosDeGrupoParaBusqueda);
         thenObtengoLaListaDeGruposYVerificoQueTengaElTamanoCorrespondiente(listaDeGruposEncontrada);
     }
-
+    @Test
+    public void queSePuedaSolicitarTodosMisGrupos(){
+        Grupo losPicatecla1= givenDadoQueExisteUnGrupo();
+        Grupo losPicatecla2= givenDadoQueExisteUnGrupo();
+        Grupo losPicatecla3= givenDadoQueExisteUnGrupo();
+        List<Grupo> gruposPresistidos= givenQueSeGuardenTodosLosGruposExistentes(losPicatecla1,losPicatecla2,losPicatecla3);
+        List<Grupo> gruposEncontrados= whenBuscoTodosMisGrupos(gruposPresistidos);
+        thenVerificoQueSeMuestrenTodosMisGrupos(gruposEncontrados);
+    }
 
     private DatosDeGrupoParaBusqueda givenQueExisteDatosDeGrupoParaBusqueda() {
         DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda=new DatosDeGrupoParaBusqueda();
@@ -219,6 +228,14 @@ public class ServicioGrupoTest{
 
     private void thenVerificoQueSeMuestrenTodosLosGrupos(List<Grupo> grupos) {
         assertThat(grupos).hasSize(3);
+    }
+    private void thenVerificoQueSeMuestrenTodosMisGrupos(List<Grupo> grupos) {
+        assertThat(grupos).hasSize(3);
+    }
+
+    private List<Grupo> whenBuscoTodosMisGrupos(List<Grupo> gruposPresistidos) {
+        when(repositorioGrupo.buscarTodosMisGrupos(usuario)).thenReturn(gruposPresistidos);
+        return servicioGrupo.buscarTodosMisGrupos(usuario);
     }
 
     private List<Grupo> whenBuscoTodosLosGrupos(List<Grupo> gruposPresistidos) {

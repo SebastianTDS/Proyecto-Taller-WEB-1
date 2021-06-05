@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.repositorios;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupoParaBusqueda;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
+import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.util.enums.Privacidad;
 
 import org.hibernate.Criteria;
@@ -36,6 +37,11 @@ public class RepositorioGrupoImpl implements RepositorioGrupo {
 	public void eliminarGrupo(Grupo objetivo) {
 		sessionFactory.getCurrentSession().remove(objetivo);
 	}
+
+    @Override
+    public List<Grupo> buscarTodosMisGrupos(Usuario usuario) {
+        return null;
+    }
 
 
     @Override

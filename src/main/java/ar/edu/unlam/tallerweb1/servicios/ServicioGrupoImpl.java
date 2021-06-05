@@ -77,7 +77,7 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 
     @Override
     public List<Grupo> buscarTodosMisGrupos(Usuario usuarioSesion) {
-        return null;
+        return repoGrupo.buscarTodosMisGrupos(usuarioSesion);
     }
 
 
