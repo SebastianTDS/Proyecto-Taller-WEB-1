@@ -1,10 +1,11 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
-import ar.edu.unlam.tallerweb1.dto.DatosDeGrupoParaBusqueda;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.repositorios.*;
 import static org.assertj.core.api.Assertions.*;
+
+import ar.edu.unlam.tallerweb1.util.enums.Privacidad;
 import ar.edu.unlam.tallerweb1.util.enums.Turno;
 import ar.edu.unlam.tallerweb1.util.exceptions.FormularioDeGrupoIncompleto;
 
@@ -104,19 +105,19 @@ public class ServicioGrupoTest{
     @Test
     public void queSeObtenganLosGruposFiltrados(){
         List<Grupo> listaDeGrupos = givenQueExisteUnaListaDeGrupos();
-        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda=givenQueExisteDatosDeGrupoParaBusqueda();
+        DatosDeGrupo datosDeGrupoParaBusqueda=givenQueExisteDatosDeGrupoParaBusqueda();
         List<Grupo> listaDeGruposEncontrada= whenbuscoLosGruposFiltrados(listaDeGrupos, datosDeGrupoParaBusqueda);
         thenObtengoLaListaDeGruposYVerificoQueTengaElTamanoCorrespondiente(listaDeGruposEncontrada);
     }
 
 
-    private DatosDeGrupoParaBusqueda givenQueExisteDatosDeGrupoParaBusqueda() {
-        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda=new DatosDeGrupoParaBusqueda();
+    private DatosDeGrupo givenQueExisteDatosDeGrupoParaBusqueda() {
+    	DatosDeGrupo datosDeGrupoParaBusqueda=new DatosDeGrupo();
         datosDeGrupoParaBusqueda.setNombre("casa");
         return datosDeGrupoParaBusqueda;
     }
 
-    private List<Grupo> whenbuscoLosGruposFiltrados(List<Grupo> listaDeGrupos, DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda) {
+    private List<Grupo> whenbuscoLosGruposFiltrados(List<Grupo> listaDeGrupos, DatosDeGrupo datosDeGrupoParaBusqueda) {
         when(repositorioGrupo.buscarGrupoPorDatos(datosDeGrupoParaBusqueda)).thenReturn(listaDeGrupos);
         return servicioGrupo.buscarGrupoPorDatos(datosDeGrupoParaBusqueda);
     }
@@ -151,7 +152,7 @@ public class ServicioGrupoTest{
         datosdegrupo.setCarrera(carrera);
         datosdegrupo.setMateria(materia);
         datosdegrupo.setTurno(turno);
-        datosdegrupo.setCerrado(false);
+        datosdegrupo.setPrivacidad(Privacidad.ABIERTO);
         datosdegrupo.setCantidadMax(ctdMaxima);
         datosdegrupo.setDescripcion(descripcion);
         return datosdegrupo;
@@ -220,7 +221,7 @@ public class ServicioGrupoTest{
         String descripcion =  "Grupo de test para taller web";
         datosdegrupo.setNombre(nombre);
         datosdegrupo.setTurno(turno);
-        datosdegrupo.setCerrado(false);
+        datosdegrupo.setPrivacidad(Privacidad.ABIERTO);
         datosdegrupo.setCantidadMax(ctdMaxima);
         datosdegrupo.setDescripcion(descripcion);
 
@@ -240,7 +241,7 @@ public class ServicioGrupoTest{
         datosdegrupo.setCarrera(carrera);
         datosdegrupo.setMateria(materia);
         datosdegrupo.setTurno(turno);
-        datosdegrupo.setCerrado(false);
+        datosdegrupo.setPrivacidad(Privacidad.ABIERTO);
         datosdegrupo.setCantidadMax(ctdMaxima);
         datosdegrupo.setDescripcion(descripcion);
         return datosdegrupo;

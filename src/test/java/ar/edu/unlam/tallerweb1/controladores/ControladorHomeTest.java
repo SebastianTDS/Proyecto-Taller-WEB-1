@@ -1,7 +1,7 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.controladores.ControladorHome;
-import ar.edu.unlam.tallerweb1.dto.DatosDeGrupoParaBusqueda;
+import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
 import org.junit.Before;
@@ -77,7 +77,7 @@ public class ControladorHomeTest {
     }
 
     private ModelAndView whenGuardoLasCarrerasEnElModel(List<Carrera> carreras){
-        DatosDeGrupoParaBusqueda datosDeGrupo=new DatosDeGrupoParaBusqueda();
+        DatosDeGrupo datosDeGrupo=new DatosDeGrupo();
         when(servicioGrupo.buscarTodasLasCarreras()).thenReturn(carreras);
         return controladorHome.buscarGrupos(datosDeGrupo);
     }
@@ -96,7 +96,7 @@ public class ControladorHomeTest {
     }
 
     private ModelAndView whenGuardoLasMateriasEnElModel(List<Materia> materias){
-        DatosDeGrupoParaBusqueda datosDeGrupo=new DatosDeGrupoParaBusqueda();
+    	DatosDeGrupo datosDeGrupo=new DatosDeGrupo();
         when(servicioGrupo.buscarTodasLasMaterias()).thenReturn(materias);
         return controladorHome.buscarGrupos(datosDeGrupo);
     }
@@ -109,7 +109,7 @@ public class ControladorHomeTest {
 
 
     private ModelAndView whenGuardoLosGruposEnElModel(List<Grupo> grupos) {
-        DatosDeGrupoParaBusqueda datosDeGrupo=new DatosDeGrupoParaBusqueda();
+    	DatosDeGrupo datosDeGrupo=new DatosDeGrupo();
         when(servicioGrupo.buscarGrupoPorDatos(datosDeGrupo)).thenReturn(grupos);
         return controladorHome.buscarGrupos(datosDeGrupo);
     }
@@ -127,7 +127,7 @@ public class ControladorHomeTest {
     }
 
     private ModelAndView whenDoyClickAFiltar() {
-        return controladorHome.buscarGrupos(new DatosDeGrupoParaBusqueda());
+        return controladorHome.buscarGrupos(new DatosDeGrupo());
     }
 
     private void thenMeMuestraLaPaginaDeGruposFiltrados(ModelAndView mvc ) {

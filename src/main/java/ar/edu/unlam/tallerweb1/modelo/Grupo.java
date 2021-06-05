@@ -104,7 +104,7 @@ public class Grupo {
 	public void actualizar(DatosDeGrupo formulario) {
 		nombre 		= Check.empty(formulario.getNombre())		? nombre		: formulario.getNombre();
 		descripcion = Check.empty(formulario.getDescripcion())  ? descripcion	: formulario.getDescripcion();
-		cerrado 	= Check.isNull(formulario.getCerrado()) 	? cerrado		: formulario.getCerrado();
+		cerrado 	= Check.isNull(formulario.estaCerrado()) 	? cerrado		: formulario.estaCerrado();
 		cantidadMax = formulario.getCantidadMax();
 		
 		if(!Check.isInRange(cantidadMax, 2, 7) && !Check.isNull(cantidadMax))
