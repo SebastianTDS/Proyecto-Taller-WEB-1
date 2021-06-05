@@ -1,5 +1,7 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
+import ar.edu.unlam.tallerweb1.modelo.Usuario;
+import ar.edu.unlam.tallerweb1.servicios.ServicioLogin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -14,22 +16,33 @@ import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 @RequestMapping("/grupos")
-public class ControladorGrupos {
+public class ControladorGrupos{
 
-	private ServicioGrupo service;
+	private final ServicioGrupo service;
+	private final ServicioLogin servicioLogin;
 
 	@Autowired
-	public ControladorGrupos(ServicioGrupo service) {
+	public ControladorGrupos(ServicioGrupo service, ServicioLogin servicioLogin) {
 		this.service = service;
+		this.servicioLogin=servicioLogin;
+
+	}
+
+	@RequestMapping(value="/ingresar-a-grupo",method = RequestMethod.POST)
+	public ModelAndView IngresarAGrupo(HttpServletRequest request,@RequestParam Long id) {
+		Usuario usuarioLogueado = (Usuario) request.getSession().getAttribute("USUARIO");
+		service.IngresarUsuarioAlGrupo(usuarioLogueado.getId(),id);
+		return new ModelAndView("redirect:/"+id);
 	}
 
 	@RequestMapping("/{id}")
 	public ModelAndView perfilDeGrupo(@PathVariable Long id) {
 		ModelMap modelo = new ModelMap();
 		Grupo buscado = service.buscarGrupoPorID(id);
-
 		modelo.put("grupo", buscado);
 		return new ModelAndView("vistaGrupo", modelo);
 	}

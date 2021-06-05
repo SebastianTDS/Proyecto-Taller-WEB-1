@@ -1,6 +1,6 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
-import ar.edu.unlam.tallerweb1.controladores.ControladorHome;
+
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupoParaBusqueda;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
@@ -81,8 +81,6 @@ public class ControladorHomeTest {
         when(servicioGrupo.buscarTodasLasCarreras()).thenReturn(carreras);
         return controladorHome.buscarGrupos(datosDeGrupo);
     }
-
-
 
     void thenMeMuestreLasMaterias(ModelAndView mvc, List<Materia>materias){
         assertThat(materias).isEqualTo(mvc.getModel().get("materias"));

@@ -1,5 +1,7 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
+import ar.edu.unlam.tallerweb1.util.exceptions.FalloAlUnirseAlGrupo;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -35,6 +37,14 @@ public class ControladorExcepciones {
 		model.put("error", e.getMessage());
 		
 		return new ModelAndView("redirect:/ir-a-home", model);
+	}
+
+	@ExceptionHandler(value= FalloAlUnirseAlGrupo.class)
+	public ModelAndView errorAlUnirseAlGrupo(FalloAlUnirseAlGrupo e){
+		ModelMap model = new ModelMap();
+		model.put("error",e.getMessage());
+
+		return new ModelAndView("redirect:/home",model);
 	}
 	
 //	TODO: Metodo encargado de redirigir a las paginas de error 4xx personalizadas.
