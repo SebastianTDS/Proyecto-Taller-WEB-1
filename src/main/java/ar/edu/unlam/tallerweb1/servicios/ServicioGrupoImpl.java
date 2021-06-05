@@ -11,10 +11,8 @@ import ar.edu.unlam.tallerweb1.util.auxClass.Check;
 import ar.edu.unlam.tallerweb1.util.exceptions.FalloAlUnirseAlGrupo;
 import ar.edu.unlam.tallerweb1.util.exceptions.FormularioDeGrupoIncompleto;
 import ar.edu.unlam.tallerweb1.util.exceptions.GrupoInexistenteException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -76,6 +74,13 @@ public class ServicioGrupoImpl implements ServicioGrupo {
         grupoAAcceder.agregarUsuarioAlGrupo(usuarioAInsertar);
         repoGrupo.actualizarGrupo(grupoAAcceder);
     }
+
+    @Override
+    public List<Grupo> buscarTodosMisGrupos(Usuario usuarioSesion) {
+        return null;
+    }
+
+
     @Override
     public Grupo crearGrupo(DatosDeGrupo datosDeGrupo) {
         Grupo grupoAPartirDeDatosDeGrupo = crearGrupoAPartirDeDatosDeGrupo(datosDeGrupo);

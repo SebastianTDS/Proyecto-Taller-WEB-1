@@ -26,18 +26,20 @@
                 </a>
             </div>
             <div class="m-1 d-flex justify-content-center mt-5">
-                <a href="ir-a-mis-grupos ">
+                <a href="ir-a-mis-grupos">
                     <button class="btn btn btn btn-primary btn-sm justify-content-center">Mis Grupos</button>
                 </a>
             </div>
             <c:if test="${not empty misGrupos}">
                 <c:forEach items="${misGrupos}" var="miGrupo">
                     <div class="container-fluid d-flex justify-content-start align-items-center p-2">
-                        <a href="grupos/${miGrupo.id}"><img src="img/Logosolo.ico" style="width: 30px; height: 30px"> </a>
-                        <a href="grupos/${miGrupo.id}"><h6 class="m-1">${miGrupo.nombre}</h6> </a>
+                        <a href="grupos/${miGrupo.id}"><img src="img/Logosolo.ico" style="width: 30px; height: 30px">
+                        </a>
+                        <a href="grupos/${miGrupo.id}"><h6 class="m-1">${miGrupo.nombre}</h6></a>
                     </div>
                 </c:forEach>
             </c:if>
+
         </div>
         <div class="col-7 col-sm-8 col-md-9 col-lg-10 col-xl-10  row container-fluid">
 

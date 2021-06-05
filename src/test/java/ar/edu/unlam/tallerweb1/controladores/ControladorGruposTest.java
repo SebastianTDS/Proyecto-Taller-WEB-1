@@ -31,21 +31,21 @@ public class ControladorGruposTest {
 
     @Before
     public void init() {
-        session=mock(HttpSession.class);
+        session = mock(HttpSession.class);
         service = mock(ServicioGrupoImpl.class);
         request = mock(HttpServletRequest.class);
-        servicioLogin=mock(ServicioLoginImpl.class);
-        controller = new ControladorGrupos(service,servicioLogin);
+        servicioLogin = mock(ServicioLoginImpl.class);
+        controller = new ControladorGrupos(service, servicioLogin);
         when(request.getSession()).thenReturn(session);
     }
 
-@Test
-public void  testQueAlIngresarUnUsuarioAUnGrupoMeTraigaLaVistaDelGrupo(){
-         givenUnUsuarioDeLaSesion();
-        Long idGrupo=1L;
-      ModelAndView mvc =  whenElUsuarioIngresaAlGrupo(idGrupo);
-      thenVerificoLaVista(mvc);
-}
+    @Test
+    public void testQueAlIngresarUnUsuarioAUnGrupoMeTraigaLaVistaDelGrupo() {
+        givenUnUsuarioDeLaSesion();
+        Long idGrupo = 1L;
+        ModelAndView mvc = whenElUsuarioIngresaAlGrupo(idGrupo);
+        thenVerificoLaVista(mvc);
+    }
 
 /*@Test(expected = FalloAlUnirseAlGrupo.class)
 public void testQueAlIngresarAUnGrupoInexistenteLanzeException(){
@@ -117,6 +117,7 @@ public void testQueAlIngresarAUnGrupoInexistenteLanzeException(){
         usuario.setId(1L);
         when(request.getSession().getAttribute("USUARIO")).thenReturn(usuario);
     }
+
     private void thenVerificoLaVista(ModelAndView mvc) {
         assertThat(mvc.getViewName()).isEqualTo("redirect:/grupos/1");
     }
@@ -126,17 +127,16 @@ public void testQueAlIngresarAUnGrupoInexistenteLanzeException(){
     }
 
     private ModelAndView whenElUsuarioIngresaAlGrupo(Long idGrupo) {
-        return controller.IngresarAGrupo(request,idGrupo) ;
+        return controller.IngresarAGrupo(request, idGrupo);
     }
 
     private void whenElUsuarioIngresaAlGrupoConNull(Long id) {
         Usuario usuario = new Usuario();
-        doThrow(FalloAlUnirseAlGrupo.class).when(service).IngresarUsuarioAlGrupo(usuario.getId(),id);
+        doThrow(FalloAlUnirseAlGrupo.class).when(service).IngresarUsuarioAlGrupo(usuario.getId(), id);
     }
 
     private ModelAndView whenBuscoPorLaURLDeEdicionConElIDIncorrectoLanzaExcepcion(Long idGrupoBuscado) {
         doThrow(GrupoInexistenteException.class).when(service).buscarGrupoPorID(idGrupoBuscado);
-
         return controller.perfilDeGrupoEdicion(idGrupoBuscado);
     }
 

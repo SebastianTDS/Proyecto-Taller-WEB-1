@@ -1,13 +1,16 @@
 package ar.edu.unlam.tallerweb1.controladores;
-
-
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupoParaBusqueda;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
+import ar.edu.unlam.tallerweb1.servicios.ServicioGrupoImpl;
+import ar.edu.unlam.tallerweb1.servicios.ServicioLogin;
+import ar.edu.unlam.tallerweb1.servicios.ServicioLoginImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,9 +21,19 @@ import static org.mockito.Mockito.when;
 public class ControladorHomeTest {
     private ControladorHome controladorHome;
     private ServicioGrupo servicioGrupo;
-
+    private static ControladorGrupos controller;
+    private static ServicioGrupo service;
+    private static HttpServletRequest request;
+    private static ServicioLogin servicioLogin;
+    private static HttpSession session;
     @Before
     public void init(){
+        session=mock(HttpSession.class);
+        service = mock(ServicioGrupoImpl.class);
+        request = mock(HttpServletRequest.class);
+        servicioLogin=mock(ServicioLoginImpl.class);
+        controller = new ControladorGrupos(service,servicioLogin);
+        when(request.getSession()).thenReturn(session);
         servicioGrupo = mock(ServicioGrupo.class);
         controladorHome = new ControladorHome(servicioGrupo);
     }
@@ -31,6 +44,7 @@ public class ControladorHomeTest {
        ModelAndView mvc= whenDoyClickACrearGrupo();
         thenMeMuestraLaPaginaDeCreacionDeGrupo(mvc);
     }
+
     @Test
     public void QueMeRedirigaALaVistaHomeAlFiltarGrupos(){
 
@@ -64,6 +78,9 @@ public class ControladorHomeTest {
         ModelAndView mvc= whenGuardoLasCarrerasEnElModel(carreras);
         thenMeMuestreLasCarreras(mvc,carreras);
     }
+
+
+
 
     void thenMeMuestreLasCarreras(ModelAndView mvc, List<Carrera>carreras){
         assertThat(carreras).isEqualTo(mvc.getModel().get("carreras"));
@@ -112,10 +129,17 @@ public class ControladorHomeTest {
         return controladorHome.buscarGrupos(datosDeGrupo);
     }
 
+    private ModelAndView whenGuardoMisGruposEnElModel(List<Grupo> grupos) {
+        DatosDeGrupoParaBusqueda datosDeGrupo=new DatosDeGrupoParaBusqueda();
+        when(servicioGrupo.buscarTodos()).thenReturn(grupos);
+        return controladorHome.irATest(request);
+    }
     private void thenMeMuestreLosGrupos(ModelAndView mvc, List<Grupo>grupos) {
         assertThat(grupos).isEqualTo(mvc.getModel().get("grupos"));
     }
-
+    private void thenMeMuestreMisGrupos(ModelAndView mvc, List<Grupo>grupos) {
+        assertThat(grupos).isEqualTo(mvc.getModel().get("misGrupos"));
+    }
     private void thenMeMuestraLaPaginaDeCreacionDeGrupo(ModelAndView mvc ) {
         assertThat("vistaParaCrearGrupo").isEqualTo(mvc.getViewName());
     }
@@ -130,5 +154,10 @@ public class ControladorHomeTest {
 
     private void thenMeMuestraLaPaginaDeGruposFiltrados(ModelAndView mvc ) {
         assertThat("home").isEqualTo(mvc.getViewName());
+    }
+    private void givenUnUsuarioDeLaSesion() {
+        Usuario usuario = new Usuario();
+        usuario.setId(1L);
+        when(request.getSession().getAttribute("USUARIO")).thenReturn(usuario);
     }
 }
