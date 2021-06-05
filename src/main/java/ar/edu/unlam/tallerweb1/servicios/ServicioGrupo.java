@@ -25,4 +25,6 @@ public interface ServicioGrupo {
 	void modificarGrupo(Long id, DatosDeGrupo formulario);
 
 	void eliminarGrupo(Long idBuscado);
+
+    void IngresarUsuarioAlGrupo(Long idUsuario, Long idGrupo);
 }

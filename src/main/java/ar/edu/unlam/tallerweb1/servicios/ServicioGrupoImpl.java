@@ -6,7 +6,9 @@ import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioCarrera;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupo;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioMateria;
+import ar.edu.unlam.tallerweb1.repositorios.RepositorioUsuario;
 import ar.edu.unlam.tallerweb1.util.auxClass.Check;
+import ar.edu.unlam.tallerweb1.util.exceptions.FalloAlUnirseAlGrupo;
 import ar.edu.unlam.tallerweb1.util.exceptions.FormularioDeGrupoIncompleto;
 import ar.edu.unlam.tallerweb1.util.exceptions.GrupoInexistenteException;
 
@@ -23,13 +25,14 @@ public class ServicioGrupoImpl implements ServicioGrupo {
     private final RepositorioGrupo repoGrupo;
     private final RepositorioCarrera repoCarrera;
     private final RepositorioMateria repoMateria;
-
+    private final RepositorioUsuario repoUsuario;
 
     @Autowired
-    public ServicioGrupoImpl(RepositorioGrupo repositorioGrupoParaElServicio, RepositorioCarrera repositorioCarreraParaElServicio, RepositorioMateria repositorioMateriaParaElServicio) {
+    public ServicioGrupoImpl(RepositorioGrupo repositorioGrupoParaElServicio, RepositorioCarrera repositorioCarreraParaElServicio, RepositorioMateria repositorioMateriaParaElServicio, RepositorioUsuario repositorioUsuarioParaElServicio) {
         this.repoGrupo = repositorioGrupoParaElServicio;
         this.repoCarrera = repositorioCarreraParaElServicio;
         this.repoMateria = repositorioMateriaParaElServicio;
+        this.repoUsuario=repositorioUsuarioParaElServicio;
     }
     
     @Override
@@ -64,7 +67,16 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 		repoGrupo.eliminarGrupo(objetivo);
 	}
 
-	@Override
+    @Override
+    public void IngresarUsuarioAlGrupo(Long idUsuario, Long idGrupo) {
+        Grupo grupoAAcceder = repoGrupo.getGrupoByID(idGrupo);
+        Usuario usuarioAInsertar = repoUsuario.getUsuarioByID(idUsuario);
+        if (grupoAAcceder == null || usuarioAInsertar == null)
+            throw new FalloAlUnirseAlGrupo();
+        grupoAAcceder.agregarUsuarioAlGrupo(usuarioAInsertar);
+        repoGrupo.actualizarGrupo(grupoAAcceder);
+    }
+    @Override
     public Grupo crearGrupo(DatosDeGrupo datosDeGrupo) {
         Grupo grupoAPartirDeDatosDeGrupo = crearGrupoAPartirDeDatosDeGrupo(datosDeGrupo);
         if (grupoAPartirDeDatosDeGrupo==null) {

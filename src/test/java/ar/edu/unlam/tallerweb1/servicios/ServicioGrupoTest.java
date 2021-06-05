@@ -10,9 +10,8 @@ import ar.edu.unlam.tallerweb1.util.exceptions.FormularioDeGrupoIncompleto;
 
 import org.junit.Before;
 import org.junit.Test;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
+import java.util.*;
 
 import static org.mockito.Mockito.*;
 
@@ -23,14 +22,49 @@ public class ServicioGrupoTest{
     private RepositorioGrupo repositorioGrupo;
     private RepositorioMateria repositorioMateria;
     private RepositorioCarrera repositorioCarrera;
+    private RepositorioUsuario repositorioUsuario;
 
     @Before
     public void init(){
+               repositorioUsuario=mock(RepositorioUsuarioImpl.class);
                repositorioGrupo = mock(RepositorioGrupoImpl.class);
                repositorioCarrera=mock(RepositorioCarreraImpl.class);
                repositorioMateria = mock(RepositorioMateriaImpl.class);
-               servicioGrupo = new ServicioGrupoImpl(repositorioGrupo, repositorioCarrera, repositorioMateria);
+               servicioGrupo = new ServicioGrupoImpl(repositorioGrupo, repositorioCarrera, repositorioMateria,repositorioUsuario);
     }
+
+    @Test
+    public void queSePuedaUnirUnUsuarioAlGrupo(){
+      Grupo buscado = givenQueExisteUnGrupo();
+      Usuario usuario = givenQueExisteUnUsuario();
+      whenAsignoElUsuarioAlGrupo(buscado,usuario);
+      thenVerificoQueElUsuarioFueAgregado(buscado);
+
+    }
+
+    private void thenVerificoQueElUsuarioFueAgregado(Grupo buscado) {
+        verify(repositorioGrupo,times(1)).actualizarGrupo(buscado);
+    }
+
+
+    private void whenAsignoElUsuarioAlGrupo(Grupo buscado, Usuario usuario) {
+        when(repositorioGrupo.getGrupoByID(buscado.getId())).thenReturn(buscado);
+        when(repositorioUsuario.getUsuarioByID(usuario.getId())).thenReturn(usuario);
+        servicioGrupo.IngresarUsuarioAlGrupo(buscado.getId(),usuario.getId());
+    }
+
+    private Usuario givenQueExisteUnUsuario() {
+        Usuario usuario= new Usuario();
+        usuario.setId(1L);
+        return usuario;
+    }
+
+    private Grupo givenQueExisteUnGrupo() {
+        Grupo grupo = new Grupo();
+        grupo.setId(1L);
+        return grupo;
+    }
+
 
     @Test
     public void siElFormularioEstaCompletoQueSePuedaCrearElGrupo(){
