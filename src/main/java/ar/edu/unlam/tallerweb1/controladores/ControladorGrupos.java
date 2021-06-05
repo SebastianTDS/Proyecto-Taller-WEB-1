@@ -36,7 +36,7 @@ public class ControladorGrupos{
 	public ModelAndView IngresarAGrupo(HttpServletRequest request,@RequestParam Long id) {
 		Usuario usuarioLogueado = (Usuario) request.getSession().getAttribute("USUARIO");
 		service.IngresarUsuarioAlGrupo(usuarioLogueado.getId(),id);
-		return new ModelAndView("redirect:/"+id);
+		return new ModelAndView("redirect:/grupos/"+id);
 	}
 
 	@RequestMapping("/{id}")

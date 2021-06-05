@@ -62,7 +62,7 @@
 					<div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-2  p-2">
 						<form:select path="turno" id="turno" class="form-control form-control-sm">
 							<option value="">Turno</option>
-							<option value="<%=Turno.MANIANA%>">Mañana</option>
+							<option value="<%=Turno.MANIANA%>">Maï¿½ana</option>
 							<option value="<%=Turno.TARDE%>">Tarde</option>
 							<option value="<%=Turno.NOCHE%>">Noche</option>
 
@@ -114,7 +114,9 @@
 									</div>
 								</div>
 								<div class="d-flex justify-content-center m-3">
-									<a href="grupos/${grupo.id}" class="btn btn-primary m-2">Ingresar</a>
+									<form:form action="grupos/ingresar-a-grupo" id="unirte" method="POST" class="row text-center">
+										<button type="submit" class="btn btn-success mt-3" name="id" form="unirte" value="${grupo.id}">Unirte</button>
+									</form:form>
 								</div>
 							</div>
 						</div>
