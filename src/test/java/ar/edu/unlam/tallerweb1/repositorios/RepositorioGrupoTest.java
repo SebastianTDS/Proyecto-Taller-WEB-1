@@ -16,11 +16,40 @@ import java.util.List;
 
 public class RepositorioGrupoTest extends SpringTest {
 
-    private Materia nuevaMateria = new Materia();
-    private Carrera nuevaCarrera = new Carrera();
+    private final Materia nuevaMateria = new Materia();
+    private final Carrera nuevaCarrera = new Carrera();
 
     @Autowired
     private RepositorioGrupoImpl repositorio;
+
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedaAgregarUnUsuarioAlGrupo(){
+
+        Grupo grupo=givenQueExisteUnGrupoConCarreraYMateria();
+        Usuario usuario=givenUnUsuario();
+        Grupo grupoActualizado = whenGuardoUnUsuarioEnGrupoYViceversa(grupo,usuario);
+        thenVerificoQueLaTablaContengaSusReferencias(grupoActualizado);
+    }
+
+    private void thenVerificoQueLaTablaContengaSusReferencias(Grupo grupoActualizado) {
+        Grupo buscado = repositorio.buscarPorId(grupoActualizado.getId());
+        assertThat(buscado.getListaDeUsuarios()).hasSize(1);
+    }
+
+    private Grupo whenGuardoUnUsuarioEnGrupoYViceversa(Grupo grupo, Usuario usuario) {
+        grupo.agregarUsuarioAlGrupo(usuario);
+        repositorio.actualizarGrupo(grupo);
+        return grupo;
+    }
+
+    private Usuario givenUnUsuario() {
+        Usuario usuario = new Usuario ();
+        session().save(usuario);
+        return usuario;
+    }
 
     @Test
     @Transactional
@@ -140,13 +169,13 @@ public class RepositorioGrupoTest extends SpringTest {
     }
     private DatosDeGrupoParaBusqueda givenQueExisteDatosParaLaBusquedaPorMateria() {
         DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda = new DatosDeGrupoParaBusqueda();
-        datosDeGrupoParaBusqueda.setMateria(1l);
+        datosDeGrupoParaBusqueda.setMateria(1L);
         return datosDeGrupoParaBusqueda;
     }
 
     private DatosDeGrupoParaBusqueda givenQueExisteDatosParaLaBusquedaPorCarrera() {
         DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda = new DatosDeGrupoParaBusqueda();
-        datosDeGrupoParaBusqueda.setCarrera(1l);
+        datosDeGrupoParaBusqueda.setCarrera(1L);
         return datosDeGrupoParaBusqueda;
     }
 

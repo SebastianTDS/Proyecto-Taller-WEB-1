@@ -1,21 +1,21 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.util.auxClass.Check;
 import ar.edu.unlam.tallerweb1.util.enums.Turno;
 import ar.edu.unlam.tallerweb1.util.exceptions.LimiteDeUsuariosFueraDeRango;
+import org.springframework.beans.MutablePropertyValues;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
-public class Grupo {
+public class Grupo  {
 	
 	private Long id;
 	private String nombre;
@@ -26,8 +26,12 @@ public class Grupo {
 	private Turno turno;
 	private Carrera carrera;
 	private Materia materia;
-	
-	public Grupo() { }
+
+	private  List<Usuario> listaDeUsuarios;
+
+	public Grupo() {
+		this.listaDeUsuarios = new ArrayList<>();
+	}
 
 	@ManyToOne(optional = false, targetEntity = Materia.class)
 	public Materia getMateria() {
@@ -109,5 +113,20 @@ public class Grupo {
 		
 		if(!Check.isInRange(cantidadMax, 2, 7) && !Check.isNull(cantidadMax))
 			throw new LimiteDeUsuariosFueraDeRango(id);
+	}
+
+	public void agregarUsuarioAlGrupo(Usuario usuarioAInsertar) {
+		listaDeUsuarios.add(usuarioAInsertar);
+		usuarioAInsertar.agregarGrupo(this);
+	}
+
+
+	@ManyToMany(mappedBy="listaDeGrupos")
+	public List<Usuario> getListaDeUsuarios() {
+		return listaDeUsuarios;
+	}
+
+	public void setListaDeUsuarios(List<Usuario> listaDeUsuarios) {
+		this.listaDeUsuarios = listaDeUsuarios;
 	}
 }

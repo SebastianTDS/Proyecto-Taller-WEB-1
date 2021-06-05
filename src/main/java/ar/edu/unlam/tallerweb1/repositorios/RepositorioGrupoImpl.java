@@ -9,6 +9,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 @Repository("repositorioGrupo")
@@ -36,7 +37,8 @@ public class RepositorioGrupoImpl implements RepositorioGrupo {
 		sessionFactory.getCurrentSession().remove(objetivo);
 	}
 
-	@Override
+
+    @Override
 	public void guardarGrupo(Grupo grupoNuevo) {
 		sessionFactory.getCurrentSession().save(grupoNuevo);
 	}
@@ -78,9 +80,6 @@ public class RepositorioGrupoImpl implements RepositorioGrupo {
     }
 
     private boolean busquedaPorPrivacidad(DatosDeGrupoParaBusqueda datosDeGrupo) {
-        if (datosDeGrupo.getPrivacidad() == Privacidad.CERRADO)
-            return true;
-        else
-            return false;
+        return datosDeGrupo.getPrivacidad() == Privacidad.CERRADO;
     }
 }
