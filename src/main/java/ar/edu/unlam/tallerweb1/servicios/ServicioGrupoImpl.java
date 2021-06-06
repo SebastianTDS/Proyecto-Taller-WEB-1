@@ -14,6 +14,7 @@ import ar.edu.unlam.tallerweb1.util.exceptions.GrupoInexistenteException;
 import ar.edu.unlam.tallerweb1.util.exceptions.YaEstoyEnElGrupo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -31,56 +32,55 @@ public class ServicioGrupoImpl implements ServicioGrupo {
         this.repoGrupo = repositorioGrupoParaElServicio;
         this.repoCarrera = repositorioCarreraParaElServicio;
         this.repoMateria = repositorioMateriaParaElServicio;
-        this.repoUsuario=repositorioUsuarioParaElServicio;
+        this.repoUsuario = repositorioUsuarioParaElServicio;
     }
-    
+
     @Override
-	public Grupo buscarGrupoPorID(Long idBuscado) {
-		Grupo encontrado = repoGrupo.getGrupoByID(idBuscado);
-		
-		if(Check.isNull(encontrado))
-			throw new GrupoInexistenteException("Grupo buscado no encontrado");
+    public Grupo buscarGrupoPorID(Long idBuscado) {
+        Grupo encontrado = repoGrupo.getGrupoByID(idBuscado);
 
-		return encontrado;
-	}
+        if (Check.isNull(encontrado))
+            throw new GrupoInexistenteException("Grupo buscado no encontrado");
 
-	@Override
-	public void modificarGrupo(Long id, DatosDeGrupo formulario) {
-		Grupo objetivo = repoGrupo.getGrupoByID(id);
-		
-		if(Check.isNull(objetivo))
-			throw new GrupoInexistenteException("No se puede modificar un grupo inexistente");
+        return encontrado;
+    }
 
-		objetivo.actualizar(formulario);
+    @Override
+    public void modificarGrupo(Long id, DatosDeGrupo formulario) {
+        Grupo objetivo = repoGrupo.getGrupoByID(id);
 
-		repoGrupo.actualizarGrupo(objetivo);
-	}
+        if (Check.isNull(objetivo))
+            throw new GrupoInexistenteException("No se puede modificar un grupo inexistente");
 
-	@Override
-	public void eliminarGrupo(Long idBuscado) {
-		Grupo objetivo = repoGrupo.getGrupoByID(idBuscado);
-		
-		if(Check.isNull(objetivo))
-			throw new GrupoInexistenteException("No se puede eliminar un grupo inexistente");
+        objetivo.actualizar(formulario);
 
-		repoGrupo.eliminarGrupo(objetivo);
-	}
+        repoGrupo.actualizarGrupo(objetivo);
+    }
+
+    @Override
+    public void eliminarGrupo(Long idBuscado) {
+        Grupo objetivo = repoGrupo.getGrupoByID(idBuscado);
+
+        if (Check.isNull(objetivo))
+            throw new GrupoInexistenteException("No se puede eliminar un grupo inexistente");
+        repoGrupo.eliminarGrupo(objetivo);
+    }
 
     @Override
     public void IngresarUsuarioAlGrupo(Long idUsuario, Long idGrupo) {
         Grupo grupoAAcceder = repoGrupo.getGrupoByID(idGrupo);
         Usuario usuarioAInsertar = repoUsuario.getUsuarioByID(idUsuario);
-        if (grupoAAcceder == null || usuarioAInsertar == null)
+        Integer cantidadActual=grupoAAcceder.getListaDeUsuarios().size();
+        if (grupoAAcceder == null || usuarioAInsertar == null ||cantidadActual>=grupoAAcceder.getCantidadMax())
             throw new FalloAlUnirseAlGrupo();
-        verificarSiElUsuarioYaEstaEnElGrupo(grupoAAcceder,usuarioAInsertar);
+        verificarSiElUsuarioYaEstaEnElGrupo(grupoAAcceder, usuarioAInsertar);
         grupoAAcceder.agregarUsuarioAlGrupo(usuarioAInsertar);
         repoGrupo.actualizarGrupo(grupoAAcceder);
     }
 
     private void verificarSiElUsuarioYaEstaEnElGrupo(Grupo grupoAAcceder, Usuario usuarioAInsertar) {
-        for ( Grupo grupoActual : usuarioAInsertar.getListaDeGrupos())
-        {
-            if (grupoActual.getId()==grupoAAcceder.getId())
+        for (Grupo grupoActual : usuarioAInsertar.getListaDeGrupos()) {
+            if (grupoActual.getId() == grupoAAcceder.getId())
                 throw new YaEstoyEnElGrupo(grupoActual.getId());
         }
     }
@@ -94,7 +94,7 @@ public class ServicioGrupoImpl implements ServicioGrupo {
     @Override
     public Grupo crearGrupo(DatosDeGrupo datosDeGrupo) {
         Grupo grupoAPartirDeDatosDeGrupo = crearGrupoAPartirDeDatosDeGrupo(datosDeGrupo);
-        if (grupoAPartirDeDatosDeGrupo==null) {
+        if (grupoAPartirDeDatosDeGrupo == null) {
             throw new FormularioDeGrupoIncompleto();
         }
         repoGrupo.guardarGrupo(grupoAPartirDeDatosDeGrupo);

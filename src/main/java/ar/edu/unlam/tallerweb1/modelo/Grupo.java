@@ -120,7 +120,6 @@ public class Grupo  {
 		usuarioAInsertar.agregarGrupo(this);
 	}
 
-
 	@ManyToMany(mappedBy="listaDeGrupos")
 	public List<Usuario> getListaDeUsuarios() {
 		return listaDeUsuarios;
@@ -129,4 +128,13 @@ public class Grupo  {
 	public void setListaDeUsuarios(List<Usuario> listaDeUsuarios) {
 		this.listaDeUsuarios = listaDeUsuarios;
 	}
+
+	@PreRemove
+	public void removerGruposDeUsuario(){
+		for(Usuario usuario:listaDeUsuarios){
+			usuario.getListaDeGrupos().remove(this);
+		}
+	}
+
+
 }

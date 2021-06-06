@@ -17,16 +17,7 @@
     <div class="container-fluid row ">
         <div class="col-5 col-sm-4 col-md-3 col-lg-2 col-xl-2 container-fluid"
              style="min-height: 500px">
-            <div class="m-3 d-flex justify-content-center mt-5">
-                <a href="ir-a-crear-nuevo-grupo ">
-                    <button class="btn btn-lg btn btn-outline-info btn-sm justify-content-center">Crear Grupo</button>
-                </a>
-            </div>
-            <div class="m-1 d-flex justify-content-center mt-5">
-                <a href="ir-a-home">
-                    <button class="btn btn btn-outline-info btn-sm justify-content-center">Home</button>
-                </a>
-            </div>
+            <jsp:include page="/templates/nav.jsp"></jsp:include>
         </div>
         <div class="col-7 col-sm-8 col-md-9 col-lg-10 col-xl-10 border-start row container-fluid" style="min-height: 500px">
 

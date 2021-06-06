@@ -12,6 +12,7 @@ public class Usuario {
 	private String password;
 	private String rol;
 	private List<Grupo> listaDeGrupos;
+	private String nombre;
 
 	public Usuario() {
 		this.listaDeGrupos = new ArrayList<>();
@@ -49,13 +50,21 @@ public class Usuario {
 			joinColumns = @JoinColumn(name = "id_usuario",nullable = false),
 			inverseJoinColumns = @JoinColumn(name = "id_grupo",nullable = false)
 	)
-	@ManyToMany(cascade=CascadeType.ALL)
+	@ManyToMany
 	public List<Grupo> getListaDeGrupos() {
 		return  listaDeGrupos;
 	}
 
 	public void setListaDeGrupos(List<Grupo> listaDeGrupos) {
 		this.listaDeGrupos = listaDeGrupos;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
 
 	public void agregarGrupo(Grupo grupo) {

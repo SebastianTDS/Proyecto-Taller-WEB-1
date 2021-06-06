@@ -63,6 +63,7 @@ public class ServicioGrupoTest{
     private Grupo givenQueExisteUnGrupo() {
         Grupo grupo = new Grupo();
         grupo.setId(1L);
+        grupo.setCantidadMax(2);
         return grupo;
     }
 

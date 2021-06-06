@@ -20,18 +20,10 @@
     <div class="container-fluid row ">
         <div class="col-5 col-sm-4 col-md-3 col-lg-2 col-xl-2 container-fluid"
              style="min-height: 500px">
-            <div class="m-3 d-flex justify-content-center mt-5">
-                <a href="ir-a-crear-nuevo-grupo ">
-                    <button class="btn btn-lg btn btn-outline-info btn-sm justify-content-center">Crear Grupo</button>
-                </a>
-            </div>
-            <div class="m-1 d-flex justify-content-center mt-5">
-                <a href="ir-a-mis-grupos">
-                    <button class="btn btn btn btn-outline-info btn-sm justify-content-center">Mis Grupos</button>
-                </a>
-            </div>
+            <jsp:include page="/templates/nav.jsp"></jsp:include>
         </div>
-        <div class="col-7 col-sm-8 col-md-9 col-lg-10 col-xl-10 border-start row container-fluid" style="min-height: 500px">
+        <div class="col-7 col-sm-8 col-md-9 col-lg-10 col-xl-10 border-start row container-fluid"
+             style="min-height: 500px">
 
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 clo-xl-12 container-fluid row d-flex justify-content-center flex-wrap align-content-center">
                 <form:form action="buscar-grupos" method="POST" modelAttribute="datosParaBuscarUnGrupo"
@@ -111,16 +103,14 @@
                                     </div>
                                 </div>
                                 <div class="d-flex justify-content-center m-3">
-                                    <form:form action="grupos/ingresar-a-grupo" id="unirte" method="POST"
-                                               class="row text-center">
-                                        <button type="submit" class="btn btn-success mt-3" name="id" form="unirte"
-                                                value="${grupo.id}">Unirte
-                                        </button>
-                                    </form:form>
+                                    <button type="submit" class="btn btn-success mt-3" name="id" form="unirte"
+                                            value="${grupo.id}">Unirte
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </c:forEach>
+                    <form action="grupos/ingresar-a-grupo" id="unirte" method="POST"></form>
                 </c:if>
                 <c:if test="${not empty error}">
                     ${error}
