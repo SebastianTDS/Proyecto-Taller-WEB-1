@@ -110,7 +110,7 @@
                             </div>
                         </div>
                     </c:forEach>
-                    <form action="grupos/ingresar-a-grupo" id="unirte" method="POST"></form>
+                    <form action="ingresar-a-grupo" id="unirte" method="POST"></form>
                 </c:if>
                 <c:if test="${not empty error}">
                     ${error}

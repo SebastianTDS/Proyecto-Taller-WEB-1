@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
+@RequestMapping("/perfil")
 public class ControladorMisGrupos {
     private final ServicioGrupo servicioGrupo;
 
@@ -25,6 +26,10 @@ public class ControladorMisGrupos {
     @RequestMapping("/ir-a-mis-grupos")
     public ModelAndView misGrupos(HttpServletRequest request) {
         Usuario usuarioLogueado = (Usuario) request.getSession().getAttribute("USUARIO");
+        
+        if(usuarioLogueado == null)
+        	return new ModelAndView("redirect:/ir-a-login");
+        
         ModelMap model = new ModelMap();
         List<Carrera> carreras = servicioGrupo.buscarTodasLasCarreras();
         List<Materia> materias = servicioGrupo.buscarTodasLasMaterias();

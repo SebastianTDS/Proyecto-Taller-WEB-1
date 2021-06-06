@@ -13,7 +13,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import ar.edu.unlam.tallerweb1.dto.DatosDeUsuario;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.modelo.Notificacion;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
@@ -40,7 +39,7 @@ public class ServicioNotificacionesTest {
 	@Test
 	public void testQueSeNotifiqueCuandoUnUsuarioEntraAUnGrupo () {
 		Grupo objetivo = givenExisteUnGrupo();
-		DatosDeUsuario nuevoIntegrante = givenNuevoIntegrante();
+		Usuario nuevoIntegrante = givenNuevoIntegrante();
 		
 		whenIntentamosNotificarASusIntegrantes(objetivo, nuevoIntegrante);
 		
@@ -51,13 +50,13 @@ public class ServicioNotificacionesTest {
 		verify(repositoryNt, times(veces)).guardarNotificacion(anyObject());
 	}
 
-	private void whenIntentamosNotificarASusIntegrantes(Grupo objetivo, DatosDeUsuario nuevoIntegrante) {
+	private void whenIntentamosNotificarASusIntegrantes(Grupo objetivo, Usuario nuevoIntegrante) {
 		when(repositoryGr.getGrupoByID(objetivo.getId())).thenReturn(objetivo);
 		service.notificarNuevoIngreso(objetivo.getId(), nuevoIntegrante);
 	}
 
-	private DatosDeUsuario givenNuevoIntegrante() {
-		DatosDeUsuario integrante = new DatosDeUsuario();
+	private Usuario givenNuevoIntegrante() {
+		Usuario integrante = new Usuario();
 		
 		integrante.setId(1L);
 		integrante.setNombre("Manolo");

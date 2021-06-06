@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.unlam.tallerweb1.HttpSessionTest;
-import ar.edu.unlam.tallerweb1.dto.DatosDeUsuario;
+import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioNotificaciones;
 import ar.edu.unlam.tallerweb1.servicios.ServicioNotificacionesImpl;
 
@@ -37,11 +37,11 @@ public class ControladorNotificacionesTest extends HttpSessionTest{
 	}
 
 	private void thenNosRedirigeAlIndex(ModelAndView vista) {
-		assertThat(vista.getViewName()).isEqualTo("redirect:/login");
+		assertThat(vista.getViewName()).isEqualTo("redirect:/ir-a-login");
 	}
 
 	private void givenNoExisteUsuarioEnSesion() {
-		when(request().getSession().getAttribute("Usuario")).thenReturn(null);
+		when(request().getSession().getAttribute("USUARIO")).thenReturn(null);
 	}
 
 	private void thenObtenemosLaVistaDeseada(ModelAndView vista) {
@@ -54,7 +54,7 @@ public class ControladorNotificacionesTest extends HttpSessionTest{
 	}
 
 	private void givenExisteUnUsuarioEnSesion() {
-		when(request().getSession().getAttribute("Usuario")).thenReturn(new DatosDeUsuario());
+		when(request().getSession().getAttribute("USUARIO")).thenReturn(new Usuario());
 	}
 
 }

@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <jsp:include page="/templates/header.jsp"></jsp:include>
+    <jsp:include page="/templates/headerLogueado.jsp"></jsp:include>
     <!-- Contenido Real -->
     <main class="container-fluid">
         <div id="main" class="row text-white">
@@ -36,12 +36,11 @@
                 <hr>
                 <div class="list-group">
                     <c:forEach items="${Notificaciones}" var="notificacion">
-						<a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
-	                        <div class="d-flex w-100 justify-content-between">
-	                            <strong>Nuevo miembro en el grupo "Equipo Dinamita"</strong>
-	                            <small>3 days ago</small>
+						<a href="#" class="list-group-item list-group-item-action flex-column active">
+	                        <div class="d-flex w-100 justify-content-between align-items-center">
+	                            <strong class="vertical-middle">${notificacion.getTitulo() }</strong>
+	                            <small class="text-end">${notificacion.getFecha().toLocalDate() } <br> ${notificacion.getFecha().toLocalTime() }</small>
 	                        </div>
-	                        <small>${notificacion.getTitulo() }</small>
                     	</a>
 					</c:forEach>
                 </div>

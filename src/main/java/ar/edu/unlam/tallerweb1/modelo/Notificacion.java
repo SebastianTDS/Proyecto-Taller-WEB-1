@@ -19,7 +19,7 @@ public class Notificacion {
 	private Boolean leido;
 	
 	public Notificacion() {
-		this.fecha = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+		this.fecha = LocalDateTime.now().withNano(0);
 		this.leido = false;
 	}
 

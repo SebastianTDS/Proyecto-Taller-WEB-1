@@ -8,9 +8,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import ar.edu.unlam.tallerweb1.dto.DatosDeUsuario;
+import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioNotificaciones;
-import ar.edu.unlam.tallerweb1.util.auxClass.Check;
 
 @Controller
 @RequestMapping("/perfil/notificaciones")
@@ -23,13 +22,13 @@ public class ControladorNotificaciones {
 		this.service = service;
 	}
 
-	@RequestMapping("/")
+	@RequestMapping("")
 	public ModelAndView verNotificaciones(HttpServletRequest request) {
 		ModelMap modelo = new ModelMap();
-		DatosDeUsuario attrSesion = (DatosDeUsuario) request.getSession().getAttribute("Usuario");
+		Usuario attrSesion = (Usuario) request.getSession().getAttribute("USUARIO");
 
-		if (Check.isNull(attrSesion))
-			return new ModelAndView("redirect:/login");
+		if (attrSesion == null)
+			return new ModelAndView("redirect:/ir-a-login");
 		
 		modelo.put("Notificaciones", service.obtenerNotificacionesPor(attrSesion.getId()));
 			

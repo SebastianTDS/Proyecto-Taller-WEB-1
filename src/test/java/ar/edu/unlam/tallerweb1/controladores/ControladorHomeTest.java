@@ -4,6 +4,8 @@ import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
+import ar.edu.unlam.tallerweb1.servicios.ServicioNotificacionesImpl;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,14 +24,23 @@ public class ControladorHomeTest {
     private ServicioGrupo servicioGrupo;
     private static HttpServletRequest request;
     private static HttpSession session;
+    
     @Before
     public void init(){
         session=mock(HttpSession.class);
         request = mock(HttpServletRequest.class);
         when(request.getSession()).thenReturn(session);
         servicioGrupo = mock(ServicioGrupo.class);
-        controladorHome = new ControladorHome(servicioGrupo);
+        controladorHome = new ControladorHome(servicioGrupo, mock(ServicioNotificacionesImpl.class));
     }
+    
+    @Test
+	public void testQueAlIngresarUnUsuarioAUnGrupoMeTraigaLaVistaDelGrupo() {
+		givenUnUsuarioDeLaSesion();
+		Long idGrupo = 1L;
+		ModelAndView mvc = whenElUsuarioIngresaAlGrupo(idGrupo);
+		thenVerificoLaVista(mvc);
+	}
 
     @Test
     public void QueMeRedirigaALaVistaCrearGrupo(){
@@ -71,6 +82,20 @@ public class ControladorHomeTest {
         ModelAndView mvc= whenGuardoLasCarrerasEnElModel(carreras);
         thenMeMuestreLasCarreras(mvc,carreras);
     }
+    
+    private void givenUnUsuarioDeLaSesion() {
+		Usuario usuario = new Usuario();
+		usuario.setId(1L);
+		when(request.getSession().getAttribute("USUARIO")).thenReturn(usuario);
+	}
+    
+    private ModelAndView whenElUsuarioIngresaAlGrupo(Long idGrupo) {
+		return controladorHome.IngresarAGrupo(request, idGrupo);
+	}
+    
+    private void thenVerificoLaVista(ModelAndView mvc) {
+		assertThat(mvc.getViewName()).isEqualTo("redirect:/grupos/1");
+	}
 
 
     void thenMeMuestreLasCarreras(ModelAndView mvc, List<Carrera>carreras){

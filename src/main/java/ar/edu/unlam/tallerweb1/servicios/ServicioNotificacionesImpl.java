@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ar.edu.unlam.tallerweb1.dto.DatosDeUsuario;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.modelo.Notificacion;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
@@ -33,7 +32,7 @@ public class ServicioNotificacionesImpl implements ServicioNotificaciones {
 	}
 
 	@Override
-	public void notificarNuevoIngreso(Long id, DatosDeUsuario nuevoIntegrante) {
+	public void notificarNuevoIngreso(Long id, Usuario nuevoIntegrante) {
 		Grupo grupoObjetivo = repoGrupo.getGrupoByID(id);
 
 		if (grupoObjetivo == null)
