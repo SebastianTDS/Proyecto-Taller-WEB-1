@@ -12,18 +12,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.PreRemove;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.util.auxClass.Check;
 import ar.edu.unlam.tallerweb1.util.enums.Turno;
 import ar.edu.unlam.tallerweb1.util.exceptions.LimiteDeUsuariosFueraDeRango;
-import org.springframework.beans.MutablePropertyValues;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 public class Grupo  {
@@ -41,16 +35,16 @@ public class Grupo  {
 	private  List<Usuario> listaDeUsuarios;
 
 	public Grupo() {
-		this.listaDeUsuarios = new ArrayList<>();
+		this.listaDeUsuarios = new ArrayList<Usuario>();
 	}
 
 	@ManyToMany(mappedBy="listaDeGrupos")
-	public List<Usuario> getIntegrantes() {
-		return integrantes;
+	public List<Usuario> getListaDeUsuarios() {
+		return listaDeUsuarios;
 	}
 
-	public void setIntegrantes(List<Usuario> integrantes) {
-		this.integrantes = integrantes;
+	public void setListaDeUsuarios(List<Usuario> listaDeUsuarios) {
+		this.listaDeUsuarios = listaDeUsuarios;
 	}
 	
 	@ManyToOne(optional = false, targetEntity = Materia.class)
@@ -138,15 +132,6 @@ public class Grupo  {
 	public void agregarUsuarioAlGrupo(Usuario usuarioAInsertar) {
 		listaDeUsuarios.add(usuarioAInsertar);
 		usuarioAInsertar.agregarGrupo(this);
-	}
-
-	@ManyToMany(mappedBy="listaDeGrupos")
-	public List<Usuario> getListaDeUsuarios() {
-		return listaDeUsuarios;
-	}
-
-	public void setListaDeUsuarios(List<Usuario> listaDeUsuarios) {
-		this.listaDeUsuarios = listaDeUsuarios;
 	}
 
 	@PreRemove

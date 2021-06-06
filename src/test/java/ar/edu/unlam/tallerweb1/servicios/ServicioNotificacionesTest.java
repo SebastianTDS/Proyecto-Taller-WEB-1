@@ -44,7 +44,7 @@ public class ServicioNotificacionesTest {
 		
 		whenIntentamosNotificarASusIntegrantes(objetivo, nuevoIntegrante);
 		
-		thenSeLesCargaLaNotificacion(objetivo.getIntegrantes().size());
+		thenSeLesCargaLaNotificacion(objetivo.getListaDeUsuarios().size());
 	}
 
 	private void thenSeLesCargaLaNotificacion(Integer veces) {
@@ -69,7 +69,7 @@ public class ServicioNotificacionesTest {
 		Grupo objetivo = new Grupo();
 		objetivo.setId(1L);
 		objetivo.setNombre("Equipo Dinamita");
-		objetivo.setIntegrantes(Arrays.asList(givenUnUsuario(5L), givenUnUsuario(4L)));
+		objetivo.setListaDeUsuarios(Arrays.asList(givenUnUsuario(5L), givenUnUsuario(4L)));
 		return objetivo;
 	}
 

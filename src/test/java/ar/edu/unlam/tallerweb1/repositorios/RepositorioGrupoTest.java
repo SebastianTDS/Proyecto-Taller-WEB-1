@@ -56,8 +56,9 @@ public class RepositorioGrupoTest extends SpringTest {
     private void thenVerificoQueMeTraigaTodosMisGrupos(List<Grupo> misGrupos) {
         assertThat(misGrupos).hasSize(1);
     }
+    
     private void thenVerificoQueLaTablaContengaSusReferencias(Grupo grupoActualizado) {
-        Grupo buscado = repositorio.buscarPorId(grupoActualizado.getId());
+        Grupo buscado = repositorio.getGrupoByID(grupoActualizado.getId());
         assertThat(buscado.getListaDeUsuarios()).hasSize(1);
     }
 
@@ -267,10 +268,10 @@ public class RepositorioGrupoTest extends SpringTest {
         nuevoGrupo.setNombre("Hola");
         nuevoGrupo.setCerrado(true);
         nuevoGrupo.setTurno(Turno.NOCHE);
-        session().save(nuevaCarrera);
-        session().save(nuevaMateria);
         nuevaCarrera.setNombre("Desarrollo web");
         nuevaMateria.setNombre("Basica I");
+        session().save(nuevaCarrera);
+        session().save(nuevaMateria);
         nuevoGrupo.setCarrera(nuevaCarrera);
         nuevoGrupo.setMateria(nuevaMateria);
         session().save(nuevoGrupo);

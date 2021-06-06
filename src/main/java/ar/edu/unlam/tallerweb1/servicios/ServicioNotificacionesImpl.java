@@ -39,7 +39,7 @@ public class ServicioNotificacionesImpl implements ServicioNotificaciones {
 		if (grupoObjetivo == null)
 			throw new GrupoInexistenteException("Imposible unirse a grupo inexistente");
 
-		for (Usuario integrante : grupoObjetivo.getIntegrantes()) {
+		for (Usuario integrante : grupoObjetivo.getListaDeUsuarios()) {
 			Notificacion mensaje = new Notificacion();
 			mensaje.setUsuario(integrante);
 

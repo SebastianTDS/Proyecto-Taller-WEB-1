@@ -31,7 +31,7 @@ public class ServicioGrupoImpl implements ServicioGrupo {
         this.repoGrupo = repoGrupo;
         this.repoCarrera = repoCarrera;
         this.repoMateria = repoMateria;
-        this.repoUsuario = reposUsuario;
+        this.repoUsuario = repoUsuario;
     }
 
     @Override
