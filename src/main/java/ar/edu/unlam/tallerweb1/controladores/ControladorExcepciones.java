@@ -44,7 +44,7 @@ public class ControladorExcepciones {
 		ModelMap model = new ModelMap();
 		model.put("error",e.getMessage());
 
-		return new ModelAndView("redirect:/home",model);
+		return new ModelAndView("redirect:/ir-a-home",model);
 	}
 	
 //	TODO: Metodo encargado de redirigir a las paginas de error 4xx personalizadas.

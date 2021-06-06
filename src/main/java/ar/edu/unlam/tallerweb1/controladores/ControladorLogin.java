@@ -64,7 +64,7 @@ public class ControladorLogin {
 	}
 
 	@RequestMapping(path = "/cerrar-sesion", method = RequestMethod.GET)
-	public ModelAndView cerrarSession(HttpServletRequest request) {
+		public ModelAndView cerrarSession(HttpServletRequest request) {
 		request.getSession().invalidate();
 		return new ModelAndView("index");
 	}

@@ -71,8 +71,17 @@ public class ServicioGrupoImpl implements ServicioGrupo {
         Usuario usuarioAInsertar = repoUsuario.getUsuarioByID(idUsuario);
         if (grupoAAcceder == null || usuarioAInsertar == null)
             throw new FalloAlUnirseAlGrupo();
+        verificarSiElUsuarioYaEstaEnElGrupo(grupoAAcceder,usuarioAInsertar);
         grupoAAcceder.agregarUsuarioAlGrupo(usuarioAInsertar);
         repoGrupo.actualizarGrupo(grupoAAcceder);
+    }
+
+    private void verificarSiElUsuarioYaEstaEnElGrupo(Grupo grupoAAcceder, Usuario usuarioAInsertar) {
+        for ( Grupo grupoActual : usuarioAInsertar.getListaDeGrupos())
+        {
+            if (grupoActual.getId()==grupoAAcceder.getId())
+                throw new FalloAlUnirseAlGrupo();
+        }
     }
 
     @Override
