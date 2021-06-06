@@ -3,6 +3,7 @@ package ar.edu.unlam.tallerweb1.controladores;
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -10,7 +11,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
+
+
 
 @Controller
 public class ControladorHome {
@@ -35,7 +41,9 @@ public class ControladorHome {
     }
 
     @RequestMapping("/ir-a-home")
-    public ModelAndView irATest() {
+    public ModelAndView irATest(HttpServletRequest request) {
+        HttpSession miSesion=request.getSession(true);
+        Usuario usuarioSesion = (Usuario) miSesion.getAttribute("USUARIO");
         ModelMap model = new ModelMap();
         List<Grupo> grupos = servicioGrupo.buscarTodos();
         DatosDeGrupo datos = new DatosDeGrupo();
@@ -44,6 +52,7 @@ public class ControladorHome {
         model.put("carreras", carreras);
         model.put("materias", materias);
         model.put("datosParaBuscarUnGrupo", datos);
+        model.put("usuario",usuarioSesion);
         int cantidadDeResultados = grupos.size();
         if (cantidadDeResultados > 0) {
             model.put("cantidadDeResultados", cantidadDeResultados);
@@ -71,4 +80,5 @@ public class ControladorHome {
             model.put("error", "No se encontro tu búsqueda");
         return new ModelAndView("home", model);
     }
+
 }

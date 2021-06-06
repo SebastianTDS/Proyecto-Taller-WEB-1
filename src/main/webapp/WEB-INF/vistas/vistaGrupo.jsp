@@ -10,7 +10,7 @@
 </head>
 
 <body>
-	<jsp:include page="/templates/header.jsp"></jsp:include>
+	<jsp:include page="/templates/headerLogueado.jsp"></jsp:include>
 	<main class="container-fluid">
 		<div id="main" class="row text-white">
 			<div class="info col-12 col-sm-3 bg-dark p-0">
@@ -34,7 +34,7 @@
 				</div>
 
 				<ul class="opciones">
-					<li><a class="text-white" href="#">Información General</a></li>
+					<li><a class="text-white" href="#">Informaciï¿½n General</a></li>
 					<li><a class="text-white" href="#">Miembros del grupo</a></li>
 					<li><a class="text-white" href="#">Archivos</a></li>
 					<li><a class="text-white" href="#">Calendario</a></li>

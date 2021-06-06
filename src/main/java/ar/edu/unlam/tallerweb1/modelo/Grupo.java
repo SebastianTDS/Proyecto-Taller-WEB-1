@@ -17,9 +17,16 @@ import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.util.auxClass.Check;
 import ar.edu.unlam.tallerweb1.util.enums.Turno;
 import ar.edu.unlam.tallerweb1.util.exceptions.LimiteDeUsuariosFueraDeRango;
+import org.springframework.beans.MutablePropertyValues;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
-public class Grupo {
+public class Grupo  {
 	
 	private Long id;
 	private String nombre;
@@ -30,11 +37,11 @@ public class Grupo {
 	private Turno turno;
 	private Carrera carrera;
 	private Materia materia;
-	
-	private List<Usuario> integrantes;
-	
-	public Grupo() { 
-		this.integrantes = new ArrayList<Usuario>();
+
+	private  List<Usuario> listaDeUsuarios;
+
+	public Grupo() {
+		this.listaDeUsuarios = new ArrayList<>();
 	}
 
 	@ManyToMany(mappedBy="listaDeGrupos")
@@ -127,10 +134,26 @@ public class Grupo {
 		if(!Check.isInRange(cantidadMax, 2, 7) && !Check.isNull(cantidadMax))
 			throw new LimiteDeUsuariosFueraDeRango(id);
 	}
-	
-	public void agregarUsuarioAlGrupo(Usuario nuevoIntegrante) {
-		integrantes.add(nuevoIntegrante);
-		nuevoIntegrante.agregarGrupo(this);
+
+	public void agregarUsuarioAlGrupo(Usuario usuarioAInsertar) {
+		listaDeUsuarios.add(usuarioAInsertar);
+		usuarioAInsertar.agregarGrupo(this);
+	}
+
+	@ManyToMany(mappedBy="listaDeGrupos")
+	public List<Usuario> getListaDeUsuarios() {
+		return listaDeUsuarios;
+	}
+
+	public void setListaDeUsuarios(List<Usuario> listaDeUsuarios) {
+		this.listaDeUsuarios = listaDeUsuarios;
+	}
+
+	@PreRemove
+	public void removerGruposDeUsuario(){
+		for(Usuario usuario:listaDeUsuarios){
+			usuario.getListaDeGrupos().remove(this);
+		}
 	}
 
 

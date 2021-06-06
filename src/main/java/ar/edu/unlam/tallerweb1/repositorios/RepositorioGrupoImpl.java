@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.repositorios;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
+import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.util.enums.Privacidad;
 
 import org.hibernate.Criteria;
@@ -9,6 +10,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 @Repository("repositorioGrupo")
@@ -36,7 +38,15 @@ public class RepositorioGrupoImpl implements RepositorioGrupo {
 		sessionFactory.getCurrentSession().remove(objetivo);
 	}
 
-	@Override
+    @Override
+    public List<Grupo> buscarTodosMisGrupos(Usuario usuario) {
+        Criteria cr = sessionFactory.getCurrentSession().createCriteria(Grupo.class);
+        cr.createCriteria("listaDeUsuarios").add(Restrictions.eq("id", usuario.getId()));
+        return cr.list();
+    }
+
+
+    @Override
 	public void guardarGrupo(Grupo grupoNuevo) {
 		sessionFactory.getCurrentSession().save(grupoNuevo);
 	}

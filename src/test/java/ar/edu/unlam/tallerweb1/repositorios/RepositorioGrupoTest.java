@@ -16,11 +16,62 @@ import java.util.List;
 
 public class RepositorioGrupoTest extends SpringTest {
 
-    private Materia nuevaMateria = new Materia();
-    private Carrera nuevaCarrera = new Carrera();
+    private static Materia nuevaMateria = new Materia();
+    private static Carrera nuevaCarrera = new Carrera();
 
     @Autowired
     private RepositorioGrupoImpl repositorio;
+
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedaAgregarUnUsuarioAlGrupo(){
+
+        Grupo grupo=givenQueExisteUnGrupoConCarreraYMateria();
+        Usuario usuario=givenUnUsuario();
+        Grupo grupoActualizado = whenGuardoUnUsuarioEnGrupoYViceversa(grupo,usuario);
+        thenVerificoQueLaTablaContengaSusReferencias(grupoActualizado);
+    }
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedaBuscarMisGrupos(){
+        Grupo grupo=givenQueExisteUnGrupoConCarreraYMateria();
+        Usuario usuario=givenUnUsuario();
+        givenGuardoUnUsuarioEnGrupoYViceversa(grupo,usuario);
+        List<Grupo> misGrupos=whenCuandoBuscoTodosMisGrupos(usuario);
+        thenVerificoQueMeTraigaTodosMisGrupos(misGrupos);
+    }
+
+    private List<Grupo> whenCuandoBuscoTodosMisGrupos(Usuario usuario) {
+        return repositorio.buscarTodosMisGrupos(usuario);
+    }
+
+    private void givenGuardoUnUsuarioEnGrupoYViceversa(Grupo grupo, Usuario usuario) {
+        grupo.agregarUsuarioAlGrupo(usuario);
+        repositorio.actualizarGrupo(grupo);
+    }
+
+    private void thenVerificoQueMeTraigaTodosMisGrupos(List<Grupo> misGrupos) {
+        assertThat(misGrupos).hasSize(1);
+    }
+    private void thenVerificoQueLaTablaContengaSusReferencias(Grupo grupoActualizado) {
+        Grupo buscado = repositorio.buscarPorId(grupoActualizado.getId());
+        assertThat(buscado.getListaDeUsuarios()).hasSize(1);
+    }
+
+    private Grupo whenGuardoUnUsuarioEnGrupoYViceversa(Grupo grupo, Usuario usuario) {
+        grupo.agregarUsuarioAlGrupo(usuario);
+        repositorio.actualizarGrupo(grupo);
+        return grupo;
+    }
+
+    private Usuario givenUnUsuario() {
+        Usuario usuario = new Usuario ();
+        session().save(usuario);
+        return usuario;
+    }
 
     @Test
     @Transactional
@@ -138,15 +189,16 @@ public class RepositorioGrupoTest extends SpringTest {
         datosDeGrupoParaBusqueda.setDisponibilidad(Disponibilidad.DISPONIBLE);
         return datosDeGrupoParaBusqueda;
     }
+
     private DatosDeGrupo givenQueExisteDatosParaLaBusquedaPorMateria() {
-    	DatosDeGrupo datosDeGrupoParaBusqueda = new DatosDeGrupo();
-        datosDeGrupoParaBusqueda.setMateria(1l);
+    	  DatosDeGrupo datosDeGrupoParaBusqueda = new DatosDeGrupo();
+        datosDeGrupoParaBusqueda.setMateria(1L);
         return datosDeGrupoParaBusqueda;
     }
 
     private DatosDeGrupo givenQueExisteDatosParaLaBusquedaPorCarrera() {
-    	DatosDeGrupo datosDeGrupoParaBusqueda = new DatosDeGrupo();
-        datosDeGrupoParaBusqueda.setCarrera(1l);
+    	  DatosDeGrupo datosDeGrupoParaBusqueda = new DatosDeGrupo();
+        datosDeGrupoParaBusqueda.setCarrera(1L);
         return datosDeGrupoParaBusqueda;
     }
 
