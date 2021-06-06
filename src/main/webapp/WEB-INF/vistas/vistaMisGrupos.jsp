@@ -18,8 +18,8 @@
 <main style="min-height: 500px">
 
     <div class="container-fluid row ">
-        <div class="col-5 col-sm-4 col-md-3 col-lg-2 col-xl-2 border-end container-fluid"
-             style="min-height: 200px">
+        <div class="col-5 col-sm-4 col-md-3 col-lg-2 col-xl-2 container-fluid"
+             style="min-height: 500px">
             <div class="m-3 d-flex justify-content-center mt-5">
                 <a href="ir-a-crear-nuevo-grupo ">
                     <button class="btn btn-lg btn btn-primary btn-sm justify-content-center">Crear Grupo</button>
@@ -31,12 +31,11 @@
                 </a>
             </div>
         </div>
-        <div class="col-7 col-sm-8 col-md-9 col-lg-10 col-xl-10  row container-fluid">
+        <div class="col-7 col-sm-8 col-md-9 col-lg-10 col-xl-10 border-start row container-fluid" style="min-height: 500px">
 
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 clo-xl-12 container-fluid row d-flex justify-content-center flex-wrap align-content-center">
-                VER FORMULARIO
+                <h3 class="form-signin-heading text-center">Mis grupos</h3>
             </div>
-
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 clo-xl-12 container-fluid row d-flex justify-content-center ">
                 <c:if test="${not empty misGrupos}">
                     <c:forEach items="${misGrupos}" var="miGrupo">
@@ -45,20 +44,10 @@
                                 <h5 class="card-title text-center">${miGrupo.nombre}</h5>
                                 <p class="card-text">${miGrupo.carrera.nombre}</p>
                                 <p class="card-text">${miGrupo.materia.nombre}</p>
-                                <div>
-                                    <div>
-                                        <p class="card-text">${miGrupo.turno}</p>
-                                        <c:if test="${miGrupo.cerrado==true}">
-                                            <p class="card-text">Cerrado</p>
-                                        </c:if>
-                                        <c:if test="${miGrupo.cerrado==false}">
-                                            <p class="card-text">Abierto</p>
-                                        </c:if>
-                                    </div>
                                     <div class="text-center container m-1">
                                         <img src="img/Logosolo.ico" style="width: 80px">
                                     </div>
-                                </div>
+
                                 <div class="d-flex justify-content-center m-3">
                                     <a href="grupos/${miGrupo.id}">
                                         <button type="button" class="btn btn-success mt-3">Ver</button>

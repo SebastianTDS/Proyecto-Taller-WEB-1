@@ -40,7 +40,9 @@ public class RepositorioGrupoImpl implements RepositorioGrupo {
 
     @Override
     public List<Grupo> buscarTodosMisGrupos(Usuario usuario) {
-        return null;
+        Criteria cr = sessionFactory.getCurrentSession().createCriteria(Grupo.class);
+        cr.createCriteria("listaDeUsuarios").add(Restrictions.eq("id", usuario.getId()));
+        return cr.list();
     }
 
 

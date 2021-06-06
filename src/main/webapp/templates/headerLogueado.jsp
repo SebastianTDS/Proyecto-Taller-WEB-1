@@ -1,10 +1,9 @@
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <header class="container-fluid bg-dark text-warning">
     <div class="row">
         <div class="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9 p-2  text-left ">
-            <a href="ir-a-inicio"><img src="img/umatch.png" width="150px"></a>
+            <a href="ir-a-home"><img src="img/umatch.png" width="150px"></a>
         </div>
         <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 d-flex flex-wrap  justify-content-center align-items-center flex-wrap align-content-center">
             <div class=" btn-group-lg d-flex text-white ">

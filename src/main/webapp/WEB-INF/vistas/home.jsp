@@ -18,8 +18,8 @@
 <main style="min-height: 500px">
 
     <div class="container-fluid row ">
-        <div class="col-5 col-sm-4 col-md-3 col-lg-2 col-xl-2 border-end container-fluid"
-             style="min-height: 200px">
+        <div class="col-5 col-sm-4 col-md-3 col-lg-2 col-xl-2 container-fluid"
+             style="min-height: 500px">
             <div class="m-3 d-flex justify-content-center mt-5">
                 <a href="ir-a-crear-nuevo-grupo ">
                     <button class="btn btn-lg btn btn-primary btn-sm justify-content-center">Crear Grupo</button>
@@ -30,18 +30,8 @@
                     <button class="btn btn btn btn-primary btn-sm justify-content-center">Mis Grupos</button>
                 </a>
             </div>
-            <c:if test="${not empty misGrupos}">
-                <c:forEach items="${misGrupos}" var="miGrupo">
-                    <div class="container-fluid d-flex justify-content-start align-items-center p-2">
-                        <a href="grupos/${miGrupo.id}"><img src="img/Logosolo.ico" style="width: 30px; height: 30px">
-                        </a>
-                        <a href="grupos/${miGrupo.id}"><h6 class="m-1">${miGrupo.nombre}</h6></a>
-                    </div>
-                </c:forEach>
-            </c:if>
-
         </div>
-        <div class="col-7 col-sm-8 col-md-9 col-lg-10 col-xl-10  row container-fluid">
+        <div class="col-7 col-sm-8 col-md-9 col-lg-10 col-xl-10 border-start row container-fluid" style="min-height: 500px">
 
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 clo-xl-12 container-fluid row d-flex justify-content-center flex-wrap align-content-center">
                 <form:form action="buscar-grupos" method="POST" modelAttribute="datosParaBuscarUnGrupo"
