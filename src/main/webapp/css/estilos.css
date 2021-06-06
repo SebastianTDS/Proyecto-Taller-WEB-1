@@ -157,7 +157,7 @@ footer .social_footer_ul li [class*="fab fa-linkedin"]:hover {
 /*estilo formulario creacion de grupo */
 
 .containerr {
-    max-width: 700px;
+    max-width: 350px;
     width: 100%;
     background-color: #fff;
     padding: 25px 30px;
@@ -273,7 +273,7 @@ form .button input:hover {
     background: linear-gradient(-135deg, #71b7e6, #9b59b6);
 }
 
-@media(max-width: 584px) {
+@media(max-width: 400px) {
     .containerr {
         max-width: 100%;
     }

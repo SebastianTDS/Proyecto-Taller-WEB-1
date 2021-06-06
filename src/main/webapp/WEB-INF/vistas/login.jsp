@@ -17,7 +17,7 @@
         <div class=" d-flex flex-wrap justify-content-center row m-5">
 
 
-            <div class=" col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  ">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  ">
                 <img src="img/undraw_remotely_2j6y.svg" class="img-fluid ilustraciones-index" alt="imagen">
             </div>
 
@@ -31,14 +31,14 @@
                                 <div class="input-box">
                                     <span class="details">Usuario</span>
                                     <form:input path="email" id="nombre" type="text"
-                                                class="form-control form-control-sm"/>
+                                                class="form-control"/>
                                 </div>
                             </div>
                             <div class="user-details">
                                 <div class="input-box">
                                     <span class="details">Password</span>
                                     <form:input path="password" id="password" type="password"
-                                                class="form-control form-control-sm"/>
+                                                class="form-control"/>
                                 </div>
                             </div>
                             <button class="btn btn-lg btn btn-primary btn-sm" Type="Submit">Iniciar</button>
