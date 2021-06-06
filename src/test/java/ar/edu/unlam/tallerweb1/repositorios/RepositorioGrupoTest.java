@@ -1,7 +1,7 @@
 package ar.edu.unlam.tallerweb1.repositorios;
 
 import ar.edu.unlam.tallerweb1.SpringTest;
-import ar.edu.unlam.tallerweb1.dto.DatosDeGrupoParaBusqueda;
+import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.util.enums.Disponibilidad;
 import ar.edu.unlam.tallerweb1.util.enums.Privacidad;
@@ -56,8 +56,9 @@ public class RepositorioGrupoTest extends SpringTest {
     private void thenVerificoQueMeTraigaTodosMisGrupos(List<Grupo> misGrupos) {
         assertThat(misGrupos).hasSize(1);
     }
+    
     private void thenVerificoQueLaTablaContengaSusReferencias(Grupo grupoActualizado) {
-        Grupo buscado = repositorio.buscarPorId(grupoActualizado.getId());
+        Grupo buscado = repositorio.getGrupoByID(grupoActualizado.getId());
         assertThat(buscado.getListaDeUsuarios()).hasSize(1);
     }
 
@@ -111,7 +112,7 @@ public class RepositorioGrupoTest extends SpringTest {
     public void queSePuedaBuscarFiltrandoLosgruposPorPrivacidad() {
         Grupo losPicatecla1 = givenQueExisteUnGrupoConCarreraYMateria();
         givenQueGuardoUnGruposEnElRepositorio(losPicatecla1);
-        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda = givenQueExisteDatosParaLaBusquedaPorPrivacidad();
+        DatosDeGrupo datosDeGrupoParaBusqueda = givenQueExisteDatosParaLaBusquedaPorPrivacidad();
         List<Grupo> grupos = whenCuandoBuscoFiltrandoLosGrupos(datosDeGrupoParaBusqueda);
         thenVerificoQueLosGruposFiltradosSeMuestren(grupos);
     }
@@ -122,7 +123,7 @@ public class RepositorioGrupoTest extends SpringTest {
     public void queSePuedaBuscarFiltrandoLosgruposPorTurno() {
         Grupo losPicatecla1 = givenQueExisteUnGrupoConCarreraYMateria();
         givenQueGuardoUnGruposEnElRepositorio(losPicatecla1);
-        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda = givenQueExisteDatosParaLaBusquedaPorTurno();
+        DatosDeGrupo datosDeGrupoParaBusqueda = givenQueExisteDatosParaLaBusquedaPorTurno();
         List<Grupo> grupos = whenCuandoBuscoFiltrandoLosGrupos(datosDeGrupoParaBusqueda);
         thenVerificoQueLosGruposFiltradosSeMuestren(grupos);
     }
@@ -133,7 +134,7 @@ public class RepositorioGrupoTest extends SpringTest {
     public void queSePuedaBuscarFiltrandoLosgruposPorNombre() {
         Grupo losPicatecla1 = givenQueExisteUnGrupoConCarreraYMateria();
         givenQueGuardoUnGruposEnElRepositorio(losPicatecla1);
-        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda = givenQueExisteDatosParaLaBusquedaPorNombre();
+        DatosDeGrupo datosDeGrupoParaBusqueda = givenQueExisteDatosParaLaBusquedaPorNombre();
         List<Grupo> grupos = whenCuandoBuscoFiltrandoLosGrupos(datosDeGrupoParaBusqueda);
         thenVerificoQueLosGruposFiltradosSeMuestren(grupos);
     }
@@ -144,7 +145,7 @@ public class RepositorioGrupoTest extends SpringTest {
     public void queSePuedaBuscarFiltrandoLosgruposPorDisponibilidad() {
         Grupo losPicatecla1 = givenQueExisteUnGrupoConCarreraYMateria();
         givenQueGuardoUnGruposEnElRepositorio(losPicatecla1);
-        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda = givenQueExisteDatosParaLaBusquedaPorDisponibilidad();
+        DatosDeGrupo datosDeGrupoParaBusqueda = givenQueExisteDatosParaLaBusquedaPorDisponibilidad();
         List<Grupo> grupos = whenCuandoBuscoFiltrandoLosGrupos(datosDeGrupoParaBusqueda);
         thenVerificoQueLosGruposFiltradosSeMuestren(grupos);
     }
@@ -155,7 +156,7 @@ public class RepositorioGrupoTest extends SpringTest {
     public void queSePuedaBuscarFiltrandoLosgruposPorNombreYTurno() {
         Grupo losPicatecla1 = givenQueExisteUnGrupoConCarreraYMateria();
         givenQueGuardoUnGruposEnElRepositorio(losPicatecla1);
-        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda = givenQueExisteDatosParaLaBusquedaPorNombreYTurno();
+        DatosDeGrupo datosDeGrupoParaBusqueda = givenQueExisteDatosParaLaBusquedaPorNombreYTurno();
         List<Grupo> grupos = whenCuandoBuscoFiltrandoLosGrupos(datosDeGrupoParaBusqueda);
         thenVerificoQueLosGruposFiltradosSeMuestren(grupos);
     }
@@ -166,7 +167,7 @@ public class RepositorioGrupoTest extends SpringTest {
     public void queSePuedaBuscarFiltrandoLosgruposPorCarrera() {
         Grupo losPicatecla1 = givenQueExisteUnGrupoConCarreraYMateria();
         givenQueGuardoUnGruposEnElRepositorio(losPicatecla1);
-        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda = givenQueExisteDatosParaLaBusquedaPorCarrera();
+        DatosDeGrupo datosDeGrupoParaBusqueda = givenQueExisteDatosParaLaBusquedaPorCarrera();
         List<Grupo> grupos = whenCuandoBuscoFiltrandoLosGrupos(datosDeGrupoParaBusqueda);
         thenVerificoQueLosGruposFiltradosSeMuestren(grupos);
     }
@@ -177,51 +178,52 @@ public class RepositorioGrupoTest extends SpringTest {
     public void queSePuedaBuscarFiltrandoLosgruposPorMateria() {
         Grupo losPicatecla1 = givenQueExisteUnGrupoConCarreraYMateria();
         givenQueGuardoUnGruposEnElRepositorio(losPicatecla1);
-        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda = givenQueExisteDatosParaLaBusquedaPorMateria();
+        DatosDeGrupo datosDeGrupoParaBusqueda = givenQueExisteDatosParaLaBusquedaPorMateria();
         List<Grupo> grupos = whenCuandoBuscoFiltrandoLosGrupos(datosDeGrupoParaBusqueda);
         thenVerificoQueLosGruposFiltradosSeMuestren(grupos);
     }
 */
 
 
-    private DatosDeGrupoParaBusqueda givenQueExisteDatosParaLaBusquedaPorDisponibilidad() {
-        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda = new DatosDeGrupoParaBusqueda();
+    private DatosDeGrupo givenQueExisteDatosParaLaBusquedaPorDisponibilidad() {
+    	DatosDeGrupo datosDeGrupoParaBusqueda = new DatosDeGrupo();
         datosDeGrupoParaBusqueda.setDisponibilidad(Disponibilidad.DISPONIBLE);
         return datosDeGrupoParaBusqueda;
     }
-    private DatosDeGrupoParaBusqueda givenQueExisteDatosParaLaBusquedaPorMateria() {
-        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda = new DatosDeGrupoParaBusqueda();
+
+    private DatosDeGrupo givenQueExisteDatosParaLaBusquedaPorMateria() {
+    	  DatosDeGrupo datosDeGrupoParaBusqueda = new DatosDeGrupo();
         datosDeGrupoParaBusqueda.setMateria(1L);
         return datosDeGrupoParaBusqueda;
     }
 
-    private DatosDeGrupoParaBusqueda givenQueExisteDatosParaLaBusquedaPorCarrera() {
-        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda = new DatosDeGrupoParaBusqueda();
+    private DatosDeGrupo givenQueExisteDatosParaLaBusquedaPorCarrera() {
+    	  DatosDeGrupo datosDeGrupoParaBusqueda = new DatosDeGrupo();
         datosDeGrupoParaBusqueda.setCarrera(1L);
         return datosDeGrupoParaBusqueda;
     }
 
-    private DatosDeGrupoParaBusqueda givenQueExisteDatosParaLaBusquedaPorNombreYTurno() {
-        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda = new DatosDeGrupoParaBusqueda();
+    private DatosDeGrupo givenQueExisteDatosParaLaBusquedaPorNombreYTurno() {
+    	DatosDeGrupo datosDeGrupoParaBusqueda = new DatosDeGrupo();
         datosDeGrupoParaBusqueda.setTurno(Turno.NOCHE);
         datosDeGrupoParaBusqueda.setNombre("Hol");
         return datosDeGrupoParaBusqueda;
     }
 
-    private DatosDeGrupoParaBusqueda givenQueExisteDatosParaLaBusquedaPorNombre() {
-        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda = new DatosDeGrupoParaBusqueda();
+    private DatosDeGrupo givenQueExisteDatosParaLaBusquedaPorNombre() {
+    	DatosDeGrupo datosDeGrupoParaBusqueda = new DatosDeGrupo();
         datosDeGrupoParaBusqueda.setNombre("Hol");
         return datosDeGrupoParaBusqueda;
     }
 
-    private DatosDeGrupoParaBusqueda givenQueExisteDatosParaLaBusquedaPorTurno() {
-        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda = new DatosDeGrupoParaBusqueda();
+    private DatosDeGrupo givenQueExisteDatosParaLaBusquedaPorTurno() {
+    	DatosDeGrupo datosDeGrupoParaBusqueda = new DatosDeGrupo();
         datosDeGrupoParaBusqueda.setTurno(Turno.NOCHE);
         return datosDeGrupoParaBusqueda;
     }
 
-    private DatosDeGrupoParaBusqueda givenQueExisteDatosParaLaBusquedaPorPrivacidad() {
-        DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda = new DatosDeGrupoParaBusqueda();
+    private DatosDeGrupo givenQueExisteDatosParaLaBusquedaPorPrivacidad() {
+    	DatosDeGrupo datosDeGrupoParaBusqueda = new DatosDeGrupo();
         datosDeGrupoParaBusqueda.setPrivacidad(Privacidad.CERRADO);
         return datosDeGrupoParaBusqueda;
     }
@@ -230,7 +232,7 @@ public class RepositorioGrupoTest extends SpringTest {
         assertThat(grupos).hasSize(1);
     }
 
-    private List<Grupo> whenCuandoBuscoFiltrandoLosGrupos(DatosDeGrupoParaBusqueda datosDeGrupoParaBusqueda) {
+    private List<Grupo> whenCuandoBuscoFiltrandoLosGrupos(DatosDeGrupo datosDeGrupoParaBusqueda) {
         return repositorio.buscarGrupoPorDatos(datosDeGrupoParaBusqueda);
     }
 
@@ -266,10 +268,10 @@ public class RepositorioGrupoTest extends SpringTest {
         nuevoGrupo.setNombre("Hola");
         nuevoGrupo.setCerrado(true);
         nuevoGrupo.setTurno(Turno.NOCHE);
-        session().save(nuevaCarrera);
-        session().save(nuevaMateria);
         nuevaCarrera.setNombre("Desarrollo web");
         nuevaMateria.setNombre("Basica I");
+        session().save(nuevaCarrera);
+        session().save(nuevaMateria);
         nuevoGrupo.setCarrera(nuevaCarrera);
         nuevoGrupo.setMateria(nuevaMateria);
         session().save(nuevoGrupo);
@@ -282,7 +284,7 @@ public class RepositorioGrupoTest extends SpringTest {
     }
 
     private void thenLoPuedoBuscarPorId(Long idDelGrupo) {
-        Grupo buscado = repositorio.buscarPorId(idDelGrupo);
+        Grupo buscado = repositorio.getGrupoByID(idDelGrupo);
         assertThat(buscado).isNotNull();
     }
 

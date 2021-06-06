@@ -1,7 +1,6 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
-import ar.edu.unlam.tallerweb1.dto.DatosDeGrupoParaBusqueda;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioCarrera;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupo;
@@ -28,11 +27,11 @@ public class ServicioGrupoImpl implements ServicioGrupo {
     private final RepositorioUsuario repoUsuario;
 
     @Autowired
-    public ServicioGrupoImpl(RepositorioGrupo repositorioGrupoParaElServicio, RepositorioCarrera repositorioCarreraParaElServicio, RepositorioMateria repositorioMateriaParaElServicio, RepositorioUsuario repositorioUsuarioParaElServicio) {
-        this.repoGrupo = repositorioGrupoParaElServicio;
-        this.repoCarrera = repositorioCarreraParaElServicio;
-        this.repoMateria = repositorioMateriaParaElServicio;
-        this.repoUsuario = repositorioUsuarioParaElServicio;
+    public ServicioGrupoImpl(RepositorioGrupo repoGrupo, RepositorioCarrera repoCarrera, RepositorioMateria repoMateria, RepositorioUsuario repoUsuario) {
+        this.repoGrupo = repoGrupo;
+        this.repoCarrera = repoCarrera;
+        this.repoMateria = repoMateria;
+        this.repoUsuario = repoUsuario;
     }
 
     @Override
@@ -117,7 +116,7 @@ public class ServicioGrupoImpl implements ServicioGrupo {
     }
 
     @Override
-    public List<Grupo> buscarGrupoPorDatos(DatosDeGrupoParaBusqueda datosParaBuscarUnGrupo) {
+    public List<Grupo> buscarGrupoPorDatos(DatosDeGrupo datosParaBuscarUnGrupo) {
         return repoGrupo.buscarGrupoPorDatos(datosParaBuscarUnGrupo);
     }
 
@@ -134,7 +133,7 @@ public class ServicioGrupoImpl implements ServicioGrupo {
         Carrera carrera = repoCarrera.buscarCarreraPorId(datosDeGrupo.getCarrera());
         grupo.setNombre(datosDeGrupo.getNombre());
         grupo.setTurno(datosDeGrupo.getTurno());
-        grupo.setCerrado(datosDeGrupo.getCerrado());
+        grupo.setCerrado(datosDeGrupo.estaCerrado());
         grupo.setCantidadMax(datosDeGrupo.getCantidadMax());
         grupo.setDescripcion(datosDeGrupo.getDescripcion());
         grupo.setMateria(materia);
@@ -172,7 +171,7 @@ public class ServicioGrupoImpl implements ServicioGrupo {
                         datosDeGrupo.getCarrera() != null &&
                         datosDeGrupo.getNombre() != null &&
                         datosDeGrupo.getTurno() != null &&
-                        datosDeGrupo.getCerrado() != null &&
+                        datosDeGrupo.getPrivacidad() != null &&
                         datosDeGrupo.getCantidadMax() != null &&
                         datosDeGrupo.getDescripcion() != null;
     }

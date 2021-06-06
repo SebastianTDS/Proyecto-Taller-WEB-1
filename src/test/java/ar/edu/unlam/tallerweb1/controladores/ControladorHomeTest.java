@@ -1,10 +1,9 @@
 package ar.edu.unlam.tallerweb1.controladores;
-import ar.edu.unlam.tallerweb1.dto.DatosDeGrupoParaBusqueda;
+
+import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
+
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
-import ar.edu.unlam.tallerweb1.servicios.ServicioGrupoImpl;
-import ar.edu.unlam.tallerweb1.servicios.ServicioLogin;
-import ar.edu.unlam.tallerweb1.servicios.ServicioLoginImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,18 +20,12 @@ import static org.mockito.Mockito.when;
 public class ControladorHomeTest {
     private ControladorHome controladorHome;
     private ServicioGrupo servicioGrupo;
-    private static ControladorGrupos controller;
-    private static ServicioGrupo service;
     private static HttpServletRequest request;
-    private static ServicioLogin servicioLogin;
     private static HttpSession session;
     @Before
     public void init(){
         session=mock(HttpSession.class);
-        service = mock(ServicioGrupoImpl.class);
         request = mock(HttpServletRequest.class);
-        servicioLogin=mock(ServicioLoginImpl.class);
-        controller = new ControladorGrupos(service,servicioLogin);
         when(request.getSession()).thenReturn(session);
         servicioGrupo = mock(ServicioGrupo.class);
         controladorHome = new ControladorHome(servicioGrupo);
@@ -80,8 +73,6 @@ public class ControladorHomeTest {
     }
 
 
-
-
     void thenMeMuestreLasCarreras(ModelAndView mvc, List<Carrera>carreras){
         assertThat(carreras).isEqualTo(mvc.getModel().get("carreras"));
     }
@@ -94,7 +85,7 @@ public class ControladorHomeTest {
     }
 
     private ModelAndView whenGuardoLasCarrerasEnElModel(List<Carrera> carreras){
-        DatosDeGrupoParaBusqueda datosDeGrupo=new DatosDeGrupoParaBusqueda();
+        DatosDeGrupo datosDeGrupo=new DatosDeGrupo();
         when(servicioGrupo.buscarTodasLasCarreras()).thenReturn(carreras);
         return controladorHome.buscarGrupos(datosDeGrupo);
     }
@@ -111,7 +102,7 @@ public class ControladorHomeTest {
     }
 
     private ModelAndView whenGuardoLasMateriasEnElModel(List<Materia> materias){
-        DatosDeGrupoParaBusqueda datosDeGrupo=new DatosDeGrupoParaBusqueda();
+    	DatosDeGrupo datosDeGrupo=new DatosDeGrupo();
         when(servicioGrupo.buscarTodasLasMaterias()).thenReturn(materias);
         return controladorHome.buscarGrupos(datosDeGrupo);
     }
@@ -124,22 +115,15 @@ public class ControladorHomeTest {
 
 
     private ModelAndView whenGuardoLosGruposEnElModel(List<Grupo> grupos) {
-        DatosDeGrupoParaBusqueda datosDeGrupo=new DatosDeGrupoParaBusqueda();
+    	DatosDeGrupo datosDeGrupo=new DatosDeGrupo();
         when(servicioGrupo.buscarGrupoPorDatos(datosDeGrupo)).thenReturn(grupos);
         return controladorHome.buscarGrupos(datosDeGrupo);
     }
 
-    private ModelAndView whenGuardoMisGruposEnElModel(List<Grupo> grupos) {
-        DatosDeGrupoParaBusqueda datosDeGrupo=new DatosDeGrupoParaBusqueda();
-        when(servicioGrupo.buscarTodos()).thenReturn(grupos);
-        return controladorHome.irATest(request);
-    }
     private void thenMeMuestreLosGrupos(ModelAndView mvc, List<Grupo>grupos) {
         assertThat(grupos).isEqualTo(mvc.getModel().get("grupos"));
     }
-    private void thenMeMuestreMisGrupos(ModelAndView mvc, List<Grupo>grupos) {
-        assertThat(grupos).isEqualTo(mvc.getModel().get("misGrupos"));
-    }
+    
     private void thenMeMuestraLaPaginaDeCreacionDeGrupo(ModelAndView mvc ) {
         assertThat("vistaParaCrearGrupo").isEqualTo(mvc.getViewName());
     }
@@ -149,15 +133,10 @@ public class ControladorHomeTest {
     }
 
     private ModelAndView whenDoyClickAFiltar() {
-        return controladorHome.buscarGrupos(new DatosDeGrupoParaBusqueda());
+        return controladorHome.buscarGrupos(new DatosDeGrupo());
     }
 
     private void thenMeMuestraLaPaginaDeGruposFiltrados(ModelAndView mvc ) {
         assertThat("home").isEqualTo(mvc.getViewName());
-    }
-    private void givenUnUsuarioDeLaSesion() {
-        Usuario usuario = new Usuario();
-        usuario.setId(1L);
-        when(request.getSession().getAttribute("USUARIO")).thenReturn(usuario);
     }
 }

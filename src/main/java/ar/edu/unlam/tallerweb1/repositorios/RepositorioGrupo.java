@@ -1,6 +1,6 @@
 package ar.edu.unlam.tallerweb1.repositorios;
 
-import ar.edu.unlam.tallerweb1.dto.DatosDeGrupoParaBusqueda;
+import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 
@@ -11,11 +11,9 @@ public interface RepositorioGrupo {
 
     void guardarGrupo(Grupo grupoNuevo) ;
 
-    Grupo buscarPorId(Long idDelGrupoABuscar);
-
     List<Grupo> buscarTodos();
 
-    List<Grupo>buscarGrupoPorDatos(DatosDeGrupoParaBusqueda datos);
+    List<Grupo>buscarGrupoPorDatos(DatosDeGrupo datos);
     
     public Grupo getGrupoByID(Long id);
 

@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="placeholder" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="ar.edu.unlam.tallerweb1.util.enums.Turno" %>
+<%@ page import="ar.edu.unlam.tallerweb1.util.enums.Privacidad" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -59,15 +60,22 @@
                 </div>
                 <div class="input-box">
                   <span class="details">Turno</span>
-              <form:select path="turno" id="turno" class="form-control form-control-sm">
-                <option value="<%=Turno.MANIANA%>">Mañana</option>
-                <option value="<%=Turno.TARDE%>">Tarde</option>
-                <option value="<%=Turno.NOCHE%>">Noche</option>
-              </form:select>
+	              <form:select path="turno" id="turno" class="form-control form-control-sm">
+		               <option value="<%=Turno.MANIANA%>">Mañana</option>
+		               <option value="<%=Turno.TARDE%>">Tarde</option>
+		               <option value="<%=Turno.NOCHE%>">Noche</option>
+	              </form:select>
                 </div>
-                <div class="input-box">
-                	<span class="">Grupo Cerrado:</span>
-               		<form:checkbox path="cerrado" id="cerrado" class="form-control" />
+                <div>
+                	<div class="details mb-1">Privacidad:</div>
+               		<div class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="privacidad" id="abierto" value="<%=Privacidad.ABIERTO%>"/>
+						<label class="form-check-label"for="abierto">Abierto</label>
+					</div>
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="privacidad" id="cerrado" value="<%=Privacidad.CERRADO%>"/>
+						<label class="form-check-label" for="cerrado">Cerrado</label>
+					</div>
                 </div>
                 
               <button class="btn btn-lg btn btn-primary btn-sm" Type="Submit">Crear!</button>

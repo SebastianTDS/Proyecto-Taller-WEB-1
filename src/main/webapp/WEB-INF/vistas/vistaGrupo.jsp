@@ -14,7 +14,7 @@
 	<main class="container-fluid">
 		<div id="main" class="row text-white">
 			<div class="info col-12 col-sm-3 bg-dark p-0">
-				<div class="mt-3 mr-3 text-white text-right">
+				<div class="mt-3 me-3 text-white text-end">
 					<button class="btn btn-outline-secondary rounded ">></button>
 				</div>
 

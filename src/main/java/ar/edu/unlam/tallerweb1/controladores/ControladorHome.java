@@ -1,7 +1,6 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
-import ar.edu.unlam.tallerweb1.dto.DatosDeGrupoParaBusqueda;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
 
@@ -47,7 +46,7 @@ public class ControladorHome {
         Usuario usuarioSesion = (Usuario) miSesion.getAttribute("USUARIO");
         ModelMap model = new ModelMap();
         List<Grupo> grupos = servicioGrupo.buscarTodos();
-        DatosDeGrupoParaBusqueda datos = new DatosDeGrupoParaBusqueda();
+        DatosDeGrupo datos = new DatosDeGrupo();
         List<Carrera> carreras = servicioGrupo.buscarTodasLasCarreras();
         List<Materia> materias = servicioGrupo.buscarTodasLasMaterias();
         model.put("carreras", carreras);
@@ -64,9 +63,9 @@ public class ControladorHome {
     }
 
     @RequestMapping("/buscar-grupos")
-    public ModelAndView buscarGrupos(@ModelAttribute DatosDeGrupoParaBusqueda datosParaBuscarUnGrupo) {
+    public ModelAndView buscarGrupos(@ModelAttribute DatosDeGrupo datosParaBuscarUnGrupo) {
         ModelMap model = new ModelMap();
-        DatosDeGrupoParaBusqueda datos = new DatosDeGrupoParaBusqueda();
+        DatosDeGrupo datos = new DatosDeGrupo();
         List<Carrera> carreras = servicioGrupo.buscarTodasLasCarreras();
         List<Materia> materias = servicioGrupo.buscarTodasLasMaterias();
         model.put("carreras", carreras);
