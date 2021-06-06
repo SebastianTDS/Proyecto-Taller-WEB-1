@@ -1,9 +1,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="placeholder" uri="http://www.springframework.org/tags/form" %>
-<%@ page import="ar.edu.unlam.tallerweb1.util.enums.Disponibilidad" %>
-<%@ page import="ar.edu.unlam.tallerweb1.util.enums.Privacidad" %>
-<%@ page import="ar.edu.unlam.tallerweb1.util.enums.Turno" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,12 +19,12 @@
              style="min-height: 500px">
             <div class="m-3 d-flex justify-content-center mt-5">
                 <a href="ir-a-crear-nuevo-grupo ">
-                    <button class="btn btn-lg btn btn-primary btn-sm justify-content-center">Crear Grupo</button>
+                    <button class="btn btn-lg btn btn-outline-info btn-sm justify-content-center">Crear Grupo</button>
                 </a>
             </div>
             <div class="m-1 d-flex justify-content-center mt-5">
                 <a href="ir-a-home">
-                    <button class="btn btn btn btn-primary btn-sm justify-content-center">Home</button>
+                    <button class="btn btn btn-outline-info btn-sm justify-content-center">Home</button>
                 </a>
             </div>
         </div>
@@ -45,12 +42,12 @@
                                 <p class="card-text">${miGrupo.carrera.nombre}</p>
                                 <p class="card-text">${miGrupo.materia.nombre}</p>
                                     <div class="text-center container m-1">
-                                        <img src="img/Logosolo.ico" style="width: 80px">
+                                        <img src="img/Logosolo.ico" style="width: 100px">
                                     </div>
 
                                 <div class="d-flex justify-content-center m-3">
                                     <a href="grupos/${miGrupo.id}">
-                                        <button type="button" class="btn btn-success mt-3">Ver</button>
+                                        <button type="button" class="btn btn-outline-success mt-3">Ver</button>
                                     </a>
                                 </div>
                             </div>
