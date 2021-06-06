@@ -1,52 +1,52 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
-import ar.edu.unlam.tallerweb1.util.exceptions.FalloAlUnirseAlGrupo;
+import ar.edu.unlam.tallerweb1.util.exceptions.*;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
-import ar.edu.unlam.tallerweb1.util.exceptions.FormularioDeGrupoIncompleto;
-import ar.edu.unlam.tallerweb1.util.exceptions.GrupoInexistenteException;
-import ar.edu.unlam.tallerweb1.util.exceptions.LimiteDeUsuariosFueraDeRango;
-
 @ControllerAdvice
 public class ControladorExcepciones {
 
-	@ExceptionHandler(value = LimiteDeUsuariosFueraDeRango.class)
-	public ModelAndView errorAlModificarGrupo(LimiteDeUsuariosFueraDeRango e) {
-		ModelMap model= new ModelMap();
-		
-		model.put("error", e.getMessage());
-		
-		return new ModelAndView("redirect:/grupos/" + e.getIdGrupoError(), model);
-	}
-	
-	@ExceptionHandler(value = FormularioDeGrupoIncompleto.class)
-	public ModelAndView errorPorCamposIncompletos(FormularioDeGrupoIncompleto e) {
-		ModelMap model= new ModelMap();
-		model.put("error",e.getMessage());
-		return new ModelAndView("redirect:/ir-a-crear-nuevo-grupo", model);
-	}
-	
-	@ExceptionHandler(value = GrupoInexistenteException.class)
-	public ModelAndView errorAlBuscarGrupo(GrupoInexistenteException e) {
-		ModelMap model= new ModelMap();
-		
-		model.put("error", e.getMessage());
-		
-		return new ModelAndView("redirect:/ir-a-home", model);
-	}
+    @ExceptionHandler(value = LimiteDeUsuariosFueraDeRango.class)
+    public ModelAndView errorAlModificarGrupo(LimiteDeUsuariosFueraDeRango e) {
+        ModelMap model = new ModelMap();
 
-	@ExceptionHandler(value= FalloAlUnirseAlGrupo.class)
-	public ModelAndView errorAlUnirseAlGrupo(FalloAlUnirseAlGrupo e){
-		ModelMap model = new ModelMap();
-		model.put("error",e.getMessage());
+        model.put("error", e.getMessage());
 
-		return new ModelAndView("redirect:/ir-a-home",model);
-	}
-	
+        return new ModelAndView("redirect:/grupos/" + e.getIdGrupoError(), model);
+    }
+
+    @ExceptionHandler(value = FormularioDeGrupoIncompleto.class)
+    public ModelAndView errorPorCamposIncompletos(FormularioDeGrupoIncompleto e) {
+        ModelMap model = new ModelMap();
+        model.put("error", e.getMessage());
+        return new ModelAndView("redirect:/ir-a-crear-nuevo-grupo", model);
+    }
+
+    @ExceptionHandler(value = GrupoInexistenteException.class)
+    public ModelAndView errorAlBuscarGrupo(GrupoInexistenteException e) {
+        ModelMap model = new ModelMap();
+
+        model.put("error", e.getMessage());
+
+        return new ModelAndView("redirect:/ir-a-home", model);
+    }
+
+    @ExceptionHandler(value = FalloAlUnirseAlGrupo.class)
+    public ModelAndView errorAlUnirseAlGrupo(FalloAlUnirseAlGrupo e) {
+        ModelMap model = new ModelMap();
+        model.put("error", e.getMessage());
+
+        return new ModelAndView("redirect:/ir-a-home", model);
+    }
+
+    @ExceptionHandler(value = YaEstoyEnElGrupo.class)
+    public ModelAndView errorAlUnirseAlGrupoQueYaSoyMiembro(YaEstoyEnElGrupo e) {
+        return new ModelAndView("redirect:/grupos/" + e.getMessage());
+    }
 //	TODO: Metodo encargado de redirigir a las paginas de error 4xx personalizadas.
 //	
 //	@ExceptionHandler(value = HttpClientErrorException.class)

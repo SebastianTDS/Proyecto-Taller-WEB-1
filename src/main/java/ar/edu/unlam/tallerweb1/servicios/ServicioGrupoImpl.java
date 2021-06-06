@@ -11,6 +11,7 @@ import ar.edu.unlam.tallerweb1.util.auxClass.Check;
 import ar.edu.unlam.tallerweb1.util.exceptions.FalloAlUnirseAlGrupo;
 import ar.edu.unlam.tallerweb1.util.exceptions.FormularioDeGrupoIncompleto;
 import ar.edu.unlam.tallerweb1.util.exceptions.GrupoInexistenteException;
+import ar.edu.unlam.tallerweb1.util.exceptions.YaEstoyEnElGrupo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
@@ -80,7 +81,7 @@ public class ServicioGrupoImpl implements ServicioGrupo {
         for ( Grupo grupoActual : usuarioAInsertar.getListaDeGrupos())
         {
             if (grupoActual.getId()==grupoAAcceder.getId())
-                throw new FalloAlUnirseAlGrupo();
+                throw new YaEstoyEnElGrupo(grupoActual.getId());
         }
     }
 
