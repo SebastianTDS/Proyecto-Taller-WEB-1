@@ -7,6 +7,9 @@ import ar.edu.unlam.tallerweb1.dto.DatosDeGrupoParaBusqueda;
 import ar.edu.unlam.tallerweb1.modelo.Carrera;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.modelo.Materia;
+import ar.edu.unlam.tallerweb1.modelo.Usuario;
+
+import javax.servlet.http.HttpServletRequest;
 
 public interface ServicioGrupo {
 
@@ -25,4 +28,8 @@ public interface ServicioGrupo {
 	void modificarGrupo(Long id, DatosDeGrupo formulario);
 
 	void eliminarGrupo(Long idBuscado);
+
+    void IngresarUsuarioAlGrupo(Long idUsuario, Long idGrupo);
+
+    List<Grupo> buscarTodosMisGrupos(Usuario usuarioSesion);
 }
