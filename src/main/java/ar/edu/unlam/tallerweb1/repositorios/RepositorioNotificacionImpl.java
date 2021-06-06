@@ -27,4 +27,9 @@ public class RepositorioNotificacionImpl implements RepositorioNotificacion {
 				.add(Restrictions.eq("joinUsuario.id", idUsuario)).list();
 	}
 
+	@Override
+	public void guardarNotificacion(Notificacion mensaje) {
+		sessionFactory.getCurrentSession().save(mensaje);
+	}
+
 }

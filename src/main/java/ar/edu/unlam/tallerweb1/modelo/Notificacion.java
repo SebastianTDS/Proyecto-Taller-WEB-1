@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,9 +16,11 @@ public class Notificacion {
 	private String titulo;
 	private LocalDateTime fecha;
 	private Usuario usuario;
+	private Boolean leido;
 	
 	public Notificacion() {
-		this.fecha = LocalDateTime.now();
+		this.fecha = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+		this.leido = false;
 	}
 
 	@Id
@@ -53,5 +56,13 @@ public class Notificacion {
 
 	public void setFecha(LocalDateTime fecha) {
 		this.fecha = fecha;
+	}
+
+	public Boolean getLeido() {
+		return leido;
+	}
+
+	public void setLeido(Boolean leido) {
+		this.leido = leido;
 	}
 }

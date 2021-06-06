@@ -1,5 +1,8 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -7,6 +10,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
@@ -27,8 +31,21 @@ public class Grupo {
 	private Carrera carrera;
 	private Materia materia;
 	
-	public Grupo() { }
+	private List<Usuario> integrantes;
+	
+	public Grupo() { 
+		this.integrantes = new ArrayList<Usuario>();
+	}
 
+	@ManyToMany(mappedBy="listaDeGrupos")
+	public List<Usuario> getIntegrantes() {
+		return integrantes;
+	}
+
+	public void setIntegrantes(List<Usuario> integrantes) {
+		this.integrantes = integrantes;
+	}
+	
 	@ManyToOne(optional = false, targetEntity = Materia.class)
 	public Materia getMateria() {
 		return materia;
@@ -110,4 +127,11 @@ public class Grupo {
 		if(!Check.isInRange(cantidadMax, 2, 7) && !Check.isNull(cantidadMax))
 			throw new LimiteDeUsuariosFueraDeRango(id);
 	}
+	
+	public void agregarUsuarioAlGrupo(Usuario nuevoIntegrante) {
+		integrantes.add(nuevoIntegrante);
+		nuevoIntegrante.agregarGrupo(this);
+	}
+
+
 }

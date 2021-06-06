@@ -8,4 +8,6 @@ public interface RepositorioNotificacion {
 
 	List<Notificacion> getNotificacionesPor(Long idUsuario);
 
+	void guardarNotificacion(Notificacion mensaje);
+
 }

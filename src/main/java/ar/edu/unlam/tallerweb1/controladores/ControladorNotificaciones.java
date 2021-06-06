@@ -23,12 +23,6 @@ public class ControladorNotificaciones {
 		this.service = service;
 	}
 
-	@RequestMapping("/simularSesion")
-	public ModelAndView simularSesion(HttpServletRequest request) {
-		request.getSession().setAttribute("Usuario", obtenerDto());
-		return new ModelAndView("redirect:/");
-	}
-
 	@RequestMapping("/")
 	public ModelAndView verNotificaciones(HttpServletRequest request) {
 		ModelMap modelo = new ModelMap();
@@ -42,14 +36,4 @@ public class ControladorNotificaciones {
 		return new ModelAndView("vistaNotificaciones", modelo);
 	}
 
-	private DatosDeUsuario obtenerDto() {
-		DatosDeUsuario dto = new DatosDeUsuario();
-		
-		dto.setId(1L);
-		dto.setNombre("Pedro");
-		dto.setEmail("carlitos@unlam.edu.ar");
-		
-		return dto;
-	}
-	
 }
