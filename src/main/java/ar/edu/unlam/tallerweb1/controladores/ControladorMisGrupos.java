@@ -37,7 +37,6 @@ public class ControladorMisGrupos {
 
         model.put("carreras", carreras);
         model.put("materias", materias);
-        model.put("usuario", usuarioLogueado);
         model.put("misGrupos", misGrupos);
 
         return new ModelAndView("vistaMisGrupos", model);

@@ -22,7 +22,7 @@
                 </div>
 
                 <div class="text-center text-white mb-5">
-                    <h3 class="mb-3">Juanito</h3>
+                    <h3 class="mb-3">${sessionScope.USUARIO.nombre}</h3>
                 </div>
 
                 <ul class="opciones">

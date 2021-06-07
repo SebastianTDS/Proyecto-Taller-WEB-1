@@ -13,4 +13,8 @@ public class Check {
 	public static Boolean isNull(Object o) {
 		return o == null;
 	}
+
+	public static Boolean outOfLength(String descripcion, Integer maxLength) {
+		return descripcion.length() > maxLength;
+	}
 }

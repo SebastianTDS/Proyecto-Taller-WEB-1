@@ -10,5 +10,7 @@ public interface ServicioNotificaciones {
 	public List<Notificacion> obtenerNotificacionesPor(Long usuario);
 
 	public void notificarNuevoIngreso(Long id, Usuario nuevoIntegrante);
+
+	public void notificarEliminacionDeGrupo(Long id);
 	
 }

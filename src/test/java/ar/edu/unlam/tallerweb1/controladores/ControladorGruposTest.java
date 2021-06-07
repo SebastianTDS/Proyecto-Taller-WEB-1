@@ -5,9 +5,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.*;
-import ar.edu.unlam.tallerweb1.util.exceptions.FalloAlUnirseAlGrupo;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,23 +15,15 @@ import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.util.exceptions.GrupoInexistenteException;
 import ar.edu.unlam.tallerweb1.util.exceptions.LimiteDeUsuariosFueraDeRango;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-public class ControladorGruposTest {
+public class ControladorGruposTest{
 
 	private static ControladorGrupos controller;
 	private static ServicioGrupo service;
-	private static HttpServletRequest request;
-	private static HttpSession session;
 
 	@Before
 	public void init() {
-		session = mock(HttpSession.class);
 		service = mock(ServicioGrupoImpl.class);
-		request = mock(HttpServletRequest.class);
-		controller = new ControladorGrupos(service);
-		when(request.getSession()).thenReturn(session);
+		controller = new ControladorGrupos(service, mock(ServicioNotificacionesImpl.class));
 	}
 
 	@Test

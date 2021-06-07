@@ -1,7 +1,7 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,36 +17,60 @@ import javax.persistence.PreRemove;
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.util.auxClass.Check;
 import ar.edu.unlam.tallerweb1.util.enums.Turno;
+import ar.edu.unlam.tallerweb1.util.exceptions.FalloAlUnirseAlGrupo;
 import ar.edu.unlam.tallerweb1.util.exceptions.LimiteDeUsuariosFueraDeRango;
 
 @Entity
-public class Grupo  {
-	
+public class Grupo {
+
 	private Long id;
 	private String nombre;
 	private String descripcion;
 	private Boolean cerrado;
 	private Integer cantidadMax;
-	
+
 	private Turno turno;
 	private Carrera carrera;
 	private Materia materia;
 
-	private  List<Usuario> listaDeUsuarios;
+	private Set<Usuario> listaDeUsuarios;
 
 	public Grupo() {
-		this.listaDeUsuarios = new ArrayList<Usuario>();
+		this.listaDeUsuarios = new HashSet<Usuario>();
 	}
 
-	@ManyToMany(mappedBy="listaDeGrupos")
-	public List<Usuario> getListaDeUsuarios() {
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof Grupo))
+			return false;
+		Grupo other = (Grupo) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
+
+	@ManyToMany(mappedBy = "listaDeGrupos")
+	public Set<Usuario> getListaDeUsuarios() {
 		return listaDeUsuarios;
 	}
 
-	public void setListaDeUsuarios(List<Usuario> listaDeUsuarios) {
+	public void setListaDeUsuarios(Set<Usuario> listaDeUsuarios) {
 		this.listaDeUsuarios = listaDeUsuarios;
 	}
-	
+
 	@ManyToOne(optional = false, targetEntity = Materia.class)
 	public Materia getMateria() {
 		return materia;
@@ -118,28 +142,25 @@ public class Grupo  {
 	public void setCantidadMax(Integer ctdMaxima) {
 		this.cantidadMax = ctdMaxima;
 	}
-	
-	public void actualizar(DatosDeGrupo formulario) {
-		nombre 		= Check.empty(formulario.getNombre())		? nombre		: formulario.getNombre();
-		descripcion = Check.empty(formulario.getDescripcion())  ? descripcion	: formulario.getDescripcion();
-		cerrado 	= Check.isNull(formulario.estaCerrado()) 	? cerrado		: formulario.estaCerrado();
-		cantidadMax = formulario.getCantidadMax();
-		
-		if(!Check.isInRange(cantidadMax, 2, 7) && !Check.isNull(cantidadMax))
-			throw new LimiteDeUsuariosFueraDeRango(id);
-	}
-
-	public void agregarUsuarioAlGrupo(Usuario usuarioAInsertar) {
-		listaDeUsuarios.add(usuarioAInsertar);
-		usuarioAInsertar.agregarGrupo(this);
-	}
 
 	@PreRemove
-	public void removerGruposDeUsuario(){
-		for(Usuario usuario:listaDeUsuarios){
+	public void removerGruposDeUsuario() {
+		for (Usuario usuario : listaDeUsuarios) {
 			usuario.getListaDeGrupos().remove(this);
 		}
 	}
 
+	public void actualizar(DatosDeGrupo formulario) {
+		nombre = formulario.tryGetNombre(nombre);
+		descripcion = formulario.tryGetDescripcion(descripcion);
+		cerrado = formulario.tryGetEstaCerrado(cerrado);
+		cantidadMax = formulario.tryGetCantidadMax(cantidadMax);
+	}
+
+	public void agregarUsuarioAlGrupo(Usuario usuarioAInsertar) {
+		if (!listaDeUsuarios.add(usuarioAInsertar))
+			throw new FalloAlUnirseAlGrupo();
+		usuarioAInsertar.agregarGrupo(this);
+	}
 
 }

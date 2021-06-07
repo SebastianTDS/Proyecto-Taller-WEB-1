@@ -13,22 +13,25 @@ import org.springframework.web.servlet.ModelAndView;
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
+import ar.edu.unlam.tallerweb1.servicios.ServicioNotificaciones;
 
 @Controller
 @RequestMapping("/grupos")
 public class ControladorGrupos{
 
-	private final ServicioGrupo service;
+	private final ServicioGrupo servicioGrupo;
+	private final ServicioNotificaciones servicioNotificacion; 
 
 	@Autowired
-	public ControladorGrupos(ServicioGrupo service) {
-		this.service = service;
+	public ControladorGrupos(ServicioGrupo servicioGrupo, ServicioNotificaciones servicioNotificacion) {
+		this.servicioGrupo = servicioGrupo;
+		this.servicioNotificacion = servicioNotificacion;
 	}
 
 	@RequestMapping("/{id}")
 	public ModelAndView perfilDeGrupo(@PathVariable Long id) {
 		ModelMap modelo = new ModelMap();
-		Grupo buscado = service.buscarGrupoPorID(id);
+		Grupo buscado = servicioGrupo.buscarGrupoPorID(id);
 		modelo.put("grupo", buscado);
 		return new ModelAndView("vistaGrupo", modelo);
 	}
@@ -44,7 +47,7 @@ public class ControladorGrupos{
 	public ModelAndView cambiarDatosGrupo(@ModelAttribute("formulario") DatosDeGrupo form) {
 		ModelMap modelo = new ModelMap();
 
-		service.modificarGrupo(form.getId(), form);
+		servicioGrupo.modificarGrupo(form.getId(), form);
 		modelo.put("mensaje", "Datos actualizados");
 
 		return new ModelAndView("redirect:/grupos/" + form.getId(), modelo);
@@ -54,7 +57,8 @@ public class ControladorGrupos{
 	public ModelAndView eliminarGrupo(@RequestParam Long id) {
 		ModelMap modelo = new ModelMap();
 
-		service.eliminarGrupo(id);
+		servicioNotificacion.notificarEliminacionDeGrupo(id);
+		servicioGrupo.eliminarGrupo(id);
 		modelo.put("mensaje", "Grupo eliminado con exito!");
 		return new ModelAndView("redirect:/ir-a-home", modelo);
 	}
