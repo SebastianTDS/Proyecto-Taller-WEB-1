@@ -29,7 +29,9 @@ public class ServicioNotificacionesImpl implements ServicioNotificaciones {
 
 	@Override
 	public List<Notificacion> obtenerNotificacionesPor(Long usuario) {
-		return repoNotificaciones.getNotificacionesPor(usuario);
+		List<Notificacion> notificaciones = repoNotificaciones.getNotificacionesPor(usuario);
+		repoNotificaciones.marcarVistoDeUsuario(usuario);
+		return notificaciones;
 	}
 
 	@Override

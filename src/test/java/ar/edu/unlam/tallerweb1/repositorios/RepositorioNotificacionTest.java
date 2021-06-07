@@ -33,6 +33,34 @@ public class RepositorioNotificacionTest extends SpringTest{
 		
 		thenObtengoSusNotificaciones(notificaciones, 2);
 	}
+	
+	@Test
+	@Transactional
+	@Rollback
+	public void testQueSeMarquenNotificacionesComoVistas() {
+		Usuario manuela = givenExisteUnUsuario("Manuela");
+		Usuario jorge = givenExisteUnUsuario("Jorge");
+		
+		givenExisteUnaNotificacion(manuela);
+		givenExisteUnaNotificacion(jorge);
+		givenExisteUnaNotificacion(manuela);
+		
+		whenUsuarioVeSusNotificaciones(manuela);
+		
+		List<Notificacion> notificaciones = whenBuscoNotificacionesDe(manuela);
+		
+		thenSusNotificacionesEstanVistas(notificaciones);
+	}
+
+	private void thenSusNotificacionesEstanVistas(List<Notificacion> notificaciones) {
+		for(Notificacion n : notificaciones) {
+			assertThat(n.getVisto()).isTrue();
+		}
+	}
+
+	private void whenUsuarioVeSusNotificaciones(Usuario usuario) {
+		repository.marcarVistoDeUsuario(usuario.getId());
+	}
 
 	private void thenObtengoSusNotificaciones(List<Notificacion> notificaciones, Integer resultadoEsperado) {
 		assertThat(notificaciones).isNotNull();
@@ -40,6 +68,7 @@ public class RepositorioNotificacionTest extends SpringTest{
 	}
 
 	private List<Notificacion> whenBuscoNotificacionesDe(Usuario usuario) {
+		session().clear();
 		return repository.getNotificacionesPor(usuario.getId());
 	}
 
@@ -49,7 +78,7 @@ public class RepositorioNotificacionTest extends SpringTest{
 		noti.setTitulo(usuario.getEmail() + " se unio a tu grupo!");
 		noti.setUsuario(usuario);
 		
-		session().save(noti);
+		repository.guardarNotificacion(noti);
 	}
 
 	private Usuario givenExisteUnUsuario(String nombre) {

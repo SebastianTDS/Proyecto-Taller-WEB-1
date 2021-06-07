@@ -36,7 +36,12 @@
                 <hr>
                 <div class="list-group">
                     <c:forEach items="${Notificaciones}" var="notificacion">
-						<a href="#" class="list-group-item list-group-item-action flex-column active">
+                    	<c:if test="${notificacion.getVisto()}">
+							<a href="#" class="list-group-item list-group-item-action flex-column">
+                    	</c:if>
+                    	<c:if test="${!notificacion.getVisto()}">
+                    		<a href="#" class="list-group-item list-group-item-action flex-column active">
+                    	</c:if>
 	                        <div class="d-flex w-100 justify-content-between align-items-center">
 	                            <strong class="vertical-middle">${notificacion.getTitulo() }</strong>
 	                            <small class="text-end">${notificacion.getFecha().toLocalDate() } <br> ${notificacion.getFecha().toLocalTime() }</small>

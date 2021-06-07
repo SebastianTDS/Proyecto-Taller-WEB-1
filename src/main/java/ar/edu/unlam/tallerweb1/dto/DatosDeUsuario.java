@@ -1,5 +1,7 @@
 package ar.edu.unlam.tallerweb1.dto;
 
+import ar.edu.unlam.tallerweb1.modelo.Usuario;
+
 public class DatosDeUsuario {
 
 	private Long id;
@@ -46,6 +48,15 @@ public class DatosDeUsuario {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Usuario generarUsuario() {
+		Usuario generado = new Usuario();
+		generado.setId(id);
+		generado.setEmail(email);
+		generado.setNombre(nombre);
+		generado.setPassword(clave);
+		return generado;
 	}
 
 }

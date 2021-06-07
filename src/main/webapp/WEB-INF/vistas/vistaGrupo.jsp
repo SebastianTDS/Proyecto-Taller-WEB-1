@@ -34,7 +34,7 @@
 				</div>
 
 				<ul class="opciones">
-					<li><a class="text-white" href="#">Informaciï¿½n General</a></li>
+					<li><a class="text-white" href="#">Información General</a></li>
 					<li><a class="text-white" href="#">Miembros del grupo</a></li>
 					<li><a class="text-white" href="#">Archivos</a></li>
 					<li><a class="text-white" href="#">Calendario</a></li>

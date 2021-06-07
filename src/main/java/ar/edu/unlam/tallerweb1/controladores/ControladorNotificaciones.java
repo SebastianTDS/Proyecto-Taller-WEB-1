@@ -31,7 +31,7 @@ public class ControladorNotificaciones {
 			return new ModelAndView("redirect:/ir-a-login");
 		
 		modelo.put("Notificaciones", service.obtenerNotificacionesPor(attrSesion.getId()));
-			
+		
 		return new ModelAndView("vistaNotificaciones", modelo);
 	}
 

@@ -30,14 +30,14 @@
                             <div class="user-details">
                                 <div class="input-box">
                                     <span class="details">Usuario</span>
-                                    <form:input path="email" id="nombre" type="text"
+                                    <form:input path="email" id="email" type="text"
                                                 class="form-control"/>
                                 </div>
                             </div>
                             <div class="user-details">
                                 <div class="input-box">
                                     <span class="details">Password</span>
-                                    <form:input path="password" id="password" type="password"
+                                    <form:input path="clave" id="clave" type="password"
                                                 class="form-control"/>
                                 </div>
                             </div>
