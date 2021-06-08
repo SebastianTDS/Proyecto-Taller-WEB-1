@@ -79,7 +79,7 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 
     private void verificarSiElUsuarioYaEstaEnElGrupo(Grupo grupoAAcceder, Usuario usuarioAInsertar) {
         for (Grupo grupoActual : usuarioAInsertar.getListaDeGrupos()) {
-            if (grupoActual.getId() == grupoAAcceder.getId())
+            if (grupoActual.getId().equals(grupoAAcceder.getId()))
                 throw new YaEstoyEnElGrupo(grupoActual.getId());
         }
     }
@@ -89,15 +89,16 @@ public class ServicioGrupoImpl implements ServicioGrupo {
         return repoGrupo.buscarTodosMisGrupos(usuarioSesion);
     }
 
-
     @Override
     public Grupo crearGrupo(DatosDeGrupo datosDeGrupo) {
-        Grupo grupoAPartirDeDatosDeGrupo = crearGrupoAPartirDeDatosDeGrupo(datosDeGrupo);
-        if (grupoAPartirDeDatosDeGrupo == null) {
+        Grupo grupoGenerado = datosDeGrupo.crearGrupoAPartirDeDatosDeGrupo();
+        if (grupoGenerado == null) {
             throw new FormularioDeGrupoIncompleto();
         }
-        repoGrupo.guardarGrupo(grupoAPartirDeDatosDeGrupo);
-        return grupoAPartirDeDatosDeGrupo;
+        materiaNoSeaNull(grupoGenerado,datosDeGrupo.getMateria());
+        carreraNoSeaNull(grupoGenerado,datosDeGrupo.getCarrera());
+        repoGrupo.guardarGrupo(grupoGenerado);
+        return grupoGenerado;
     }
 
     @Override
@@ -120,68 +121,19 @@ public class ServicioGrupoImpl implements ServicioGrupo {
         return repoGrupo.buscarGrupoPorDatos(datosParaBuscarUnGrupo);
     }
 
-    private Grupo crearGrupoAPartirDeDatosDeGrupo(DatosDeGrupo datosDeGrupo) {
-        if (verificarQueCtdEsteEnElRango(datosDeGrupo)) {
-            return getGrupo(datosDeGrupo);
-        }
-        return null;
+    private void materiaNoSeaNull(Grupo grupoGenerado,Long idMateria){
+       Materia materiaEncontrada = repoMateria.buscarMateriaPorId(idMateria);
+       if(materiaEncontrada==null)
+           throw new FormularioDeGrupoIncompleto();
+           grupoGenerado.setMateria(materiaEncontrada);
     }
 
-    private Grupo getGrupo(DatosDeGrupo datosDeGrupo) {
-        Grupo grupo = new Grupo();
-        Materia materia = repoMateria.buscarMateriaPorId(datosDeGrupo.getMateria());
-        Carrera carrera = repoCarrera.buscarCarreraPorId(datosDeGrupo.getCarrera());
-        grupo.setNombre(datosDeGrupo.getNombre());
-        grupo.setTurno(datosDeGrupo.getTurno());
-        grupo.setCerrado(datosDeGrupo.estaCerrado());
-        grupo.setCantidadMax(datosDeGrupo.getCantidadMax());
-        grupo.setDescripcion(datosDeGrupo.getDescripcion());
-        grupo.setMateria(materia);
-        grupo.setCarrera(carrera);
-        return grupo;
+    private void carreraNoSeaNull(Grupo grupoGenerado,Long idCarrera){
+        Carrera carreraEncontrada = repoCarrera.buscarCarreraPorId(idCarrera);
+        if(carreraEncontrada==null)
+            throw new FormularioDeGrupoIncompleto();
+        grupoGenerado.setCarrera(carreraEncontrada);
     }
 
-    private boolean verificarQueCtdEsteEnElRango(DatosDeGrupo datosDeGrupo) {
-        final Integer CTD_USUARIO_MINIMO = 2;
-        final Integer CTD_USUARIO_MAXIMO = 7;
-
-        if (verificarDatosDeGruposNoVacios(datosDeGrupo)) {
-            return Check.isInRange(datosDeGrupo.getCantidadMax(), CTD_USUARIO_MINIMO, CTD_USUARIO_MAXIMO);
-        }
-        return false;
-
-    }
-
-    private boolean verificarDatosDeGruposNoVacios(DatosDeGrupo datosDeGrupo) {
-
-        if (verificarDatosDeGruposNoSeanNulos(datosDeGrupo)) {
-            return
-                    !datosDeGrupo.getNombre().isBlank() &&
-                            !datosDeGrupo.getDescripcion().isBlank() &&
-                            verificarQueExistaLaMateriaEnElRepositorio(datosDeGrupo.getMateria()) &&
-                            verificarQueExistaLaCarreraEnElRepositorio(datosDeGrupo.getCarrera());
-        }
-        return false;
-    }
-
-    private boolean verificarDatosDeGruposNoSeanNulos(DatosDeGrupo datosDeGrupo) {
-
-        return
-                datosDeGrupo.getMateria() != null &
-                        datosDeGrupo.getCarrera() != null &&
-                        datosDeGrupo.getNombre() != null &&
-                        datosDeGrupo.getTurno() != null &&
-                        datosDeGrupo.getPrivacidad() != null &&
-                        datosDeGrupo.getCantidadMax() != null &&
-                        datosDeGrupo.getDescripcion() != null;
-    }
-
-    private boolean verificarQueExistaLaMateriaEnElRepositorio(Long id) {
-        return repoMateria.buscarMateriaPorId(id) != null;
-    }
-
-    private boolean verificarQueExistaLaCarreraEnElRepositorio(Long id) {
-        return repoCarrera.buscarCarreraPorId(id) != null;
-    }
 
 }

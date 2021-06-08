@@ -43,7 +43,6 @@ public class ControladorGrupos{
 	@RequestMapping(path = "/modificar", method = RequestMethod.POST)
 	public ModelAndView cambiarDatosGrupo(@ModelAttribute("formulario") DatosDeGrupo form) {
 		ModelMap modelo = new ModelMap();
-
 		service.modificarGrupo(form.getId(), form);
 		modelo.put("mensaje", "Datos actualizados");
 

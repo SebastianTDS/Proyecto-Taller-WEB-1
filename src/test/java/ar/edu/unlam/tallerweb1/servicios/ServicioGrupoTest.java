@@ -24,7 +24,7 @@ public class ServicioGrupoTest{
     private RepositorioMateria repositorioMateria;
     private RepositorioCarrera repositorioCarrera;
     private RepositorioUsuario repositorioUsuario;
-    private static Usuario usuario=new Usuario();
+    private static final Usuario usuario=new Usuario();
 
     @Before
     public void init(){
@@ -44,32 +44,7 @@ public class ServicioGrupoTest{
 
     }
 
-    private void thenVerificoQueElUsuarioFueAgregado(Grupo buscado) {
-        verify(repositorioGrupo,times(1)).actualizarGrupo(buscado);
-    }
-
-
-    private void whenAsignoElUsuarioAlGrupo(Grupo buscado, Usuario usuario) {
-        when(repositorioGrupo.getGrupoByID(buscado.getId())).thenReturn(buscado);
-        when(repositorioUsuario.getUsuarioByID(usuario.getId())).thenReturn(usuario);
-        servicioGrupo.IngresarUsuarioAlGrupo(buscado.getId(),usuario.getId());
-    }
-
-    private Usuario givenQueExisteUnUsuario() {
-        Usuario usuario= new Usuario();
-        usuario.setId(1L);
-        return usuario;
-    }
-
-    private Grupo givenQueExisteUnGrupo() {
-        Grupo grupo = new Grupo();
-        grupo.setId(1L);
-        grupo.setCantidadMax(2);
-        return grupo;
-    }
-
-
-    @Test
+@Test
     public void siElFormularioEstaCompletoQueSePuedaCrearElGrupo(){
              DatosDeGrupo losPicatecla= givenQueExisteDatosDeGrupo();
              Grupo grupoGeneradoAPartirDeLosDatosDeGrupo = whenCreoElGrupoConAtributosCompletos(losPicatecla);
@@ -77,17 +52,9 @@ public class ServicioGrupoTest{
     }
 
     @Test(expected = FormularioDeGrupoIncompleto.class)
-    public void siElFormularioEstaIncompletoQueNoSeCreeUnGrupoYLanzeExcepcion(){
-                DatosDeGrupo losPicatecla=givenQueExisteUnGrupoIncompleto();
-                Grupo grupo=whenCreoElGrupoConAtributosIncompletos(losPicatecla);
-                thenElGrupoNoSeCreo(grupo);
-        }
-
-    @Test(expected = FormularioDeGrupoIncompleto.class)
     public void siElFormularioEstaIncompletoQueSeLanzeUnaExcepcion(){
         DatosDeGrupo losPicatecla=givenQueExisteUnGrupoIncompleto();
-        Grupo grupo=whenCreoElGrupoConAtributosIncompletos(losPicatecla);
-        thenElGrupoNoSeCreo(grupo);
+        whenCreoElGrupoConAtributosIncompletos(losPicatecla);
     }
 
     @Test
@@ -120,14 +87,6 @@ public class ServicioGrupoTest{
         thenObtengoLaListaDeMateriasYVerificoQueTengaElTamanoCorrespondiente(listaDeMateriasEncontrada);
     }
 
-    @Test(expected = FormularioDeGrupoIncompleto.class)
-    public void  queNoSePuedaCrearUnGrupoConMateriaInexistenteProvenienteDeDatosDeGrupoYLanzeExcepcion(){
-
-        DatosDeGrupo intentoDeGrupo = givenQueExistenDatosDeGrupoConUnIdInvalido();
-        Grupo grupoNoGenerado=whenIntentoPersistirElGrupoConDatosDeGrupoConIdInvalido(intentoDeGrupo);
-        thenElGrupoNoSeCreo(grupoNoGenerado);
-    }
-
     @Test
     public void queSeObtenganTodosLosGrupos(){
 
@@ -145,6 +104,7 @@ public class ServicioGrupoTest{
         List<Grupo> listaDeGruposEncontrada= whenbuscoLosGruposFiltrados(listaDeGrupos, datosDeGrupoParaBusqueda);
         thenObtengoLaListaDeGruposYVerificoQueTengaElTamanoCorrespondiente(listaDeGruposEncontrada);
     }
+
     @Test
     public void queSePuedaSolicitarTodosMisGrupos(){
         Grupo losPicatecla1= givenDadoQueExisteUnGrupo();
@@ -179,29 +139,6 @@ public class ServicioGrupoTest{
         assertThat(listaDeGruposEncontrada).hasSize(2);
     }
 
-    private Grupo whenIntentoPersistirElGrupoConDatosDeGrupoConIdInvalido(DatosDeGrupo intentoDeGrupo) {
-        when(repositorioMateria.buscarMateriaPorId(intentoDeGrupo.getMateria())).thenReturn(null);
-        return servicioGrupo.crearGrupo(intentoDeGrupo);
-    }
-
-    private DatosDeGrupo givenQueExistenDatosDeGrupoConUnIdInvalido(){
-        DatosDeGrupo datosdegrupo = new DatosDeGrupo();
-        Long carrera = 134L;
-        Long materia = 123L;
-        String nombre="picatecla";
-        Turno turno = Turno.NOCHE;
-        Integer ctdMaxima = 5;
-        String descripcion =  "Grupo de test para taller web";
-        datosdegrupo.setNombre(nombre);
-        datosdegrupo.setCarrera(carrera);
-        datosdegrupo.setMateria(materia);
-        datosdegrupo.setTurno(turno);
-        datosdegrupo.setPrivacidad(Privacidad.ABIERTO);
-        datosdegrupo.setCantidadMax(ctdMaxima);
-        datosdegrupo.setDescripcion(descripcion);
-        return datosdegrupo;
-    }
-
     private void thenObtengoLaListaDeMateriasYVerificoQueTengaElTamanoCorrespondiente(List<Materia> listaDeMateriasEncontrada) {
         assertThat(listaDeMateriasEncontrada).hasSize(2);
     }
@@ -231,6 +168,7 @@ public class ServicioGrupoTest{
     private void thenVerificoQueSeMuestrenTodosLosGrupos(List<Grupo> grupos) {
         assertThat(grupos).hasSize(3);
     }
+
     private void thenVerificoQueSeMuestrenTodosMisGrupos(List<Grupo> grupos) {
         assertThat(grupos).hasSize(3);
     }
@@ -257,12 +195,8 @@ public class ServicioGrupoTest{
         return new Grupo();
     }
 
-    private void thenElGrupoNoSeCreo(Grupo losPicatecla) {
-        verify(repositorioGrupo,times(0)).guardarGrupo(losPicatecla);
-    }
-
-    private Grupo whenCreoElGrupoConAtributosIncompletos(DatosDeGrupo losPicatecla) {
-            return servicioGrupo.crearGrupo(losPicatecla);
+    private void whenCreoElGrupoConAtributosIncompletos(DatosDeGrupo losPicatecla) {
+        servicioGrupo.crearGrupo(losPicatecla);
     }
 
     private DatosDeGrupo givenQueExisteUnGrupoIncompleto(){
@@ -282,16 +216,15 @@ public class ServicioGrupoTest{
 
     private DatosDeGrupo givenQueExisteDatosDeGrupo() {
         DatosDeGrupo datosdegrupo = new DatosDeGrupo();
-        Long carrera = 134L;
-        Long materia = 123L;
         String nombre="picatecla";
         Turno turno = Turno.NOCHE;
         Integer ctdMaxima = 5;
         String descripcion =  "Grupo de test para taller web";
-
+        Long materia1=123L;
+        Long carrera2=134L;
+        datosdegrupo.setCarrera(carrera2);
+        datosdegrupo.setMateria(materia1);
         datosdegrupo.setNombre(nombre);
-        datosdegrupo.setCarrera(carrera);
-        datosdegrupo.setMateria(materia);
         datosdegrupo.setTurno(turno);
         datosdegrupo.setPrivacidad(Privacidad.ABIERTO);
         datosdegrupo.setCantidadMax(ctdMaxima);
@@ -300,16 +233,36 @@ public class ServicioGrupoTest{
     }
 
     private Grupo whenCreoElGrupoConAtributosCompletos(DatosDeGrupo losPicatecla) {
-        Long materia1=123L;
-        Long carrera2=134L;
-        Carrera carrera = new Carrera();
-        Materia materia = new Materia();
-        when(repositorioMateria.buscarMateriaPorId(materia1)).thenReturn(materia);
-        when(repositorioCarrera.buscarCarreraPorId(carrera2)).thenReturn(carrera);
+        when(repositorioMateria.buscarMateriaPorId(losPicatecla.getMateria())).thenReturn(new Materia());
+        when(repositorioCarrera.buscarCarreraPorId(losPicatecla.getCarrera())).thenReturn(new Carrera());
         return servicioGrupo.crearGrupo(losPicatecla);
     }
 
     private void thenElGrupoSeCreo(Grupo grupoGenerado) {
         verify(repositorioGrupo,times(1)).guardarGrupo(grupoGenerado);
     }
+
+    private void thenVerificoQueElUsuarioFueAgregado(Grupo buscado) {
+        verify(repositorioGrupo,times(1)).actualizarGrupo(buscado);
+    }
+
+    private void whenAsignoElUsuarioAlGrupo(Grupo buscado, Usuario usuario) {
+        when(repositorioGrupo.getGrupoByID(buscado.getId())).thenReturn(buscado);
+        when(repositorioUsuario.getUsuarioByID(usuario.getId())).thenReturn(usuario);
+        servicioGrupo.IngresarUsuarioAlGrupo(buscado.getId(),usuario.getId());
+    }
+
+    private Usuario givenQueExisteUnUsuario() {
+        Usuario usuario= new Usuario();
+        usuario.setId(1L);
+        return usuario;
+    }
+
+    private Grupo givenQueExisteUnGrupo() {
+        Grupo grupo = new Grupo();
+        grupo.setId(1L);
+        grupo.setCantidadMax(2);
+        return grupo;
+    }
+
 }
