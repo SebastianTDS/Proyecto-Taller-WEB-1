@@ -51,7 +51,7 @@ public class ControladorHome {
 	}
 
 	@RequestMapping("/ir-a-home")
-	public ModelAndView irATest(HttpServletRequest request) {
+	public ModelAndView irAHome(HttpServletRequest request) {
 		HttpSession miSesion = request.getSession(true);
 		Usuario usuarioSesion = (Usuario) miSesion.getAttribute("USUARIO");
 		ModelMap model = new ModelMap();

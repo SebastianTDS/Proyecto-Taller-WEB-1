@@ -1,5 +1,7 @@
 package ar.edu.unlam.tallerweb1.dto;
 
+import ar.edu.unlam.tallerweb1.modelo.Grupo;
+import ar.edu.unlam.tallerweb1.util.auxClass.Check;
 import ar.edu.unlam.tallerweb1.util.enums.Disponibilidad;
 import ar.edu.unlam.tallerweb1.util.enums.Privacidad;
 import ar.edu.unlam.tallerweb1.util.enums.Turno;
@@ -91,4 +93,39 @@ public class DatosDeGrupo {
 	public Boolean estaCerrado() {
 		return privacidad == Privacidad.CERRADO; 
 	}
+
+   public Grupo crearGrupoAPartirDeDatosDeGrupo() {
+        if (verificarQueCtdEsteEnElRango()) {
+            return getGrupo();
+        }
+        return null;
+    }
+
+    private Grupo getGrupo() {
+        Grupo grupo = new Grupo();
+        grupo.setNombre(nombre);
+        grupo.setTurno(turno);
+        grupo.setCerrado(estaCerrado());
+        grupo.setCantidadMax(cantidadMax);
+        grupo.setDescripcion(descripcion);
+        return grupo;
+    }
+
+    private boolean verificarQueCtdEsteEnElRango() {
+        final Integer CTD_USUARIO_MINIMO = 2;
+        final Integer CTD_USUARIO_MAXIMO = 7;
+
+        if (verificarDatosDeGruposNoVacios()) return Check.isInRange(cantidadMax, CTD_USUARIO_MINIMO, CTD_USUARIO_MAXIMO);
+        return false;
+    }
+
+    private boolean verificarDatosDeGruposNoVacios() {
+        if (verificarDatosDeGruposNoSeanNulos()) return  !Check.empty(nombre) && !Check.empty(descripcion);
+        return false;
+    }
+
+    private boolean verificarDatosDeGruposNoSeanNulos() {
+        return materia != null & carrera!= null && nombre != null && turno!= null && privacidad != null && cantidadMax != null && descripcion != null;
+    }
+
 }

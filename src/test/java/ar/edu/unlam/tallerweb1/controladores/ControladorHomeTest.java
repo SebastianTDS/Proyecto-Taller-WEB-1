@@ -7,14 +7,12 @@ import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
 import ar.edu.unlam.tallerweb1.servicios.ServicioNotificacionesImpl;
 
 import ar.edu.unlam.tallerweb1.util.exceptions.FalloAlUnirseAlGrupo;
-import ar.edu.unlam.tallerweb1.util.exceptions.FormularioDeGrupoIncompleto;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.xml.stream.FactoryConfigurationError;
 import java.util.ArrayList;
 import java.util.List;
 
