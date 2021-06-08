@@ -7,6 +7,7 @@ import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupo;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioMateria;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioUsuario;
 import ar.edu.unlam.tallerweb1.util.auxClass.Check;
+import ar.edu.unlam.tallerweb1.util.enums.Disponibilidad;
 import ar.edu.unlam.tallerweb1.util.exceptions.FalloAlUnirseAlGrupo;
 import ar.edu.unlam.tallerweb1.util.exceptions.FormularioDeGrupoIncompleto;
 import ar.edu.unlam.tallerweb1.util.exceptions.GrupoInexistenteException;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("servicioGrupos")
@@ -117,7 +119,28 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 
     @Override
     public List<Grupo> buscarGrupoPorDatos(DatosDeGrupo datosParaBuscarUnGrupo) {
-        return repoGrupo.buscarGrupoPorDatos(datosParaBuscarUnGrupo);
+        return filtrarPorCupo(repoGrupo.buscarGrupoPorDatos(datosParaBuscarUnGrupo), datosParaBuscarUnGrupo.getDisponibilidad());
+    }
+
+    private List<Grupo> filtrarPorCupo(List<Grupo> grupos, Disponibilidad disponibilidad) {
+        List<Grupo> prov=new ArrayList<>();
+        if (disponibilidad== Disponibilidad.LLENO){
+            for(Grupo aux: grupos){
+                if (aux.grupoLleno()){
+                    prov.add(aux);
+                }
+            }
+            return prov;
+        }
+        if (disponibilidad== Disponibilidad.DISPONIBLE){
+            for(Grupo aux: grupos){
+                if (!aux.grupoLleno()){
+                    prov.add(aux);
+                }
+            }
+            return prov;
+        }
+        return grupos;
     }
 
     private Grupo crearGrupoAPartirDeDatosDeGrupo(DatosDeGrupo datosDeGrupo) {
