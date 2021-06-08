@@ -12,6 +12,10 @@
     color: #F9A826;
 }
 
+a{
+	text-decoration:none;
+}
+
 .ilustraciones-index {
     width: 500px;
 }

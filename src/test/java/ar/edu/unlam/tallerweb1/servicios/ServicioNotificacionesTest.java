@@ -55,6 +55,24 @@ public class ServicioNotificacionesTest {
 		
 		thenSeLesCargaLaNotificacion(objetivo.getListaDeUsuarios().size());
 	}
+	
+	@Test
+	public void testQueTeAviseSiExistenNotificacionesNuevas () {
+		Long usuario = 1L;
+		
+		Boolean hayNotificaciones = whenExisteAlmenosUnaNotificacionNueva(usuario);
+		
+		thenNosDevuelve(hayNotificaciones);
+	}
+
+	private void thenNosDevuelve(Boolean hayNotificaciones) {
+		assertThat(hayNotificaciones).isTrue();
+	}
+
+	private Boolean whenExisteAlmenosUnaNotificacionNueva(Long usuario) {
+		when(repositoryNt.getExistePendiente(usuario)).thenReturn(new Notificacion());
+		return service.hayPendientes(usuario);
+	}
 
 	private void whenIntentamosNotificarSuEliminacion(Grupo objetivo) {
 		when(repositoryGr.getGrupoByID(objetivo.getId())).thenReturn(objetivo);

@@ -29,7 +29,7 @@
 							<strong class="px-3 py-1 rounded bg-white text-dark">
 								${grupo.getCerrado() ? "Cerrado" : "Abierto"} </strong>
 						</div>
-						<div class="col-12 col-md-4 mb-1 text-md-start">1 / ${grupo.getCantidadMax()}</div>
+						<div class="col-12 col-md-4 mb-1 text-md-start">${grupo.getListaDeUsuarios().size()} / ${grupo.getCantidadMax()}</div>
 					</div>
 				</div>
 

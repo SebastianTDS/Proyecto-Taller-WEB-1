@@ -3,6 +3,8 @@ package ar.edu.unlam.tallerweb1.controladores;
 import ar.edu.unlam.tallerweb1.dto.DatosDeUsuario;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioLogin;
+import ar.edu.unlam.tallerweb1.servicios.ServicioNotificaciones;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,25 +18,29 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class ControladorLogin {
 
-	private ServicioLogin servicioLogin;
+	private final ServicioLogin servicioLogin;
+	private final ServicioNotificaciones servicioNotificacion;
 
 	@Autowired
-	public ControladorLogin(ServicioLogin servicioLogin) {
+	public ControladorLogin(ServicioLogin servicioLogin, ServicioNotificaciones servicioNotificacion) {
 		this.servicioLogin = servicioLogin;
+		this.servicioNotificacion = servicioNotificacion;
 	}
 
 	@RequestMapping("/ir-a-login")
 	public ModelAndView irALogin() {
 		ModelMap modelo = new ModelMap();
-		DatosDeUsuario usuario = new DatosDeUsuario();
-		modelo.put("usuario", usuario);
+		modelo.put("usuario", new DatosDeUsuario());
 		return new ModelAndView("login", modelo);
 	}
 
 	@RequestMapping(path = "/validar-login", method = RequestMethod.POST)
 	public ModelAndView validarLogin(@ModelAttribute("usuario") DatosDeUsuario usuario, HttpServletRequest request) {
-		Usuario usuarioBuscado = servicioLogin.consultarUsuario(usuario);
-		request.getSession().setAttribute("USUARIO", usuarioBuscado);
+		Usuario buscado = servicioLogin.consultarUsuario(usuario);
+		
+		request.getSession().setAttribute("USUARIO", buscado);
+		request.getSession().setAttribute("PENDIENTES", servicioNotificacion.hayPendientes(buscado.getId()));
+		
 		return new ModelAndView("redirect:/ir-a-home");
 	}
 
@@ -43,15 +49,10 @@ public class ControladorLogin {
 		return new ModelAndView("index");
 	}
 
-	@RequestMapping(path = "/ir-a-inicio", method = RequestMethod.GET)
-	public ModelAndView inicio1() {
-		return new ModelAndView("index");
-	}
-
 	@RequestMapping(path = "/cerrar-sesion", method = RequestMethod.GET)
 	public ModelAndView cerrarSession(HttpServletRequest request) {
 		request.getSession().invalidate();
-		return new ModelAndView("index");
+		return new ModelAndView("redirect:/");
 	}
 
 }

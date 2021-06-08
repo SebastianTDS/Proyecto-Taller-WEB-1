@@ -51,6 +51,52 @@ public class RepositorioNotificacionTest extends SpringTest{
 		
 		thenSusNotificacionesEstanVistas(notificaciones);
 	}
+	
+	@Test
+	@Transactional
+	@Rollback
+	public void testQueEncuentreUnaNotificacionPendienteSiExiste() {
+		Usuario manuela = givenExisteUnUsuario("Manuela");
+		Usuario jorge = givenExisteUnUsuario("Jorge");
+		
+		givenExisteUnaNotificacion(manuela);
+		givenExisteUnaNotificacion(jorge);
+		givenExisteUnaNotificacion(manuela);
+		
+		Notificacion pendiente = whenBuscoNotificacionesNuevasDeUsuario(manuela);
+		
+		thenObtengoQueTiene(pendiente);
+	}
+	
+	@Test
+	@Transactional
+	@Rollback
+	public void testNoTraigaNadaEnCasoDeQueNoHayanNuevasNotificaciones() {
+		Usuario manuela = givenExisteUnUsuario("Manuela");
+		Usuario jorge = givenExisteUnUsuario("Jorge");
+		
+		givenExisteUnaNotificacion(manuela);
+		givenExisteUnaNotificacion(jorge);
+		givenExisteUnaNotificacion(manuela);
+		
+		whenUsuarioVeSusNotificaciones(jorge);
+		
+		Notificacion pendiente = whenBuscoNotificacionesNuevasDeUsuario(jorge);
+		
+		thenObtengoQueNoTiene(pendiente);
+	}
+
+	private void thenObtengoQueNoTiene(Notificacion pendiente) {
+		assertThat(pendiente).isNull();
+	}
+
+	private void thenObtengoQueTiene(Notificacion pendiente) {
+		assertThat(pendiente).isNotNull();
+	}
+
+	private Notificacion whenBuscoNotificacionesNuevasDeUsuario(Usuario usuario) {
+		return repository.getExistePendiente(usuario.getId());
+	}
 
 	private void thenSusNotificacionesEstanVistas(List<Notificacion> notificaciones) {
 		for(Notificacion n : notificaciones) {
@@ -60,6 +106,7 @@ public class RepositorioNotificacionTest extends SpringTest{
 
 	private void whenUsuarioVeSusNotificaciones(Usuario usuario) {
 		repository.marcarVistoDeUsuario(usuario.getId());
+		session().clear();
 	}
 
 	private void thenObtengoSusNotificaciones(List<Notificacion> notificaciones, Integer resultadoEsperado) {
@@ -68,7 +115,6 @@ public class RepositorioNotificacionTest extends SpringTest{
 	}
 
 	private List<Notificacion> whenBuscoNotificacionesDe(Usuario usuario) {
-		session().clear();
 		return repository.getNotificacionesPor(usuario.getId());
 	}
 

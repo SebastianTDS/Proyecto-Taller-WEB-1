@@ -154,7 +154,7 @@ public class ControladorHomeTest {
     }
 
     private ModelAndView whenDoyClickACrearGrupo() {
-      return controladorHome.irAlFormulario();
+      return controladorHome.irACrearGrupo();
     }
 
     private ModelAndView whenDoyClickAFiltar() {

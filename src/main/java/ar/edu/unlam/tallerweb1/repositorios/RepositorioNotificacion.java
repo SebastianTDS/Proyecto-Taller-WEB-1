@@ -12,4 +12,6 @@ public interface RepositorioNotificacion {
 
 	void marcarVistoDeUsuario(Long usuario);
 
+	Notificacion getExistePendiente(Long usuario);
+
 }

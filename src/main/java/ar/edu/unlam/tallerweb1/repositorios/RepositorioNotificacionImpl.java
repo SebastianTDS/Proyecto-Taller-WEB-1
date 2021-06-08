@@ -23,8 +23,7 @@ public class RepositorioNotificacionImpl implements RepositorioNotificacion {
 	@Override
 	public List<Notificacion> getNotificacionesPor(Long idUsuario) {
 		return sessionFactory.getCurrentSession().createCriteria(Notificacion.class)
-				.createAlias("usuario", "usuarioJoin")
-				.add(Restrictions.eq("usuarioJoin.id", idUsuario)).list();
+				.createAlias("usuario", "usuarioJoin").add(Restrictions.eq("usuarioJoin.id", idUsuario)).list();
 	}
 
 	@Override
@@ -35,10 +34,16 @@ public class RepositorioNotificacionImpl implements RepositorioNotificacion {
 	@Override
 	public void marcarVistoDeUsuario(Long usuario) {
 		String hql = "UPDATE Notificacion n SET n.visto = :vis WHERE n.usuario.id = :uid";
-		sessionFactory.getCurrentSession().createQuery(hql)
-				.setParameter("vis", true)
-				.setParameter("uid", usuario)
+		sessionFactory.getCurrentSession().createQuery(hql).setParameter("vis", true).setParameter("uid", usuario)
 				.executeUpdate();
+	}
+
+	@Override
+	public Notificacion getExistePendiente(Long usuario) {
+		return (Notificacion) sessionFactory.getCurrentSession().createCriteria(Notificacion.class)
+				.add(Restrictions.eq("usuario.id", usuario))
+				.add(Restrictions.eq("visto", false))
+				.setMaxResults(1).uniqueResult();
 	}
 
 }

@@ -12,5 +12,7 @@ public interface ServicioNotificaciones {
 	public void notificarNuevoIngreso(Long id, Usuario nuevoIntegrante);
 
 	public void notificarEliminacionDeGrupo(Long id);
-	
+
+	Boolean hayPendientes(Long idUsuario);
+
 }

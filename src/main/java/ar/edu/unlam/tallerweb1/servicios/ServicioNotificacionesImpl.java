@@ -62,6 +62,11 @@ public class ServicioNotificacionesImpl implements ServicioNotificaciones {
 			notificar(titulo, integrante);
 		}
 	}
+	
+	@Override
+	public Boolean hayPendientes(Long idUsuario) {
+		return !Check.isNull(repoNotificaciones.getExistePendiente(idUsuario));
+	}
 
 	private void notificar(String titulo, Usuario destinatario) {
 		Notificacion mensaje = new Notificacion();

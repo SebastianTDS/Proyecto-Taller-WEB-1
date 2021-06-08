@@ -12,12 +12,13 @@ import ar.edu.unlam.tallerweb1.HttpSessionTest;
 import ar.edu.unlam.tallerweb1.dto.DatosDeUsuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioLogin;
 import ar.edu.unlam.tallerweb1.servicios.ServicioLoginImpl;
+import ar.edu.unlam.tallerweb1.servicios.ServicioNotificacionesImpl;
 import ar.edu.unlam.tallerweb1.util.exceptions.UsuarioNoEncontradoException;
 
 public class ControladorLoginTest extends HttpSessionTest {
 
 	private ServicioLogin service = mock(ServicioLoginImpl.class);
-	private ControladorLogin controller = new ControladorLogin(service);
+	private ControladorLogin controller = new ControladorLogin(service, mock(ServicioNotificacionesImpl.class));
 
 	@Test
 	public void testQuePodamosLoguearUnUsuario() {

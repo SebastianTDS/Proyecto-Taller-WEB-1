@@ -11,7 +11,7 @@
             <h3>${grupo.getMateria().getNombre()} - ${grupo.getCarrera().getNombre()} - Turno ${grupo.getTurno().name()}</h3>
         </li>
         <hr>
-        <li><h4>Integrantes: 1/${grupo.getCantidadMax()}</h4></li>
+        <li><h4>Integrantes: ${grupo.getListaDeUsuarios().size()}/${grupo.getCantidadMax()}</h4></li>
         <li><h4>Privacidad: ${grupo.getCerrado()? "Cerrado" : "Abierto"}</h4></li>
         <li class="my-4">
         	<p>${grupo.getDescripcion()}</p>
