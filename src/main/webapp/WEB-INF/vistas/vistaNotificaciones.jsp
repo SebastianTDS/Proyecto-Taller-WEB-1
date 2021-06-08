@@ -26,9 +26,9 @@
                 </div>
 
                 <ul class="opciones">
-                    <li><a class="text-white" href="#">Información General</a></li>
-                    <li><a class="text-white" href="#">Mis Grupos</a></li>
-                    <li><a class="text-white" href="#">Notificaciones</a></li>
+                    <li><a class="text-white" href="perfil">Información General</a></li>
+                    <li><a class="text-white" href="perfil/ir-a-mis-grupos">Mis Grupos</a></li>
+                    <li><a class="text-white" href="perfil/notificaciones">Notificaciones</a></li>
                 </ul>
             </div>
             <div class="window col-12 col-sm-9 text-dark">
@@ -44,7 +44,7 @@
                     	</c:if>
 	                        <div class="d-flex w-100 justify-content-between align-items-center">
 	                            <strong class="vertical-middle">${notificacion.getTitulo() }</strong>
-	                            <small class="text-end">${notificacion.getFecha().toLocalDate() } <br> ${notificacion.getFecha().toLocalTime() }</small>
+	                            <small class="text-end">${notificacion.periodoTranscurrido() }</small>
 	                        </div>
                     	</a>
 					</c:forEach>

@@ -12,4 +12,7 @@ INSERT INTO usuario(email, nombre, password, rol)
 VALUES ('k4tnet@outlook.com', 'Marcelo' ,'1234','Admin');
 
 INSERT INTO usuario(email, nombre, password, rol)
-VALUES ('usuario2@outlook.com', 'Andres' ,'1234','Adminn');
+VALUES ('usuario2@outlook.com', 'Andres' ,'1234','Admin');
+
+INSERT INTO usuario(email, nombre, password, rol)
+VALUES ('usuario3@outlook.com', 'Mayra' ,'1234','Admin');

@@ -16,10 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PreRemove;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
-import ar.edu.unlam.tallerweb1.util.auxClass.Check;
 import ar.edu.unlam.tallerweb1.util.enums.Turno;
-import ar.edu.unlam.tallerweb1.util.exceptions.FalloAlUnirseAlGrupo;
-import ar.edu.unlam.tallerweb1.util.exceptions.LimiteDeUsuariosFueraDeRango;
 import ar.edu.unlam.tallerweb1.util.exceptions.YaEstoyEnElGrupo;
 
 @Entity
@@ -163,6 +160,10 @@ public class Grupo {
 		if (!listaDeUsuarios.add(usuarioAInsertar))
 			throw new YaEstoyEnElGrupo(id);
 		usuarioAInsertar.agregarGrupo(this);
+	}
+	
+	public Boolean grupoLleno() {
+		return listaDeUsuarios.size() >= cantidadMax;
 	}
 
 }

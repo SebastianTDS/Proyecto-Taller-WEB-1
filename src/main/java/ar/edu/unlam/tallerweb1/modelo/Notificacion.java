@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import ar.edu.unlam.tallerweb1.util.auxClass.Algorithm;
+
 @Entity
 public class Notificacion {
 	
@@ -63,5 +65,9 @@ public class Notificacion {
 
 	public void setVisto(Boolean visto) {
 		this.visto = visto;
+	}
+	
+	public String periodoTranscurrido() {
+		return Algorithm.getTiempoTranscurrido(fecha);
 	}
 }

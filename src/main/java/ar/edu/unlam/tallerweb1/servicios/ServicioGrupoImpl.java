@@ -69,9 +69,10 @@ public class ServicioGrupoImpl implements ServicioGrupo {
     public void IngresarUsuarioAlGrupo(Long idUsuario, Long idGrupo) {
         Grupo grupoAAcceder = repoGrupo.getGrupoByID(idGrupo);
         Usuario usuarioAInsertar = repoUsuario.getUsuarioByID(idUsuario);
-        Integer cantidadActual=grupoAAcceder.getListaDeUsuarios().size();
-        if (grupoAAcceder == null || usuarioAInsertar == null ||cantidadActual>=grupoAAcceder.getCantidadMax())
+        
+        if (grupoAAcceder == null || usuarioAInsertar == null || grupoAAcceder.grupoLleno())
             throw new FalloAlUnirseAlGrupo();
+        
         grupoAAcceder.agregarUsuarioAlGrupo(usuarioAInsertar);
         repoGrupo.actualizarGrupo(grupoAAcceder);
     }
