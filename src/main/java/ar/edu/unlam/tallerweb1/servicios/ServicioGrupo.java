@@ -3,10 +3,12 @@ package ar.edu.unlam.tallerweb1.servicios;
 import java.util.List;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
-import ar.edu.unlam.tallerweb1.dto.DatosDeGrupoParaBusqueda;
 import ar.edu.unlam.tallerweb1.modelo.Carrera;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.modelo.Materia;
+import ar.edu.unlam.tallerweb1.modelo.Usuario;
+
+import javax.servlet.http.HttpServletRequest;
 
 public interface ServicioGrupo {
 
@@ -18,11 +20,15 @@ public interface ServicioGrupo {
 
     List<Materia> buscarTodasLasMaterias();
 
-    List<Grupo> buscarGrupoPorDatos(DatosDeGrupoParaBusqueda datosParaBuscarUnGrupo);
+    List<Grupo> buscarGrupoPorDatos(DatosDeGrupo datosParaBuscarUnGrupo);
     
     Grupo buscarGrupoPorID(Long idBuscado);
 
 	void modificarGrupo(Long id, DatosDeGrupo formulario);
 
 	void eliminarGrupo(Long idBuscado);
+
+    void IngresarUsuarioAlGrupo(Long idUsuario, Long idGrupo);
+
+    List<Grupo> buscarTodosMisGrupos(Usuario usuarioSesion);
 }

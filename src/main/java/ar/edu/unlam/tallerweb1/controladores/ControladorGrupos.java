@@ -16,9 +16,9 @@ import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
 
 @Controller
 @RequestMapping("/grupos")
-public class ControladorGrupos {
+public class ControladorGrupos{
 
-	private ServicioGrupo service;
+	private final ServicioGrupo service;
 
 	@Autowired
 	public ControladorGrupos(ServicioGrupo service) {
@@ -29,7 +29,6 @@ public class ControladorGrupos {
 	public ModelAndView perfilDeGrupo(@PathVariable Long id) {
 		ModelMap modelo = new ModelMap();
 		Grupo buscado = service.buscarGrupoPorID(id);
-
 		modelo.put("grupo", buscado);
 		return new ModelAndView("vistaGrupo", modelo);
 	}

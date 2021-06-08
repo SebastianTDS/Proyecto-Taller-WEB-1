@@ -5,41 +5,47 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import ar.edu.unlam.tallerweb1.modelo.Usuario;
+import ar.edu.unlam.tallerweb1.servicios.*;
+import ar.edu.unlam.tallerweb1.util.exceptions.FalloAlUnirseAlGrupo;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
-import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
-import ar.edu.unlam.tallerweb1.servicios.ServicioGrupoImpl;
 import ar.edu.unlam.tallerweb1.util.exceptions.GrupoInexistenteException;
 import ar.edu.unlam.tallerweb1.util.exceptions.LimiteDeUsuariosFueraDeRango;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 public class ControladorGruposTest {
 
 	private static ControladorGrupos controller;
 	private static ServicioGrupo service;
+	private static HttpServletRequest request;
+	private static HttpSession session;
 
 	@Before
 	public void init() {
+		session = mock(HttpSession.class);
 		service = mock(ServicioGrupoImpl.class);
+		request = mock(HttpServletRequest.class);
 		controller = new ControladorGrupos(service);
+		when(request.getSession()).thenReturn(session);
 	}
 
 	@Test
 	public void testQueAlPegarleALaURLTraigaLaVistaDelGrupo() {
 		Long idGrupoBuscado = 1L;
-
 		ModelAndView vistaObtenida = whenBuscoPorLaURLConElIDCorrecto(idGrupoBuscado);
-
 		thenObtengoLaVistaYLosDatosDelGrupo(vistaObtenida);
 	}
 
 	@Test(expected = GrupoInexistenteException.class)
 	public void testQueAlBuscarUnGrupoInexistenteVolvamosAlIndex() {
 		Long idGrupoInexistente = 2L;
-
 		whenBuscoPorLaURLConElIDIncorrectoLanzaExcepcion(idGrupoInexistente);
 	}
 
@@ -70,44 +76,40 @@ public class ControladorGruposTest {
 		whenIntentamosModificarGrupoLanzaException(idGrupoBuscado, formulario);
 
 	}
-	
+
 	@Test
 	public void testQuePodamosAccederAEdicionDeGrupo() {
 		Long idGrupoBuscado = 1L;
-
 		ModelAndView vistaObtenida = whenBuscoPorLaURLConElIDCorrectoAEditar(idGrupoBuscado);
 
 		thenObtengoLaVistaYElModeloDelFormulario(vistaObtenida);
 	}
-	
+
 	@Test(expected = GrupoInexistenteException.class)
 	public void testQueNoPodamosAccederAEdicionDeGrupoInexistente() {
 		Long idGrupoBuscado = 1L;
-
 		whenBuscoPorLaURLDeEdicionConElIDIncorrectoLanzaExcepcion(idGrupoBuscado);
 
 	}
 
 	/* Metodos Auxiliares */
-	
+
 	private ModelAndView whenBuscoPorLaURLDeEdicionConElIDIncorrectoLanzaExcepcion(Long idGrupoBuscado) {
 		doThrow(GrupoInexistenteException.class).when(service).buscarGrupoPorID(idGrupoBuscado);
-
 		return controller.perfilDeGrupoEdicion(idGrupoBuscado);
 	}
-	
+
 	private void thenObtengoLaVistaYElModeloDelFormulario(ModelAndView vistaObtenida) {
 		assertThat(vistaObtenida.getViewName()).isEqualTo("vistaGrupo");
 		assertThat(vistaObtenida.getModel().get("formulario")).isNotNull();
 	}
-	
+
 	private ModelAndView whenBuscoPorLaURLConElIDCorrectoAEditar(Long idGrupoBuscado) {
 		when(service.buscarGrupoPorID(idGrupoBuscado)).thenReturn(new Grupo());
 
 		return controller.perfilDeGrupoEdicion(idGrupoBuscado);
 	}
 
-	
 	private void whenIntentamosModificarGrupoLanzaException(Long idGrupoBuscado, DatosDeGrupo formulario) {
 		doThrow(LimiteDeUsuariosFueraDeRango.class).when(service).modificarGrupo(idGrupoBuscado, formulario);
 		controller.cambiarDatosGrupo(formulario);
@@ -139,7 +141,7 @@ public class ControladorGruposTest {
 
 		return nuevoGrupo;
 	}
-	
+
 	private DatosDeGrupo givenCompletamosFormularioErroneamente(Long idGrupoBuscado) {
 		DatosDeGrupo nuevoGrupo = new DatosDeGrupo();
 
@@ -157,7 +159,6 @@ public class ControladorGruposTest {
 
 	private ModelAndView whenBuscoPorLaURLConElIDIncorrectoLanzaExcepcion(Long idGrupoInexistente) {
 		doThrow(GrupoInexistenteException.class).when(service).buscarGrupoPorID(idGrupoInexistente);
-
 		return controller.perfilDeGrupo(idGrupoInexistente);
 	}
 

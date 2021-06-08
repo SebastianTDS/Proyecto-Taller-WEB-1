@@ -2,11 +2,11 @@ package ar.edu.unlam.tallerweb1.dto;
 
 public class DatosDeUsuario {
 
+	private Long id;
     private String nombre;
     private String email;
     private String clave;
     private String repiteClave;
-
 
     public String getNombre() {
         return nombre;
@@ -39,4 +39,13 @@ public class DatosDeUsuario {
     public void setRepiteClave(String repiteClave) {
         this.repiteClave = repiteClave;
     }
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 }

@@ -245,10 +245,6 @@ form .category label .dot {
     transition: all 0.3s ease;
 }
 
-form input[type="radio"] {
-    display: none;
-}
-
 form .button {
     height: 45px;
     margin: 35px 0

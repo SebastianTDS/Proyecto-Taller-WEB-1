@@ -11,8 +11,9 @@ import javax.transaction.Transactional;
 @Transactional
 public class ServicioUsuarioImpl implements ServicioUsuario {
 
-
     public String registrar(DatosDeUsuario datos) {
         return "Las claves no coinciden al registrar";
     }
+
+
 }

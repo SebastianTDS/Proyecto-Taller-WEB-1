@@ -1,5 +1,7 @@
 package ar.edu.unlam.tallerweb1.dto;
 
+import ar.edu.unlam.tallerweb1.util.enums.Disponibilidad;
+import ar.edu.unlam.tallerweb1.util.enums.Privacidad;
 import ar.edu.unlam.tallerweb1.util.enums.Turno;
 
 public class DatosDeGrupo {
@@ -7,11 +9,12 @@ public class DatosDeGrupo {
 	private Long id;
     private String nombre;
     private Turno turno;
-    private Boolean cerrado;
     private Integer cantidadMax;
     private String descripcion;
     private Long carrera;
     private Long materia;
+    private Privacidad privacidad;
+    private Disponibilidad disponibilidad;
 
     public Long getCarrera() {
         return carrera;
@@ -35,14 +38,6 @@ public class DatosDeGrupo {
 
     public void setTurno(Turno turno) {
         this.turno = turno;
-    }
-
-    public Boolean getCerrado() {
-        return cerrado;
-    }
-
-    public void setCerrado(Boolean cerrado) {
-        this.cerrado = cerrado;
     }
 
     public Integer getCantidadMax() {
@@ -75,5 +70,25 @@ public class DatosDeGrupo {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Privacidad getPrivacidad() {
+		return privacidad;
+	}
+
+	public void setPrivacidad(Privacidad privacidad) {
+		this.privacidad = privacidad;
+	}
+
+	public Disponibilidad getDisponibilidad() {
+		return disponibilidad;
+	}
+
+	public void setDisponibilidad(Disponibilidad disponibilidad) {
+		this.disponibilidad = disponibilidad;
+	}
+	
+	public Boolean estaCerrado() {
+		return privacidad == Privacidad.CERRADO; 
 	}
 }

@@ -11,6 +11,15 @@
     border-radius: 20px !important;
 }
 
+.list-group-item.active{
+    background-color: var(--bs-warning);
+    border-color: rgba(0, 0, 0, 0.125);
+}
+
+.list-group-item-action.active:hover{
+    background-color: #ffc825;
+}
+
 .perfil {
     position: relative;
     width: 50%;
@@ -37,7 +46,7 @@ textarea{
     object-fit: cover;
     object-position: center;
     border-radius: 100%;
-    border: 2px white solid;
+    border: 3px white solid;
     background-clip: content-box;
 }
 
@@ -45,12 +54,12 @@ textarea{
     list-style: none;
     padding: unset;
     margin: 20px 0;
-    border-top: 1px gray solid;
+    border-top: 1px var(--bs-secondary) solid;
 }
 
 .opciones li {
-    background-color: #343a40;
-    border-bottom: 1px gray solid;
+    background-color: var(--bs-dark);
+    border-bottom: 1px var(--bs-secondary) solid;
 }
 
 .opciones li:hover {

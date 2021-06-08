@@ -4,6 +4,7 @@ import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupoImpl;
+import ar.edu.unlam.tallerweb1.util.enums.Privacidad;
 import ar.edu.unlam.tallerweb1.util.enums.Turno;
 import ar.edu.unlam.tallerweb1.util.exceptions.FormularioDeGrupoIncompleto;
 
@@ -57,7 +58,7 @@ public class ControladorCreacionDeGrupoTest {
         String descripcion =  "Grupo de test para taller web";
         datosdegrupo.setNombre(nombre);
         datosdegrupo.setMateria(123L);
-        datosdegrupo.setCerrado(false);
+        datosdegrupo.setPrivacidad(Privacidad.ABIERTO);
         datosdegrupo.setCantidadMax(ctdMaxima);
         datosdegrupo.setDescripcion(descripcion);
         return datosdegrupo;
@@ -76,7 +77,7 @@ public class ControladorCreacionDeGrupoTest {
         datosdegrupo.setCarrera(carrera);
         datosdegrupo.setMateria(materia);
         datosdegrupo.setTurno(turno);
-        datosdegrupo.setCerrado(false);
+        datosdegrupo.setPrivacidad(Privacidad.ABIERTO);
         datosdegrupo.setCantidadMax(ctdMaxima);
         datosdegrupo.setDescripcion(descripcion);
 

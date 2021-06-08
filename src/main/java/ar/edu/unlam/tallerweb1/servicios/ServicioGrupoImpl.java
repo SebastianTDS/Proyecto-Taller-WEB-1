@@ -1,15 +1,16 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
-import ar.edu.unlam.tallerweb1.dto.DatosDeGrupoParaBusqueda;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioCarrera;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupo;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioMateria;
+import ar.edu.unlam.tallerweb1.repositorios.RepositorioUsuario;
 import ar.edu.unlam.tallerweb1.util.auxClass.Check;
+import ar.edu.unlam.tallerweb1.util.exceptions.FalloAlUnirseAlGrupo;
 import ar.edu.unlam.tallerweb1.util.exceptions.FormularioDeGrupoIncompleto;
 import ar.edu.unlam.tallerweb1.util.exceptions.GrupoInexistenteException;
-
+import ar.edu.unlam.tallerweb1.util.exceptions.YaEstoyEnElGrupo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,51 +24,76 @@ public class ServicioGrupoImpl implements ServicioGrupo {
     private final RepositorioGrupo repoGrupo;
     private final RepositorioCarrera repoCarrera;
     private final RepositorioMateria repoMateria;
-
+    private final RepositorioUsuario repoUsuario;
 
     @Autowired
-    public ServicioGrupoImpl(RepositorioGrupo repositorioGrupoParaElServicio, RepositorioCarrera repositorioCarreraParaElServicio, RepositorioMateria repositorioMateriaParaElServicio) {
-        this.repoGrupo = repositorioGrupoParaElServicio;
-        this.repoCarrera = repositorioCarreraParaElServicio;
-        this.repoMateria = repositorioMateriaParaElServicio;
+    public ServicioGrupoImpl(RepositorioGrupo repoGrupo, RepositorioCarrera repoCarrera, RepositorioMateria repoMateria, RepositorioUsuario repoUsuario) {
+        this.repoGrupo = repoGrupo;
+        this.repoCarrera = repoCarrera;
+        this.repoMateria = repoMateria;
+        this.repoUsuario = repoUsuario;
     }
-    
+
     @Override
-	public Grupo buscarGrupoPorID(Long idBuscado) {
-		Grupo encontrado = repoGrupo.getGrupoByID(idBuscado);
-		
-		if(Check.isNull(encontrado))
-			throw new GrupoInexistenteException("Grupo buscado no encontrado");
+    public Grupo buscarGrupoPorID(Long idBuscado) {
+        Grupo encontrado = repoGrupo.getGrupoByID(idBuscado);
 
-		return encontrado;
-	}
+        if (Check.isNull(encontrado))
+            throw new GrupoInexistenteException("Grupo buscado no encontrado");
 
-	@Override
-	public void modificarGrupo(Long id, DatosDeGrupo formulario) {
-		Grupo objetivo = repoGrupo.getGrupoByID(id);
-		
-		if(Check.isNull(objetivo))
-			throw new GrupoInexistenteException("No se puede modificar un grupo inexistente");
+        return encontrado;
+    }
 
-		objetivo.actualizar(formulario);
+    @Override
+    public void modificarGrupo(Long id, DatosDeGrupo formulario) {
+        Grupo objetivo = repoGrupo.getGrupoByID(id);
 
-		repoGrupo.actualizarGrupo(objetivo);
-	}
+        if (Check.isNull(objetivo))
+            throw new GrupoInexistenteException("No se puede modificar un grupo inexistente");
 
-	@Override
-	public void eliminarGrupo(Long idBuscado) {
-		Grupo objetivo = repoGrupo.getGrupoByID(idBuscado);
-		
-		if(Check.isNull(objetivo))
-			throw new GrupoInexistenteException("No se puede eliminar un grupo inexistente");
+        objetivo.actualizar(formulario);
 
-		repoGrupo.eliminarGrupo(objetivo);
-	}
+        repoGrupo.actualizarGrupo(objetivo);
+    }
 
-	@Override
+    @Override
+    public void eliminarGrupo(Long idBuscado) {
+        Grupo objetivo = repoGrupo.getGrupoByID(idBuscado);
+
+        if (Check.isNull(objetivo))
+            throw new GrupoInexistenteException("No se puede eliminar un grupo inexistente");
+        repoGrupo.eliminarGrupo(objetivo);
+    }
+
+    @Override
+    public void IngresarUsuarioAlGrupo(Long idUsuario, Long idGrupo) {
+        Grupo grupoAAcceder = repoGrupo.getGrupoByID(idGrupo);
+        Usuario usuarioAInsertar = repoUsuario.getUsuarioByID(idUsuario);
+        Integer cantidadActual=grupoAAcceder.getListaDeUsuarios().size();
+        if (grupoAAcceder == null || usuarioAInsertar == null ||cantidadActual>=grupoAAcceder.getCantidadMax())
+            throw new FalloAlUnirseAlGrupo();
+        verificarSiElUsuarioYaEstaEnElGrupo(grupoAAcceder, usuarioAInsertar);
+        grupoAAcceder.agregarUsuarioAlGrupo(usuarioAInsertar);
+        repoGrupo.actualizarGrupo(grupoAAcceder);
+    }
+
+    private void verificarSiElUsuarioYaEstaEnElGrupo(Grupo grupoAAcceder, Usuario usuarioAInsertar) {
+        for (Grupo grupoActual : usuarioAInsertar.getListaDeGrupos()) {
+            if (grupoActual.getId() == grupoAAcceder.getId())
+                throw new YaEstoyEnElGrupo(grupoActual.getId());
+        }
+    }
+
+    @Override
+    public List<Grupo> buscarTodosMisGrupos(Usuario usuarioSesion) {
+        return repoGrupo.buscarTodosMisGrupos(usuarioSesion);
+    }
+
+
+    @Override
     public Grupo crearGrupo(DatosDeGrupo datosDeGrupo) {
         Grupo grupoAPartirDeDatosDeGrupo = crearGrupoAPartirDeDatosDeGrupo(datosDeGrupo);
-        if (grupoAPartirDeDatosDeGrupo==null) {
+        if (grupoAPartirDeDatosDeGrupo == null) {
             throw new FormularioDeGrupoIncompleto();
         }
         repoGrupo.guardarGrupo(grupoAPartirDeDatosDeGrupo);
@@ -90,7 +116,7 @@ public class ServicioGrupoImpl implements ServicioGrupo {
     }
 
     @Override
-    public List<Grupo> buscarGrupoPorDatos(DatosDeGrupoParaBusqueda datosParaBuscarUnGrupo) {
+    public List<Grupo> buscarGrupoPorDatos(DatosDeGrupo datosParaBuscarUnGrupo) {
         return repoGrupo.buscarGrupoPorDatos(datosParaBuscarUnGrupo);
     }
 
@@ -107,7 +133,7 @@ public class ServicioGrupoImpl implements ServicioGrupo {
         Carrera carrera = repoCarrera.buscarCarreraPorId(datosDeGrupo.getCarrera());
         grupo.setNombre(datosDeGrupo.getNombre());
         grupo.setTurno(datosDeGrupo.getTurno());
-        grupo.setCerrado(datosDeGrupo.getCerrado());
+        grupo.setCerrado(datosDeGrupo.estaCerrado());
         grupo.setCantidadMax(datosDeGrupo.getCantidadMax());
         grupo.setDescripcion(datosDeGrupo.getDescripcion());
         grupo.setMateria(materia);
@@ -145,7 +171,7 @@ public class ServicioGrupoImpl implements ServicioGrupo {
                         datosDeGrupo.getCarrera() != null &&
                         datosDeGrupo.getNombre() != null &&
                         datosDeGrupo.getTurno() != null &&
-                        datosDeGrupo.getCerrado() != null &&
+                        datosDeGrupo.getPrivacidad() != null &&
                         datosDeGrupo.getCantidadMax() != null &&
                         datosDeGrupo.getDescripcion() != null;
     }
