@@ -3,16 +3,7 @@ package ar.edu.unlam.tallerweb1.modelo;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.PreRemove;
+import javax.persistence.*;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.util.auxClass.Check;
@@ -35,10 +26,11 @@ public class Grupo {
     private List<Usuario> listaDeUsuarios;
 
     public Grupo() {
-        this.listaDeUsuarios = new ArrayList<Usuario>();
+        this.listaDeUsuarios = new ArrayList<>();
     }
 
-    @ManyToMany(mappedBy = "listaDeGrupos")
+    @ManyToMany(mappedBy = "listaDeGrupos",
+    fetch = FetchType.EAGER)
     public List<Usuario> getListaDeUsuarios() {
         return listaDeUsuarios;
     }
@@ -142,10 +134,14 @@ public class Grupo {
     }
 
     public Boolean grupoLleno() {
-        if (listaDeUsuarios.size() >= cantidadMax)
+        if (listaDeUsuarios.size() == cantidadMax)
             return true;
         else
             return false;
+    }
+
+    public Integer cantidadDeIntegrantes(){
+        return listaDeUsuarios.size();
     }
 
 

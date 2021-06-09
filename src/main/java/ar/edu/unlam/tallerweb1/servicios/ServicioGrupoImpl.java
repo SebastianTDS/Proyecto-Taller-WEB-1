@@ -140,7 +140,8 @@ public class ServicioGrupoImpl implements ServicioGrupo {
             }
             return prov;
         }
-        return grupos;
+        prov.addAll(grupos);
+        return prov;
     }
 
     private Grupo crearGrupoAPartirDeDatosDeGrupo(DatosDeGrupo datosDeGrupo) {
