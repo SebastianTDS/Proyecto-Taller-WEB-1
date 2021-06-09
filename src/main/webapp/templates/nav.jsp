@@ -4,7 +4,7 @@
   </a>
 </div>
 <div class="m-1 d-flex justify-content-center mt-5">
-  <a href="ir-a-mis-grupos">
+  <a href="perfil/ir-a-mis-grupos">
     <button class="btn btn btn btn-outline-info btn-sm justify-content-center">Mis Grupos</button>
   </a>
 </div>

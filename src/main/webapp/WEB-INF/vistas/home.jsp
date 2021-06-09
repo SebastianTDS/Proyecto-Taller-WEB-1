@@ -90,6 +90,7 @@
                                 <p class="card-text">${grupo.materia.nombre}</p>
                                 <div>
                                     <div>
+                                        <p>Integrantes:${grupo.cantidadDeIntegrantes()}/${grupo.cantidadMax}</p>
                                         <p class="card-text">${grupo.turno}</p>
                                         <c:if test="${grupo.cerrado==true}">
                                             <p class="card-text">Cerrado</p>
@@ -103,9 +104,16 @@
                                     </div>
                                 </div>
                                 <div class="d-flex justify-content-center m-3">
-                                    <button type="submit" class="btn btn-success mt-3" name="id" form="unirte"
-                                            value="${grupo.id}">Unirte
-                                    </button>
+                                    <c:choose>
+                                        <c:when test="${grupo.grupoLleno()==true}">
+                                            <button type="submit" class="btn btn-secondary mt-3" disabled>Lleno
+                                            </button>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <button type="submit" class="btn btn-success mt-3" name="id" form="unirte"
+                                                    value="${grupo.id}">Unirte</button>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </div>
                             </div>
                         </div>

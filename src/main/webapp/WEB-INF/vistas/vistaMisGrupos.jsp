@@ -32,7 +32,7 @@
                                 <h5 class="card-title text-center">${miGrupo.nombre}</h5>
                                 <p class="card-text">${miGrupo.carrera.nombre}</p>
                                 <p class="card-text">${miGrupo.materia.nombre}</p>
-                                    <div class="text-center container m-1">
+                                <div class="text-center container m-1">
                                         <img src="img/Logosolo.ico" style="width: 100px">
                                     </div>
 
