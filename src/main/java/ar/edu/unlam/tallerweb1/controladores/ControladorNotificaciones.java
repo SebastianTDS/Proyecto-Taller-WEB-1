@@ -20,6 +20,7 @@ public class ControladorNotificaciones {
 	@Autowired
 	public ControladorNotificaciones(ServicioNotificaciones service) {
 		this.service = service;
+		System.out.println("hola");
 	}
 
 	@RequestMapping("")
@@ -31,7 +32,8 @@ public class ControladorNotificaciones {
 			return new ModelAndView("redirect:/ir-a-login");
 		
 		modelo.put("Notificaciones", service.obtenerNotificacionesPor(attrSesion.getId()));
-			
+		request.getSession().setAttribute("PENDIENTES", service.hayPendientes(attrSesion.getId()));
+		
 		return new ModelAndView("vistaNotificaciones", modelo);
 	}
 

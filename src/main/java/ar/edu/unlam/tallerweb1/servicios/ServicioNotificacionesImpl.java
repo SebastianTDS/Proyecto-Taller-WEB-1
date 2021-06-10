@@ -11,6 +11,7 @@ import ar.edu.unlam.tallerweb1.modelo.Notificacion;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupo;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioNotificacion;
+import ar.edu.unlam.tallerweb1.util.auxClass.Check;
 import ar.edu.unlam.tallerweb1.util.exceptions.GrupoInexistenteException;
 
 @Service
@@ -28,27 +29,50 @@ public class ServicioNotificacionesImpl implements ServicioNotificaciones {
 
 	@Override
 	public List<Notificacion> obtenerNotificacionesPor(Long usuario) {
-		return repoNotificaciones.getNotificacionesPor(usuario);
+		List<Notificacion> notificaciones = repoNotificaciones.getNotificacionesPor(usuario);
+		repoNotificaciones.marcarVistoDeUsuario(usuario);
+		return notificaciones;
 	}
 
 	@Override
 	public void notificarNuevoIngreso(Long id, Usuario nuevoIntegrante) {
 		Grupo grupoObjetivo = repoGrupo.getGrupoByID(id);
 
-		if (grupoObjetivo == null)
+		if (Check.isNull(grupoObjetivo))
 			throw new GrupoInexistenteException("Imposible unirse a grupo inexistente");
 
 		for (Usuario integrante : grupoObjetivo.getListaDeUsuarios()) {
-			Notificacion mensaje = new Notificacion();
-			mensaje.setUsuario(integrante);
+			String titulo = integrante.getId() == nuevoIntegrante.getId()
+					? "Te has unido al grupo \"" + grupoObjetivo.getNombre() + "\""
+					: nuevoIntegrante.getNombre() + " se ha unido al grupo \"" + grupoObjetivo.getNombre() + "\"";
 
-			if (integrante.getId() == nuevoIntegrante.getId())
-				mensaje.setTitulo("Te has unido al grupo " + grupoObjetivo.getNombre());
-			else
-				mensaje.setTitulo(nuevoIntegrante.getNombre() + " se ha unido al grupo " + grupoObjetivo.getNombre());
-
-			repoNotificaciones.guardarNotificacion(mensaje);
+			notificar(titulo, integrante);
 		}
+	}
+
+	@Override
+	public void notificarEliminacionDeGrupo(Long id) {
+		Grupo grupoObjetivo = repoGrupo.getGrupoByID(id);
+
+		if (Check.isNull(grupoObjetivo))
+			throw new GrupoInexistenteException("Imposible eliminar un grupo inexistente");
+
+		for (Usuario integrante : grupoObjetivo.getListaDeUsuarios()) {
+			String titulo = "El grupo \"" + grupoObjetivo.getNombre() + "\" ha sido eliminado";
+			notificar(titulo, integrante);
+		}
+	}
+	
+	@Override
+	public Boolean hayPendientes(Long idUsuario) {
+		return !Check.isNull(repoNotificaciones.getExistePendiente(idUsuario));
+	}
+
+	private void notificar(String titulo, Usuario destinatario) {
+		Notificacion mensaje = new Notificacion();
+		mensaje.setUsuario(destinatario);
+		mensaje.setTitulo(titulo);
+		repoNotificaciones.guardarNotificacion(mensaje);
 	}
 
 }

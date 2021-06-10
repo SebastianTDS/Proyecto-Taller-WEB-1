@@ -1,13 +1,14 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+
+import ar.edu.unlam.tallerweb1.util.auxClass.Algorithm;
 
 @Entity
 public class Notificacion {
@@ -16,11 +17,11 @@ public class Notificacion {
 	private String titulo;
 	private LocalDateTime fecha;
 	private Usuario usuario;
-	private Boolean leido;
+	private Boolean visto;
 	
 	public Notificacion() {
 		this.fecha = LocalDateTime.now().withNano(0);
-		this.leido = false;
+		this.visto = false;
 	}
 
 	@Id
@@ -58,11 +59,15 @@ public class Notificacion {
 		this.fecha = fecha;
 	}
 
-	public Boolean getLeido() {
-		return leido;
+	public Boolean getVisto() {
+		return visto;
 	}
 
-	public void setLeido(Boolean leido) {
-		this.leido = leido;
+	public void setVisto(Boolean visto) {
+		this.visto = visto;
+	}
+	
+	public String periodoTranscurrido() {
+		return Algorithm.getTiempoTranscurrido(fecha);
 	}
 }

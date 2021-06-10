@@ -1,7 +1,6 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.util.exceptions.*;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -47,9 +46,13 @@ public class ControladorExcepciones {
     public ModelAndView errorAlUnirseAlGrupoQueYaSoyMiembro(YaEstoyEnElGrupo e) {
         return new ModelAndView("redirect:/grupos/" + e.getMessage());
     }
-//	TODO: Metodo encargado de redirigir a las paginas de error 4xx personalizadas.
-//	
-//	@ExceptionHandler(value = HttpClientErrorException.class)
-//	public void ErroresHttpDelCliente(HttpClientErrorException e) {
-//	}
+
+    @ExceptionHandler(value = UsuarioNoEncontradoException.class)
+    public ModelAndView errorAlLoguearUsuario(UsuarioNoEncontradoException e){
+    	ModelMap model = new ModelMap();
+        model.put("error", e.getMessage());
+
+        return new ModelAndView("redirect:/ir-a-login", model);
+    }
+    
 }

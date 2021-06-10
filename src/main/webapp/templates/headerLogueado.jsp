@@ -1,14 +1,31 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page session = "true" %>
 <header class="container-fluid bg-dark text-warning">
     <div class="row">
-        <div class="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9 p-2  text-left ">
+        <div class="col-5 p-2 text-left my-2">
             <a href="ir-a-home"><img src="img/umatch.png" width="150px"></a>
         </div>
-        <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 d-flex flex-wrap  justify-content-center align-items-center flex-wrap align-content-center">
-            <div class=" btn-group-lg d-flex text-white ">
-                <a href="modificar-datos-usuario"><img src="img/profile.png" width="40px"></a>
-                <a href="modificar-datos-usuario" class="m-1 link-light"><h5>${usuario.nombre}</h5></a>
-                <a href="cerrar-sesion" class="m-1 ms-2 link-light">Salir</a>
+        <div class="col-7 d-flex flex-wrap justify-content-end align-items-center flex-wrap align-content-center">
+            <div class=" btn-group-lg d-flex text-white my-2">
+                
+                <div class="text-end">
+                	<div class="">
+	                	<c:if test="${sessionScope.PENDIENTES}">
+	                    	<a href="perfil/notificaciones" class="link-warning"><i class="fas fa-bell me-2"></i></a>
+	               		</c:if>
+	                	<c:if test="${!sessionScope.PENDIENTES}">
+	                   		<a href="perfil/notificaciones" class="link-warning"><i class="far fa-bell me-2"></i></a>
+	                	</c:if>
+		                <a href="modificar-datos-usuario" class="link-light"><h5 class="mb-0 d-inline-block">${sessionScope.USUARIO.nombre}</h5></a>
+                	</div>
+	                <div>
+		                <a href="perfil/ir-a-mis-grupos" class="me-2 link-light">Mis Grupos</a>
+		                <a href="cerrar-sesion" class="link-light">Salir</a>
+	                </div>
+                </div>
+                <div class="pt-2 ms-2">
+	                <a href="modificar-datos-usuario"><img src="img/profile.png" width="40px"></a>
+                </div>
             </div>
         </div>
     </div>

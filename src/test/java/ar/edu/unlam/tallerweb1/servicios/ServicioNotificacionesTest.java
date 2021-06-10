@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import org.junit.Test;
@@ -45,6 +46,38 @@ public class ServicioNotificacionesTest {
 		
 		thenSeLesCargaLaNotificacion(objetivo.getListaDeUsuarios().size());
 	}
+	
+	@Test
+	public void testQueSeNotifiqueAlUsuarioCuandoSeEliminaUnoDeSusGrupos () {
+		Grupo objetivo = givenExisteUnGrupo();
+		
+		whenIntentamosNotificarSuEliminacion(objetivo);
+		
+		thenSeLesCargaLaNotificacion(objetivo.getListaDeUsuarios().size());
+	}
+	
+	@Test
+	public void testQueTeAviseSiExistenNotificacionesNuevas () {
+		Long usuario = 1L;
+		
+		Boolean hayNotificaciones = whenExisteAlmenosUnaNotificacionNueva(usuario);
+		
+		thenNosDevuelve(hayNotificaciones);
+	}
+
+	private void thenNosDevuelve(Boolean hayNotificaciones) {
+		assertThat(hayNotificaciones).isTrue();
+	}
+
+	private Boolean whenExisteAlmenosUnaNotificacionNueva(Long usuario) {
+		when(repositoryNt.getExistePendiente(usuario)).thenReturn(new Notificacion());
+		return service.hayPendientes(usuario);
+	}
+
+	private void whenIntentamosNotificarSuEliminacion(Grupo objetivo) {
+		when(repositoryGr.getGrupoByID(objetivo.getId())).thenReturn(objetivo);
+		service.notificarEliminacionDeGrupo(objetivo.getId());
+	}
 
 	private void thenSeLesCargaLaNotificacion(Integer veces) {
 		verify(repositoryNt, times(veces)).guardarNotificacion(anyObject());
@@ -68,7 +101,7 @@ public class ServicioNotificacionesTest {
 		Grupo objetivo = new Grupo();
 		objetivo.setId(1L);
 		objetivo.setNombre("Equipo Dinamita");
-		objetivo.setListaDeUsuarios(Arrays.asList(givenUnUsuario(5L), givenUnUsuario(4L)));
+		objetivo.setListaDeUsuarios(new HashSet<Usuario>(Arrays.asList(givenUnUsuario(5L), givenUnUsuario(4L))));
 		return objetivo;
 	}
 

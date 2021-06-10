@@ -12,6 +12,10 @@
     color: #F9A826;
 }
 
+a{
+	text-decoration:none;
+}
+
 .ilustraciones-index {
     width: 500px;
 }
@@ -157,7 +161,6 @@ footer .social_footer_ul li [class*="fab fa-linkedin"]:hover {
 /*estilo formulario creacion de grupo */
 
 .containerr {
-    max-width: 700px;
     width: 100%;
     background-color: #fff;
     padding: 25px 30px;

@@ -10,4 +10,8 @@ public interface RepositorioNotificacion {
 
 	void guardarNotificacion(Notificacion mensaje);
 
+	void marcarVistoDeUsuario(Long usuario);
+
+	Notificacion getExistePendiente(Long usuario);
+
 }

@@ -11,7 +11,6 @@ import ar.edu.unlam.tallerweb1.util.enums.Disponibilidad;
 import ar.edu.unlam.tallerweb1.util.exceptions.FalloAlUnirseAlGrupo;
 import ar.edu.unlam.tallerweb1.util.exceptions.FormularioDeGrupoIncompleto;
 import ar.edu.unlam.tallerweb1.util.exceptions.GrupoInexistenteException;
-import ar.edu.unlam.tallerweb1.util.exceptions.YaEstoyEnElGrupo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -64,6 +63,7 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 
         if (Check.isNull(objetivo))
             throw new GrupoInexistenteException("No se puede eliminar un grupo inexistente");
+        
         repoGrupo.eliminarGrupo(objetivo);
     }
 
@@ -71,19 +71,12 @@ public class ServicioGrupoImpl implements ServicioGrupo {
     public void IngresarUsuarioAlGrupo(Long idUsuario, Long idGrupo) {
         Grupo grupoAAcceder = repoGrupo.getGrupoByID(idGrupo);
         Usuario usuarioAInsertar = repoUsuario.getUsuarioByID(idUsuario);
-        Integer cantidadActual=grupoAAcceder.getListaDeUsuarios().size();
-        if (grupoAAcceder == null || usuarioAInsertar == null ||cantidadActual>=grupoAAcceder.getCantidadMax())
+        
+        if (grupoAAcceder == null || usuarioAInsertar == null || grupoAAcceder.grupoLleno())
             throw new FalloAlUnirseAlGrupo();
-        verificarSiElUsuarioYaEstaEnElGrupo(grupoAAcceder, usuarioAInsertar);
+        
         grupoAAcceder.agregarUsuarioAlGrupo(usuarioAInsertar);
         repoGrupo.actualizarGrupo(grupoAAcceder);
-    }
-
-    private void verificarSiElUsuarioYaEstaEnElGrupo(Grupo grupoAAcceder, Usuario usuarioAInsertar) {
-        for (Grupo grupoActual : usuarioAInsertar.getListaDeGrupos()) {
-            if (grupoActual.getId().equals(grupoAAcceder.getId()))
-                throw new YaEstoyEnElGrupo(grupoActual.getId());
-        }
     }
 
     @Override

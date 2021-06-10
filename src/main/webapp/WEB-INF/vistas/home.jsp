@@ -50,7 +50,7 @@
                     <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-2  p-2">
                         <form:select path="turno" id="turno" class="form-control form-control-sm">
                             <option value="">Turno</option>
-                            <option value="<%=Turno.MANIANA%>">Maï¿½ana</option>
+                            <option value="<%=Turno.MANIANA%>">Mañana</option>
                             <option value="<%=Turno.TARDE%>">Tarde</option>
                             <option value="<%=Turno.NOCHE%>">Noche</option>
 
@@ -120,8 +120,10 @@
                     </c:forEach>
                     <form action="ingresar-a-grupo" id="unirte" method="POST"></form>
                 </c:if>
-                <c:if test="${not empty error}">
-                    ${error}
+                <c:if test="${empty grupos}">
+                	<div>
+                		No se encontraron resultados!
+                	</div>
                 </c:if>
             </div>
         </div>

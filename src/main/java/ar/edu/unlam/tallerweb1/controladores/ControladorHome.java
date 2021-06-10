@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -33,61 +32,43 @@ public class ControladorHome {
 	@RequestMapping(value = "/ingresar-a-grupo", method = RequestMethod.POST)
 	public ModelAndView IngresarAGrupo(HttpServletRequest request, @RequestParam Long id) {
 		Usuario usuarioLogueado = (Usuario) request.getSession().getAttribute("USUARIO");
+
 		servicioGrupo.IngresarUsuarioAlGrupo(usuarioLogueado.getId(), id);
 		servicioNotificaciones.notificarNuevoIngreso(id, usuarioLogueado);
+
 		return new ModelAndView("redirect:/grupos/" + id);
 	}
 
 	@RequestMapping(value = "/ir-a-crear-nuevo-grupo")
-	public ModelAndView irAlFormulario() {
+	public ModelAndView irACrearGrupo() {
 		ModelMap model = new ModelMap();
-		DatosDeGrupo datos = new DatosDeGrupo();
-		List<Carrera> carreras = servicioGrupo.buscarTodasLasCarreras();
-		List<Materia> materias = servicioGrupo.buscarTodasLasMaterias();
-		model.put("carreras", carreras);
-		model.put("materias", materias);
-		model.put("datos", datos);
+
+		model.put("carreras", servicioGrupo.buscarTodasLasCarreras());
+		model.put("materias", servicioGrupo.buscarTodasLasMaterias());
+		model.put("datos", new DatosDeGrupo());
+
 		return new ModelAndView("vistaParaCrearGrupo", model);
 	}
 
 	@RequestMapping("/ir-a-home")
-	public ModelAndView irAHome(HttpServletRequest request) {
-		HttpSession miSesion = request.getSession(true);
-		Usuario usuarioSesion = (Usuario) miSesion.getAttribute("USUARIO");
-		ModelMap model = new ModelMap();
-		List<Grupo> grupos = servicioGrupo.buscarTodos();
-		DatosDeGrupo datos = new DatosDeGrupo();
-		List<Carrera> carreras = servicioGrupo.buscarTodasLasCarreras();
-		List<Materia> materias = servicioGrupo.buscarTodasLasMaterias();
-		model.put("carreras", carreras);
-		model.put("materias", materias);
-		model.put("datosParaBuscarUnGrupo", datos);
-		model.put("usuario", usuarioSesion);
-		int cantidadDeResultados = grupos.size();
-		if (cantidadDeResultados > 0) {
-			model.put("cantidadDeResultados", cantidadDeResultados);
-			model.put("grupos", grupos);
-		} else
-			model.put("error", "No nay grupos disponibles");
-		return new ModelAndView("home", model);
+	public ModelAndView irAHome() {
+		return cargarModelAndViewHome(servicioGrupo.buscarTodos());
+
 	}
 
 	@RequestMapping("/buscar-grupos")
-	public ModelAndView buscarGrupos(@ModelAttribute DatosDeGrupo datosParaBuscarUnGrupo) {
+	public ModelAndView buscarGrupos(@ModelAttribute DatosDeGrupo datosDeBusqueda) {
+		return cargarModelAndViewHome(servicioGrupo.buscarGrupoPorDatos(datosDeBusqueda));
+	}
+
+	private ModelAndView cargarModelAndViewHome(List<Grupo> listadoDeGrupos) {
 		ModelMap model = new ModelMap();
-		DatosDeGrupo datos = new DatosDeGrupo();
-		List<Carrera> carreras = servicioGrupo.buscarTodasLasCarreras();
-		List<Materia> materias = servicioGrupo.buscarTodasLasMaterias();
-		model.put("carreras", carreras);
-		model.put("materias", materias);
-		model.put("datosParaBuscarUnGrupo", datos);
-		List<Grupo> grupos = servicioGrupo.buscarGrupoPorDatos(datosParaBuscarUnGrupo);
-		int cantidadDeResultados = grupos.size();
-		if (cantidadDeResultados > 0) {
-			model.put("cantidadDeResultados", cantidadDeResultados);
-			model.put("grupos", grupos);
-		} else
-			model.put("error", "No se encontro tu búsqueda");
+
+		model.put("grupos", listadoDeGrupos);
+		model.put("carreras", servicioGrupo.buscarTodasLasCarreras());
+		model.put("materias", servicioGrupo.buscarTodasLasMaterias());
+		model.put("datosParaBuscarUnGrupo", new DatosDeGrupo());
+
 		return new ModelAndView("home", model);
 	}
 

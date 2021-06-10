@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioUsuario;
+import ar.edu.unlam.tallerweb1.util.auxClass.Check;
+import ar.edu.unlam.tallerweb1.util.exceptions.UsuarioNoEncontradoException;
+import ar.edu.unlam.tallerweb1.dto.DatosDeUsuario;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 
 @Service("servicioLogin")
@@ -19,8 +22,13 @@ public class ServicioLoginImpl implements ServicioLogin {
 	}
 
 	@Override
-	public Usuario consultarUsuario (Usuario usuario) {
-		return servicioLoginDao.consultarUsuario(usuario);
+	public Usuario consultarUsuario (DatosDeUsuario usuario) {
+		Usuario buscado = servicioLoginDao.consultarUsuario(usuario.generarUsuario());
+		
+		if(Check.isNull(buscado))
+			throw new UsuarioNoEncontradoException();
+		
+		return buscado;
 	}
 
 }

@@ -22,8 +22,6 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 
 	@Override
 	public Usuario consultarUsuario(Usuario usuario) {
-
-
 		final Session session = sessionFactory.getCurrentSession();
 		return (Usuario) session.createCriteria(Usuario.class)
 				.add(Restrictions.eq("email", usuario.getEmail()))

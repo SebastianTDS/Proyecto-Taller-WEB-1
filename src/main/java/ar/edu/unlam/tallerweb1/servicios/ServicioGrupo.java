@@ -8,8 +8,6 @@ import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.modelo.Materia;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 
-import javax.servlet.http.HttpServletRequest;
-
 public interface ServicioGrupo {
 
     Grupo crearGrupo(DatosDeGrupo grupoNuevo);
