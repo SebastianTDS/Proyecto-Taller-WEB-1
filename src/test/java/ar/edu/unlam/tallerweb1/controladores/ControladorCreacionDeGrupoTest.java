@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
+import ar.edu.unlam.tallerweb1.HttpSessionTest;
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
@@ -17,7 +18,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ControladorCreacionDeGrupoTest {
+public class ControladorCreacionDeGrupoTest extends HttpSessionTest{
 
     private ControladorCreacionDeGrupo controladorCreacionDeGrupo;
     private ServicioGrupo servicioGrupo;
@@ -29,13 +30,18 @@ public class ControladorCreacionDeGrupoTest {
     }
     
     @Test
-    public void queAlCrearElGrupoMedianteDatosCorrectosMeRedirigaALaVistaDelGrupoCreado(){
+    public void queAlCrearElGrupoMedianteDatosCorrectosYUsuarioMeRedirigaALaVistaDelGrupoCreado(){
         DatosDeGrupo grupo = givenDatosDeGrupo();
+        givenUsuarioDeLaSesion();
         ModelAndView mvc =  whenDoyClickACrearGrupo(grupo);
         thenMeRedirigeALaVistaDeGrupoCreado(mvc);
     }
 
-    @Test(expected = FormularioDeGrupoIncompleto.class)
+    private void givenUsuarioDeLaSesion() {
+    	when(request().getSession().getAttribute("USUARIO")).thenReturn(new Usuario());
+	}
+
+	@Test(expected = FormularioDeGrupoIncompleto.class)
     public void queAlCrearElGrupoConCamposNulosMeRedirigaALaVistaParaVolverACrearlo(){
         DatosDeGrupo grupo =givenDatosDeGrupoIncompletos();
         ModelAndView mvc = whenDoyClickACrearGrupoIncompleto(grupo);
@@ -44,7 +50,7 @@ public class ControladorCreacionDeGrupoTest {
 
     private ModelAndView whenDoyClickACrearGrupoIncompleto(DatosDeGrupo grupo) {
     	doThrow(FormularioDeGrupoIncompleto.class).when(servicioGrupo).crearGrupo(grupo);
-        return controladorCreacionDeGrupo.irALaVistaDeGrupoCreado(grupo);
+        return controladorCreacionDeGrupo.irALaVistaDeGrupoCreado(request(), grupo);
     }
 
     private void thenMeRedirigeALaVistaParaVolverALlenarElFormulario(ModelAndView mvc) {
@@ -66,7 +72,7 @@ public class ControladorCreacionDeGrupoTest {
 
     private DatosDeGrupo givenDatosDeGrupo() {
         DatosDeGrupo datosdegrupo = new DatosDeGrupo();
-       Long materia = 1334L;
+        Long materia = 1334L;
         Long carrera = 1234L;
         String nombre = "Los Picateclas";
         Turno turno = Turno.NOCHE;
@@ -86,7 +92,7 @@ public class ControladorCreacionDeGrupoTest {
 
     private ModelAndView whenDoyClickACrearGrupo(DatosDeGrupo datos) {
         when(servicioGrupo.crearGrupo(datos)).thenReturn(new Grupo());
-        return controladorCreacionDeGrupo.irALaVistaDeGrupoCreado(datos);
+        return controladorCreacionDeGrupo.irALaVistaDeGrupoCreado(request(),datos);
     }
 
     private void thenMeRedirigeALaVistaDeGrupoCreado(ModelAndView mvc) {
