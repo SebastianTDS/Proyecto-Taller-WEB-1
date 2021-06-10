@@ -6,6 +6,7 @@ import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
 import ar.edu.unlam.tallerweb1.servicios.ServicioNotificacionesImpl;
 
+import ar.edu.unlam.tallerweb1.util.exceptions.FalloAlUnirseAlGrupo;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
@@ -16,8 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class ControladorHomeTest {
     private ControladorHome controladorHome;
@@ -41,6 +41,15 @@ public class ControladorHomeTest {
 		ModelAndView mvc = whenElUsuarioIngresaAlGrupo(idGrupo);
 		thenVerificoLaVista(mvc);
 	}
+
+	@Test (expected = FalloAlUnirseAlGrupo.class)
+    public void testQueAlIngresarAUnGrupoSinUsuarioLanzeException(){
+        Usuario usuario=givenUnUsuarioNoLogueado();
+        Grupo grupo = givenUnGrupo();
+        whenIntentoIngresarAlGrupo(usuario.getId(),grupo.getId());
+    }
+
+
 
     @Test
     public void QueMeRedirigaALaVistaCrearGrupo(){
@@ -102,6 +111,10 @@ public class ControladorHomeTest {
         assertThat(carreras).isEqualTo(mvc.getModel().get("carreras"));
     }
 
+
+    private Usuario givenUnUsuarioNoLogueado() {
+        return new Usuario();
+    }
     private List<Carrera> givenCarrerasPersistidas() {
         Carrera carrera=new Carrera();
         List<Carrera>carreras=new ArrayList<>();
@@ -164,4 +177,14 @@ public class ControladorHomeTest {
     private void thenMeMuestraLaPaginaDeGruposFiltrados(ModelAndView mvc ) {
         assertThat("home").isEqualTo(mvc.getViewName());
     }
+
+    private Grupo givenUnGrupo() {
+        return new Grupo();
+    }
+
+    private void whenIntentoIngresarAlGrupo(Long idUser, Long idGrupo) {
+        doThrow(FalloAlUnirseAlGrupo.class).when(servicioGrupo).IngresarUsuarioAlGrupo(idUser,idGrupo);
+        servicioGrupo.IngresarUsuarioAlGrupo(idUser,idGrupo);
+    }
+
 }

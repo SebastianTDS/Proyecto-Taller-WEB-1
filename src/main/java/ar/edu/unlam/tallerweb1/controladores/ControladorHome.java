@@ -53,6 +53,7 @@ public class ControladorHome {
 	@RequestMapping("/ir-a-home")
 	public ModelAndView irAHome() {
 		return cargarModelAndViewHome(servicioGrupo.buscarTodos());
+
 	}
 
 	@RequestMapping("/buscar-grupos")

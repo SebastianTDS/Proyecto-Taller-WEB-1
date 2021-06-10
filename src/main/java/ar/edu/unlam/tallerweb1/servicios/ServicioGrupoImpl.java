@@ -7,6 +7,7 @@ import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupo;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioMateria;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioUsuario;
 import ar.edu.unlam.tallerweb1.util.auxClass.Check;
+import ar.edu.unlam.tallerweb1.util.enums.Disponibilidad;
 import ar.edu.unlam.tallerweb1.util.exceptions.FalloAlUnirseAlGrupo;
 import ar.edu.unlam.tallerweb1.util.exceptions.FormularioDeGrupoIncompleto;
 import ar.edu.unlam.tallerweb1.util.exceptions.GrupoInexistenteException;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("servicioGrupos")
@@ -82,15 +84,16 @@ public class ServicioGrupoImpl implements ServicioGrupo {
         return repoGrupo.buscarTodosMisGrupos(usuarioSesion);
     }
 
-
     @Override
     public Grupo crearGrupo(DatosDeGrupo datosDeGrupo) {
-        Grupo grupoAPartirDeDatosDeGrupo = crearGrupoAPartirDeDatosDeGrupo(datosDeGrupo);
-        if (grupoAPartirDeDatosDeGrupo == null) {
+        Grupo grupoGenerado = datosDeGrupo.crearGrupoAPartirDeDatosDeGrupo();
+        if (grupoGenerado == null) {
             throw new FormularioDeGrupoIncompleto();
         }
-        repoGrupo.guardarGrupo(grupoAPartirDeDatosDeGrupo);
-        return grupoAPartirDeDatosDeGrupo;
+        materiaNoSeaNull(grupoGenerado,datosDeGrupo.getMateria());
+        carreraNoSeaNull(grupoGenerado,datosDeGrupo.getCarrera());
+        repoGrupo.guardarGrupo(grupoGenerado);
+        return grupoGenerado;
     }
 
     @Override
@@ -110,71 +113,44 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 
     @Override
     public List<Grupo> buscarGrupoPorDatos(DatosDeGrupo datosParaBuscarUnGrupo) {
-        return repoGrupo.buscarGrupoPorDatos(datosParaBuscarUnGrupo);
+        return filtrarPorCupo(repoGrupo.buscarGrupoPorDatos(datosParaBuscarUnGrupo), datosParaBuscarUnGrupo.getDisponibilidad());
     }
 
-    private Grupo crearGrupoAPartirDeDatosDeGrupo(DatosDeGrupo datosDeGrupo) {
-        if (verificarQueCtdEsteEnElRango(datosDeGrupo)) {
-            return getGrupo(datosDeGrupo);
+    private List<Grupo> filtrarPorCupo(List<Grupo> grupos, Disponibilidad disponibilidad) {
+        List<Grupo> prov=new ArrayList<>();
+        if (disponibilidad== Disponibilidad.LLENO){
+            for(Grupo aux: grupos){
+                if (aux.grupoLleno()){
+                    prov.add(aux);
+                }
+            }
+            return prov;
         }
-        return null;
-    }
-
-    private Grupo getGrupo(DatosDeGrupo datosDeGrupo) {
-        Grupo grupo = new Grupo();
-        Materia materia = repoMateria.buscarMateriaPorId(datosDeGrupo.getMateria());
-        Carrera carrera = repoCarrera.buscarCarreraPorId(datosDeGrupo.getCarrera());
-        grupo.setNombre(datosDeGrupo.getNombre());
-        grupo.setTurno(datosDeGrupo.getTurno());
-        grupo.setCerrado(datosDeGrupo.estaCerrado());
-        grupo.setCantidadMax(datosDeGrupo.getCantidadMax());
-        grupo.setDescripcion(datosDeGrupo.getDescripcion());
-        grupo.setMateria(materia);
-        grupo.setCarrera(carrera);
-        return grupo;
-    }
-
-    private boolean verificarQueCtdEsteEnElRango(DatosDeGrupo datosDeGrupo) {
-        final Integer CTD_USUARIO_MINIMO = 2;
-        final Integer CTD_USUARIO_MAXIMO = 7;
-
-        if (verificarDatosDeGruposNoVacios(datosDeGrupo)) {
-            return Check.isInRange(datosDeGrupo.getCantidadMax(), CTD_USUARIO_MINIMO, CTD_USUARIO_MAXIMO);
+        if (disponibilidad== Disponibilidad.DISPONIBLE){
+            for(Grupo aux: grupos){
+                if (!aux.grupoLleno()){
+                    prov.add(aux);
+                }
+            }
+            return prov;
         }
-        return false;
-
+        prov.addAll(grupos);
+        return prov;
     }
 
-    private boolean verificarDatosDeGruposNoVacios(DatosDeGrupo datosDeGrupo) {
-
-        if (verificarDatosDeGruposNoSeanNulos(datosDeGrupo)) {
-            return
-                    !datosDeGrupo.getNombre().isBlank() &&
-                            !datosDeGrupo.getDescripcion().isBlank() &&
-                            verificarQueExistaLaMateriaEnElRepositorio(datosDeGrupo.getMateria()) &&
-                            verificarQueExistaLaCarreraEnElRepositorio(datosDeGrupo.getCarrera());
-        }
-        return false;
+    private void materiaNoSeaNull(Grupo grupoGenerado,Long idMateria){
+       Materia materiaEncontrada = repoMateria.buscarMateriaPorId(idMateria);
+       if(materiaEncontrada==null)
+           throw new FormularioDeGrupoIncompleto();
+           grupoGenerado.setMateria(materiaEncontrada);
     }
 
-    private boolean verificarDatosDeGruposNoSeanNulos(DatosDeGrupo datosDeGrupo) {
-
-        return
-                datosDeGrupo.getMateria() != null &
-                        datosDeGrupo.getCarrera() != null &&
-                        datosDeGrupo.getNombre() != null &&
-                        datosDeGrupo.getTurno() != null &&
-                        datosDeGrupo.getPrivacidad() != null &&
-                        datosDeGrupo.getCantidadMax() != null &&
-                        datosDeGrupo.getDescripcion() != null;
+    private void carreraNoSeaNull(Grupo grupoGenerado,Long idCarrera){
+        Carrera carreraEncontrada = repoCarrera.buscarCarreraPorId(idCarrera);
+        if(carreraEncontrada==null)
+            throw new FormularioDeGrupoIncompleto();
+        grupoGenerado.setCarrera(carreraEncontrada);
     }
 
-    private boolean verificarQueExistaLaMateriaEnElRepositorio(Long id) {
-        return repoMateria.buscarMateriaPorId(id) != null;
-    }
-
-    private boolean verificarQueExistaLaCarreraEnElRepositorio(Long id) {
-        return repoCarrera.buscarCarreraPorId(id) != null;
-    }
 
 }

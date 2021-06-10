@@ -166,4 +166,8 @@ public class Grupo {
 		return listaDeUsuarios.size() >= cantidadMax;
 	}
 
+  public Integer cantidadDeIntegrantes(){
+      return listaDeUsuarios.size();
+  }
+
 }
