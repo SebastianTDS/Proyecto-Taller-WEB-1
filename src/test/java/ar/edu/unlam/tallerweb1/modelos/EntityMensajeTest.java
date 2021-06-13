@@ -29,7 +29,7 @@ public class EntityMensajeTest extends SpringTest{
 	private Long whenPersistimosMensajeDe(Usuario usuario) {
 		Mensaje mensaje= new Mensaje();
 		mensaje.setMensaje("Manolo se unio se unio a tu grupo");
-		mensaje.setUsuario(usuario.getId());
+		mensaje.setUsuario(usuario);
 		return (Long) session().save(mensaje);
 	}
 

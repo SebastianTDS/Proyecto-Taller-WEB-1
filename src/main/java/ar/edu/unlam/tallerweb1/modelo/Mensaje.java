@@ -1,12 +1,15 @@
 package ar.edu.unlam.tallerweb1.modelo;
+
+import ar.edu.unlam.tallerweb1.modelo.Usuario;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
-
+import java.util.Date;
 @Entity
 public class Mensaje {
     private Long id;
     private String mensaje;
-    private Long idUsuario;
+    private Usuario usuario;
     private LocalDateTime fecha;
 
     @Id
@@ -15,12 +18,13 @@ public class Mensaje {
         return id;
     }
 
-    public Long getUsuario() {
-        return idUsuario;
+    @ManyToOne(optional = false, targetEntity = Usuario.class)
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setUsuario(Long usuario) {
-        this.idUsuario = usuario;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     public void setId(Long id) {
