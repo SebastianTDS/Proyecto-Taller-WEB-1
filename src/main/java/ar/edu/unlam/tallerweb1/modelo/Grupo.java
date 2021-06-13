@@ -157,9 +157,11 @@ public class Grupo {
 	}
 
 	public void agregarUsuarioAlGrupo(Usuario usuarioAInsertar) {
-		if (!listaDeUsuarios.add(usuarioAInsertar))
-			throw new YaEstoyEnElGrupo(id);
-		usuarioAInsertar.agregarGrupo(this);
+		if(!listaDeUsuarios.contains(usuarioAInsertar)){
+			listaDeUsuarios.add(usuarioAInsertar);
+			usuarioAInsertar.agregarGrupo(this);
+		}
+
 	}
 	
 	public Boolean grupoLleno() {

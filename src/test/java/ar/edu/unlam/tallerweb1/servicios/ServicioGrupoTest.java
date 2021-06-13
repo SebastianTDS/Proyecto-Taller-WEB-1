@@ -41,7 +41,6 @@ public class ServicioGrupoTest{
       Usuario usuario = givenQueExisteUnUsuario();
       whenAsignoElUsuarioAlGrupo(buscado,usuario);
       thenVerificoQueElUsuarioFueAgregado(buscado);
-
     }
 
 @Test
