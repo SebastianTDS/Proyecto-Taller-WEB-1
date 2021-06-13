@@ -3,17 +3,7 @@ package ar.edu.unlam.tallerweb1.modelo;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.PreRemove;
+import javax.persistence.*;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.util.enums.Turno;
@@ -33,9 +23,11 @@ public class Grupo {
 	private Materia materia;
 
 	private Set<Usuario> listaDeUsuarios;
+	private Set<Mensaje> listaDeMensajes;
 
 	public Grupo() {
 		this.listaDeUsuarios = new HashSet<Usuario>();
+		this.listaDeMensajes = new HashSet<Mensaje>();
 	}
 
 	@Override
@@ -59,6 +51,15 @@ public class Grupo {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	@OneToMany(fetch = FetchType.EAGER)
+	public Set<Mensaje> getListaDeMensajes() {
+		return listaDeMensajes;
+	}
+
+	public void setListaDeMensajes(Set<Mensaje> listaDeMensajes) {
+		this.listaDeMensajes = listaDeMensajes;
 	}
 
 	@ManyToMany(mappedBy = "listaDeGrupos", fetch = FetchType.EAGER)

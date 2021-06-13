@@ -1,10 +1,7 @@
 package ar.edu.unlam.tallerweb1.modelo;
-
-import ar.edu.unlam.tallerweb1.modelo.Usuario;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
+
 @Entity
 public class Mensaje {
     private Long id;
@@ -36,6 +33,7 @@ public class Mensaje {
         this.mensaje=s;
     }
 
+    @Column(nullable = false)
     public String getMensaje() {
         return mensaje;
     }
