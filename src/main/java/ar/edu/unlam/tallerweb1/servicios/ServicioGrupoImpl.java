@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
+import ar.edu.unlam.tallerweb1.dto.DatosDeMensaje;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioCarrera;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupo;
@@ -11,6 +12,7 @@ import ar.edu.unlam.tallerweb1.util.enums.Disponibilidad;
 import ar.edu.unlam.tallerweb1.util.exceptions.FalloAlUnirseAlGrupo;
 import ar.edu.unlam.tallerweb1.util.exceptions.FormularioDeGrupoIncompleto;
 import ar.edu.unlam.tallerweb1.util.exceptions.GrupoInexistenteException;
+import ar.edu.unlam.tallerweb1.util.exceptions.NoSeEnvioElMensaje;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -82,6 +84,24 @@ public class ServicioGrupoImpl implements ServicioGrupo {
     @Override
     public List<Grupo> buscarTodosMisGrupos(Usuario usuarioSesion) {
         return repoGrupo.buscarTodosMisGrupos(usuarioSesion);
+    }
+
+    @Override
+    public void IngresarUnMensajeAlGrupo(Long idGrupo, Long idUsuario, DatosDeMensaje datosMensaje) {
+        Grupo grupoAAcceder = repoGrupo.getGrupoByID(idGrupo);
+        Usuario usuarioAInsertar = repoUsuario.getUsuarioByID(idUsuario);
+        if (grupoAAcceder == null || usuarioAInsertar == null || datosMensaje.getMensaje()==null)
+            throw new NoSeEnvioElMensaje(grupoAAcceder.getId());
+        Mensaje mensajeCreado= crearMensaje(usuarioAInsertar,datosMensaje);
+        grupoAAcceder.agregarMensajeAlGrupo(mensajeCreado);
+        repoGrupo.actualizarGrupo(grupoAAcceder);
+    }
+
+    private Mensaje crearMensaje(Usuario usuarioAInsertar, DatosDeMensaje datosMensaje) {
+        Mensaje mensaje=new Mensaje();
+        mensaje.setUsuario(usuarioAInsertar);
+        mensaje.setMensaje(datosMensaje.getMensaje());
+        return mensaje;
     }
 
     @Override

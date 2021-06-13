@@ -173,4 +173,7 @@ public class Grupo {
       return listaDeUsuarios.size();
   }
 
+	public void agregarMensajeAlGrupo(Mensaje mensajeCreado) {
+		listaDeMensajes.add(mensajeCreado);
+	}
 }
