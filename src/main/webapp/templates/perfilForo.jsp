@@ -6,6 +6,8 @@
     <br>
     <c:forEach items="${grupo.listaDeMensajes}" var="misMensajes">
         ${misMensajes.mensaje}
+        ${misMensajes.usuario.nombre}
+        ${misMensajes.fecha}
         <br>
     </c:forEach>
 

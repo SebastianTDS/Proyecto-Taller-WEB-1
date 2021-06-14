@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Service("servicioGrupos")
@@ -83,7 +84,10 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 
     @Override
     public List<Grupo> buscarTodosMisGrupos(Usuario usuarioSesion) {
-        return repoGrupo.buscarTodosMisGrupos(usuarioSesion);
+        List<Grupo> misGrupos=repoGrupo.buscarTodosMisGrupos(usuarioSesion);
+        HashSet<Grupo>grupos=new HashSet<>(misGrupos);
+        List<Grupo> misGrupos2=new ArrayList<>(grupos);
+        return misGrupos2;
     }
 
     @Override

@@ -81,9 +81,7 @@ public class ServicioGrupoTest {
     @Test
     public void queSePuedaSolicitarTodosLosGrupos() {
         Grupo losPicatecla1 = givenDadoQueExisteUnGrupo();
-        Grupo losPicatecla2 = givenDadoQueExisteUnGrupo();
-        Grupo losPicatecla3 = givenDadoQueExisteUnGrupo();
-        List<Grupo> gruposPresistidos = givenQueSeGuardenTodosLosGruposExistentes(losPicatecla1, losPicatecla2, losPicatecla3);
+        List<Grupo> gruposPresistidos = givenQueSeGuardenTodosLosGruposExistentes(losPicatecla1);
         List<Grupo> gruposEncontrados = whenBuscoTodosLosGrupos(gruposPresistidos);
         thenVerificoQueSeMuestrenTodosLosGrupos(gruposEncontrados);
     }
@@ -129,9 +127,8 @@ public class ServicioGrupoTest {
     @Test
     public void queSePuedaSolicitarTodosMisGrupos() {
         Grupo losPicatecla1 = givenDadoQueExisteUnGrupo();
-        Grupo losPicatecla2 = givenDadoQueExisteUnGrupo();
-        Grupo losPicatecla3 = givenDadoQueExisteUnGrupo();
-        List<Grupo> gruposPresistidos = givenQueSeGuardenTodosLosGruposExistentes(losPicatecla1, losPicatecla2, losPicatecla3);
+
+        List<Grupo> gruposPresistidos = givenQueSeGuardenTodosLosGruposExistentes(losPicatecla1);
         List<Grupo> gruposEncontrados = whenBuscoTodosMisGrupos(gruposPresistidos);
         thenVerificoQueSeMuestrenTodosMisGrupos(gruposEncontrados);
     }
@@ -187,11 +184,11 @@ public class ServicioGrupoTest {
     }
 
     private void thenVerificoQueSeMuestrenTodosLosGrupos(List<Grupo> grupos) {
-        assertThat(grupos).hasSize(3);
+        assertThat(grupos).hasSize(1);
     }
 
     private void thenVerificoQueSeMuestrenTodosMisGrupos(List<Grupo> grupos) {
-        assertThat(grupos).hasSize(3);
+        assertThat(grupos).hasSize(1);
     }
 
     private List<Grupo> whenBuscoTodosMisGrupos(List<Grupo> gruposPresistidos) {
@@ -204,11 +201,9 @@ public class ServicioGrupoTest {
         return servicioGrupo.buscarTodos();
     }
 
-    private List<Grupo> givenQueSeGuardenTodosLosGruposExistentes(Grupo losPicatecla1, Grupo losPicatecla2, Grupo losPicatecla3) {
+    private List<Grupo> givenQueSeGuardenTodosLosGruposExistentes(Grupo losPicatecla1) {
         List<Grupo> grupo = new ArrayList<>();
         grupo.add(losPicatecla1);
-        grupo.add(losPicatecla2);
-        grupo.add(losPicatecla3);
         return grupo;
     }
 
