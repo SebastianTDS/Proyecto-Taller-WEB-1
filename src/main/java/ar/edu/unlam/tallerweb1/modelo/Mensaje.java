@@ -8,11 +8,20 @@ public class Mensaje {
     private String mensaje;
     private Usuario usuario;
     private LocalDateTime fecha;
+    private Grupo grupo;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
         return id;
+    }
+
+    @ManyToOne()
+    public Grupo getGrupo() { return grupo;
+    }
+
+    public void setGrupo(Grupo grupo) {
+        this.grupo = grupo;
     }
 
     @ManyToOne(optional = false, targetEntity = Usuario.class)

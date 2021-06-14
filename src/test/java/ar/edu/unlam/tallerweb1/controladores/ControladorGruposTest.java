@@ -82,7 +82,26 @@ public class ControladorGruposTest{
 
 	}
 
+	@Test
+	public void testQuePodamosAccederAlForoDeGrupo() {
+		Long idGrupoBuscado = 1L;
+		ModelAndView vistaObtenida = whenBuscoPorLaURLConElIDCorrectoAlForo(idGrupoBuscado);
+
+		thenObtengoLaVistaYElModeloDelForo(vistaObtenida);
+	}
+
+
+
+
 	/* Metodos Auxiliares */
+	private ModelAndView whenBuscoPorLaURLConElIDCorrectoAlForo(Long idGrupoBuscado) {
+		when(service.buscarGrupoPorID(idGrupoBuscado)).thenReturn(new Grupo());
+		return controller.perfilDeGrupoForo(idGrupoBuscado);
+	}
+	private void thenObtengoLaVistaYElModeloDelForo(ModelAndView vistaObtenida) {
+		assertThat(vistaObtenida.getViewName()).isEqualTo("vistaGrupo");
+		assertThat(vistaObtenida.getModel().get("msj")).isNotNull();
+	}
 
 	private ModelAndView whenBuscoPorLaURLDeEdicionConElIDIncorrectoLanzaExcepcion(Long idGrupoBuscado) {
 		doThrow(GrupoInexistenteException.class).when(service).buscarGrupoPorID(idGrupoBuscado);

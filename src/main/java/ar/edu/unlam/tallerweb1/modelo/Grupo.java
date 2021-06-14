@@ -53,10 +53,8 @@ public class Grupo {
 		return true;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER)
-	public Set<Mensaje> getListaDeMensajes() {
-		return listaDeMensajes;
-	}
+	@OneToMany(mappedBy = "grupo", fetch = FetchType.EAGER)
+	public Set<Mensaje> getListaDeMensajes() { return listaDeMensajes;}
 
 	public void setListaDeMensajes(Set<Mensaje> listaDeMensajes) {
 		this.listaDeMensajes = listaDeMensajes;
