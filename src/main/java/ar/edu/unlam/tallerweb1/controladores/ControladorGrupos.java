@@ -75,5 +75,11 @@ public class ControladorGrupos {
         vistaModificada.addObject("msj", mensaje);
         return vistaModificada;
     }
+    @RequestMapping("/{id}/foro/enviar-msj")
+    public ModelAndView insertarMensajeEnElForo(HttpServletRequest request, @ModelAttribute("msj") DatosDeMensaje datosDeMensaje) {
+        Usuario usuarioLogueado = (Usuario) request.getSession().getAttribute("USUARIO");
+        servicioGrupo.IngresarUnMensajeAlGrupo(usuarioLogueado.getId(),datosDeMensaje);
+        return new ModelAndView("redirect:/grupos/"+datosDeMensaje.getId()+"/foro");
 
+    }
 }

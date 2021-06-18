@@ -1,9 +1,14 @@
 package ar.edu.unlam.tallerweb1.modelo;
+
+import ar.edu.unlam.tallerweb1.util.auxClass.Algorithm;
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
-public class Mensaje {
+public class Mensaje implements Comparable<Mensaje> {
     private Long id;
     private String mensaje;
     private Usuario usuario;
@@ -17,7 +22,8 @@ public class Mensaje {
     }
 
     @ManyToOne()
-    public Grupo getGrupo() { return grupo;
+    public Grupo getGrupo() {
+        return grupo;
     }
 
     public void setGrupo(Grupo grupo) {
@@ -39,9 +45,10 @@ public class Mensaje {
 
 
     public void setMensaje(String s) {
-        this.mensaje=s;
+        this.mensaje = s;
     }
 
+    @Type(type = "text")
     @Column(nullable = false)
     public String getMensaje() {
         return mensaje;
@@ -53,5 +60,33 @@ public class Mensaje {
 
     public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
+    }
+
+    public String tiempoDePublicacion(){
+        return Algorithm.getTiempoTranscurrido(fecha);
+    }
+
+
+
+
+    @Override
+    public int compareTo(Mensaje o) {
+        if (this.id < o.getId())
+            return 0;
+        else
+            return 1;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Mensaje mensaje = (Mensaje) o;
+        return Objects.equals(id, mensaje.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

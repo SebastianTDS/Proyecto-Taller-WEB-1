@@ -18,8 +18,7 @@ public class RepositorioGrupoTest extends SpringTest {
 
     private static Materia nuevaMateria = new Materia();
     private static Carrera nuevaCarrera = new Carrera();
-    private static Mensaje mensaje1= new Mensaje();
-    private static Mensaje mensaje2= new Mensaje();
+
 
     @Autowired
     private RepositorioGrupoImpl repositorio;
@@ -46,29 +45,7 @@ public class RepositorioGrupoTest extends SpringTest {
         thenVerificoQueMeTraigaTodosMisGrupos(misGrupos);
     }
 
-    @Test
-    @Transactional
-    @Rollback
-    public void queSePuedaAgregarUnMensajeAlGrupo(){
-        Grupo grupo=givenQueExisteUnGrupoConCarreraYMateria();
-        Usuario usuario=givenUnUsuario();
-        Grupo grupoActualizado = whenGuardoLosMensajesEnElGrupo(grupo,usuario);
-        thenVerificoQueElGrupoContengaLosMensajes(grupoActualizado);
-    }
 
-    private void thenVerificoQueElGrupoContengaLosMensajes(Grupo grupoActualizado) {
-        Grupo buscado = repositorio.getGrupoByID(grupoActualizado.getId());
-        assertThat(buscado.getListaDeMensajes()).hasSize(2);
-    }
-
-    private Grupo whenGuardoLosMensajesEnElGrupo(Grupo grupo, Usuario usuario) {
-        mensaje1.setUsuario(usuario);
-        mensaje2.setUsuario(usuario);
-        grupo.getListaDeMensajes().add(mensaje1);
-        grupo.getListaDeMensajes().add(mensaje2);
-        repositorio.actualizarGrupo(grupo);
-        return grupo;
-    }
 
     private List<Grupo> whenCuandoBuscoTodosMisGrupos(Usuario usuario) {
         return repositorio.buscarTodosMisGrupos(usuario);

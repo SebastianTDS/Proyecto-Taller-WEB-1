@@ -4,18 +4,20 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
+import ar.edu.unlam.tallerweb1.HttpSessionTest;
+import ar.edu.unlam.tallerweb1.dto.DatosDeMensaje;
+import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
-
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.util.exceptions.GrupoInexistenteException;
 import ar.edu.unlam.tallerweb1.util.exceptions.LimiteDeUsuariosFueraDeRango;
 
-public class ControladorGruposTest{
+
+public class ControladorGruposTest extends HttpSessionTest{
 
 	private static ControladorGrupos controller;
 	private static ServicioGrupo service;
@@ -89,11 +91,44 @@ public class ControladorGruposTest{
 
 		thenObtengoLaVistaYElModeloDelForo(vistaObtenida);
 	}
+	@Test
+	public void testQuePodamosInsertarUnMensajeEnElGrupo() {
+		Long idGrupoBuscado = 1L;
+		DatosDeMensaje datosDeMensaje= givenCompletamosDeMensaje(idGrupoBuscado);
 
+		ModelAndView vista = whenCargoLosDatosDeMensaje(idGrupoBuscado, datosDeMensaje);
+
+		thenObtengoLaVistaYElModeloDelForoDespuesDeEnviarUnMsj(vista);
+	}
 
 
 
 	/* Metodos Auxiliares */
+	private void thenObtengoLaVistaYElModeloDelForoDespuesDeEnviarUnMsj(ModelAndView vistaObtenida) {
+		assertThat(vistaObtenida.getViewName()).isEqualTo("redirect:/grupos/1/foro");
+	}
+
+
+
+	private ModelAndView whenCargoLosDatosDeMensaje(Long idGrupoBuscado, DatosDeMensaje datosDeMensaje) {
+		givenUnUsuarioDeLaSesion();
+		Usuario  usuario=(Usuario) request().getSession().getAttribute("USUARIO");
+		return controller.insertarMensajeEnElForo(request(),datosDeMensaje);
+	}
+
+
+
+	private DatosDeMensaje givenCompletamosDeMensaje(Long idGrupoBuscado) {
+		DatosDeMensaje datosDeMensaje=new DatosDeMensaje();
+		datosDeMensaje.setId(1L);
+		datosDeMensaje.setMensaje("MENSAJE 1");
+		return datosDeMensaje;
+	}
+	private void givenUnUsuarioDeLaSesion() {
+		Usuario usuario = new Usuario();
+		usuario.setId(1L);
+		when(request().getSession().getAttribute("USUARIO")).thenReturn(usuario);
+	}
 	private ModelAndView whenBuscoPorLaURLConElIDCorrectoAlForo(Long idGrupoBuscado) {
 		when(service.buscarGrupoPorID(idGrupoBuscado)).thenReturn(new Grupo());
 		return controller.perfilDeGrupoForo(idGrupoBuscado);

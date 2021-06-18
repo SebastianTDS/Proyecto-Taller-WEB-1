@@ -1,7 +1,6 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import javax.persistence.*;
 
@@ -24,6 +23,7 @@ public class Grupo {
 
 	private Set<Usuario> listaDeUsuarios;
 	private Set<Mensaje> listaDeMensajes;
+
 
 	public Grupo() {
 		this.listaDeUsuarios = new HashSet<Usuario>();
@@ -160,7 +160,6 @@ public class Grupo {
 			listaDeUsuarios.add(usuarioAInsertar);
 			usuarioAInsertar.agregarGrupo(this);
 		}
-
 	}
 	
 	public Boolean grupoLleno() {
@@ -171,7 +170,10 @@ public class Grupo {
       return listaDeUsuarios.size();
   }
 
-	public void agregarMensajeAlGrupo(Mensaje mensajeCreado) {
-		listaDeMensajes.add(mensajeCreado);
+
+	public TreeSet<Mensaje>  ordenarMsj(){
+		TreeSet<Mensaje> mensajes=new TreeSet();
+		mensajes.addAll(listaDeMensajes);
+		return mensajes;
 	}
 }

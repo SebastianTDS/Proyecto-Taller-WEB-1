@@ -31,5 +31,5 @@ public interface ServicioGrupo {
 
     List<Grupo> buscarTodosMisGrupos(Usuario usuarioSesion);
 
-    void IngresarUnMensajeAlGrupo(Long idGrupo, Long idUsuario, DatosDeMensaje mensaje);
+    void IngresarUnMensajeAlGrupo(Long idUsuario, DatosDeMensaje mensaje);
 }
