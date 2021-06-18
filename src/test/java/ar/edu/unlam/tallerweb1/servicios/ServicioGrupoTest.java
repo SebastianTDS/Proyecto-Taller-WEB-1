@@ -39,29 +39,29 @@ public class ServicioGrupoTest {
     }
 
     @Test
+    public void queSePuedabuscarUnGrupoConMensajes() {
+        Grupo losPicatecla1 = givenQueExisteUnGrupoConMensajes();
+        List<Grupo> gruposPresistidos = givenQueSeGuardenTodosLosGruposExistentes(losPicatecla1);
+        List<Grupo> gruposEncontrados = whenBuscoTodosLosGrupos(gruposPresistidos);
+        thenVerificoQueElGrupoContengaMensajes(gruposEncontrados);
+    }
+
+    private Grupo givenQueExisteUnGrupoConMensajes() {
+        HashSet<Mensaje> mensajes = new HashSet<>();
+        mensajes.add(new Mensaje());
+        Grupo grupo = new Grupo();
+        grupo.setId(1L);
+        grupo.setListaDeMensajes(mensajes);
+        return grupo;
+    }
+
+    @Test
     public void queSePuedaEnviarUnMensajeAlGrupo() {
         Grupo buscado = givenQueExisteUnGrupo();
         Usuario usuario = givenQueExisteUnUsuario();
         DatosDeMensaje datosMensaje = givenQueExisteUnDatosDeMensaje(buscado);
         whenAsignoElMensajeAlGrupo(buscado, usuario, datosMensaje);
         thenVerificoQueElMensajeFueAgregado(buscado);
-    }
-
-    private void whenAsignoElMensajeAlGrupo(Grupo buscado, Usuario usuario, DatosDeMensaje mensaje) {
-        when(repositorioGrupo.getGrupoByID(1L)).thenReturn(buscado);
-        when(repositorioUsuario.getUsuarioByID(usuario.getId())).thenReturn(usuario);
-        servicioGrupo.IngresarUnMensajeAlGrupo(usuario.getId(), mensaje);
-    }
-
-    private void thenVerificoQueElMensajeFueAgregado(Grupo buscado) {
-        verify(repositorioMsj, times(1)).save(new Mensaje());
-    }
-
-    private DatosDeMensaje givenQueExisteUnDatosDeMensaje(Grupo grupo) {
-        DatosDeMensaje mensaje = new DatosDeMensaje();
-        mensaje.setMensaje("MSJ DE PRUEBA");
-        mensaje.setId(grupo.getId());
-        return mensaje;
     }
 
     @Test
@@ -140,6 +140,27 @@ public class ServicioGrupoTest {
         thenVerificoQueSeMuestrenTodosMisGrupos(gruposEncontrados);
     }
 
+    private void whenAsignoElMensajeAlGrupo(Grupo buscado, Usuario usuario, DatosDeMensaje mensaje) {
+        when(repositorioGrupo.getGrupoByID(1L)).thenReturn(buscado);
+        when(repositorioUsuario.getUsuarioByID(usuario.getId())).thenReturn(usuario);
+        servicioGrupo.IngresarUnMensajeAlGrupo(usuario.getId(), mensaje);
+    }
+
+    private void thenVerificoQueElGrupoContengaMensajes(List<Grupo> grupos) {
+        assertThat(grupos).hasSize(1);
+        assertThat(grupos.get(0).getListaDeMensajes()).hasSize(1);
+    }
+
+    private void thenVerificoQueElMensajeFueAgregado(Grupo buscado) {
+        verify(repositorioMsj, times(1)).save(new Mensaje());
+    }
+
+    private DatosDeMensaje givenQueExisteUnDatosDeMensaje(Grupo grupo) {
+        DatosDeMensaje mensaje = new DatosDeMensaje();
+        mensaje.setMensaje("MSJ DE PRUEBA");
+        mensaje.setId(grupo.getId());
+        return mensaje;
+    }
 
     private DatosDeGrupo givenQueExisteDatosDeGrupoParaBusqueda() {
         DatosDeGrupo datosDeGrupoParaBusqueda = new DatosDeGrupo();
