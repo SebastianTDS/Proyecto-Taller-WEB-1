@@ -7,6 +7,7 @@ import javax.persistence.*;
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.util.enums.Turno;
 import ar.edu.unlam.tallerweb1.util.exceptions.YaEstoyEnElGrupo;
+import com.sun.istack.NotNull;
 
 @Entity
 public class Grupo {
@@ -16,6 +17,8 @@ public class Grupo {
 	private String descripcion;
 	private Boolean cerrado;
 	private Integer cantidadMax;
+	
+	private Boolean esMateria;
 
 	private Turno turno;
 	private Carrera carrera;
@@ -26,8 +29,8 @@ public class Grupo {
 
 
 	public Grupo() {
-		this.listaDeUsuarios = new HashSet<Usuario>();
-		this.listaDeMensajes = new HashSet<Mensaje>();
+		this.listaDeUsuarios = new HashSet<>();
+		this.listaDeMensajes = new HashSet<>();
 	}
 
 	@Override
@@ -170,6 +173,13 @@ public class Grupo {
       return listaDeUsuarios.size();
   }
 
+	public Boolean getEsMateria() {
+		return esMateria;
+	}
+
+	public void setEsMateria(Boolean esMateria) {
+		this.esMateria = esMateria;
+	}
 
 	public TreeSet<Mensaje>  ordenarMsj(){
 		TreeSet<Mensaje> mensajes=new TreeSet();
