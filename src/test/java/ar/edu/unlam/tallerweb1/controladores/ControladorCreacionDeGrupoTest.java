@@ -32,13 +32,14 @@ public class ControladorCreacionDeGrupoTest extends HttpSessionTest{
     @Test
     public void queAlCrearElGrupoMedianteDatosCorrectosYUsuarioMeRedirigaALaVistaDelGrupoCreado(){
         DatosDeGrupo grupo = givenDatosDeGrupo();
-        givenUsuarioDeLaSesion();
-        ModelAndView mvc =  whenDoyClickACrearGrupo(grupo);
+        Usuario usuario = givenUsuarioDeLaSesion();
+        ModelAndView mvc =  whenDoyClickACrearGrupo(grupo, usuario);
         thenMeRedirigeALaVistaDeGrupoCreado(mvc);
     }
 
-    private void givenUsuarioDeLaSesion() {
+    private Usuario givenUsuarioDeLaSesion() {
     	when(request().getSession().getAttribute("USUARIO")).thenReturn(new Usuario());
+    	return new Usuario();
 	}
 
 	@Test(expected = FormularioDeGrupoIncompleto.class)
@@ -49,7 +50,8 @@ public class ControladorCreacionDeGrupoTest extends HttpSessionTest{
     }
 
     private ModelAndView whenDoyClickACrearGrupoIncompleto(DatosDeGrupo grupo) {
-    	doThrow(FormularioDeGrupoIncompleto.class).when(servicioGrupo).crearGrupo(grupo);
+    	when(request().getSession().getAttribute("USUARIO")).thenReturn(new Usuario());
+    	doThrow(FormularioDeGrupoIncompleto.class).when(servicioGrupo).crearGrupo(grupo, new Usuario().getId());
         return controladorCreacionDeGrupo.irALaVistaDeGrupoCreado(request(), grupo);
     }
 
@@ -90,8 +92,9 @@ public class ControladorCreacionDeGrupoTest extends HttpSessionTest{
         return datosdegrupo;
     }
 
-    private ModelAndView whenDoyClickACrearGrupo(DatosDeGrupo datos) {
-        when(servicioGrupo.crearGrupo(datos)).thenReturn(new Grupo());
+    private ModelAndView whenDoyClickACrearGrupo(DatosDeGrupo datos, Usuario usuario) {
+    	when(request().getSession().getAttribute("USUARIO")).thenReturn(new Usuario());
+        when(servicioGrupo.crearGrupo(datos, new Usuario().getId())).thenReturn(new Grupo());
         return controladorCreacionDeGrupo.irALaVistaDeGrupoCreado(request(),datos);
     }
 

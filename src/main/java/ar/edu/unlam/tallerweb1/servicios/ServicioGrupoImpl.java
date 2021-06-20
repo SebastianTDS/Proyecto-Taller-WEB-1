@@ -85,7 +85,7 @@ public class ServicioGrupoImpl implements ServicioGrupo {
     }
 
     @Override
-    public Grupo crearGrupo(DatosDeGrupo datosDeGrupo) {
+    public Grupo crearGrupo(DatosDeGrupo datosDeGrupo, Long owner) {
         Grupo grupoGenerado = datosDeGrupo.crearGrupoAPartirDeDatosDeGrupo();
         if (grupoGenerado == null) {
             throw new FormularioDeGrupoIncompleto();
@@ -93,6 +93,9 @@ public class ServicioGrupoImpl implements ServicioGrupo {
         materiaNoSeaNull(grupoGenerado,datosDeGrupo.getMateria());
         carreraNoSeaNull(grupoGenerado,datosDeGrupo.getCarrera());
         repoGrupo.guardarGrupo(grupoGenerado);
+        
+        IngresarUsuarioAlGrupo(owner, grupoGenerado.getId());
+        
         return grupoGenerado;
     }
 
@@ -142,7 +145,7 @@ public class ServicioGrupoImpl implements ServicioGrupo {
        Materia materiaEncontrada = repoMateria.buscarMateriaPorId(idMateria);
        if(materiaEncontrada==null)
            throw new FormularioDeGrupoIncompleto();
-           grupoGenerado.setMateria(materiaEncontrada);
+       grupoGenerado.setMateria(materiaEncontrada);
     }
 
     private void carreraNoSeaNull(Grupo grupoGenerado,Long idCarrera){
