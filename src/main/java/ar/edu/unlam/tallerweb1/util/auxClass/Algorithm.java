@@ -21,13 +21,13 @@ public class Algorithm {
 
 		if (diferenciaSegundos.getSeconds() >= SEGUNDOS_EN_MINUTO * MINUTOS_EN_HORA * HORAS_EN_DIA) {
 			if (diferenciaDias.getDays() < DIAS_EN_SEMANA)
-				return "Hace " + diferenciaDias.getDays() + " día/s.";
+				return "Hace " + diferenciaDias.getDays() + " dÃ­a/s.";
 			else if (diferenciaDias.getDays() < DIAS_EN_SEMANA * SEMANAS_EN_MES)
 				return "Hace " + diferenciaDias.getDays() / DIAS_EN_SEMANA + " semana/s.";
 			else if (diferenciaDias.getDays() < DIAS_EN_SEMANA * SEMANAS_EN_MES * MESES_EN_ANIO)
 				return "Hace " + diferenciaDias.getMonths() + " mes/es.";
 			else
-				return "Hace " + diferenciaDias.getYears() + " año/s.";
+				return "Hace " + diferenciaDias.getYears() + " aÃ±o/s.";
 
 		} else {
 			if (diferenciaSegundos.getSeconds() < SEGUNDOS_EN_MINUTO)

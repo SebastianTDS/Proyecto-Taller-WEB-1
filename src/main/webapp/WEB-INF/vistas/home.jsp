@@ -50,7 +50,7 @@
                     <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-2  p-2">
                         <form:select path="turno" id="turno" class="form-control form-control-sm">
                             <option value="">Turno</option>
-                            <option value="<%=Turno.MANIANA%>">Mañana</option>
+                            <option value="<%=Turno.MANIANA%>">Maï¿½ana</option>
                             <option value="<%=Turno.TARDE%>">Tarde</option>
                             <option value="<%=Turno.NOCHE%>">Noche</option>
 
@@ -80,7 +80,7 @@
                 </form:form>
             </div>
 
-            <div class="col-12 col-sm-12 col-md-12 col-lg-12 clo-xl-12 container-fluid row d-flex justify-content-center ">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 clo-xl-12 container-fluid row d-flex justify-content-center " style=" overflow: scroll; max-height: 800px">
                 <c:if test="${not empty grupos}">
                     <c:forEach items="${grupos}" var="grupo">
                         <div class="bg-light text-dark col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 m-3 d-flex flex-wrap align-content-between hover-shadow bg-body rounded">

@@ -11,9 +11,9 @@
 
 <body>
 	<jsp:include page="/templates/headerLogueado.jsp"></jsp:include>
-	<main class="container-fluid">
+	<main class="container-fluid ">
 		<div id="main" class="row text-white">
-			<div class="info col-12 col-sm-3 bg-dark p-0">
+			<div class="info col-12 col-sm-3 bg-dark p-0 ">
 				<div class="mt-3 me-3 text-white text-end">
 					<button class="btn btn-outline-secondary rounded ">></button>
 				</div>
@@ -34,20 +34,24 @@
 				</div>
 
 				<ul class="opciones">
-					<li><a class="text-white" href="#">Información General</a></li>
+					<li><a class="text-white" href="grupos/${grupo.getId()}">Información General</a></li>
 					<li><a class="text-white" href="#">Miembros del grupo</a></li>
 					<li><a class="text-white" href="#">Archivos</a></li>
 					<li><a class="text-white" href="#">Calendario</a></li>
-					<li><a class="text-white" href="#">Foro</a></li>
+					<li><a class="text-white" href="grupos/${grupo.getId()}/foro">Foro</a></li>
 				</ul>
 			</div>
-			<!--   Agregar Import  -->
-			<c:if test="${not empty formulario }">
-				<jsp:include page="/templates/perfilMod.jsp"></jsp:include>
-			</c:if>
-			<c:if test="${empty formulario }">
-				<jsp:include page="/templates/perfilInfo.jsp"></jsp:include>
-			</c:if>
+				<!--   Agregar Import  -->
+				<c:if test="${not empty formulario }">
+					<jsp:include page="/templates/perfilMod.jsp"></jsp:include>
+				</c:if>
+				<c:if test="${empty formulario and empty msj}">
+					<jsp:include page="/templates/perfilInfo.jsp"></jsp:include>
+				</c:if>
+				<c:if test="${not empty msj }">
+					<jsp:include page="/templates/perfilForo.jsp"></jsp:include>
+
+				</c:if>
 		</div>
 	</main>
 	<jsp:include page="/templates/footer.jsp"></jsp:include>

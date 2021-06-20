@@ -1,19 +1,8 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.PreRemove;
+import javax.persistence.*;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.util.enums.Turno;
@@ -33,9 +22,12 @@ public class Grupo {
 	private Materia materia;
 
 	private Set<Usuario> listaDeUsuarios;
+	private Set<Mensaje> listaDeMensajes;
+
 
 	public Grupo() {
 		this.listaDeUsuarios = new HashSet<Usuario>();
+		this.listaDeMensajes = new HashSet<Mensaje>();
 	}
 
 	@Override
@@ -59,6 +51,13 @@ public class Grupo {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	@OneToMany(mappedBy = "grupo", fetch = FetchType.EAGER)
+	public Set<Mensaje> getListaDeMensajes() { return listaDeMensajes;}
+
+	public void setListaDeMensajes(Set<Mensaje> listaDeMensajes) {
+		this.listaDeMensajes = listaDeMensajes;
 	}
 
 	@ManyToMany(mappedBy = "listaDeGrupos", fetch = FetchType.EAGER)
@@ -157,9 +156,10 @@ public class Grupo {
 	}
 
 	public void agregarUsuarioAlGrupo(Usuario usuarioAInsertar) {
-		if (!listaDeUsuarios.add(usuarioAInsertar))
-			throw new YaEstoyEnElGrupo(id);
-		usuarioAInsertar.agregarGrupo(this);
+		if(!listaDeUsuarios.contains(usuarioAInsertar)){
+			listaDeUsuarios.add(usuarioAInsertar);
+			usuarioAInsertar.agregarGrupo(this);
+		}
 	}
 	
 	public Boolean grupoLleno() {
@@ -170,4 +170,10 @@ public class Grupo {
       return listaDeUsuarios.size();
   }
 
+
+	public TreeSet<Mensaje>  ordenarMsj(){
+		TreeSet<Mensaje> mensajes=new TreeSet();
+		mensajes.addAll(listaDeMensajes);
+		return mensajes;
+	}
 }
