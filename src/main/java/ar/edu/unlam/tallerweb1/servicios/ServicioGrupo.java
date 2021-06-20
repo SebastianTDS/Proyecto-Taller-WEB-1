@@ -11,7 +11,7 @@ import ar.edu.unlam.tallerweb1.modelo.Usuario;
 
 public interface ServicioGrupo {
 
-    Grupo crearGrupo(DatosDeGrupo grupoNuevo);
+    Grupo crearGrupo(DatosDeGrupo grupoNuevo, Long owner);
 
     List<Grupo> buscarTodos();
 

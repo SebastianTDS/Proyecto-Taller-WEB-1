@@ -28,18 +28,16 @@ public class ControladorCreacionDeGrupoTest extends HttpSessionTest{
         servicioGrupo = mock(ServicioGrupoImpl.class);
         controladorCreacionDeGrupo = new ControladorCreacionDeGrupo(servicioGrupo);
     }
-    
+
     @Test
     public void queAlCrearElGrupoMedianteDatosCorrectosYUsuarioMeRedirigaALaVistaDelGrupoCreado(){
         DatosDeGrupo grupo = givenDatosDeGrupo();
-        givenUsuarioDeLaSesion();
-        ModelAndView mvc =  whenDoyClickACrearGrupo(grupo);
+        Usuario usuario = givenUsuarioDeLaSesion();
+        ModelAndView mvc =  whenDoyClickACrearGrupo(grupo, usuario);
         thenMeRedirigeALaVistaDeGrupoCreado(mvc);
     }
 
-    private void givenUsuarioDeLaSesion() {
-    	when(request().getSession().getAttribute("USUARIO")).thenReturn(new Usuario());
-	}
+
 
 	@Test(expected = FormularioDeGrupoIncompleto.class)
     public void queAlCrearElGrupoConCamposNulosMeRedirigaALaVistaParaVolverACrearlo(){
@@ -49,7 +47,8 @@ public class ControladorCreacionDeGrupoTest extends HttpSessionTest{
     }
 
     private ModelAndView whenDoyClickACrearGrupoIncompleto(DatosDeGrupo grupo) {
-    	doThrow(FormularioDeGrupoIncompleto.class).when(servicioGrupo).crearGrupo(grupo);
+        when(request().getSession().getAttribute("USUARIO")).thenReturn(new Usuario());
+        doThrow(FormularioDeGrupoIncompleto.class).when(servicioGrupo).crearGrupo(grupo, new Usuario().getId());
         return controladorCreacionDeGrupo.irALaVistaDeGrupoCreado(request(), grupo);
     }
 
@@ -90,15 +89,19 @@ public class ControladorCreacionDeGrupoTest extends HttpSessionTest{
         return datosdegrupo;
     }
 
-    private ModelAndView whenDoyClickACrearGrupo(DatosDeGrupo datos) {
-        when(servicioGrupo.crearGrupo(datos)).thenReturn(new Grupo());
+    private ModelAndView whenDoyClickACrearGrupo(DatosDeGrupo datos, Usuario usuario) {
+        when(request().getSession().getAttribute("USUARIO")).thenReturn(new Usuario());
+        when(servicioGrupo.crearGrupo(datos, new Usuario().getId())).thenReturn(new Grupo());
         return controladorCreacionDeGrupo.irALaVistaDeGrupoCreado(request(),datos);
     }
 
     private void thenMeRedirigeALaVistaDeGrupoCreado(ModelAndView mvc) {
         assertThat("redirect:/grupos/null").isEqualTo(mvc.getViewName());
     }
-
+    private Usuario givenUsuarioDeLaSesion() {
+        when(request().getSession().getAttribute("USUARIO")).thenReturn(new Usuario());
+        return new Usuario();
+    }
 }
 
 
