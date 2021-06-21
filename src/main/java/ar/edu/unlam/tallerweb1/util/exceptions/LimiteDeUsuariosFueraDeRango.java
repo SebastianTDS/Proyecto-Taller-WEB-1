@@ -6,7 +6,7 @@ public class LimiteDeUsuariosFueraDeRango extends RuntimeException{
 	private Long idGrupoError;
 
 	public LimiteDeUsuariosFueraDeRango(Long idGrupoError) {
-		super("El numero de integrantes debe de ser de entre 2 y 8 usuarios!");
+		super("El numero de integrantes debe de ser de entre 2 y 7 usuarios!");
 		this.idGrupoError = idGrupoError;
 	}
 
