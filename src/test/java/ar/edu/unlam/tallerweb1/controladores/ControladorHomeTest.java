@@ -183,8 +183,8 @@ public class ControladorHomeTest {
     }
 
     private void whenIntentoIngresarAlGrupo(Long idUser, Long idGrupo) {
-        doThrow(FalloAlUnirseAlGrupo.class).when(servicioGrupo).IngresarUsuarioAlGrupo(idUser,idGrupo);
-        servicioGrupo.IngresarUsuarioAlGrupo(idUser,idGrupo);
+        doThrow(FalloAlUnirseAlGrupo.class).when(servicioGrupo).ingresarUsuarioAlGrupo(idUser,idGrupo);
+        servicioGrupo.ingresarUsuarioAlGrupo(idUser,idGrupo);
     }
 
 }

@@ -25,8 +25,8 @@ public class ControladorExcepciones {
         return new ModelAndView("redirect:/ir-a-crear-nuevo-grupo", model);
     }
 
-    @ExceptionHandler(value = GrupoInexistenteException.class)
-    public ModelAndView errorAlBuscarGrupo(GrupoInexistenteException e) {
+    @ExceptionHandler(value = {GrupoInexistenteException.class, NoEsMiembroException.class})
+    public ModelAndView errorAlBuscarGrupo(RuntimeException e) {
         ModelMap model = new ModelMap();
 
         model.put("error", e.getMessage());
@@ -54,5 +54,14 @@ public class ControladorExcepciones {
 
         return new ModelAndView("redirect:/ir-a-login", model);
     }
+    
+    @ExceptionHandler(value = UsuarioSinPermisosException.class)
+    public ModelAndView errorAlVerificarPermiso(UsuarioSinPermisosException e) {
+    	ModelMap model = new ModelMap();
+        model.put("error", e.getMessage());
+
+        return new ModelAndView("redirect:/grupos/" + e.getIdGrupo(), model);
+    }
+    
     
 }

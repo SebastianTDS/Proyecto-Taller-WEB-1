@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.dto;
 
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
+import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.util.auxClass.Check;
 import ar.edu.unlam.tallerweb1.util.enums.Disponibilidad;
 import ar.edu.unlam.tallerweb1.util.enums.Privacidad;
@@ -11,16 +12,27 @@ public class DatosDeGrupo {
 
 	private Long id;
 	private String nombre;
-	private Turno turno;
-	private Integer cantidadMax;
 	private String descripcion;
+	private Integer cantidadMax;
+	
 	private Long carrera;
 	private Long materia;
+	private Usuario administrador;
+	
+	private Turno turno;
 	private Privacidad privacidad;
 	private Disponibilidad disponibilidad;
 
 	public Long getCarrera() {
 		return carrera;
+	}
+
+	public Usuario getAdministrador() {
+		return administrador;
+	}
+
+	public void setAdministrador(Usuario administrador) {
+		this.administrador = administrador;
 	}
 
 	public Long getMateria() {
@@ -137,6 +149,7 @@ public class DatosDeGrupo {
         grupo.setCerrado(estaCerrado());
         grupo.setCantidadMax(cantidadMax);
         grupo.setDescripcion(descripcion);
+        grupo.setAdministrador(administrador);
         return grupo;
     }
 

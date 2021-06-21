@@ -7,6 +7,7 @@ import ar.edu.unlam.tallerweb1.modelo.Carrera;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.modelo.Materia;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
+import ar.edu.unlam.tallerweb1.util.enums.Permiso;
 
 public interface ServicioGrupo {
 
@@ -22,11 +23,13 @@ public interface ServicioGrupo {
     
     Grupo buscarGrupoPorID(Long idBuscado);
 
-	void modificarGrupo(Long id, DatosDeGrupo formulario);
+	void modificarGrupo(DatosDeGrupo formulario);
 
 	void eliminarGrupo(Long idBuscado);
 
-    void IngresarUsuarioAlGrupo(Long idUsuario, Long idGrupo);
+    void ingresarUsuarioAlGrupo(Long idUsuario, Long idGrupo);
 
     List<Grupo> buscarTodosMisGrupos(Usuario usuarioSesion);
+
+	void validarPermiso(Long idUsuario, Long idGrupo, Permiso permisoAValidar);
 }

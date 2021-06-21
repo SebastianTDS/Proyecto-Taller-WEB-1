@@ -27,8 +27,9 @@ public class Grupo {
 	private String descripcion;
 	private Boolean cerrado;
 	private Integer cantidadMax;
-
 	private Turno turno;
+	
+	private Usuario administrador;
 	private Carrera carrera;
 	private Materia materia;
 
@@ -59,6 +60,15 @@ public class Grupo {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	@ManyToOne(optional = false)
+	public Usuario getAdministrador() {
+		return administrador;
+	}
+
+	public void setAdministrador(Usuario administrador) {
+		this.administrador = administrador;
 	}
 
 	@ManyToMany(mappedBy = "listaDeGrupos", fetch = FetchType.EAGER)

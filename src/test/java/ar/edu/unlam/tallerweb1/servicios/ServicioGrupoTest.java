@@ -46,9 +46,9 @@ public class ServicioGrupoTest{
 
     @Test
     public void siElFormularioEstaCompletoQueSePuedaCrearElGrupo(){
-             DatosDeGrupo losPicatecla= givenQueExisteDatosDeGrupo();
-             Grupo grupoGeneradoAPartirDeLosDatosDeGrupo = whenCreoElGrupoConAtributosCompletos(losPicatecla);
-             thenElGrupoSeCreo(grupoGeneradoAPartirDeLosDatosDeGrupo);
+         DatosDeGrupo losPicatecla= givenQueExisteDatosDeGrupo();
+         Grupo grupoGeneradoAPartirDeLosDatosDeGrupo = whenCreoElGrupoConAtributosCompletos(losPicatecla);
+         thenElGrupoSeCreo(grupoGeneradoAPartirDeLosDatosDeGrupo);
     }
 
     @Test(expected = FormularioDeGrupoIncompleto.class)
@@ -235,17 +235,24 @@ public class ServicioGrupoTest{
         datosdegrupo.setPrivacidad(Privacidad.ABIERTO);
         datosdegrupo.setCantidadMax(ctdMaxima);
         datosdegrupo.setDescripcion(descripcion);
+        datosdegrupo.setAdministrador(new Usuario());
         return datosdegrupo;
     }
 
     private Grupo whenCreoElGrupoConAtributosCompletos(DatosDeGrupo losPicatecla) {
         when(repositorioMateria.buscarMateriaPorId(losPicatecla.getMateria())).thenReturn(new Materia());
         when(repositorioCarrera.buscarCarreraPorId(losPicatecla.getCarrera())).thenReturn(new Carrera());
+        
+        when(repositorioGrupo.getGrupoByID(anyLong())).thenReturn(losPicatecla.crearGrupoAPartirDeDatosDeGrupo());
+        when(repositorioUsuario.getUsuarioByID(anyLong())).thenReturn(losPicatecla.getAdministrador());
+        
         return servicioGrupo.crearGrupo(losPicatecla);
     }
 
     private void thenElGrupoSeCreo(Grupo grupoGenerado) {
         verify(repositorioGrupo,times(1)).guardarGrupo(grupoGenerado);
+        assertThat(grupoGenerado.getAdministrador()).isNotNull();
+        verify(repositorioGrupo, times(1)).actualizarGrupo(grupoGenerado);
     }
 
     private void thenVerificoQueElUsuarioFueAgregado(Grupo buscado) {
@@ -255,7 +262,7 @@ public class ServicioGrupoTest{
     private void whenAsignoElUsuarioAlGrupo(Grupo buscado, Usuario usuario) {
         when(repositorioGrupo.getGrupoByID(buscado.getId())).thenReturn(buscado);
         when(repositorioUsuario.getUsuarioByID(usuario.getId())).thenReturn(usuario);
-        servicioGrupo.IngresarUsuarioAlGrupo(buscado.getId(),usuario.getId());
+        servicioGrupo.ingresarUsuarioAlGrupo(buscado.getId(),usuario.getId());
     }
 
     private Usuario givenQueExisteUnUsuario() {

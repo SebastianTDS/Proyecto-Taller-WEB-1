@@ -18,6 +18,7 @@ public class RepositorioGrupoTest extends SpringTest {
 
     private static Materia nuevaMateria = new Materia();
     private static Carrera nuevaCarrera = new Carrera();
+    private static Usuario administrador = new Usuario();
 
     @Autowired
     private RepositorioGrupoImpl repositorio;
@@ -268,12 +269,18 @@ public class RepositorioGrupoTest extends SpringTest {
         nuevoGrupo.setNombre("Hola");
         nuevoGrupo.setCerrado(true);
         nuevoGrupo.setTurno(Turno.NOCHE);
+        
         nuevaCarrera.setNombre("Desarrollo web");
         nuevaMateria.setNombre("Basica I");
+        administrador.setNombre("Manuel");
+        
         session().save(nuevaCarrera);
         session().save(nuevaMateria);
+        session().save(administrador);
+        
         nuevoGrupo.setCarrera(nuevaCarrera);
         nuevoGrupo.setMateria(nuevaMateria);
+        nuevoGrupo.setAdministrador(administrador);
         session().save(nuevoGrupo);
         return nuevoGrupo;
     }

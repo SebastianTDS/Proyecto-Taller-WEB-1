@@ -46,7 +46,7 @@ public class ServicioGruposTest {
 	@Test
 	public void testQueSeModifiquenLosDatos() {
 		Grupo buscado = givenExisteUnGrupo();
-		DatosDeGrupo nuevosDatos = givenDatosAActualizar();
+		DatosDeGrupo nuevosDatos = givenDatosAActualizar(buscado.getId());
 
 		whenIntentamosActualizamosLosDatos(buscado, nuevosDatos);
 
@@ -56,7 +56,7 @@ public class ServicioGruposTest {
 	@Test(expected = LimiteDeUsuariosFueraDeRango.class)
 	public void testQueSeRespetenElMaxYMinDeParticipantes() {
 		Grupo buscado = givenExisteUnGrupo();
-		DatosDeGrupo nuevosDatos = givenDatosInvalidosAActualizar();
+		DatosDeGrupo nuevosDatos = givenDatosInvalidosAActualizar(buscado.getId());
 
 		whenIntentamosActualizarLanzaExcepcion(buscado, nuevosDatos);
 	}
@@ -79,9 +79,10 @@ public class ServicioGruposTest {
 		service.eliminarGrupo(buscado.getId());
 	}
 
-	private DatosDeGrupo givenDatosInvalidosAActualizar() {
+	private DatosDeGrupo givenDatosInvalidosAActualizar(Long idGrupo) {
 		DatosDeGrupo nuevosDatos = new DatosDeGrupo();
 
+		nuevosDatos.setId(idGrupo);
 		nuevosDatos.setCantidadMax(8);
 
 		return nuevosDatos;
@@ -89,7 +90,7 @@ public class ServicioGruposTest {
 	
 	private void whenIntentamosActualizamosLosDatos(Grupo buscado, DatosDeGrupo nuevosDatos) {
 		when(repository.getGrupoByID(buscado.getId())).thenReturn(buscado);
-		service.modificarGrupo(buscado.getId(), nuevosDatos);
+		service.modificarGrupo(nuevosDatos);
 	}
 
 	private void thenLosDatosSeModifican(Grupo buscado) {
@@ -98,12 +99,13 @@ public class ServicioGruposTest {
 
 	private void whenIntentamosActualizarLanzaExcepcion(Grupo buscado, DatosDeGrupo nuevosDatos) {
 		when(repository.getGrupoByID(buscado.getId())).thenReturn(buscado);
-		service.modificarGrupo(buscado.getId(), nuevosDatos);
+		service.modificarGrupo(nuevosDatos);
 	}
 
-	private DatosDeGrupo givenDatosAActualizar() {
+	private DatosDeGrupo givenDatosAActualizar(Long idGrupo) {
 		DatosDeGrupo nuevosDatos = new DatosDeGrupo();
 
+		nuevosDatos.setId(idGrupo);
 		nuevosDatos.setNombre("Nuevo nombre de grupo");
 		nuevosDatos.setDescripcion("Nueva descripcion");
 

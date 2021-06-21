@@ -1,5 +1,7 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -12,15 +14,18 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
+import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
 import ar.edu.unlam.tallerweb1.servicios.ServicioNotificaciones;
+import ar.edu.unlam.tallerweb1.util.enums.Permiso;
+import ar.edu.unlam.tallerweb1.util.exceptions.UsuarioNoEncontradoException;
 
 @Controller
 @RequestMapping("/grupos")
-public class ControladorGrupos{
+public class ControladorGrupos {
 
 	private final ServicioGrupo servicioGrupo;
-	private final ServicioNotificaciones servicioNotificacion; 
+	private final ServicioNotificaciones servicioNotificacion;
 
 	@Autowired
 	public ControladorGrupos(ServicioGrupo servicioGrupo, ServicioNotificaciones servicioNotificacion) {
@@ -29,37 +34,62 @@ public class ControladorGrupos{
 	}
 
 	@RequestMapping("/{id}")
-	public ModelAndView perfilDeGrupo(@PathVariable Long id) {
-		ModelMap modelo = new ModelMap();
+	public ModelAndView perfilDeGrupo(@PathVariable Long id, HttpServletRequest request) {
+		Usuario usuarioEnSesion = validarSesion(request);
 		Grupo buscado = servicioGrupo.buscarGrupoPorID(id);
+		ModelMap modelo = new ModelMap();
+
+		servicioGrupo.validarPermiso(usuarioEnSesion.getId(), buscado.getId(), Permiso.VISTA);
+
 		modelo.put("grupo", buscado);
 		return new ModelAndView("vistaGrupo", modelo);
 	}
 
 	@RequestMapping("/{id}/edicion")
-	public ModelAndView perfilDeGrupoEdicion(@PathVariable Long id) {
-		ModelAndView vistaModificada = perfilDeGrupo(id);
-		vistaModificada.addObject("formulario", new Grupo());
-		return vistaModificada;
+	public ModelAndView perfilDeGrupoEdicion(@PathVariable Long id, HttpServletRequest request) {
+		Usuario usuarioEnSesion = validarSesion(request);
+		Grupo buscado = servicioGrupo.buscarGrupoPorID(id);
+		ModelMap modelo = new ModelMap();
+
+		servicioGrupo.validarPermiso(usuarioEnSesion.getId(), buscado.getId(), Permiso.MODIFICACION);
+
+		modelo.put("grupo", buscado);
+		modelo.put("formulario", new Grupo());
+		return new ModelAndView("vistaGrupo", modelo);
 	}
 
 	@RequestMapping(path = "/modificar", method = RequestMethod.POST)
-	public ModelAndView cambiarDatosGrupo(@ModelAttribute("formulario") DatosDeGrupo form) {
+	public ModelAndView cambiarDatosGrupo(@ModelAttribute("formulario") DatosDeGrupo form, HttpServletRequest request) {
+		Usuario usuarioEnSesion = validarSesion(request);
 		ModelMap modelo = new ModelMap();
-		servicioGrupo.modificarGrupo(form.getId(), form);
+		
+		servicioGrupo.validarPermiso(usuarioEnSesion.getId(), form.getId(), Permiso.MODIFICACION);
+		servicioGrupo.modificarGrupo(form);
 		modelo.put("mensaje", "Datos actualizados");
 
 		return new ModelAndView("redirect:/grupos/" + form.getId(), modelo);
 	}
 
 	@RequestMapping(path = "/eliminar", method = RequestMethod.POST)
-	public ModelAndView eliminarGrupo(@RequestParam Long id) {
+	public ModelAndView eliminarGrupo(@RequestParam Long id, HttpServletRequest request) {
+		Usuario usuarioEnSesion = validarSesion(request);
 		ModelMap modelo = new ModelMap();
 
+		servicioGrupo.validarPermiso(usuarioEnSesion.getId(), id, Permiso.MODIFICACION);
+		
 		servicioNotificacion.notificarEliminacionDeGrupo(id);
 		servicioGrupo.eliminarGrupo(id);
 		modelo.put("mensaje", "Grupo eliminado con exito!");
 		return new ModelAndView("redirect:/ir-a-home", modelo);
+	}
+	
+	private Usuario validarSesion(HttpServletRequest request) {
+		Usuario objetivo = (Usuario) request.getSession().getAttribute("USUARIO");
+		
+		if(objetivo == null)
+			throw new UsuarioNoEncontradoException("No existe un usuario logueado!");
+			
+		return objetivo;
 	}
 
 }

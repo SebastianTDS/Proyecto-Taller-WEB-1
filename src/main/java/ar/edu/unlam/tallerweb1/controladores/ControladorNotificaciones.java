@@ -25,13 +25,13 @@ public class ControladorNotificaciones {
 	@RequestMapping("")
 	public ModelAndView verNotificaciones(HttpServletRequest request) {
 		ModelMap modelo = new ModelMap();
-		Usuario attrSesion = (Usuario) request.getSession().getAttribute("USUARIO");
+		Usuario usuarioEnSesion = (Usuario) request.getSession().getAttribute("USUARIO");
 
-		if (attrSesion == null)
+		if (usuarioEnSesion == null)
 			return new ModelAndView("redirect:/ir-a-login");
 		
-		modelo.put("Notificaciones", service.obtenerNotificacionesPor(attrSesion.getId()));
-		request.getSession().setAttribute("PENDIENTES", service.hayPendientes(attrSesion.getId()));
+		modelo.put("Notificaciones", service.obtenerNotificacionesPor(usuarioEnSesion.getId()));
+		request.getSession().setAttribute("PENDIENTES", service.hayPendientes(usuarioEnSesion.getId()));
 		
 		return new ModelAndView("vistaNotificaciones", modelo);
 	}
