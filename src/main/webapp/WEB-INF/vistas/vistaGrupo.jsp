@@ -40,7 +40,7 @@
 
                 <ul class="opciones">
                     <li><a class="text-white" href="grupos/${grupo.getId()}">Informaci�n General</a></li>
-                    <li><a class="text-white" href="#">Miembros del grupo</a></li>
+                    <li><a class="text-white" href="grupos/${grupo.getId()}/miembros">Miembros del grupo</a></li>
                     <li><a class="text-white" href="#">Archivos</a></li>
                     <li><a class="text-white" href="#">Calendario</a></li>
                     <li><a class="text-white" href="grupos/${grupo.getId()}/foro">Foro</a></li>
@@ -53,12 +53,14 @@
         <c:if test="${not empty formulario }">
             <jsp:include page="/templates/perfilMod.jsp"></jsp:include>
         </c:if>
-        <c:if test="${empty formulario and empty msj}">
+        <c:if test="${empty formulario and empty msj and empty integrantes}">
             <jsp:include page="/templates/perfilInfo.jsp"></jsp:include>
         </c:if>
         <c:if test="${not empty msj }">
             <jsp:include page="/templates/perfilForo.jsp"></jsp:include>
-
+        </c:if>
+        <c:if test="${not empty integrantes }">
+            <jsp:include page="/templates/miembros.jsp"></jsp:include>
         </c:if>
     </div>
 </main>

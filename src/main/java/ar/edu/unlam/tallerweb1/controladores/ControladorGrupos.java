@@ -82,4 +82,12 @@ public class ControladorGrupos {
         return new ModelAndView("redirect:/grupos/"+datosDeMensaje.getId()+"/foro");
 
     }
+
+    @RequestMapping("/{id}/miembros")
+    public ModelAndView mostrarMiembrosDelGrupo(@PathVariable Long id) {
+        ModelAndView vistaModificada = perfilDeGrupo(id);
+        vistaModificada.addObject("integrantes", true);
+        return vistaModificada;
+    }
+
 }
