@@ -45,7 +45,7 @@ public class ServicioSolicitudImpl implements ServicioSolicitud {
 	}
 
 	@Override
-	public void enviarSolicitudAGrupo(Long idGrupo, Long idUsuario) {
+	public void solicitarInclusionAGrupo(Long idGrupo, Long idUsuario) {
 		Grupo solicitado = repoGrupo.getGrupoByID(idGrupo);
 		Usuario solicitante = repoUsuario.getUsuarioByID(idUsuario);
 

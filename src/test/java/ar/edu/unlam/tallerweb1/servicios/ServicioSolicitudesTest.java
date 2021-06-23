@@ -98,7 +98,7 @@ public class ServicioSolicitudesTest {
 	private void whenUnUsuarioSolicitaUnirseAGrupoDelQueYaFormaParte(Grupo solicitado) {
 		when(repoGrupo.getGrupoByID(solicitado.getId())).thenReturn(solicitado);
 		when(repoUsuario.getUsuarioByID(solicitado.getAdministrador().getId())).thenReturn(solicitado.getAdministrador());
-		service.enviarSolicitudAGrupo(solicitado.getId(), solicitado.getAdministrador().getId());
+		service.solicitarInclusionAGrupo(solicitado.getId(), solicitado.getAdministrador().getId());
 	}
 
 	private Grupo givenGrupoConUsuario() {
@@ -144,13 +144,13 @@ public class ServicioSolicitudesTest {
 	private void whenUnUsuarioInexistenteSolicitaUnirseAGrupo(Long idUsuario, Long idGrupo) {
 		when(repoGrupo.getGrupoByID(idGrupo)).thenReturn(new Grupo());
 		when(repoUsuario.getUsuarioByID(idUsuario)).thenReturn(null);
-		service.enviarSolicitudAGrupo(idGrupo, idUsuario);
+		service.solicitarInclusionAGrupo(idGrupo, idUsuario);
 	}
 
 	private void whenUnUsuarioSolicitaUnirseAGrupoInexistente(Long idUsuario, Long idGrupo) {
 		when(repoGrupo.getGrupoByID(idGrupo)).thenReturn(null);
 		when(repoUsuario.getUsuarioByID(idUsuario)).thenReturn(new Usuario());
-		service.enviarSolicitudAGrupo(idGrupo, idUsuario);
+		service.solicitarInclusionAGrupo(idGrupo, idUsuario);
 	}
 
 	private void thenSeEnviaSolicitud() {
@@ -160,7 +160,7 @@ public class ServicioSolicitudesTest {
 	private void whenUnUsuarioSolicitaUnirseAGrupo(Long idUsuario, Long idGrupo) {
 		when(repoGrupo.getGrupoByID(idGrupo)).thenReturn(new Grupo());
 		when(repoUsuario.getUsuarioByID(idUsuario)).thenReturn(new Usuario());
-		service.enviarSolicitudAGrupo(idGrupo, idUsuario);
+		service.solicitarInclusionAGrupo(idGrupo, idUsuario);
 	}
 
 	private void thenObtenemosTodasSusSolicitudes(List<Solicitud> solicitudes) {

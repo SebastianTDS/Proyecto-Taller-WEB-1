@@ -40,7 +40,7 @@ public class ControladorSolicitudes {
 		Usuario usuarioEnSesion = validarSesion(request);
 		ModelMap modelo = new ModelMap();
 		
-		servicioSolicitud.enviarSolicitudAGrupo(idGrupo, usuarioEnSesion.getId());
+		servicioSolicitud.solicitarInclusionAGrupo(idGrupo, usuarioEnSesion.getId());
 		
 		modelo.put("mensaje", "Solicitud Enviada");
 		

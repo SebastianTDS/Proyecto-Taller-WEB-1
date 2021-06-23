@@ -8,6 +8,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import ar.edu.unlam.tallerweb1.modelo.Notificacion;
 import ar.edu.unlam.tallerweb1.modelo.Solicitud;
 
 @Repository
@@ -46,6 +47,13 @@ public class RepositorioSolicitudImpl implements RepositorioSolicitud{
 	@Override
 	public void borrarSolicitud(Solicitud aprobada) {
 		sessionFactory.getCurrentSession().remove(aprobada);
+	}
+
+	@Override
+	public Solicitud getExistePendiente(Long idUsuario) {
+		return (Solicitud) sessionFactory.getCurrentSession().createCriteria(Solicitud.class)
+				.add(Restrictions.eq("destino.id", idUsuario))
+				.setMaxResults(1).uniqueResult();
 	}
 
 }

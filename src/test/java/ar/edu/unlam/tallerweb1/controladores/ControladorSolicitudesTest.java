@@ -102,7 +102,7 @@ public class ControladorSolicitudesTest extends HttpSessionTest{
 
 	private void thenSeEnviaLaSolicitud(ModelAndView vista, Long idGrupoSolicitado) {
 		assertThat(vista.getViewName()).isEqualTo("redirect:/ir-a-home");
-		verify(service, times(1)).enviarSolicitudAGrupo(idGrupoSolicitado, usuarioEjemplo.getId());
+		verify(service, times(1)).solicitarInclusionAGrupo(idGrupoSolicitado, usuarioEjemplo.getId());
 	}
 
 	private ModelAndView whenSolicitamosUnirnosAUnGrupo(Long idGrupoSolicitado) {

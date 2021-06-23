@@ -67,6 +67,30 @@ public class RepositorioSolicitudTest extends SpringTest {
 
 		thenEncontramosTodasSusSolicitudes(solicitudes, 1);
 	}
+	
+	@Test
+	@Transactional
+	@Rollback
+	public void testQueEncuentreUnaSolicitudPendienteSiExiste() {
+		Usuario manuela = givenExisteUnUsuario("Manuela");
+		Usuario jorge = givenExisteUnUsuario("Jorge");
+		
+		givenExisteUnaSolicitud(manuela);
+		givenExisteUnaSolicitud(jorge);
+		givenExisteUnaSolicitud(manuela);
+		
+		Solicitud pendiente = whenBuscoSolicitudesNuevasDeUsuario(manuela);
+		
+		thenObtengoQueTiene(pendiente);
+	}
+
+	private void thenObtengoQueTiene(Solicitud pendiente) {
+		assertThat(pendiente).isNotNull();
+	}
+
+	private Solicitud whenBuscoSolicitudesNuevasDeUsuario(Usuario manuela) {
+		return repository.getExistePendiente(manuela.getId());
+	}
 
 	private void givenEliminamosUnaSolicitud(Solicitud solicitudALimpiar) {
 		repository.borrarSolicitud(solicitudALimpiar);

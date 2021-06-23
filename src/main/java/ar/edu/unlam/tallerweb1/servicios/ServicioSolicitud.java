@@ -8,7 +8,7 @@ public interface ServicioSolicitud {
 
 	List<Solicitud> buscarSolicitudes(Long idUsuario);
 
-	void enviarSolicitudAGrupo(Long idGrupo, Long idUsuario);
+	void solicitarInclusionAGrupo(Long idGrupo, Long idUsuario);
 
 	void aprobarSolicitud(Long idSolicitudAceptada, Long idUsuario);
 

@@ -11,6 +11,7 @@ import ar.edu.unlam.tallerweb1.modelo.Notificacion;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupo;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioNotificacion;
+import ar.edu.unlam.tallerweb1.repositorios.RepositorioSolicitud;
 import ar.edu.unlam.tallerweb1.util.auxClass.Check;
 import ar.edu.unlam.tallerweb1.util.exceptions.GrupoInexistenteException;
 
@@ -19,11 +20,13 @@ import ar.edu.unlam.tallerweb1.util.exceptions.GrupoInexistenteException;
 public class ServicioNotificacionesImpl implements ServicioNotificaciones {
 
 	private RepositorioNotificacion repoNotificaciones;
+	private RepositorioSolicitud repoSolicitudes;
 	private RepositorioGrupo repoGrupo;
 
 	@Autowired
-	public ServicioNotificacionesImpl(RepositorioNotificacion repoNotificaciones, RepositorioGrupo repoGrupo) {
+	public ServicioNotificacionesImpl(RepositorioNotificacion repoNotificaciones, RepositorioGrupo repoGrupo, RepositorioSolicitud repoSolicitudes) {
 		this.repoNotificaciones = repoNotificaciones;
+		this.repoSolicitudes = repoSolicitudes;
 		this.repoGrupo = repoGrupo;
 	}
 
@@ -65,7 +68,8 @@ public class ServicioNotificacionesImpl implements ServicioNotificaciones {
 	
 	@Override
 	public Boolean hayPendientes(Long idUsuario) {
-		return !Check.isNull(repoNotificaciones.getExistePendiente(idUsuario));
+		return !Check.isNull(repoNotificaciones.getExistePendiente(idUsuario))
+				|| !Check.isNull(repoSolicitudes.getExistePendiente(idUsuario));
 	}
 
 	private void notificar(String titulo, Usuario destinatario) {

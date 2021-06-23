@@ -10,8 +10,10 @@ public interface RepositorioSolicitud {
 
 	void cargarSolicitud(Solicitud nuevaSolicitud);
 
+	void borrarSolicitud(Solicitud aprobada);
+
 	Solicitud buscarSolicitudPor(Long idSolicitud, Long idUsuario);
 
-	void borrarSolicitud(Solicitud aprobada);
+	Solicitud getExistePendiente(Long idUsuario);
 
 }
