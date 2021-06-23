@@ -63,5 +63,11 @@ public class ControladorExcepciones {
         return new ModelAndView("redirect:/grupos/" + e.getIdGrupo(), model);
     }
     
-    
+    @ExceptionHandler(value = FalloAlProcesarSolicitud.class)
+    public ModelAndView falloAlProcesarSolicitud(FalloAlProcesarSolicitud e) {
+    	ModelMap model = new ModelMap();
+        model.put("error", e.getMessage());
+
+        return new ModelAndView("redirect:/solicitudes" , model);
+    }
 }

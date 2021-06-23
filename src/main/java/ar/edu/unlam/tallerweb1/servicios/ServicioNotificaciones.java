@@ -9,9 +9,9 @@ public interface ServicioNotificaciones {
 
 	public List<Notificacion> obtenerNotificacionesPor(Long usuario);
 
-	public void notificarNuevoIngreso(Long id, Usuario nuevoIntegrante);
+	public void notificarNuevoIngreso(Long idGrupo, Usuario nuevoIntegrante);
 
-	public void notificarEliminacionDeGrupo(Long id);
+	public void notificarEliminacionDeGrupo(Long idGrupo);
 
 	Boolean hayPendientes(Long idUsuario);
 

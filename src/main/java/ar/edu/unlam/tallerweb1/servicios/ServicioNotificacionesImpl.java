@@ -35,8 +35,8 @@ public class ServicioNotificacionesImpl implements ServicioNotificaciones {
 	}
 
 	@Override
-	public void notificarNuevoIngreso(Long id, Usuario nuevoIntegrante) {
-		Grupo grupoObjetivo = repoGrupo.getGrupoByID(id);
+	public void notificarNuevoIngreso(Long idGrupo, Usuario nuevoIntegrante) {
+		Grupo grupoObjetivo = repoGrupo.getGrupoByID(idGrupo);
 
 		if (Check.isNull(grupoObjetivo))
 			throw new GrupoInexistenteException("Imposible unirse a grupo inexistente");
@@ -51,8 +51,8 @@ public class ServicioNotificacionesImpl implements ServicioNotificaciones {
 	}
 
 	@Override
-	public void notificarEliminacionDeGrupo(Long id) {
-		Grupo grupoObjetivo = repoGrupo.getGrupoByID(id);
+	public void notificarEliminacionDeGrupo(Long idGrupo) {
+		Grupo grupoObjetivo = repoGrupo.getGrupoByID(idGrupo);
 
 		if (Check.isNull(grupoObjetivo))
 			throw new GrupoInexistenteException("Imposible eliminar un grupo inexistente");

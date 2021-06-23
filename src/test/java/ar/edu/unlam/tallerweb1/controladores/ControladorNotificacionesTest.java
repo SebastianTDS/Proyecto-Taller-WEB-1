@@ -16,7 +16,6 @@ import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioNotificaciones;
 import ar.edu.unlam.tallerweb1.servicios.ServicioNotificacionesImpl;
 
-// Test validar pendientes
 public class ControladorNotificacionesTest extends HttpSessionTest{
 
 	private static ServicioNotificaciones service = mock(ServicioNotificacionesImpl.class);

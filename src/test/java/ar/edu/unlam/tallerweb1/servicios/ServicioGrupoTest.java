@@ -7,6 +7,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import ar.edu.unlam.tallerweb1.util.enums.Privacidad;
 import ar.edu.unlam.tallerweb1.util.enums.Turno;
+import ar.edu.unlam.tallerweb1.util.exceptions.FalloAlUnirseAlGrupo;
 import ar.edu.unlam.tallerweb1.util.exceptions.FormularioDeGrupoIncompleto;
 
 import org.junit.Before;
@@ -41,10 +42,24 @@ public class ServicioGrupoTest{
       Usuario usuario = givenQueExisteUnUsuario();
       whenAsignoElUsuarioAlGrupo(buscado,usuario);
       thenVerificoQueElUsuarioFueAgregado(buscado);
-
     }
+    
+    @Test(expected = FalloAlUnirseAlGrupo.class)
+	public void testQueNoSePuedaUnirAGrupoCerrado () {
+    	Grupo buscado = givenQueExisteUnGrupoCerrado();
+        Usuario usuario = givenQueExisteUnUsuario();
+        whenAsignoElUsuarioAlGrupo(buscado,usuario);
+	}
 
-    @Test
+    private Grupo givenQueExisteUnGrupoCerrado() {
+    	Grupo grupo = new Grupo();
+        grupo.setId(1L);
+        grupo.setCantidadMax(2);
+        grupo.setCerrado(true);
+        return grupo;
+	}
+
+	@Test
     public void siElFormularioEstaCompletoQueSePuedaCrearElGrupo(){
          DatosDeGrupo losPicatecla= givenQueExisteDatosDeGrupo();
          Grupo grupoGeneradoAPartirDeLosDatosDeGrupo = whenCreoElGrupoConAtributosCompletos(losPicatecla);
@@ -252,7 +267,6 @@ public class ServicioGrupoTest{
     private void thenElGrupoSeCreo(Grupo grupoGenerado) {
         verify(repositorioGrupo,times(1)).guardarGrupo(grupoGenerado);
         assertThat(grupoGenerado.getAdministrador()).isNotNull();
-        verify(repositorioGrupo, times(1)).actualizarGrupo(grupoGenerado);
     }
 
     private void thenVerificoQueElUsuarioFueAgregado(Grupo buscado) {
@@ -275,6 +289,7 @@ public class ServicioGrupoTest{
         Grupo grupo = new Grupo();
         grupo.setId(1L);
         grupo.setCantidadMax(2);
+        grupo.setCerrado(false);
         return grupo;
     }
 

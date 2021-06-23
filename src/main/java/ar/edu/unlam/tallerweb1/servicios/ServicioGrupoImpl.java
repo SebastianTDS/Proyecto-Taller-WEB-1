@@ -98,7 +98,7 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 		Grupo grupoAAcceder = repoGrupo.getGrupoByID(idGrupo);
 		Usuario usuarioAInsertar = repoUsuario.getUsuarioByID(idUsuario);
 
-		if (grupoAAcceder == null || usuarioAInsertar == null || grupoAAcceder.grupoLleno())
+		if (grupoAAcceder == null || usuarioAInsertar == null || grupoAAcceder.grupoLleno() || grupoAAcceder.getCerrado())
 			throw new FalloAlUnirseAlGrupo();
 
 		grupoAAcceder.agregarUsuarioAlGrupo(usuarioAInsertar);
@@ -121,13 +121,14 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 		if (grupoGenerado.getAdministrador() == null) {
 			throw new UsuarioNoEncontradoException("Usuario inexistente");
 		}
+		
+		Usuario administrador = repoUsuario.getUsuarioByID(grupoGenerado.getAdministrador().getId());
 
 		materiaNoSeaNull(grupoGenerado, datosDeGrupo.getMateria());
 		carreraNoSeaNull(grupoGenerado, datosDeGrupo.getCarrera());
 
+		grupoGenerado.agregarUsuarioAlGrupo(administrador);
 		repoGrupo.guardarGrupo(grupoGenerado);
-
-		ingresarUsuarioAlGrupo(grupoGenerado.getAdministrador().getId(), grupoGenerado.getId());
 		return grupoGenerado;
 	}
 
