@@ -62,6 +62,8 @@ public class RepositorioGrupoImpl implements RepositorioGrupo {
     @Override
     public List<Grupo> buscarGrupoPorDatos(DatosDeGrupo datosDeGrupo) {
         Criteria cr = sessionFactory.getCurrentSession().createCriteria(Grupo.class);
+        cr.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+        
         agregarCriteriosDeBusqueda(datosDeGrupo, cr);
         return cr.list();
     }

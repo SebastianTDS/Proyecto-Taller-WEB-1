@@ -10,10 +10,6 @@ VALUES ('Basica I'),
        ('Ingles Tecnico I'),
        ('Informatica General');
 
-INSERT INTO grupo(cantidadMax, descripcion, nombre, cerrado, turno, carrera_id, materia_id)
-VALUES (1, 'Trabajo practico basica 1', 'Equipo dinamita', 1, 'NOCHE', 1, 1),
-       (4, 'TP Matematica', 'Equipo flama', 0, 'TARDE', 2, 2);
-
 INSERT INTO usuario(email, nombre, password, rol)
 VALUES ('GLOBAL', 'GLOBAL', 'GLOBAL', 'GLOBAL');
 
