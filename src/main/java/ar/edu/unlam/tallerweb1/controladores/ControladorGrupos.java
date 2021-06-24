@@ -1,11 +1,6 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
-
-import javax.servlet.http.HttpServletRequest;
-
-
 import ar.edu.unlam.tallerweb1.dto.DatosDeMensaje;
-import ar.edu.unlam.tallerweb1.modelo.Mensaje;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,14 +14,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
-import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
 import ar.edu.unlam.tallerweb1.servicios.ServicioNotificaciones;
 import ar.edu.unlam.tallerweb1.util.enums.Permiso;
 import ar.edu.unlam.tallerweb1.util.exceptions.UsuarioNoEncontradoException;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashSet;
 
 @Controller
 @RequestMapping("/grupos")
@@ -70,7 +63,7 @@ public class ControladorGrupos {
 	public ModelAndView cambiarDatosGrupo(@ModelAttribute("formulario") DatosDeGrupo form, HttpServletRequest request) {
 		Usuario usuarioEnSesion = validarSesion(request);
 		ModelMap modelo = new ModelMap();
-		
+
 		servicioGrupo.validarPermiso(usuarioEnSesion.getId(), form.getId(), Permiso.MODIFICACION);
 		servicioGrupo.modificarGrupo(form);
 		modelo.put("mensaje", "Datos actualizados");
@@ -84,43 +77,49 @@ public class ControladorGrupos {
 		ModelMap modelo = new ModelMap();
 
 		servicioGrupo.validarPermiso(usuarioEnSesion.getId(), id, Permiso.MODIFICACION);
-		
+
 		servicioNotificacion.notificarEliminacionDeGrupo(id);
 		servicioGrupo.eliminarGrupo(id);
 		modelo.put("mensaje", "Grupo eliminado con exito!");
 		return new ModelAndView("redirect:/ir-a-home", modelo);
 	}
-  
-  @RequestMapping("/{id}/foro")
-  public ModelAndView perfilDeGrupoForo(@PathVariable Long id) {
-      ModelAndView vistaModificada = perfilDeGrupo(id);
-      DatosDeMensaje mensaje = new DatosDeMensaje();
-      vistaModificada.addObject("msj", mensaje);
-      return vistaModificada;
-  }
-  @RequestMapping("/{id}/foro/enviar-msj")
-  public ModelAndView insertarMensajeEnElForo(HttpServletRequest request, @ModelAttribute("msj") DatosDeMensaje datosDeMensaje) {
-      Usuario usuarioLogueado = (Usuario) request.getSession().getAttribute("USUARIO");
-      servicioGrupo.IngresarUnMensajeAlGrupo(usuarioLogueado.getId(),datosDeMensaje);
-      return new ModelAndView("redirect:/grupos/"+datosDeMensaje.getId()+"/foro");
 
-  }
+	@RequestMapping("/{id}/foro")
+	public ModelAndView perfilDeGrupoForo(@PathVariable Long id) {
+		Grupo buscado = servicioGrupo.buscarGrupoPorID(id);
+		ModelMap modelo = new ModelMap();
+		DatosDeMensaje mensaje = new DatosDeMensaje();
 
-  @RequestMapping("/{id}/miembros")
-  public ModelAndView mostrarMiembrosDelGrupo(@PathVariable Long id) {
-      ModelAndView vistaModificada = perfilDeGrupo(id);
-      vistaModificada.addObject("integrantes", true);
-      return vistaModificada;
-  }
+		modelo.put("msj", mensaje);
+		modelo.put("grupo", buscado);
+		return new ModelAndView("vistaGrupo", modelo);
+	}
 
-}
-	
+	@RequestMapping("/{id}/foro/enviar-msj")
+	public ModelAndView insertarMensajeEnElForo(HttpServletRequest request,
+			@ModelAttribute("msj") DatosDeMensaje datosDeMensaje) {
+		Usuario usuarioLogueado = (Usuario) request.getSession().getAttribute("USUARIO");
+		servicioGrupo.IngresarUnMensajeAlGrupo(usuarioLogueado.getId(), datosDeMensaje);
+		return new ModelAndView("redirect:/grupos/" + datosDeMensaje.getId() + "/foro");
+
+	}
+
+	@RequestMapping("/{id}/miembros")
+	public ModelAndView mostrarMiembrosDelGrupo(@PathVariable Long id) {
+		Grupo buscado = servicioGrupo.buscarGrupoPorID(id);
+		ModelMap modelo = new ModelMap();
+
+		modelo.put("grupo", buscado);
+		modelo.put("integrantes", true);
+		return new ModelAndView("vistaGrupo", modelo);
+	}
+
 	private Usuario validarSesion(HttpServletRequest request) {
 		Usuario objetivo = (Usuario) request.getSession().getAttribute("USUARIO");
-		
-		if(objetivo == null)
+
+		if (objetivo == null)
 			throw new UsuarioNoEncontradoException("No existe un usuario logueado!");
-			
+
 		return objetivo;
 	}
 }

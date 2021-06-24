@@ -33,13 +33,12 @@
                                         <img src="img/Logosolo.ico" style="width: 80px">
                                     </div>
                                 <div class="d-flex justify-content-center m-3">
-                                            <button type="submit" class="btn btn-success mt-3" name="id" form="unirte" value="${grupo.id}">Ingresar a foro</button>
+                                     <a href="ingresar-a-foro/${grupo.id}" class="btn btn-success mt-3">Ingresar a foro</a>
                                 </div>
                             </div>
                         </div>
                     </c:if>
                     </c:forEach>
-                    <form action="ingresar-a-foro" id="unirte" method="POST"></form>
                 </c:if>
                 <c:if test="${empty grupos}">
                     <div>

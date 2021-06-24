@@ -38,10 +38,9 @@ public class EntityGrupoTest extends SpringTest{
 	
 	private void thenLaCarreraSeAsignaAlGrupo(Long id) {
 		Grupo grupoEncontrado = session().get(Grupo.class, id);
-		Carrera carreraEncontrada = session().get(Carrera.class, id);
 		
 		assertThat(grupoEncontrado).isNotNull();
-		assertThat(carreraEncontrada).isNotNull();
+		assertThat(grupoEncontrado.getCarrera()).isNotNull();
 		assertThat(grupoEncontrado.getCarrera().getNombre()).isEqualTo("Desarrollo WEB");
 	}
 
@@ -83,10 +82,9 @@ public class EntityGrupoTest extends SpringTest{
 
 	private void thenLaMateriaSeAsignaAlGrupo(Long id) {
 		Grupo grupoEncontrado = session().get(Grupo.class, id);
-		Materia materiaEncontrada = session().get(Materia.class, id);
 		
 		assertThat(grupoEncontrado).isNotNull();
-		assertThat(materiaEncontrada).isNotNull();
+		assertThat(grupoEncontrado.getMateria()).isNotNull();
 		assertThat(grupoEncontrado.getMateria().getNombre()).isEqualTo("Basica 1");
 	}
 

@@ -66,19 +66,6 @@ public class ServicioGrupoImpl implements ServicioGrupo {
         repoMsj.save(mensajeCreado);
     }
 
-    private boolean verificarDatosDeMSJ(DatosDeMensaje datosMensaje) {
-        return datosMensaje.getMensaje() == null || datosMensaje.getMensaje().isBlank() || datosMensaje.getMensaje().equals("<p><br></p>");
-    }
-
-    private Mensaje crearMensaje(Usuario usuarioAInsertar, Grupo grupoAAcceder, DatosDeMensaje datosMensaje) {
-        Mensaje mensaje=new Mensaje();
-        mensaje.setUsuario(usuarioAInsertar);
-        mensaje.setMensaje(datosMensaje.getMensaje());
-        mensaje.setFecha(LocalDateTime.now().withNano(0));
-        mensaje.setGrupo(grupoAAcceder);
-        return mensaje;
-    }
-
     @Override
     public void validarPermiso(Long idUsuario, Long idGrupo, Permiso permisoAValidar) {
       Grupo objetivo = repoGrupo.getGrupoByID(idGrupo);
@@ -200,6 +187,19 @@ public class ServicioGrupoImpl implements ServicioGrupo {
       }
       return new ArrayList<Grupo>(prov);
     }
+    
+    private boolean verificarDatosDeMSJ(DatosDeMensaje datosMensaje) {
+        return datosMensaje.getMensaje() == null || datosMensaje.getMensaje().isBlank() || datosMensaje.getMensaje().equals("<p><br></p>");
+    }
+
+    private Mensaje crearMensaje(Usuario usuarioAInsertar, Grupo grupoAAcceder, DatosDeMensaje datosMensaje) {
+        Mensaje mensaje=new Mensaje();
+        mensaje.setUsuario(usuarioAInsertar);
+        mensaje.setMensaje(datosMensaje.getMensaje());
+        mensaje.setFecha(LocalDateTime.now().withNano(0));
+        mensaje.setGrupo(grupoAAcceder);
+        return mensaje;
+    }
 
     private void materiaNoSeaNull(Grupo grupoGenerado, Long idMateria) {
       Materia materiaEncontrada = repoMateria.buscarMateriaPorId(idMateria);
@@ -214,5 +214,6 @@ public class ServicioGrupoImpl implements ServicioGrupo {
         throw new FormularioDeGrupoIncompleto();
       grupoGenerado.setCarrera(carreraEncontrada);
     }
+    
 
 }

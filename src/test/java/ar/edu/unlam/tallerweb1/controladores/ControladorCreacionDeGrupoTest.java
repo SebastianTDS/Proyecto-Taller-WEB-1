@@ -48,7 +48,7 @@ public class ControladorCreacionDeGrupoTest extends HttpSessionTest{
 
     private ModelAndView whenDoyClickACrearGrupoIncompleto(DatosDeGrupo grupo) {
         when(request().getSession().getAttribute("USUARIO")).thenReturn(new Usuario());
-        doThrow(FormularioDeGrupoIncompleto.class).when(servicioGrupo).crearGrupo(grupo, new Usuario().getId());
+        doThrow(FormularioDeGrupoIncompleto.class).when(servicioGrupo).crearGrupo(grupo);
         return controladorCreacionDeGrupo.irALaVistaDeGrupoCreado(request(), grupo);
     }
 
@@ -91,7 +91,7 @@ public class ControladorCreacionDeGrupoTest extends HttpSessionTest{
 
     private ModelAndView whenDoyClickACrearGrupo(DatosDeGrupo datos, Usuario usuario) {
         when(request().getSession().getAttribute("USUARIO")).thenReturn(new Usuario());
-        when(servicioGrupo.crearGrupo(datos, new Usuario().getId())).thenReturn(new Grupo());
+        when(servicioGrupo.crearGrupo(datos)).thenReturn(new Grupo());
         return controladorCreacionDeGrupo.irALaVistaDeGrupoCreado(request(),datos);
     }
 

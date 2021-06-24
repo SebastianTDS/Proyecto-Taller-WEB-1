@@ -53,6 +53,7 @@ public class RepositorioMensajeTest extends SpringTest {
         nuevoGrupo.setNombre("Hola");
         nuevoGrupo.setCerrado(true);
         nuevoGrupo.setTurno(Turno.NOCHE);
+        nuevoGrupo.setAdministrador(givenQueExisteUnUsuario());
         nuevaCarrera.setNombre("Desarrollo web");
         nuevaMateria.setNombre("Basica I");
         session().save(nuevaCarrera);

@@ -28,7 +28,7 @@ public class ValidacionPermisosTest {
 	public void init() {
 		repoGrupo = mock(RepositorioGrupoImpl.class);
 		repoUsuario = mock(RepositorioUsuarioImpl.class);
-		service = new ServicioGrupoImpl(repoGrupo, null, null, repoUsuario);
+		service = new ServicioGrupoImpl(repoGrupo, null, null, repoUsuario, null);
 	}
 	
 	@Test(expected = UsuarioNoEncontradoException.class)
