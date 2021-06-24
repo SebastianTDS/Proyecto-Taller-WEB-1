@@ -46,7 +46,12 @@ public class ControladorExcepciones {
     public ModelAndView errorAlUnirseAlGrupoQueYaSoyMiembro(YaEstoyEnElGrupo e) {
         return new ModelAndView("redirect:/grupos/" + e.getMessage());
     }
-
+    @ExceptionHandler(value = NoSeEnvioElMensaje.class)
+    public ModelAndView errorAlEnviarUnMensaje(NoSeEnvioElMensaje e) {
+        ModelMap model = new ModelMap();
+        model.put("error", "No se envio el mensaje");
+        return new ModelAndView("redirect:/grupos/" + e.getMessage()+"/foro",model);
+    }
     @ExceptionHandler(value = UsuarioNoEncontradoException.class)
     public ModelAndView errorAlLoguearUsuario(UsuarioNoEncontradoException e){
     	ModelMap model = new ModelMap();

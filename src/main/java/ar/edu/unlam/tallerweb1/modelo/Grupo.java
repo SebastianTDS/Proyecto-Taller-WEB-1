@@ -1,23 +1,13 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.PreRemove;
+import javax.persistence.*;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.util.enums.Turno;
 import ar.edu.unlam.tallerweb1.util.exceptions.YaEstoyEnElGrupo;
+import com.sun.istack.NotNull;
 
 @Entity
 public class Grupo {
@@ -27,6 +17,9 @@ public class Grupo {
 	private String descripcion;
 	private Boolean cerrado;
 	private Integer cantidadMax;
+
+	private Boolean esMateria;
+
 	private Turno turno;
 	
 	private Usuario administrador;
@@ -34,9 +27,12 @@ public class Grupo {
 	private Materia materia;
 
 	private Set<Usuario> listaDeUsuarios;
+	private Set<Mensaje> listaDeMensajes;
+
 
 	public Grupo() {
-		this.listaDeUsuarios = new HashSet<Usuario>();
+		this.listaDeUsuarios = new HashSet<>();
+		this.listaDeMensajes = new HashSet<>();
 	}
 
 	@Override
@@ -69,6 +65,13 @@ public class Grupo {
 
 	public void setAdministrador(Usuario administrador) {
 		this.administrador = administrador;
+  }
+
+	@OneToMany(mappedBy = "grupo", fetch = FetchType.EAGER)
+	public Set<Mensaje> getListaDeMensajes() { return listaDeMensajes;}
+
+	public void setListaDeMensajes(Set<Mensaje> listaDeMensajes) {
+		this.listaDeMensajes = listaDeMensajes;
 	}
 
 	@ManyToMany(mappedBy = "listaDeGrupos", fetch = FetchType.EAGER)
@@ -167,9 +170,10 @@ public class Grupo {
 	}
 
 	public void agregarUsuarioAlGrupo(Usuario usuarioAInsertar) {
-		if (!listaDeUsuarios.add(usuarioAInsertar))
-			throw new YaEstoyEnElGrupo(id);
-		usuarioAInsertar.agregarGrupo(this);
+		if(!listaDeUsuarios.contains(usuarioAInsertar)){
+			listaDeUsuarios.add(usuarioAInsertar);
+			usuarioAInsertar.agregarGrupo(this);
+		}
 	}
 	
 	public Boolean grupoLleno() {
@@ -180,4 +184,17 @@ public class Grupo {
       return listaDeUsuarios.size();
   }
 
+	public Boolean getEsMateria() {
+		return esMateria;
+	}
+
+	public void setEsMateria(Boolean esMateria) {
+		this.esMateria = esMateria;
+	}
+
+	public TreeSet<Mensaje>  ordenarMsj(){
+		TreeSet<Mensaje> mensajes=new TreeSet();
+		mensajes.addAll(listaDeMensajes);
+		return mensajes;
+	}
 }

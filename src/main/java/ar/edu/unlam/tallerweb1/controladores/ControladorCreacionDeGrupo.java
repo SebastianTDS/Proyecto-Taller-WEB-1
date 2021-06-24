@@ -26,7 +26,7 @@ public class ControladorCreacionDeGrupo {
 
 	@RequestMapping(value = "crear-grupo", method = RequestMethod.POST)
 	public ModelAndView irALaVistaDeGrupoCreado(HttpServletRequest request, @ModelAttribute DatosDeGrupo datos) {
-		
+
 		Usuario usuarioLogueado = (Usuario) request.getSession().getAttribute("USUARIO");
 		datos.setAdministrador(usuarioLogueado);
 		

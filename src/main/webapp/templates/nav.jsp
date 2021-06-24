@@ -19,3 +19,9 @@
     <button class="btn btn btn btn-outline-info btn-sm justify-content-center">Notificaciones</button>
   </a>
 </div>
+
+<div class="m-1 d-flex justify-content-center mt-5">
+  <a href="ir-a-foros-materias">
+    <button class="btn btn btn btn-outline-info btn-sm justify-content-center">Foros Materias</button>
+  </a>
+</div>

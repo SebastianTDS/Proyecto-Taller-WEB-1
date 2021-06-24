@@ -91,7 +91,23 @@ public class ControladorHomeTest {
         ModelAndView mvc= whenGuardoLasCarrerasEnElModel(carreras);
         thenMeMuestreLasCarreras(mvc,carreras);
     }
-    
+
+    @Test
+    public void queMeRedirigaALaVistaForoMaterias(){
+                ModelAndView mvc=whenDoyClickAForoMaterias();
+                thenMeMuestraLaVistaForoMaterias(mvc);
+
+    }
+
+    private void thenMeMuestraLaVistaForoMaterias(ModelAndView mvc) {
+        assertThat(mvc.getViewName()).isEqualTo("vistaForosMaterias");
+    }
+
+    private ModelAndView whenDoyClickAForoMaterias() {
+        return controladorHome.IrAForosMaterias();
+    }
+
+
     private void givenUnUsuarioDeLaSesion() {
 		Usuario usuario = new Usuario();
 		usuario.setId(1L);
