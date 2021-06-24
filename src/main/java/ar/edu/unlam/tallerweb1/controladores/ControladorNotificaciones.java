@@ -20,7 +20,6 @@ public class ControladorNotificaciones {
 	@Autowired
 	public ControladorNotificaciones(ServicioNotificaciones service) {
 		this.service = service;
-		System.out.println("hola");
 	}
 
 	@RequestMapping("")

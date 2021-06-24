@@ -62,6 +62,7 @@ public class ServicioGrupoTest {
         DatosDeMensaje datosMensaje = givenQueExisteUnDatosDeMensaje(buscado);
         whenAsignoElMensajeAlGrupo(buscado, usuario, datosMensaje);
         thenVerificoQueElMensajeFueAgregado(buscado);
+
     }
 
     @Test
@@ -176,7 +177,14 @@ public class ServicioGrupoTest {
     }
 
     private List<Grupo> givenQueExisteUnaListaDeGrupos() {
-        return Arrays.asList(new Grupo(), new Grupo());
+
+    	Grupo a = new Grupo();
+    	Grupo b = new Grupo();
+    	
+    	a.setId(1L);
+    	b.setId(2L);
+    	
+        return Arrays.asList(a,b);
     }
 
     private List<Grupo> whenbuscoTodosLosGrupos(List<Grupo> listaDeGrupos) {

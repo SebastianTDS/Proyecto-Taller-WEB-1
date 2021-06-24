@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service("servicioGrupos")
 @Transactional
@@ -149,25 +150,25 @@ public class ServicioGrupoImpl implements ServicioGrupo {
     }
 
     private List<Grupo> filtrarPorCupo(List<Grupo> grupos, Disponibilidad disponibilidad) {
-        List<Grupo> prov=new ArrayList<>();
-        if (disponibilidad== Disponibilidad.LLENO){
+        Set<Grupo> prov=new HashSet<Grupo>();
+        if (disponibilidad == Disponibilidad.LLENO){
             for(Grupo aux: grupos){
                 if (aux.grupoLleno()){
                     prov.add(aux);
                 }
             }
-            return prov;
-        }
-        if (disponibilidad== Disponibilidad.DISPONIBLE){
+            return new ArrayList<Grupo>(prov);
+        }else if (disponibilidad== Disponibilidad.DISPONIBLE){
             for(Grupo aux: grupos){
                 if (!aux.grupoLleno()){
                     prov.add(aux);
                 }
             }
-            return prov;
+            return new ArrayList<Grupo>(prov);
+        }else {
+        	prov.addAll(grupos);
         }
-        prov.addAll(grupos);
-        return prov;
+        return new ArrayList<Grupo>(prov);
     }
 
     private void materiaNoSeaNull(Grupo grupoGenerado,Long idMateria){
