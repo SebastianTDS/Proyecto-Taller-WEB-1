@@ -3,6 +3,7 @@ package ar.edu.unlam.tallerweb1.servicios;
 import java.util.List;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
+import ar.edu.unlam.tallerweb1.dto.DatosDeMensaje;
 import ar.edu.unlam.tallerweb1.modelo.Carrera;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.modelo.Materia;
@@ -10,7 +11,7 @@ import ar.edu.unlam.tallerweb1.modelo.Usuario;
 
 public interface ServicioGrupo {
 
-    Grupo crearGrupo(DatosDeGrupo grupoNuevo);
+    Grupo crearGrupo(DatosDeGrupo grupoNuevo, Long owner);
 
     List<Grupo> buscarTodos();
 
@@ -29,4 +30,6 @@ public interface ServicioGrupo {
     void IngresarUsuarioAlGrupo(Long idUsuario, Long idGrupo);
 
     List<Grupo> buscarTodosMisGrupos(Usuario usuarioSesion);
+
+    void IngresarUnMensajeAlGrupo(Long idUsuario, DatosDeMensaje mensaje);
 }

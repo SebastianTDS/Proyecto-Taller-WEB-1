@@ -19,6 +19,7 @@ public class RepositorioGrupoTest extends SpringTest {
     private static Materia nuevaMateria = new Materia();
     private static Carrera nuevaCarrera = new Carrera();
 
+
     @Autowired
     private RepositorioGrupoImpl repositorio;
 
@@ -43,6 +44,8 @@ public class RepositorioGrupoTest extends SpringTest {
         List<Grupo> misGrupos=whenCuandoBuscoTodosMisGrupos(usuario);
         thenVerificoQueMeTraigaTodosMisGrupos(misGrupos);
     }
+
+
 
     private List<Grupo> whenCuandoBuscoTodosMisGrupos(Usuario usuario) {
         return repositorio.buscarTodosMisGrupos(usuario);
@@ -183,6 +186,9 @@ public class RepositorioGrupoTest extends SpringTest {
         thenVerificoQueLosGruposFiltradosSeMuestren(grupos);
     }
 */
+
+
+
 
 
     private DatosDeGrupo givenQueExisteDatosParaLaBusquedaPorDisponibilidad() {

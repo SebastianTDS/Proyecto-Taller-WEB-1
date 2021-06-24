@@ -1,20 +1,20 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
+import ar.edu.unlam.tallerweb1.dto.DatosDeMensaje;
 import ar.edu.unlam.tallerweb1.modelo.*;
-import ar.edu.unlam.tallerweb1.repositorios.RepositorioCarrera;
-import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupo;
-import ar.edu.unlam.tallerweb1.repositorios.RepositorioMateria;
-import ar.edu.unlam.tallerweb1.repositorios.RepositorioUsuario;
+import ar.edu.unlam.tallerweb1.repositorios.*;
 import ar.edu.unlam.tallerweb1.util.auxClass.Check;
 import ar.edu.unlam.tallerweb1.util.enums.Disponibilidad;
 import ar.edu.unlam.tallerweb1.util.exceptions.FalloAlUnirseAlGrupo;
 import ar.edu.unlam.tallerweb1.util.exceptions.FormularioDeGrupoIncompleto;
 import ar.edu.unlam.tallerweb1.util.exceptions.GrupoInexistenteException;
+import ar.edu.unlam.tallerweb1.util.exceptions.NoSeEnvioElMensaje;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -22,19 +22,22 @@ import java.util.Set;
 
 @Service("servicioGrupos")
 @Transactional
+
 public class ServicioGrupoImpl implements ServicioGrupo {
 
     private final RepositorioGrupo repoGrupo;
     private final RepositorioCarrera repoCarrera;
     private final RepositorioMateria repoMateria;
     private final RepositorioUsuario repoUsuario;
+    private final RepositorioMensaje repoMsj;
 
     @Autowired
-    public ServicioGrupoImpl(RepositorioGrupo repoGrupo, RepositorioCarrera repoCarrera, RepositorioMateria repoMateria, RepositorioUsuario repoUsuario) {
+    public ServicioGrupoImpl(RepositorioGrupo repoGrupo, RepositorioCarrera repoCarrera, RepositorioMateria repoMateria, RepositorioUsuario repoUsuario,RepositorioMensaje repoMsj) {
         this.repoGrupo = repoGrupo;
         this.repoCarrera = repoCarrera;
         this.repoMateria = repoMateria;
         this.repoUsuario = repoUsuario;
+        this.repoMsj=repoMsj;
     }
 
     @Override
@@ -73,21 +76,33 @@ public class ServicioGrupoImpl implements ServicioGrupo {
     public void IngresarUsuarioAlGrupo(Long idUsuario, Long idGrupo) {
         Grupo grupoAAcceder = repoGrupo.getGrupoByID(idGrupo);
         Usuario usuarioAInsertar = repoUsuario.getUsuarioByID(idUsuario);
-        
+
         if (grupoAAcceder == null || usuarioAInsertar == null || grupoAAcceder.grupoLleno())
             throw new FalloAlUnirseAlGrupo();
-        
+
         grupoAAcceder.agregarUsuarioAlGrupo(usuarioAInsertar);
         repoGrupo.actualizarGrupo(grupoAAcceder);
     }
 
     @Override
     public List<Grupo> buscarTodosMisGrupos(Usuario usuarioSesion) {
-        return repoGrupo.buscarTodosMisGrupos(usuarioSesion);
+        List<Grupo> misGrupos=repoGrupo.buscarTodosMisGrupos(usuarioSesion);
+        HashSet<Grupo>grupos=new HashSet<>(misGrupos);
+        return new ArrayList<>(grupos);
     }
 
     @Override
-    public Grupo crearGrupo(DatosDeGrupo datosDeGrupo) {
+    public void IngresarUnMensajeAlGrupo(Long idUsuario, DatosDeMensaje datosMensaje) {
+        Grupo grupoAAcceder = repoGrupo.getGrupoByID(datosMensaje.getId());
+        Usuario usuarioAInsertar = repoUsuario.getUsuarioByID(idUsuario);
+        if (grupoAAcceder == null || usuarioAInsertar == null || verificarDatosDeMSJ(datosMensaje))
+            throw new NoSeEnvioElMensaje(grupoAAcceder.getId());
+        Mensaje mensajeCreado= crearMensaje(usuarioAInsertar,grupoAAcceder,datosMensaje);
+        repoMsj.save(mensajeCreado);
+    }
+
+    @Override
+    public Grupo crearGrupo(DatosDeGrupo datosDeGrupo, Long owner) {
         Grupo grupoGenerado = datosDeGrupo.crearGrupoAPartirDeDatosDeGrupo();
         if (grupoGenerado == null) {
             throw new FormularioDeGrupoIncompleto();
@@ -95,6 +110,9 @@ public class ServicioGrupoImpl implements ServicioGrupo {
         materiaNoSeaNull(grupoGenerado,datosDeGrupo.getMateria());
         carreraNoSeaNull(grupoGenerado,datosDeGrupo.getCarrera());
         repoGrupo.guardarGrupo(grupoGenerado);
+
+        IngresarUsuarioAlGrupo(owner, grupoGenerado.getId());
+
         return grupoGenerado;
     }
 
@@ -116,6 +134,19 @@ public class ServicioGrupoImpl implements ServicioGrupo {
     @Override
     public List<Grupo> buscarGrupoPorDatos(DatosDeGrupo datosParaBuscarUnGrupo) {
         return filtrarPorCupo(repoGrupo.buscarGrupoPorDatos(datosParaBuscarUnGrupo), datosParaBuscarUnGrupo.getDisponibilidad());
+    }
+
+    private boolean verificarDatosDeMSJ(DatosDeMensaje datosMensaje) {
+        return datosMensaje.getMensaje() == null || datosMensaje.getMensaje().isBlank() || datosMensaje.getMensaje().equals("<p><br></p>");
+    }
+
+    private Mensaje crearMensaje(Usuario usuarioAInsertar, Grupo grupoAAcceder, DatosDeMensaje datosMensaje) {
+        Mensaje mensaje=new Mensaje();
+        mensaje.setUsuario(usuarioAInsertar);
+        mensaje.setMensaje(datosMensaje.getMensaje());
+        mensaje.setFecha(LocalDateTime.now().withNano(0));
+        mensaje.setGrupo(grupoAAcceder);
+        return mensaje;
     }
 
     private List<Grupo> filtrarPorCupo(List<Grupo> grupos, Disponibilidad disponibilidad) {
