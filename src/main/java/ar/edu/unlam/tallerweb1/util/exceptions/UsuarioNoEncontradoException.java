@@ -4,8 +4,8 @@ public class UsuarioNoEncontradoException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 	
-	public UsuarioNoEncontradoException() {
-		super("Usuario o contraseña incorrectos");
+	public UsuarioNoEncontradoException(String mensaje) {
+		super(mensaje);
 	}
 
 }

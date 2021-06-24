@@ -11,6 +11,7 @@ import ar.edu.unlam.tallerweb1.modelo.Notificacion;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupo;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioNotificacion;
+import ar.edu.unlam.tallerweb1.repositorios.RepositorioSolicitud;
 import ar.edu.unlam.tallerweb1.util.auxClass.Check;
 import ar.edu.unlam.tallerweb1.util.exceptions.GrupoInexistenteException;
 
@@ -19,11 +20,13 @@ import ar.edu.unlam.tallerweb1.util.exceptions.GrupoInexistenteException;
 public class ServicioNotificacionesImpl implements ServicioNotificaciones {
 
 	private RepositorioNotificacion repoNotificaciones;
+	private RepositorioSolicitud repoSolicitudes;
 	private RepositorioGrupo repoGrupo;
 
 	@Autowired
-	public ServicioNotificacionesImpl(RepositorioNotificacion repoNotificaciones, RepositorioGrupo repoGrupo) {
+	public ServicioNotificacionesImpl(RepositorioNotificacion repoNotificaciones, RepositorioGrupo repoGrupo, RepositorioSolicitud repoSolicitudes) {
 		this.repoNotificaciones = repoNotificaciones;
+		this.repoSolicitudes = repoSolicitudes;
 		this.repoGrupo = repoGrupo;
 	}
 
@@ -35,8 +38,8 @@ public class ServicioNotificacionesImpl implements ServicioNotificaciones {
 	}
 
 	@Override
-	public void notificarNuevoIngreso(Long id, Usuario nuevoIntegrante) {
-		Grupo grupoObjetivo = repoGrupo.getGrupoByID(id);
+	public void notificarNuevoIngreso(Long idGrupo, Usuario nuevoIntegrante) {
+		Grupo grupoObjetivo = repoGrupo.getGrupoByID(idGrupo);
 
 		if (Check.isNull(grupoObjetivo))
 			throw new GrupoInexistenteException("Imposible unirse a grupo inexistente");
@@ -51,8 +54,8 @@ public class ServicioNotificacionesImpl implements ServicioNotificaciones {
 	}
 
 	@Override
-	public void notificarEliminacionDeGrupo(Long id) {
-		Grupo grupoObjetivo = repoGrupo.getGrupoByID(id);
+	public void notificarEliminacionDeGrupo(Long idGrupo) {
+		Grupo grupoObjetivo = repoGrupo.getGrupoByID(idGrupo);
 
 		if (Check.isNull(grupoObjetivo))
 			throw new GrupoInexistenteException("Imposible eliminar un grupo inexistente");
@@ -65,7 +68,8 @@ public class ServicioNotificacionesImpl implements ServicioNotificaciones {
 	
 	@Override
 	public Boolean hayPendientes(Long idUsuario) {
-		return !Check.isNull(repoNotificaciones.getExistePendiente(idUsuario));
+		return !Check.isNull(repoNotificaciones.getExistePendiente(idUsuario))
+				|| !Check.isNull(repoSolicitudes.getExistePendiente(idUsuario));
 	}
 
 	private void notificar(String titulo, Usuario destinatario) {

@@ -33,19 +33,23 @@
                 </ul>
             </div>
             <div class="window col-12 col-sm-9 text-dark">
-                <h1 class="mt-2">Notificaciones</h1>
+            	<form action="solicitudes/aceptar-solicitud" method="POST" id="aceptarSolicitud"></form>
+				<form action="solicitudes/rechazar-solicitud" method="POST" id="rechazarSolicitud"></form>
+                <h1 class="mt-2">Solicitudes</h1>
                 <hr>
                 <div class="list-group">
-                    <c:forEach items="${Notificaciones}" var="notificacion">
-                    	<c:if test="${notificacion.getVisto()}">
-							<div class="list-group-item list-group-item-action flex-column">
-                    	</c:if>
-                    	<c:if test="${!notificacion.getVisto()}">
-                    		<div class="list-group-item list-group-item-action flex-column active">
-                    	</c:if>
+				<form action="grupos/eliminar" method="POST" id="delete"></form>                
+                    <c:forEach items="${Solicitudes}" var="notificacion">
+						<div class="list-group-item list-group-item-action flex-column">
 	                        <div class="d-flex w-100 justify-content-between align-items-center">
-	                            <strong class="vertical-middle">${notificacion.getTitulo() }</strong>
-	                            <small class="text-end">${notificacion.periodoTranscurrido() }</small>
+	                            <small class="text-start">${notificacion.periodoTranscurrido() } > </small>
+	                            <span class="vertical-middle">${notificacion.mensaje() }</span>
+	                            <div>
+		                            <div>
+		                            	<button type="submit" name="idSolicitudAceptada" form="aceptarSolicitud" value="${notificacion.getId()}" class="btn btn-outline-success">Aceptar</button>
+		                            	<button type="submit" name="idSolicitudRechazada" form="rechazarSolicitud" value="${notificacion.getId()}" class="btn btn-outline-danger">Rechazar</button>
+		                            </div>
+	                            </div>
 	                        </div>
                     	</div>
 					</c:forEach>

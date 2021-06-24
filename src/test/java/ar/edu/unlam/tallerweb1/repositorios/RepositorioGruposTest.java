@@ -12,6 +12,7 @@ import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.Carrera;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.modelo.Materia;
+import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.util.enums.Turno;
 
 public class RepositorioGruposTest extends SpringTest{
@@ -86,18 +87,28 @@ public class RepositorioGruposTest extends SpringTest{
 	private Long givenUnGrupoPersistido() {
 		Materia materia = givenExisteUnaMateria();
 		Carrera carrera = givenExisteUnaCarrera();
+		Usuario administrador = givenExisteUnAdmin();
 		Grupo grupo = givenExisteUnGrupo();
 		
 		session().save(carrera);
 		session().save(materia);
+		session().save(administrador);
 		
 		grupo.setCarrera(carrera);
 		grupo.setMateria(materia);
+		grupo.setAdministrador(administrador);
 		session().save(grupo);
 		
 		return grupo.getId();
 	}
 	
+	private Usuario givenExisteUnAdmin() {
+		Usuario admin = new Usuario();
+		
+		admin.setNombre("Manuel");
+		return admin;
+	}
+
 	private Materia givenExisteUnaMateria() {
 		Materia nuevaMateria = new Materia();
 		

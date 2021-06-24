@@ -16,17 +16,21 @@ import org.junit.Test;
 
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.modelo.Notificacion;
+import ar.edu.unlam.tallerweb1.modelo.Solicitud;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupo;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupoImpl;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioNotificacion;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioNotificacionImpl;
+import ar.edu.unlam.tallerweb1.repositorios.RepositorioSolicitud;
+import ar.edu.unlam.tallerweb1.repositorios.RepositorioSolicitudImpl;
 
 public class ServicioNotificacionesTest {
 
 	private RepositorioNotificacion repositoryNt = mock(RepositorioNotificacionImpl.class);
 	private RepositorioGrupo repositoryGr = mock(RepositorioGrupoImpl.class);
-	private ServicioNotificaciones service = new ServicioNotificacionesImpl(repositoryNt, repositoryGr);
+	private RepositorioSolicitud repositorySl = mock(RepositorioSolicitudImpl.class);
+	private ServicioNotificaciones service = new ServicioNotificacionesImpl(repositoryNt, repositoryGr, repositorySl);
 
 	@Test
 	public void testQueSePuedanObtenerLasNotificacionesDeUnUsuario() {
@@ -62,15 +66,18 @@ public class ServicioNotificacionesTest {
 		
 		Boolean hayNotificaciones = whenExisteAlmenosUnaNotificacionNueva(usuario);
 		
-		thenNosDevuelve(hayNotificaciones);
+		thenNosDevuelve(hayNotificaciones, usuario);
 	}
 
-	private void thenNosDevuelve(Boolean hayNotificaciones) {
+	private void thenNosDevuelve(Boolean hayNotificaciones, Long usuario) {
+		verify(repositorySl, times(1)).getExistePendiente(usuario);
+		verify(repositoryNt, times(1)).getExistePendiente(usuario);
 		assertThat(hayNotificaciones).isTrue();
 	}
 
 	private Boolean whenExisteAlmenosUnaNotificacionNueva(Long usuario) {
-		when(repositoryNt.getExistePendiente(usuario)).thenReturn(new Notificacion());
+		when(repositoryNt.getExistePendiente(usuario)).thenReturn(null);
+		when(repositorySl.getExistePendiente(usuario)).thenReturn(new Solicitud());
 		return service.hayPendientes(usuario);
 	}
 

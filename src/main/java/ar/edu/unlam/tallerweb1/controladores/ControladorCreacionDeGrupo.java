@@ -28,8 +28,10 @@ public class ControladorCreacionDeGrupo {
 	public ModelAndView irALaVistaDeGrupoCreado(HttpServletRequest request, @ModelAttribute DatosDeGrupo datos) {
 
 		Usuario usuarioLogueado = (Usuario) request.getSession().getAttribute("USUARIO");
-		Grupo grupo = servicioGrupo.crearGrupo(datos, usuarioLogueado.getId());
-
+		datos.setAdministrador(usuarioLogueado);
+		
+		Grupo grupo = servicioGrupo.crearGrupo(datos);
+		
 		return new ModelAndView("redirect:/grupos/" + grupo.getId());
 	}
 

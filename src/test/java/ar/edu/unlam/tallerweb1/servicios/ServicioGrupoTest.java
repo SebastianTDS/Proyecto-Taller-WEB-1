@@ -9,6 +9,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import ar.edu.unlam.tallerweb1.util.enums.Privacidad;
 import ar.edu.unlam.tallerweb1.util.enums.Turno;
+import ar.edu.unlam.tallerweb1.util.exceptions.FalloAlUnirseAlGrupo;
 import ar.edu.unlam.tallerweb1.util.exceptions.FormularioDeGrupoIncompleto;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,309 +18,337 @@ import java.util.*;
 
 import static org.mockito.Mockito.*;
 
-
 public class ServicioGrupoTest {
 
-    private ServicioGrupo servicioGrupo;
-    private RepositorioGrupo repositorioGrupo;
-    private RepositorioMateria repositorioMateria;
-    private RepositorioCarrera repositorioCarrera;
-    private RepositorioUsuario repositorioUsuario;
-    private RepositorioMensajeImpl repositorioMsj;
-    private final Usuario usuario = new Usuario();
+	private ServicioGrupo servicioGrupo;
+	private RepositorioGrupo repositorioGrupo;
+	private RepositorioMateria repositorioMateria;
+	private RepositorioCarrera repositorioCarrera;
+	private RepositorioUsuario repositorioUsuario;
+	private RepositorioMensajeImpl repositorioMsj;
+	private final Usuario usuario = new Usuario();
 
-    @Before
-    public void init() {
-        repositorioUsuario = mock(RepositorioUsuarioImpl.class);
-        repositorioGrupo = mock(RepositorioGrupoImpl.class);
-        repositorioCarrera = mock(RepositorioCarreraImpl.class);
-        repositorioMateria = mock(RepositorioMateriaImpl.class);
-        repositorioMsj = mock(RepositorioMensajeImpl.class);
-        servicioGrupo = new ServicioGrupoImpl(repositorioGrupo, repositorioCarrera, repositorioMateria, repositorioUsuario, repositorioMsj);
-    }
+	@Before
+	public void init() {
+		repositorioUsuario = mock(RepositorioUsuarioImpl.class);
+		repositorioGrupo = mock(RepositorioGrupoImpl.class);
+		repositorioCarrera = mock(RepositorioCarreraImpl.class);
+		repositorioMateria = mock(RepositorioMateriaImpl.class);
+		repositorioMsj = mock(RepositorioMensajeImpl.class);
+		servicioGrupo = new ServicioGrupoImpl(repositorioGrupo, repositorioCarrera, repositorioMateria,
+				repositorioUsuario, repositorioMsj);
+	}
 
-    @Test
-    public void queSePuedabuscarUnGrupoConMensajes() {
-        Grupo losPicatecla1 = givenQueExisteUnGrupoConMensajes();
-        List<Grupo> gruposPresistidos = givenQueSeGuardenTodosLosGruposExistentes(losPicatecla1);
-        List<Grupo> gruposEncontrados = whenBuscoTodosLosGrupos(gruposPresistidos);
-        thenVerificoQueElGrupoContengaMensajes(gruposEncontrados);
-    }
+	@Test
+	public void queSePuedaUnirUnUsuarioAlGrupo() {
+		Grupo buscado = givenQueExisteUnGrupo();
+		Usuario usuario = givenQueExisteUnUsuario();
+		whenAsignoElUsuarioAlGrupo(buscado, usuario);
+		thenVerificoQueElUsuarioFueAgregado(buscado);
+	}
 
-    private Grupo givenQueExisteUnGrupoConMensajes() {
-        HashSet<Mensaje> mensajes = new HashSet<>();
-        mensajes.add(new Mensaje());
-        Grupo grupo = new Grupo();
-        grupo.setId(1L);
-        grupo.setListaDeMensajes(mensajes);
-        return grupo;
-    }
+	@Test
+	public void queSePuedabuscarUnGrupoConMensajes() {
+		Grupo losPicatecla1 = givenQueExisteUnGrupoConMensajes();
+		List<Grupo> gruposPresistidos = givenQueSeGuardenTodosLosGruposExistentes(losPicatecla1);
+		List<Grupo> gruposEncontrados = whenBuscoTodosLosGrupos(gruposPresistidos);
+		thenVerificoQueElGrupoContengaMensajes(gruposEncontrados);
+	}
 
-    @Test
-    public void queSePuedaEnviarUnMensajeAlGrupo() {
-        Grupo buscado = givenQueExisteUnGrupo();
-        Usuario usuario = givenQueExisteUnUsuario();
-        DatosDeMensaje datosMensaje = givenQueExisteUnDatosDeMensaje(buscado);
-        whenAsignoElMensajeAlGrupo(buscado, usuario, datosMensaje);
-        thenVerificoQueElMensajeFueAgregado(buscado);
+	private Grupo givenQueExisteUnGrupoConMensajes() {
+		HashSet<Mensaje> mensajes = new HashSet<>();
+		mensajes.add(new Mensaje());
+		Grupo grupo = new Grupo();
+		grupo.setId(1L);
+		grupo.setListaDeMensajes(mensajes);
+		return grupo;
+	}
 
-    }
+	@Test(expected = FalloAlUnirseAlGrupo.class)
+	public void testQueNoSePuedaUnirAGrupoCerrado() {
+		Grupo buscado = givenQueExisteUnGrupoCerrado();
+		Usuario usuario = givenQueExisteUnUsuario();
+		whenAsignoElUsuarioAlGrupo(buscado, usuario);
+	}
 
-    @Test
-    public void queSePuedaUnirUnUsuarioAlGrupo() {
-        Grupo buscado = givenQueExisteUnGrupo();
-        Usuario usuario = givenQueExisteUnUsuario();
-        whenAsignoElUsuarioAlGrupo(buscado, usuario);
-        thenVerificoQueElUsuarioFueAgregado(buscado);
-    }
+	private Grupo givenQueExisteUnGrupoCerrado() {
+		Grupo grupo = new Grupo();
+		grupo.setId(1L);
+		grupo.setCantidadMax(2);
+		grupo.setCerrado(true);
+		return grupo;
+	}
 
- /*
-   @Test
-    public void siElFormularioEstaCompletoQueSePuedaCrearElGrupo() {
-        DatosDeGrupo losPicatecla = givenQueExisteDatosDeGrupo();
-        Grupo grupoGeneradoAPartirDeLosDatosDeGrupo = whenCreoElGrupoConAtributosCompletos(losPicatecla);
-        thenElGrupoSeCreo(grupoGeneradoAPartirDeLosDatosDeGrupo);
-    }
-*/
-    @Test(expected = FormularioDeGrupoIncompleto.class)
-    public void siElFormularioEstaIncompletoQueSeLanzeUnaExcepcion(){
-        DatosDeGrupo losPicatecla=givenQueExisteUnGrupoIncompleto();
-        Usuario usuario=new Usuario();
-        whenCreoElGrupoConAtributosIncompletos(losPicatecla,usuario.getId());
-    }
+	@Test
+    public void siElFormularioEstaCompletoQueSePuedaCrearElGrupo(){
+         DatosDeGrupo losPicatecla= givenQueExisteDatosDeGrupo();
+         Grupo grupoGeneradoAPartirDeLosDatosDeGrupo = whenCreoElGrupoConAtributosCompletos(losPicatecla);
+         thenElGrupoSeCreo(grupoGeneradoAPartirDeLosDatosDeGrupo);
+	}
 
-    @Test
-    public void queSePuedaSolicitarTodosLosGrupos() {
-        Grupo losPicatecla1 = givenDadoQueExisteUnGrupo();
-        List<Grupo> gruposPresistidos = givenQueSeGuardenTodosLosGruposExistentes(losPicatecla1);
-        List<Grupo> gruposEncontrados = whenBuscoTodosLosGrupos(gruposPresistidos);
-        thenVerificoQueSeMuestrenTodosLosGrupos(gruposEncontrados);
-    }
+	@Test
+	public void queSePuedaEnviarUnMensajeAlGrupo() {
+		Grupo buscado = givenQueExisteUnGrupo();
+		Usuario usuario = givenQueExisteUnUsuario();
+		DatosDeMensaje datosMensaje = givenQueExisteUnDatosDeMensaje(buscado);
+		whenAsignoElMensajeAlGrupo(buscado, usuario, datosMensaje);
+	}
 
-    @Test
-    public void queSeObtenganTodasLasCarreras() {
+	/*
+	 * @Test public void siElFormularioEstaCompletoQueSePuedaCrearElGrupo() {
+	 * DatosDeGrupo losPicatecla = givenQueExisteDatosDeGrupo(); Grupo
+	 * grupoGeneradoAPartirDeLosDatosDeGrupo =
+	 * whenCreoElGrupoConAtributosCompletos(losPicatecla);
+	 * thenElGrupoSeCreo(grupoGeneradoAPartirDeLosDatosDeGrupo); }
+	 */
+	@Test(expected = FormularioDeGrupoIncompleto.class)
+	public void siElFormularioEstaIncompletoQueSeLanzeUnaExcepcion() {
+		DatosDeGrupo losPicatecla = givenQueExisteUnGrupoIncompleto();
+		Usuario usuario = new Usuario();
+		whenCreoElGrupoConAtributosIncompletos(losPicatecla);
+	}
 
-        List<Carrera> listaDeCarreras = givenQueExisteUnaListaDeCarreras();
+	@Test
+	public void queSePuedaSolicitarTodosLosGrupos() {
+		Grupo losPicatecla1 = givenDadoQueExisteUnGrupo();
+		List<Grupo> gruposPresistidos = givenQueSeGuardenTodosLosGruposExistentes(losPicatecla1);
+		List<Grupo> gruposEncontrados = whenBuscoTodosLosGrupos(gruposPresistidos);
+		thenVerificoQueSeMuestrenTodosLosGrupos(gruposEncontrados);
+	}
 
-        List<Carrera> listaDeCarrerasEncontrada = whenbuscoTodasLasCarreras(listaDeCarreras);
+	@Test
+	public void queSeObtenganTodasLasCarreras() {
 
-        thenObtengoLaListaDeCarrerasYVerificoQueTengaElTamanoCorrespondiente(listaDeCarrerasEncontrada);
-    }
+		List<Carrera> listaDeCarreras = givenQueExisteUnaListaDeCarreras();
 
-    @Test
-    public void queSeObtenganTodasLasMaterias() {
+		List<Carrera> listaDeCarrerasEncontrada = whenbuscoTodasLasCarreras(listaDeCarreras);
 
-        List<Materia> listaDeMaterias = givenQueExisteUnaListaDeMaterias();
+		thenObtengoLaListaDeCarrerasYVerificoQueTengaElTamanoCorrespondiente(listaDeCarrerasEncontrada);
+	}
 
-        List<Materia> listaDeMateriasEncontrada = whenbuscoTodasLasMaterias(listaDeMaterias);
+	@Test
+	public void queSeObtenganTodasLasMaterias() {
 
-        thenObtengoLaListaDeMateriasYVerificoQueTengaElTamanoCorrespondiente(listaDeMateriasEncontrada);
-    }
+		List<Materia> listaDeMaterias = givenQueExisteUnaListaDeMaterias();
 
-    @Test
-    public void queSeObtenganTodosLosGrupos() {
+		List<Materia> listaDeMateriasEncontrada = whenbuscoTodasLasMaterias(listaDeMaterias);
 
-        List<Grupo> listaDeGrupos = givenQueExisteUnaListaDeGrupos();
+		thenObtengoLaListaDeMateriasYVerificoQueTengaElTamanoCorrespondiente(listaDeMateriasEncontrada);
+	}
 
-        List<Grupo> listaDeGruposEncontrada = whenbuscoTodosLosGrupos(listaDeGrupos);
+	@Test
+	public void queSeObtenganTodosLosGrupos() {
 
-        thenObtengoLaListaDeGruposYVerificoQueTengaElTamanoCorrespondiente(listaDeGruposEncontrada);
-    }
+		List<Grupo> listaDeGrupos = givenQueExisteUnaListaDeGrupos();
 
-    @Test
-    public void queSeObtenganLosGruposFiltrados() {
-        List<Grupo> listaDeGrupos = givenQueExisteUnaListaDeGrupos();
-        DatosDeGrupo datosDeGrupoParaBusqueda = givenQueExisteDatosDeGrupoParaBusqueda();
-        List<Grupo> listaDeGruposEncontrada = whenbuscoLosGruposFiltrados(listaDeGrupos, datosDeGrupoParaBusqueda);
-        thenObtengoLaListaDeGruposYVerificoQueTengaElTamanoCorrespondiente(listaDeGruposEncontrada);
-    }
+		List<Grupo> listaDeGruposEncontrada = whenbuscoTodosLosGrupos(listaDeGrupos);
 
-    @Test
-    public void queSePuedaSolicitarTodosMisGrupos() {
-        Grupo losPicatecla1 = givenDadoQueExisteUnGrupo();
+		thenObtengoLaListaDeGruposYVerificoQueTengaElTamanoCorrespondiente(listaDeGruposEncontrada);
+	}
 
-        List<Grupo> gruposPresistidos = givenQueSeGuardenTodosLosGruposExistentes(losPicatecla1);
-        List<Grupo> gruposEncontrados = whenBuscoTodosMisGrupos(gruposPresistidos);
-        thenVerificoQueSeMuestrenTodosMisGrupos(gruposEncontrados);
-    }
+	@Test
+	public void queSeObtenganLosGruposFiltrados() {
+		List<Grupo> listaDeGrupos = givenQueExisteUnaListaDeGrupos();
+		DatosDeGrupo datosDeGrupoParaBusqueda = givenQueExisteDatosDeGrupoParaBusqueda();
+		List<Grupo> listaDeGruposEncontrada = whenbuscoLosGruposFiltrados(listaDeGrupos, datosDeGrupoParaBusqueda);
+		thenObtengoLaListaDeGruposYVerificoQueTengaElTamanoCorrespondiente(listaDeGruposEncontrada);
+	}
 
-    private void whenAsignoElMensajeAlGrupo(Grupo buscado, Usuario usuario, DatosDeMensaje mensaje) {
-        when(repositorioGrupo.getGrupoByID(1L)).thenReturn(buscado);
-        when(repositorioUsuario.getUsuarioByID(usuario.getId())).thenReturn(usuario);
-        servicioGrupo.IngresarUnMensajeAlGrupo(usuario.getId(), mensaje);
-    }
+	@Test
+	public void queSePuedaSolicitarTodosMisGrupos() {
+		Grupo losPicatecla1 = givenDadoQueExisteUnGrupo();
 
-    private void thenVerificoQueElGrupoContengaMensajes(List<Grupo> grupos) {
-        assertThat(grupos).hasSize(1);
-        assertThat(grupos.get(0).getListaDeMensajes()).hasSize(1);
-    }
+		List<Grupo> gruposPresistidos = givenQueSeGuardenTodosLosGruposExistentes(losPicatecla1);
+		List<Grupo> gruposEncontrados = whenBuscoTodosMisGrupos(gruposPresistidos);
+		thenVerificoQueSeMuestrenTodosMisGrupos(gruposEncontrados);
+	}
 
-    private void thenVerificoQueElMensajeFueAgregado(Grupo buscado) {
-        verify(repositorioMsj, times(1)).save(new Mensaje());
-    }
+	private void whenAsignoElMensajeAlGrupo(Grupo buscado, Usuario usuario, DatosDeMensaje mensaje) {
+		when(repositorioGrupo.getGrupoByID(1L)).thenReturn(buscado);
+		when(repositorioUsuario.getUsuarioByID(usuario.getId())).thenReturn(usuario);
+		servicioGrupo.IngresarUnMensajeAlGrupo(usuario.getId(), mensaje);
+	}
 
-    private DatosDeMensaje givenQueExisteUnDatosDeMensaje(Grupo grupo) {
-        DatosDeMensaje mensaje = new DatosDeMensaje();
-        mensaje.setMensaje("MSJ DE PRUEBA");
-        mensaje.setId(grupo.getId());
-        return mensaje;
-    }
+	private void thenVerificoQueElGrupoContengaMensajes(List<Grupo> grupos) {
+		assertThat(grupos).hasSize(1);
+		assertThat(grupos.get(0).getListaDeMensajes()).hasSize(1);
+	}
 
-    private DatosDeGrupo givenQueExisteDatosDeGrupoParaBusqueda() {
-        DatosDeGrupo datosDeGrupoParaBusqueda = new DatosDeGrupo();
-        datosDeGrupoParaBusqueda.setNombre("casa");
-        return datosDeGrupoParaBusqueda;
-    }
+	private void thenVerificoQueElMensajeFueAgregado(Grupo buscado) {
+		verify(repositorioMsj, times(1)).save(new Mensaje());
+	}
 
-    private List<Grupo> whenbuscoLosGruposFiltrados(List<Grupo> listaDeGrupos, DatosDeGrupo datosDeGrupoParaBusqueda) {
-        when(repositorioGrupo.buscarGrupoPorDatos(datosDeGrupoParaBusqueda)).thenReturn(listaDeGrupos);
-        return servicioGrupo.buscarGrupoPorDatos(datosDeGrupoParaBusqueda);
-    }
+	private DatosDeMensaje givenQueExisteUnDatosDeMensaje(Grupo grupo) {
+		DatosDeMensaje mensaje = new DatosDeMensaje();
+		mensaje.setMensaje("MSJ DE PRUEBA");
+		mensaje.setId(grupo.getId());
+		return mensaje;
+	}
 
-    private List<Grupo> givenQueExisteUnaListaDeGrupos() {
+	private DatosDeGrupo givenQueExisteDatosDeGrupoParaBusqueda() {
+		DatosDeGrupo datosDeGrupoParaBusqueda = new DatosDeGrupo();
+		datosDeGrupoParaBusqueda.setNombre("casa");
+		return datosDeGrupoParaBusqueda;
+	}
 
-    	Grupo a = new Grupo();
-    	Grupo b = new Grupo();
-    	
-    	a.setId(1L);
-    	b.setId(2L);
-    	
-        return Arrays.asList(a,b);
-    }
+	private List<Grupo> whenbuscoLosGruposFiltrados(List<Grupo> listaDeGrupos, DatosDeGrupo datosDeGrupoParaBusqueda) {
+		when(repositorioGrupo.buscarGrupoPorDatos(datosDeGrupoParaBusqueda)).thenReturn(listaDeGrupos);
+		return servicioGrupo.buscarGrupoPorDatos(datosDeGrupoParaBusqueda);
+	}
 
-    private List<Grupo> whenbuscoTodosLosGrupos(List<Grupo> listaDeGrupos) {
-        when(repositorioGrupo.buscarTodos()).thenReturn(listaDeGrupos);
-        return servicioGrupo.buscarTodos();
-    }
+	private List<Grupo> givenQueExisteUnaListaDeGrupos() {
 
-    private void thenObtengoLaListaDeGruposYVerificoQueTengaElTamanoCorrespondiente(List<Grupo> listaDeGruposEncontrada) {
-        assertThat(listaDeGruposEncontrada).hasSize(2);
-    }
+		Grupo a = new Grupo();
+		Grupo b = new Grupo();
 
-    private void thenObtengoLaListaDeMateriasYVerificoQueTengaElTamanoCorrespondiente(List<Materia> listaDeMateriasEncontrada) {
-        assertThat(listaDeMateriasEncontrada).hasSize(2);
-    }
+		a.setId(1L);
+		b.setId(2L);
 
-    private List<Materia> whenbuscoTodasLasMaterias(List<Materia> listaDeMaterias) {
-        when(repositorioMateria.buscarTodasLasMaterias()).thenReturn(listaDeMaterias);
-        return servicioGrupo.buscarTodasLasMaterias();
-    }
+		return Arrays.asList(a, b);
+	}
 
-    private List<Materia> givenQueExisteUnaListaDeMaterias() {
-        return Arrays.asList(new Materia(), new Materia());
-    }
+	private List<Grupo> whenbuscoTodosLosGrupos(List<Grupo> listaDeGrupos) {
+		when(repositorioGrupo.buscarTodos()).thenReturn(listaDeGrupos);
+		return servicioGrupo.buscarTodos();
+	}
 
-    private void thenObtengoLaListaDeCarrerasYVerificoQueTengaElTamanoCorrespondiente(List<Carrera> listaDeCarrerasEncontrada) {
-        assertThat(listaDeCarrerasEncontrada).hasSize(2);
-    }
+	private void thenObtengoLaListaDeGruposYVerificoQueTengaElTamanoCorrespondiente(
+			List<Grupo> listaDeGruposEncontrada) {
+		assertThat(listaDeGruposEncontrada).hasSize(2);
+	}
 
-    private List<Carrera> whenbuscoTodasLasCarreras(List<Carrera> listaDeCarreras) {
-        when(repositorioCarrera.buscarTodasLasCarreras()).thenReturn(listaDeCarreras);
-        return servicioGrupo.buscarTodasLasCarreras();
-    }
+	private void thenObtengoLaListaDeMateriasYVerificoQueTengaElTamanoCorrespondiente(
+			List<Materia> listaDeMateriasEncontrada) {
+		assertThat(listaDeMateriasEncontrada).hasSize(2);
+	}
 
-    private List<Carrera> givenQueExisteUnaListaDeCarreras() {
-        return Arrays.asList(new Carrera(), new Carrera());
-    }
+	private List<Materia> whenbuscoTodasLasMaterias(List<Materia> listaDeMaterias) {
+		when(repositorioMateria.buscarTodasLasMaterias()).thenReturn(listaDeMaterias);
+		return servicioGrupo.buscarTodasLasMaterias();
+	}
 
-    private void thenVerificoQueSeMuestrenTodosLosGrupos(List<Grupo> grupos) {
-        assertThat(grupos).hasSize(1);
-    }
+	private List<Materia> givenQueExisteUnaListaDeMaterias() {
+		return Arrays.asList(new Materia(), new Materia());
+	}
 
-    private void thenVerificoQueSeMuestrenTodosMisGrupos(List<Grupo> grupos) {
-        assertThat(grupos).hasSize(1);
-    }
+	private void thenObtengoLaListaDeCarrerasYVerificoQueTengaElTamanoCorrespondiente(
+			List<Carrera> listaDeCarrerasEncontrada) {
+		assertThat(listaDeCarrerasEncontrada).hasSize(2);
+	}
 
-    private List<Grupo> whenBuscoTodosMisGrupos(List<Grupo> gruposPresistidos) {
-        when(repositorioGrupo.buscarTodosMisGrupos(usuario)).thenReturn(gruposPresistidos);
-        return servicioGrupo.buscarTodosMisGrupos(usuario);
-    }
+	private List<Carrera> whenbuscoTodasLasCarreras(List<Carrera> listaDeCarreras) {
+		when(repositorioCarrera.buscarTodasLasCarreras()).thenReturn(listaDeCarreras);
+		return servicioGrupo.buscarTodasLasCarreras();
+	}
 
-    private List<Grupo> whenBuscoTodosLosGrupos(List<Grupo> gruposPresistidos) {
-        when(repositorioGrupo.buscarTodos()).thenReturn(gruposPresistidos);
-        return servicioGrupo.buscarTodos();
-    }
+	private List<Carrera> givenQueExisteUnaListaDeCarreras() {
+		return Arrays.asList(new Carrera(), new Carrera());
+	}
 
-    private List<Grupo> givenQueSeGuardenTodosLosGruposExistentes(Grupo losPicatecla1) {
-        List<Grupo> grupo = new ArrayList<>();
-        grupo.add(losPicatecla1);
-        return grupo;
-    }
+	private void thenVerificoQueSeMuestrenTodosLosGrupos(List<Grupo> grupos) {
+		assertThat(grupos).hasSize(1);
+	}
 
-    private Grupo givenDadoQueExisteUnGrupo() {
-        return new Grupo();
-    }
+	private void thenVerificoQueSeMuestrenTodosMisGrupos(List<Grupo> grupos) {
+		assertThat(grupos).hasSize(1);
+	}
 
-    private void whenCreoElGrupoConAtributosIncompletos(DatosDeGrupo losPicatecla,Long id) {
-        servicioGrupo.crearGrupo(losPicatecla,id);
-    }
+	private List<Grupo> whenBuscoTodosMisGrupos(List<Grupo> gruposPresistidos) {
+		when(repositorioGrupo.buscarTodosMisGrupos(usuario)).thenReturn(gruposPresistidos);
+		return servicioGrupo.buscarTodosMisGrupos(usuario);
+	}
 
-    private DatosDeGrupo givenQueExisteUnGrupoIncompleto() {
-        DatosDeGrupo datosdegrupo = new DatosDeGrupo();
-        String nombre = "Los Picateclas";
-        Turno turno = Turno.NOCHE;
-        Integer ctdMaxima = 5;
-        String descripcion = "Grupo de test para taller web";
-        datosdegrupo.setNombre(nombre);
-        datosdegrupo.setTurno(turno);
-        datosdegrupo.setPrivacidad(Privacidad.ABIERTO);
-        datosdegrupo.setCantidadMax(ctdMaxima);
-        datosdegrupo.setDescripcion(descripcion);
+	private List<Grupo> whenBuscoTodosLosGrupos(List<Grupo> gruposPresistidos) {
+		when(repositorioGrupo.buscarTodos()).thenReturn(gruposPresistidos);
+		return servicioGrupo.buscarTodos();
+	}
 
-        return datosdegrupo;
-    }
+	private List<Grupo> givenQueSeGuardenTodosLosGruposExistentes(Grupo losPicatecla1) {
+		List<Grupo> grupo = new ArrayList<>();
+		grupo.add(losPicatecla1);
+		return grupo;
+	}
 
-    private DatosDeGrupo givenQueExisteDatosDeGrupo() {
-        DatosDeGrupo datosdegrupo = new DatosDeGrupo();
-        String nombre = "picatecla";
-        Turno turno = Turno.NOCHE;
-        Integer ctdMaxima = 5;
-        String descripcion = "Grupo de test para taller web";
-        Long materia1 = 123L;
-        Long carrera2 = 134L;
-        datosdegrupo.setCarrera(carrera2);
-        datosdegrupo.setMateria(materia1);
-        datosdegrupo.setNombre(nombre);
-        datosdegrupo.setTurno(turno);
-        datosdegrupo.setPrivacidad(Privacidad.ABIERTO);
-        datosdegrupo.setCantidadMax(ctdMaxima);
-        datosdegrupo.setDescripcion(descripcion);
-        return datosdegrupo;
-    }
+	private Grupo givenDadoQueExisteUnGrupo() {
+		return new Grupo();
+	}
 
-    private Grupo whenCreoElGrupoConAtributosCompletos(DatosDeGrupo losPicatecla,Long usuarioId) {
-        when(repositorioGrupo.getGrupoByID(servicioGrupo.crearGrupo(losPicatecla, usuarioId).getId())).thenReturn(new Grupo());
-        when(repositorioUsuario.getUsuarioByID(usuarioId)).thenReturn(new Usuario());
-        when(repositorioMateria.buscarMateriaPorId(losPicatecla.getMateria())).thenReturn(new Materia());
-        when(repositorioCarrera.buscarCarreraPorId(losPicatecla.getCarrera())).thenReturn(new Carrera());
-        return servicioGrupo.crearGrupo(losPicatecla,usuarioId);
-    }
+	private void whenCreoElGrupoConAtributosIncompletos(DatosDeGrupo losPicatecla) {
+		servicioGrupo.crearGrupo(losPicatecla);
+	}
 
-    private void thenElGrupoSeCreo(Grupo grupoGenerado) {
-        verify(repositorioGrupo, times(1)).guardarGrupo(grupoGenerado);
-    }
+	private DatosDeGrupo givenQueExisteUnGrupoIncompleto() {
+		DatosDeGrupo datosdegrupo = new DatosDeGrupo();
+		String nombre = "Los Picateclas";
+		Turno turno = Turno.NOCHE;
+		Integer ctdMaxima = 5;
+		String descripcion = "Grupo de test para taller web";
+		datosdegrupo.setNombre(nombre);
+		datosdegrupo.setTurno(turno);
+		datosdegrupo.setPrivacidad(Privacidad.ABIERTO);
+		datosdegrupo.setCantidadMax(ctdMaxima);
+		datosdegrupo.setDescripcion(descripcion);
 
-    private void thenVerificoQueElUsuarioFueAgregado(Grupo buscado) {
-        verify(repositorioGrupo, times(1)).actualizarGrupo(buscado);
-    }
+		return datosdegrupo;
+	}
 
-    private void whenAsignoElUsuarioAlGrupo(Grupo buscado, Usuario usuario) {
-        when(repositorioGrupo.getGrupoByID(buscado.getId())).thenReturn(buscado);
-        when(repositorioUsuario.getUsuarioByID(usuario.getId())).thenReturn(usuario);
-        servicioGrupo.IngresarUsuarioAlGrupo(buscado.getId(), usuario.getId());
-    }
+	private DatosDeGrupo givenQueExisteDatosDeGrupo() {
+		DatosDeGrupo datosdegrupo = new DatosDeGrupo();
+		String nombre = "picatecla";
+		Turno turno = Turno.NOCHE;
+		Integer ctdMaxima = 5;
+		String descripcion = "Grupo de test para taller web";
+		Long materia1 = 123L;
+		Long carrera2 = 134L;
+		datosdegrupo.setCarrera(carrera2);
+		datosdegrupo.setMateria(materia1);
+		datosdegrupo.setNombre(nombre);
+		datosdegrupo.setTurno(turno);
+		datosdegrupo.setPrivacidad(Privacidad.ABIERTO);
+		datosdegrupo.setCantidadMax(ctdMaxima);
+		datosdegrupo.setDescripcion(descripcion);
+		datosdegrupo.setAdministrador(new Usuario());
+		return datosdegrupo;
+	}
 
-    private Usuario givenQueExisteUnUsuario() {
-        Usuario usuario = new Usuario();
-        usuario.setId(1L);
-        return usuario;
-    }
+	private Grupo whenCreoElGrupoConAtributosCompletos(DatosDeGrupo losPicatecla) {
+		when(repositorioMateria.buscarMateriaPorId(losPicatecla.getMateria())).thenReturn(new Materia());
+		when(repositorioCarrera.buscarCarreraPorId(losPicatecla.getCarrera())).thenReturn(new Carrera());
 
-    private Grupo givenQueExisteUnGrupo() {
-        Grupo grupo = new Grupo();
-        grupo.setId(1L);
-        grupo.setCantidadMax(2);
-        return grupo;
-    }
+		when(repositorioGrupo.getGrupoByID(anyLong())).thenReturn(losPicatecla.crearGrupoAPartirDeDatosDeGrupo());
+		when(repositorioUsuario.getUsuarioByID(anyLong())).thenReturn(losPicatecla.getAdministrador());
+
+		return servicioGrupo.crearGrupo(losPicatecla);
+	}
+
+	private void thenElGrupoSeCreo(Grupo grupoGenerado) {
+		verify(repositorioGrupo, times(1)).guardarGrupo(grupoGenerado);
+		assertThat(grupoGenerado.getAdministrador()).isNotNull();
+	}
+
+	private void thenVerificoQueElUsuarioFueAgregado(Grupo buscado) {
+		verify(repositorioGrupo, times(1)).actualizarGrupo(buscado);
+	}
+
+	private void whenAsignoElUsuarioAlGrupo(Grupo buscado, Usuario usuario) {
+		when(repositorioGrupo.getGrupoByID(buscado.getId())).thenReturn(buscado);
+		when(repositorioUsuario.getUsuarioByID(usuario.getId())).thenReturn(usuario);
+
+		servicioGrupo.ingresarUsuarioAlGrupo(buscado.getId(), usuario.getId());
+	}
+
+	private Usuario givenQueExisteUnUsuario() {
+		Usuario usuario = new Usuario();
+		usuario.setId(1L);
+		return usuario;
+	}
+
+	private Grupo givenQueExisteUnGrupo() {
+		Grupo grupo = new Grupo();
+		grupo.setId(1L);
+		grupo.setCantidadMax(2);
+		grupo.setCerrado(false);
+		return grupo;
+	}
 
 }

@@ -10,6 +10,7 @@ import ar.edu.unlam.tallerweb1.SpringTest;
 import ar.edu.unlam.tallerweb1.modelo.Carrera;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.modelo.Materia;
+import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.util.enums.Turno;
 
 public class EntityGrupoTest extends SpringTest{
@@ -37,10 +38,9 @@ public class EntityGrupoTest extends SpringTest{
 	
 	private void thenLaCarreraSeAsignaAlGrupo(Long id) {
 		Grupo grupoEncontrado = session().get(Grupo.class, id);
-		Carrera carreraEncontrada = session().get(Carrera.class, id);
 		
 		assertThat(grupoEncontrado).isNotNull();
-		assertThat(carreraEncontrada).isNotNull();
+		assertThat(grupoEncontrado.getCarrera()).isNotNull();
 		assertThat(grupoEncontrado.getCarrera().getNombre()).isEqualTo("Desarrollo WEB");
 	}
 
@@ -55,16 +55,26 @@ public class EntityGrupoTest extends SpringTest{
 		Grupo nuevoGrupo = givenExisteUnGrupo();
 		Carrera nuevaCarrera = givenExisteUnaCarrera();
 		Materia nuevaMateria = givenExisteUnaMateria();
+		Usuario administrador = givenExisteUnAdmin();
 		
-		whenPersistimosUnGrupo(nuevoGrupo, nuevaCarrera, nuevaMateria);
+		whenPersistimosUnGrupo(nuevoGrupo, nuevaCarrera, nuevaMateria, administrador);
 		
 		return nuevoGrupo.getId();
 	}
 
-	private void whenPersistimosUnGrupo(Grupo nuevoGrupo, Carrera nuevaCarrera, Materia nuevaMateria) {
+	private Usuario givenExisteUnAdmin() {
+		Usuario admin = new Usuario();
+		
+		admin.setNombre("Manuel");
+		return admin;
+	}
+
+	private void whenPersistimosUnGrupo(Grupo nuevoGrupo, Carrera nuevaCarrera, Materia nuevaMateria, Usuario administrador) {
 		session().save(nuevaCarrera);
 		session().save(nuevaMateria);
+		session().save(administrador);
 		
+		nuevoGrupo.setAdministrador(administrador);
 		nuevoGrupo.setCarrera(nuevaCarrera);
 		nuevoGrupo.setMateria(nuevaMateria);
 		session().save(nuevoGrupo);
@@ -72,10 +82,9 @@ public class EntityGrupoTest extends SpringTest{
 
 	private void thenLaMateriaSeAsignaAlGrupo(Long id) {
 		Grupo grupoEncontrado = session().get(Grupo.class, id);
-		Materia materiaEncontrada = session().get(Materia.class, id);
 		
 		assertThat(grupoEncontrado).isNotNull();
-		assertThat(materiaEncontrada).isNotNull();
+		assertThat(grupoEncontrado.getMateria()).isNotNull();
 		assertThat(grupoEncontrado.getMateria().getNombre()).isEqualTo("Basica 1");
 	}
 

@@ -33,7 +33,7 @@ public class ControladorHome {
 	public ModelAndView IngresarAGrupo(HttpServletRequest request, @RequestParam Long id) {
 		Usuario usuarioLogueado = (Usuario) request.getSession().getAttribute("USUARIO");
 
-		servicioGrupo.IngresarUsuarioAlGrupo(usuarioLogueado.getId(), id);
+		servicioGrupo.ingresarUsuarioAlGrupo(usuarioLogueado.getId(), id);
 		servicioNotificaciones.notificarNuevoIngreso(id, usuarioLogueado);
 
 		return new ModelAndView("redirect:/grupos/" + id);

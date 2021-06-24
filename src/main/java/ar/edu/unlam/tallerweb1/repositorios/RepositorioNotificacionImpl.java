@@ -38,6 +38,7 @@ public class RepositorioNotificacionImpl implements RepositorioNotificacion {
 				.executeUpdate();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public Notificacion getExistePendiente(Long usuario) {
 		return (Notificacion) sessionFactory.getCurrentSession().createCriteria(Notificacion.class)

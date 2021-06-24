@@ -106,14 +106,28 @@
                                 </div>
                                 <div class="d-flex justify-content-center m-3">
                                     <c:choose>
+                                    
                                         <c:when test="${grupo.grupoLleno()==true}">
                                             <button type="submit" class="btn btn-secondary mt-3" disabled>Lleno
                                             </button>
                                         </c:when>
+                                        
                                         <c:otherwise>
-                                            <button type="submit" class="btn btn-success mt-3" name="id" form="unirte"
+                                        
+                                        	<c:choose>
+                                        		<c:when test="${grupo.getCerrado()==false}">
+                                        			<button type="submit" class="btn btn-success mt-3" name="id" form="unirte"
                                                     value="${grupo.id}">Unirte</button>
+                                        		</c:when>
+                                        		
+                                        		<c:otherwise>
+                                            		<button type="submit" class="btn btn-success mt-3" name="idGrupo" form="solicitarUnirse"
+                                                    value="${grupo.id}">Solicitar Unirse</button>
+                                       		 	</c:otherwise>
+                                   		 	</c:choose>
+                                   		 	
                                         </c:otherwise>
+                                        
                                     </c:choose>
                                 </div>
                             </div>
@@ -121,6 +135,7 @@
                         </c:if>
                     </c:forEach>
                     <form action="ingresar-a-grupo" id="unirte" method="POST"></form>
+                    <form action="solicitudes/solicitar-inclusion" id="solicitarUnirse" method="POST"></form>
                 </c:if>
                 <c:if test="${empty grupos}">
                 	<div>

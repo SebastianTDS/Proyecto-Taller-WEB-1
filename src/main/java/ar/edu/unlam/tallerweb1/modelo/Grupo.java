@@ -7,7 +7,6 @@ import javax.persistence.*;
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.util.enums.Turno;
 import ar.edu.unlam.tallerweb1.util.exceptions.YaEstoyEnElGrupo;
-import com.sun.istack.NotNull;
 
 @Entity
 public class Grupo {
@@ -17,16 +16,17 @@ public class Grupo {
 	private String descripcion;
 	private Boolean cerrado;
 	private Integer cantidadMax;
-	
+
 	private Boolean esMateria;
 
 	private Turno turno;
+
+	private Usuario administrador;
 	private Carrera carrera;
 	private Materia materia;
 
 	private Set<Usuario> listaDeUsuarios;
 	private Set<Mensaje> listaDeMensajes;
-
 
 	public Grupo() {
 		this.listaDeUsuarios = new HashSet<>();
@@ -56,8 +56,19 @@ public class Grupo {
 		return true;
 	}
 
+	@ManyToOne(optional = false)
+	public Usuario getAdministrador() {
+		return administrador;
+	}
+
+	public void setAdministrador(Usuario administrador) {
+		this.administrador = administrador;
+	}
+
 	@OneToMany(mappedBy = "grupo", fetch = FetchType.EAGER)
-	public Set<Mensaje> getListaDeMensajes() { return listaDeMensajes;}
+	public Set<Mensaje> getListaDeMensajes() {
+		return listaDeMensajes;
+	}
 
 	public void setListaDeMensajes(Set<Mensaje> listaDeMensajes) {
 		this.listaDeMensajes = listaDeMensajes;
@@ -143,14 +154,7 @@ public class Grupo {
 	public void setCantidadMax(Integer ctdMaxima) {
 		this.cantidadMax = ctdMaxima;
 	}
-
-	@PreRemove
-	public void removerGruposDeUsuario() {
-		for (Usuario usuario : listaDeUsuarios) {
-			usuario.getListaDeGrupos().remove(this);
-		}
-	}
-
+	
 	public void actualizar(DatosDeGrupo formulario) {
 		nombre = formulario.tryGetNombre(nombre);
 		descripcion = formulario.tryGetDescripcion(descripcion);
@@ -159,19 +163,20 @@ public class Grupo {
 	}
 
 	public void agregarUsuarioAlGrupo(Usuario usuarioAInsertar) {
-		if(!listaDeUsuarios.contains(usuarioAInsertar)){
-			listaDeUsuarios.add(usuarioAInsertar);
-			usuarioAInsertar.agregarGrupo(this);
-		}
+		if (listaDeUsuarios.contains(usuarioAInsertar)) 
+			throw new YaEstoyEnElGrupo(id);
+			
+		listaDeUsuarios.add(usuarioAInsertar);
+		usuarioAInsertar.agregarGrupo(this);
 	}
-	
+
 	public Boolean grupoLleno() {
 		return listaDeUsuarios.size() >= cantidadMax;
 	}
 
-  public Integer cantidadDeIntegrantes(){
-      return listaDeUsuarios.size();
-  }
+	public Integer cantidadDeIntegrantes() {
+		return listaDeUsuarios.size();
+	}
 
 	public Boolean getEsMateria() {
 		return esMateria;
@@ -181,9 +186,21 @@ public class Grupo {
 		this.esMateria = esMateria;
 	}
 
-	public TreeSet<Mensaje>  ordenarMsj(){
-		TreeSet<Mensaje> mensajes=new TreeSet();
+	public TreeSet<Mensaje> ordenarMsj() {
+		TreeSet<Mensaje> mensajes = new TreeSet<Mensaje>();
 		mensajes.addAll(listaDeMensajes);
 		return mensajes;
 	}
+
+	@PreRemove
+	public void removerGruposDeUsuario() {
+		for (Usuario usuario : listaDeUsuarios) {
+			usuario.getListaDeGrupos().remove(this);
+		}
+		
+		for(Mensaje mensaje : listaDeMensajes) {
+			mensaje.setGrupo(null);
+		}
+	}
+
 }
