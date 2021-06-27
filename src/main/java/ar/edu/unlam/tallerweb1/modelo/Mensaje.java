@@ -21,7 +21,7 @@ public class Mensaje implements Comparable<Mensaje> {
         return id;
     }
 
-    @ManyToOne()
+    @ManyToOne(optional = false, targetEntity = Grupo.class)
     public Grupo getGrupo() {
         return grupo;
     }

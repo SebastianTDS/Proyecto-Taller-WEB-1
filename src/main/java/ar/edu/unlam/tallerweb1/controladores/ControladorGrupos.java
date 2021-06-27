@@ -92,6 +92,7 @@ public class ControladorGrupos {
 
 		modelo.put("msj", mensaje);
 		modelo.put("grupo", buscado);
+		//modelo.put("mensajes",servicioGrupo.buscarMensajes(id));
 		return new ModelAndView("vistaGrupo", modelo);
 	}
 

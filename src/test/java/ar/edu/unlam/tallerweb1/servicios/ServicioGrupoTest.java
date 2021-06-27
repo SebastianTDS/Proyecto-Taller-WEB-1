@@ -60,7 +60,6 @@ public class ServicioGrupoTest {
 		mensajes.add(new Mensaje());
 		Grupo grupo = new Grupo();
 		grupo.setId(1L);
-		grupo.setListaDeMensajes(mensajes);
 		return grupo;
 	}
 
@@ -171,7 +170,6 @@ public class ServicioGrupoTest {
 
 	private void thenVerificoQueElGrupoContengaMensajes(List<Grupo> grupos) {
 		assertThat(grupos).hasSize(1);
-		assertThat(grupos.get(0).getListaDeMensajes()).hasSize(1);
 	}
 
 	private void thenVerificoQueElMensajeFueAgregado(Grupo buscado) {

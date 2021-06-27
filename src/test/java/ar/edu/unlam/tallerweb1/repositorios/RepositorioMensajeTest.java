@@ -15,6 +15,8 @@ public class RepositorioMensajeTest extends SpringTest {
     @Autowired
     private RepositorioMensajeImpl repositorio;
     private final Mensaje mensaje1= new Mensaje();
+    private final Mensaje mensaje2= new Mensaje();
+    private final Mensaje mensaje3= new Mensaje();
     private final Materia nuevaMateria = new Materia();
     private final Carrera nuevaCarrera = new Carrera();
 
@@ -29,6 +31,26 @@ public class RepositorioMensajeTest extends SpringTest {
         thenVerificoQueElMensajeSeGuarde(msjGuardado);
     }
 
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedaBuscarTodosLosMensajesDeUnGrupo(){
+        Grupo grupo=givenQueExisteUnGrupoConCarreraYMateria();
+        Usuario usuario=givenQueExisteUnUsuario();
+        Mensaje mensaje=givenQueExisteUnMensaje(grupo,usuario);
+        Mensaje mensaje2=givenQueExisteUnMensaje2(grupo,usuario);
+        Mensaje mensaje3=givenQueExisteUnMensaje3(grupo,usuario);
+        whenGuardoLosMensajesEnElGrupo(mensaje);
+        whenGuardoLosMensajesEnElGrupo(mensaje2);
+        whenGuardoLosMensajesEnElGrupo(mensaje3);
+        thenBuscoLosMsjDelGrupo(grupo);
+    }
+
+
+    private void thenBuscoLosMsjDelGrupo(Grupo grupo) {
+        assertThat(repositorio.getMensajesByIDGrupo(grupo.getId())).hasSize(2);
+    }
+
     private void thenVerificoQueElMensajeSeGuarde(Mensaje mensaje) {
         assertThat(session().get(Mensaje.class, mensaje.getId())).isNotNull();
     }
@@ -39,6 +61,22 @@ public class RepositorioMensajeTest extends SpringTest {
         mensaje1.setGrupo(grupo);
         mensaje1.setUsuario(usuario);
         return mensaje1;
+    }
+
+    private Mensaje givenQueExisteUnMensaje2(Grupo grupo, Usuario usuario) {
+        mensaje2.setFecha(LocalDateTime.now().withNano(0));
+        mensaje2.setMensaje("Prueba2");
+        mensaje2.setGrupo(grupo);
+        mensaje2.setUsuario(usuario);
+        return mensaje2;
+    }
+
+    private Mensaje givenQueExisteUnMensaje3(Grupo grupo, Usuario usuario) {
+        mensaje3.setFecha(LocalDateTime.now().withNano(0));
+        mensaje3.setMensaje("Prueba2");
+        mensaje3.setGrupo(null);
+        mensaje3.setUsuario(usuario);
+        return mensaje2;
     }
 
     private Mensaje whenGuardoLosMensajesEnElGrupo(Mensaje mensaje) {

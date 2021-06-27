@@ -1,9 +1,14 @@
 package ar.edu.unlam.tallerweb1.repositorios;
 
+import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.modelo.Mensaje;
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 
 @Repository
@@ -19,5 +24,13 @@ public class RepositorioMensajeImpl implements RepositorioMensaje {
     public void save(Mensaje mensajeCreado) {
         sessionFactory.getCurrentSession().save(mensajeCreado);
     }
+
+    @Override
+    public List<Mensaje> getMensajesByIDGrupo(Long id) {
+        Criteria cr = sessionFactory.getCurrentSession().createCriteria(Mensaje.class);
+        cr.createCriteria("grupo").add(Restrictions.eq("id", id));
+        return cr.list();
+    }
+
 
 }
