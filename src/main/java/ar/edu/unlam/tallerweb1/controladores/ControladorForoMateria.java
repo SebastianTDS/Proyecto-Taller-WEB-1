@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeMensaje;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
+import ar.edu.unlam.tallerweb1.servicios.ServicioMensajes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -14,10 +15,12 @@ import org.springframework.web.servlet.ModelAndView;
 public class ControladorForoMateria {
 
     private final ServicioGrupo servicioGrupo;
+    private final ServicioMensajes servicioMensajes;
 
     @Autowired
-    public ControladorForoMateria(ServicioGrupo servicioGrupo) {
+    public ControladorForoMateria(ServicioGrupo servicioGrupo, ServicioMensajes servicioMensajes) {
         this.servicioGrupo = servicioGrupo;
+        this.servicioMensajes = servicioMensajes;
     }
 
     @RequestMapping(path = "/ingresar-a-foro/{id}",method = RequestMethod.GET)
@@ -26,6 +29,8 @@ public class ControladorForoMateria {
         DatosDeMensaje mensaje = new DatosDeMensaje();
         model.put("msj", mensaje);
         model.put("grupo",servicioGrupo.buscarGrupoPorID(id));
+        model.put("mensajes",servicioMensajes.buscarMensajesDeUnGrupo(id));
+
         return new ModelAndView ("vistaForoMateria",model);
     }
 }

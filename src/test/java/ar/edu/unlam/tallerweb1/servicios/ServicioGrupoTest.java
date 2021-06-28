@@ -1,7 +1,6 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
-import ar.edu.unlam.tallerweb1.dto.DatosDeMensaje;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.repositorios.*;
 
@@ -25,7 +24,6 @@ public class ServicioGrupoTest {
 	private RepositorioMateria repositorioMateria;
 	private RepositorioCarrera repositorioCarrera;
 	private RepositorioUsuario repositorioUsuario;
-	private RepositorioMensajeImpl repositorioMsj;
 	private final Usuario usuario = new Usuario();
 
 	@Before
@@ -34,9 +32,7 @@ public class ServicioGrupoTest {
 		repositorioGrupo = mock(RepositorioGrupoImpl.class);
 		repositorioCarrera = mock(RepositorioCarreraImpl.class);
 		repositorioMateria = mock(RepositorioMateriaImpl.class);
-		repositorioMsj = mock(RepositorioMensajeImpl.class);
-		servicioGrupo = new ServicioGrupoImpl(repositorioGrupo, repositorioCarrera, repositorioMateria,
-				repositorioUsuario, repositorioMsj);
+		servicioGrupo = new ServicioGrupoImpl(repositorioGrupo, repositorioCarrera, repositorioMateria,repositorioUsuario);
 	}
 
 	@Test
@@ -47,21 +43,6 @@ public class ServicioGrupoTest {
 		thenVerificoQueElUsuarioFueAgregado(buscado);
 	}
 
-	@Test
-	public void queSePuedabuscarUnGrupoConMensajes() {
-		Grupo losPicatecla1 = givenQueExisteUnGrupoConMensajes();
-		List<Grupo> gruposPresistidos = givenQueSeGuardenTodosLosGruposExistentes(losPicatecla1);
-		List<Grupo> gruposEncontrados = whenBuscoTodosLosGrupos(gruposPresistidos);
-		thenVerificoQueElGrupoContengaMensajes(gruposEncontrados);
-	}
-
-	private Grupo givenQueExisteUnGrupoConMensajes() {
-		HashSet<Mensaje> mensajes = new HashSet<>();
-		mensajes.add(new Mensaje());
-		Grupo grupo = new Grupo();
-		grupo.setId(1L);
-		return grupo;
-	}
 
 	@Test(expected = FalloAlUnirseAlGrupo.class)
 	public void testQueNoSePuedaUnirAGrupoCerrado() {
@@ -85,14 +66,6 @@ public class ServicioGrupoTest {
          thenElGrupoSeCreo(grupoGeneradoAPartirDeLosDatosDeGrupo);
 	}
 
-	@Test
-	public void queSePuedaEnviarUnMensajeAlGrupo() {
-		Grupo buscado = givenQueExisteUnGrupo();
-		Usuario usuario = givenQueExisteUnUsuario();
-		DatosDeMensaje datosMensaje = givenQueExisteUnDatosDeMensaje(buscado);
-		whenAsignoElMensajeAlGrupo(buscado, usuario, datosMensaje);
-	}
-
 	/*
 	 * @Test public void siElFormularioEstaCompletoQueSePuedaCrearElGrupo() {
 	 * DatosDeGrupo losPicatecla = givenQueExisteDatosDeGrupo(); Grupo
@@ -103,7 +76,6 @@ public class ServicioGrupoTest {
 	@Test(expected = FormularioDeGrupoIncompleto.class)
 	public void siElFormularioEstaIncompletoQueSeLanzeUnaExcepcion() {
 		DatosDeGrupo losPicatecla = givenQueExisteUnGrupoIncompleto();
-		Usuario usuario = new Usuario();
 		whenCreoElGrupoConAtributosIncompletos(losPicatecla);
 	}
 
@@ -162,26 +134,6 @@ public class ServicioGrupoTest {
 		thenVerificoQueSeMuestrenTodosMisGrupos(gruposEncontrados);
 	}
 
-	private void whenAsignoElMensajeAlGrupo(Grupo buscado, Usuario usuario, DatosDeMensaje mensaje) {
-		when(repositorioGrupo.getGrupoByID(1L)).thenReturn(buscado);
-		when(repositorioUsuario.getUsuarioByID(usuario.getId())).thenReturn(usuario);
-		servicioGrupo.IngresarUnMensajeAlGrupo(usuario.getId(), mensaje);
-	}
-
-	private void thenVerificoQueElGrupoContengaMensajes(List<Grupo> grupos) {
-		assertThat(grupos).hasSize(1);
-	}
-
-	private void thenVerificoQueElMensajeFueAgregado(Grupo buscado) {
-		verify(repositorioMsj, times(1)).save(new Mensaje());
-	}
-
-	private DatosDeMensaje givenQueExisteUnDatosDeMensaje(Grupo grupo) {
-		DatosDeMensaje mensaje = new DatosDeMensaje();
-		mensaje.setMensaje("MSJ DE PRUEBA");
-		mensaje.setId(grupo.getId());
-		return mensaje;
-	}
 
 	private DatosDeGrupo givenQueExisteDatosDeGrupoParaBusqueda() {
 		DatosDeGrupo datosDeGrupoParaBusqueda = new DatosDeGrupo();

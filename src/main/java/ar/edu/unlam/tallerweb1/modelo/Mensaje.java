@@ -66,9 +66,6 @@ public class Mensaje implements Comparable<Mensaje> {
         return Algorithm.getTiempoTranscurrido(fecha);
     }
 
-
-
-
     @Override
     public int compareTo(Mensaje o) {
         if (this.id < o.getId())
@@ -82,7 +79,7 @@ public class Mensaje implements Comparable<Mensaje> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Mensaje mensaje = (Mensaje) o;
-        return Objects.equals(id, mensaje.id);
+        return id.equals(mensaje.id);
     }
 
     @Override
