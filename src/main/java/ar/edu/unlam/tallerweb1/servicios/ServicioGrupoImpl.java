@@ -67,10 +67,11 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 	@Override
 	public void validarPermiso(Long idUsuario, Long idGrupo, Permiso permisoAValidar) {
 		Grupo objetivo = repoGrupo.getGrupoByID(idGrupo);
-		Usuario usuarioAValidar = repoUsuario.getUsuarioByID(idUsuario);
 
 		if (objetivo == null)
 			throw new GrupoInexistenteException("El grupo no existe");
+		
+		Usuario usuarioAValidar = repoUsuario.getUsuarioByID(idUsuario);
 
 		if (usuarioAValidar == null)
 			throw new UsuarioNoEncontradoException("El usuario no existe");
@@ -145,8 +146,8 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 	}
 
 	@Override
-	public List<Grupo> buscarTodos() {
-		return repoGrupo.buscarTodos();
+	public List<Grupo> buscarTodos(Usuario logueado) {
+		return repoGrupo.buscarTodos(logueado);
 	}
 
 	@Override
@@ -160,9 +161,14 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 	}
 
 	@Override
-	public List<Grupo> buscarGrupoPorDatos(DatosDeGrupo datosParaBuscarUnGrupo) {
-		return filtrarPorCupo(repoGrupo.buscarGrupoPorDatos(datosParaBuscarUnGrupo),
-				datosParaBuscarUnGrupo.getDisponibilidad());
+	public List<Grupo> buscarGrupoPorDatos(DatosDeGrupo filtros) {
+		return filtrarPorCupo(repoGrupo.buscarGrupoPorDatos(filtros),
+				filtros.getDisponibilidad());
+	}
+	
+	@Override
+	public List<Grupo> buscarForosMateria() {
+		return repoGrupo.buscarForos();
 	}
 
 	private List<Grupo> filtrarPorCupo(List<Grupo> grupos, Disponibilidad disponibilidad) {

@@ -5,8 +5,8 @@ public class LimiteDeUsuariosFueraDeRango extends RuntimeException{
 	private static final long serialVersionUID = 1L;
 	private Long idGrupoError;
 
-	public LimiteDeUsuariosFueraDeRango(Long idGrupoError) {
-		super("El numero de integrantes debe de ser de entre 2 y 7 usuarios!");
+	public LimiteDeUsuariosFueraDeRango(String mensaje, Long idGrupoError) {
+		super(mensaje);
 		this.idGrupoError = idGrupoError;
 	}
 

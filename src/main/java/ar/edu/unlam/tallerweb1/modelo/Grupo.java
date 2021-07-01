@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.util.enums.Turno;
+import ar.edu.unlam.tallerweb1.util.exceptions.LimiteDeUsuariosFueraDeRango;
 import ar.edu.unlam.tallerweb1.util.exceptions.YaEstoyEnElGrupo;
 
 @Entity
@@ -160,6 +161,9 @@ public class Grupo {
 		descripcion = formulario.tryGetDescripcion(descripcion);
 		cerrado = formulario.tryGetEstaCerrado(cerrado);
 		cantidadMax = formulario.tryGetCantidadMax(cantidadMax);
+		
+		if(cantidadMax < listaDeUsuarios.size())
+			throw new LimiteDeUsuariosFueraDeRango("La cantidad Maxima no puede ser menor al numero de miembros" ,id);
 	}
 
 	public void agregarUsuarioAlGrupo(Usuario usuarioAInsertar) {

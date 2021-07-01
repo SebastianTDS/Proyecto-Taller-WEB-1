@@ -11,6 +11,7 @@ import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.PropertyInferredData;
 import org.hibernate.criterion.*;
+import org.hibernate.sql.JoinType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -44,9 +45,15 @@ public class RepositorioGrupoImpl implements RepositorioGrupo {
     @Override
     public List<Grupo> buscarTodosMisGrupos(Usuario usuario) {
         Criteria cr = sessionFactory.getCurrentSession().createCriteria(Grupo.class);
+        cr.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
         cr.createCriteria("listaDeUsuarios").add(Restrictions.eq("id", usuario.getId()));
         return cr.list();
     }
+    
+    @Override
+	public List<Grupo> buscarForos() {
+		return sessionFactory.getCurrentSession().createQuery("SELECT g FROM Grupo g WHERE g.esMateria IS NOT NULL", Grupo.class).getResultList();
+	}
 
     @Override
     public void guardarGrupo(Grupo grupoNuevo) {
@@ -54,10 +61,11 @@ public class RepositorioGrupoImpl implements RepositorioGrupo {
     }
 
     @Override
-    public List<Grupo> buscarTodos() {
-        return sessionFactory.getCurrentSession().createQuery("SELECT g FROM Grupo g", Grupo.class).getResultList();
+    public List<Grupo> buscarTodos(Usuario logueado) {
+    	String sql = "SELECT g FROM Grupo g WHERE g.esMateria IS NULL AND g.id NOT IN(SELECT g FROM Grupo g JOIN g.listaDeUsuarios u WHERE u.id = " + logueado.getId() + ")";
+        return sessionFactory.getCurrentSession().createQuery(sql, Grupo.class).getResultList();
     }
-
+    
     @SuppressWarnings({"unchecked", "deprecation"})
     @Override
     public List<Grupo> buscarGrupoPorDatos(DatosDeGrupo datosDeGrupo) {
@@ -85,4 +93,5 @@ public class RepositorioGrupoImpl implements RepositorioGrupo {
             cr.createCriteria("carrera").add(Restrictions.eq("id", datosDeGrupo.getCarrera()));
         }
     }
+
 }

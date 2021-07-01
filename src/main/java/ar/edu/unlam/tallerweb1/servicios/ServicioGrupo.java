@@ -14,13 +14,15 @@ public interface ServicioGrupo {
 
     Grupo crearGrupo(DatosDeGrupo grupoNuevo);
 
-    List<Grupo> buscarTodos();
+    List<Grupo> buscarTodos(Usuario logueado);
+    
+    List<Grupo> buscarForosMateria();
 
     List<Carrera> buscarTodasLasCarreras();
 
     List<Materia> buscarTodasLasMaterias();
 
-    List<Grupo> buscarGrupoPorDatos(DatosDeGrupo datosParaBuscarUnGrupo);
+    List<Grupo> buscarGrupoPorDatos(DatosDeGrupo filtros);
     
     Grupo buscarGrupoPorID(Long idBuscado);
 

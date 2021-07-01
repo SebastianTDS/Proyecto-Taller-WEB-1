@@ -12,7 +12,7 @@ public interface RepositorioGrupo {
 
     void guardarGrupo(Grupo grupoNuevo) ;
 
-    List<Grupo> buscarTodos();
+    List<Grupo>buscarTodos(Usuario logueado);
 
     List<Grupo>buscarGrupoPorDatos(DatosDeGrupo datos);
     
@@ -23,5 +23,7 @@ public interface RepositorioGrupo {
 	public void eliminarGrupo(Grupo objetivo);
 
     List<Grupo> buscarTodosMisGrupos(Usuario usuario);
+
+	List<Grupo> buscarForos();
 
 }
