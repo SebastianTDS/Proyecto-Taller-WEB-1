@@ -50,7 +50,6 @@ public class ServicioMensajesTest {
 
     private TreeSet<Mensaje> whenBuscoLosMsjDeUnGrupo(Grupo losPicatecla1,List<Mensaje>msjPresistidos) {
         when(repositorioMsj.getMensajesByIDGrupo(losPicatecla1.getId())).thenReturn(msjPresistidos);
-        System.out.println(servicioMensajes.buscarMensajesDeUnGrupo(losPicatecla1.getId()).size());
         return servicioMensajes.buscarMensajesDeUnGrupo(losPicatecla1.getId());
     }
 

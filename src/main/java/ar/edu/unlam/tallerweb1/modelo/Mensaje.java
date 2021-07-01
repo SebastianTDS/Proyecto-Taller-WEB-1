@@ -79,7 +79,7 @@ public class Mensaje implements Comparable<Mensaje> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Mensaje mensaje = (Mensaje) o;
-        return id.equals(mensaje.id);
+        return Objects.equals(id, mensaje.id);
     }
 
     @Override
