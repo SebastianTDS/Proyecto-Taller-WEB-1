@@ -24,7 +24,7 @@ public class ServicioGruposTest {
 	@Before
 	public void init() {
 		repository = mock(RepositorioGrupoImpl.class);
-		service = new ServicioGrupoImpl(repository, null, null, null, null);
+		service = new ServicioGrupoImpl(repository, null, null, null);
 	}
 
 	@Test

@@ -34,6 +34,5 @@ public interface ServicioGrupo {
 
 	void validarPermiso(Long idUsuario, Long idGrupo, Permiso permisoAValidar);
 
-    void IngresarUnMensajeAlGrupo(Long idUsuario, DatosDeMensaje mensaje);
-
+    List<Grupo> buscarGruposDeMateria();
 }

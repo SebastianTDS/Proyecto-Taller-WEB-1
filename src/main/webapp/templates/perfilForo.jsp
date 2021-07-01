@@ -5,7 +5,7 @@
 <div class="window col-12 col-sm-9 text-dark" style="max-height: 500px; overflow: scroll;" >
     <h1 class="text-center border-bottom p-2">Foro ${grupo.nombre}</h1>
     <br>
-    <c:forEach items="${grupo.ordenarMsj()}" var="misMensajes">
+    <c:forEach items="${mensajes}" var="misMensajes">
     <c:choose>
         <c:when test="${sessionScope.USUARIO.id==misMensajes.usuario.id}">
             <div class="d-flex justify-content-end">

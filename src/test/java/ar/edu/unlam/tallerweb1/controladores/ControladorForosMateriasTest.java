@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.controladores;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupoImpl;
+import ar.edu.unlam.tallerweb1.servicios.ServicioMensajesImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
@@ -15,7 +16,7 @@ public class ControladorForosMateriasTest {
     @Before
     public void init(){
         servicioGrupo = mock(ServicioGrupoImpl.class);
-        controladorForoMateria = new ControladorForoMateria(servicioGrupo);
+        controladorForoMateria = new ControladorForoMateria(servicioGrupo, mock(ServicioMensajesImpl.class));
     }
 
         @Test

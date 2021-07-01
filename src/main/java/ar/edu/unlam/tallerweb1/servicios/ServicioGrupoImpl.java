@@ -1,7 +1,6 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
-import ar.edu.unlam.tallerweb1.dto.DatosDeMensaje;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.repositorios.*;
 import ar.edu.unlam.tallerweb1.util.auxClass.Check;
@@ -14,7 +13,6 @@ import ar.edu.unlam.tallerweb1.util.exceptions.GrupoInexistenteException;
 import ar.edu.unlam.tallerweb1.util.exceptions.NoEsMiembroException;
 import ar.edu.unlam.tallerweb1.util.exceptions.UsuarioNoEncontradoException;
 import ar.edu.unlam.tallerweb1.util.exceptions.UsuarioSinPermisosException;
-import ar.edu.unlam.tallerweb1.util.exceptions.NoSeEnvioElMensaje;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +20,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Service("servicioGrupos")
@@ -32,16 +31,14 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 	private final RepositorioCarrera repoCarrera;
 	private final RepositorioMateria repoMateria;
 	private final RepositorioUsuario repoUsuario;
-	private final RepositorioMensaje repoMsj;
 
 	@Autowired
 	public ServicioGrupoImpl(RepositorioGrupo repoGrupo, RepositorioCarrera repoCarrera, RepositorioMateria repoMateria,
-			RepositorioUsuario repoUsuario, RepositorioMensaje repoMsj) {
+			RepositorioUsuario repoUsuario) {
 		this.repoGrupo = repoGrupo;
 		this.repoCarrera = repoCarrera;
 		this.repoMateria = repoMateria;
 		this.repoUsuario = repoUsuario;
-		this.repoMsj = repoMsj;
 	}
 
 	@Override
@@ -54,15 +51,6 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 		return encontrado;
 	}
 
-	@Override
-	public void IngresarUnMensajeAlGrupo(Long idUsuario, DatosDeMensaje datosMensaje) {
-		Grupo grupoAAcceder = repoGrupo.getGrupoByID(datosMensaje.getId());
-		Usuario usuarioAInsertar = repoUsuario.getUsuarioByID(idUsuario);
-		if (grupoAAcceder == null || usuarioAInsertar == null || verificarDatosDeMSJ(datosMensaje))
-			throw new NoSeEnvioElMensaje(grupoAAcceder.getId());
-		Mensaje mensajeCreado = crearMensaje(usuarioAInsertar, grupoAAcceder, datosMensaje);
-		repoMsj.save(mensajeCreado);
-	}
 
 	@Override
 	public void validarPermiso(Long idUsuario, Long idGrupo, Permiso permisoAValidar) {
@@ -80,6 +68,11 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 
 		if (permisoAValidar == Permiso.MODIFICACION && !usuarioAValidar.equals(objetivo.getAdministrador()))
 			throw new UsuarioSinPermisosException("No tienes permiso para realizar esta operacion", idGrupo);
+	}
+
+	@Override
+	public List<Grupo> buscarGruposDeMateria() {
+		return repoGrupo.buscarGrupoMateria();
 	}
 
 	@Override
@@ -119,7 +112,9 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 
 	@Override
 	public List<Grupo> buscarTodosMisGrupos(Usuario usuarioSesion) {
-		return repoGrupo.buscarTodosMisGrupos(usuarioSesion);
+		HashSet<Grupo> grupos= new HashSet<>(repoGrupo.buscarTodosMisGrupos(usuarioSesion));
+		List<Grupo> grupoList=new ArrayList<>(grupos);
+		return grupoList;
 	}
 
 	@Override
@@ -146,7 +141,9 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 
 	@Override
 	public List<Grupo> buscarTodos() {
-		return repoGrupo.buscarTodos();
+		HashSet<Grupo> grupos= new HashSet<>(repoGrupo.buscarTodos());
+		List<Grupo> grupoList=new ArrayList<>(grupos);
+		return grupoList;
 	}
 
 	@Override
@@ -187,19 +184,6 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 		return prov;
 	}
 
-	private boolean verificarDatosDeMSJ(DatosDeMensaje datosMensaje) {
-		return datosMensaje.getMensaje() == null || datosMensaje.getMensaje().isBlank()
-				|| datosMensaje.getMensaje().equals("<p><br></p>");
-	}
-
-	private Mensaje crearMensaje(Usuario usuarioAInsertar, Grupo grupoAAcceder, DatosDeMensaje datosMensaje) {
-		Mensaje mensaje = new Mensaje();
-		mensaje.setUsuario(usuarioAInsertar);
-		mensaje.setMensaje(datosMensaje.getMensaje());
-		mensaje.setFecha(LocalDateTime.now().withNano(0));
-		mensaje.setGrupo(grupoAAcceder);
-		return mensaje;
-	}
 
 	private void materiaNoSeaNull(Grupo grupoGenerado, Long idMateria) {
 		Materia materiaEncontrada = repoMateria.buscarMateriaPorId(idMateria);
