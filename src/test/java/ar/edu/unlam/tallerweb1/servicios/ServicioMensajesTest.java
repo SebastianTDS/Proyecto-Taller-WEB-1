@@ -33,18 +33,7 @@ public class ServicioMensajesTest {
     public void queSePuedaBuscarLosMensjaesDeUnGrupo() {
         Grupo losPicatecla1 = givenQueExisteUnGrupoConMensajes();
         List<Mensaje> mensajesPresistidos = givenQueExistenMensajesPersistidos(losPicatecla1);
-        System.out.println("MENSAJES GUARDADOS "+mensajesPresistidos.size());
-
-        for (Mensaje mensaje: mensajesPresistidos){
-            System.out.println("MENSAJES PERSIS "+mensaje.getId());
-        }
-
         TreeSet<Mensaje> mensajesEncontrados = whenBuscoLosMsjDeUnGrupo(losPicatecla1,mensajesPresistidos);
-
-        for (Mensaje mensaje: mensajesEncontrados){
-            System.out.println("MENSAJES ENCONTRA "+mensaje.getId());
-        }
-
         thenVerificoQueElGrupoContengaMensajes(mensajesEncontrados);
     }
 
