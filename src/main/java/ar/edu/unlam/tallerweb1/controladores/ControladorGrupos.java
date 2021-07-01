@@ -1,9 +1,9 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeMensaje;
+import ar.edu.unlam.tallerweb1.modelo.Archivo;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
-import ar.edu.unlam.tallerweb1.servicios.ServicioMensajes;
-import ar.edu.unlam.tallerweb1.servicios.ServicioMensajesImpl;
+import ar.edu.unlam.tallerweb1.servicios.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,12 +16,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
-import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
-import ar.edu.unlam.tallerweb1.servicios.ServicioNotificaciones;
 import ar.edu.unlam.tallerweb1.util.enums.Permiso;
 import ar.edu.unlam.tallerweb1.util.exceptions.UsuarioNoEncontradoException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeSet;
 
 @Controller
 @RequestMapping("/grupos")
@@ -30,10 +31,13 @@ public class ControladorGrupos {
     private final ServicioGrupo servicioGrupo;
     private final ServicioNotificaciones servicioNotificacion;
     private final ServicioMensajes servicioMensajes;
+    private final ServicioArchivos servicioArchivos;
+
 
     @Autowired
-    public ControladorGrupos(ServicioGrupo servicioGrupo, ServicioNotificaciones servicioNotificacion, ServicioMensajes servicioMensajes) {
+    public ControladorGrupos(ServicioGrupo servicioGrupo, ServicioNotificaciones servicioNotificacion, ServicioMensajes servicioMensajes, ServicioArchivos serviceArchivos) {
         this.servicioGrupo = servicioGrupo;
+        this.servicioArchivos = serviceArchivos;
         this.servicioNotificacion = servicioNotificacion;
         this.servicioMensajes = servicioMensajes;
     }
@@ -126,5 +130,15 @@ public class ControladorGrupos {
             throw new UsuarioNoEncontradoException("No existe un usuario logueado!");
 
         return objetivo;
+    }
+    @RequestMapping("/{id}/archivos")
+    public ModelAndView perfilDeGrupoArchivos(@PathVariable Long id) {
+        Grupo buscado = servicioGrupo.buscarGrupoPorID(id);
+        ModelMap modelo = new ModelMap();
+        modelo.put("vistaArchivos", true);
+        modelo.put("grupo", buscado);
+        TreeSet<Archivo> archivos=servicioArchivos.buscarArchivosPorGrupo(id);
+        modelo.put("archivos", archivos);
+        return new ModelAndView("vistaGrupo", modelo);
     }
 }

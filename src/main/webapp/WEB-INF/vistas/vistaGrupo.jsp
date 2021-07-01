@@ -53,7 +53,7 @@
         <c:if test="${not empty formulario }">
             <jsp:include page="/templates/perfilMod.jsp"></jsp:include>
         </c:if>
-        <c:if test="${empty formulario and empty msj and empty integrantes}">
+        <c:if test="${empty formulario and empty msj and empty integrantes and empty vistaArchivos}">
             <jsp:include page="/templates/perfilInfo.jsp"></jsp:include>
         </c:if>
         <c:if test="${not empty msj }">
@@ -61,6 +61,9 @@
         </c:if>
         <c:if test="${not empty integrantes }">
             <jsp:include page="/templates/miembros.jsp"></jsp:include>
+        </c:if>
+        <c:if test="${not empty vistaArchivos}">
+            <jsp:include page="/templates/archivos.jsp"></jsp:include>
         </c:if>
     </div>
 </main>

@@ -1,13 +1,11 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
 import java.util.List;
+import java.util.TreeSet;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.dto.DatosDeMensaje;
-import ar.edu.unlam.tallerweb1.modelo.Carrera;
-import ar.edu.unlam.tallerweb1.modelo.Grupo;
-import ar.edu.unlam.tallerweb1.modelo.Materia;
-import ar.edu.unlam.tallerweb1.modelo.Usuario;
+import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.util.enums.Permiso;
 
 public interface ServicioGrupo {
@@ -35,4 +33,5 @@ public interface ServicioGrupo {
 	void validarPermiso(Long idUsuario, Long idGrupo, Permiso permisoAValidar);
 
     List<Grupo> buscarGruposDeMateria();
+
 }

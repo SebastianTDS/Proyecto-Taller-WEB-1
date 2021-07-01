@@ -15,13 +15,8 @@ import ar.edu.unlam.tallerweb1.servicios.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
-
-
-import ar.edu.unlam.tallerweb1.HttpSessionTest;
-
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
-import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.util.enums.Permiso;
 import ar.edu.unlam.tallerweb1.util.exceptions.GrupoInexistenteException;
 import ar.edu.unlam.tallerweb1.util.exceptions.LimiteDeUsuariosFueraDeRango;
@@ -32,12 +27,12 @@ public class ControladorGruposTest extends HttpSessionTest{
 
 	private static ControladorGrupos controller;
 	private static ServicioGrupo service;
-	private static Usuario usuarioEjemplo = new Usuario();;
+	private static Usuario usuarioEjemplo = new Usuario();
 
 	@Before
 	public void init() {
 		service = mock(ServicioGrupoImpl.class);
-		controller = new ControladorGrupos(service, mock(ServicioNotificacionesImpl.class),mock(ServicioMensajesImpl.class));
+		controller = new ControladorGrupos(service, mock(ServicioNotificacionesImpl.class),mock(ServicioMensajesImpl.class), mock(ServiciosArchivosImpl.class));
 		usuarioEjemplo.setId(1L); 
 	}
 
