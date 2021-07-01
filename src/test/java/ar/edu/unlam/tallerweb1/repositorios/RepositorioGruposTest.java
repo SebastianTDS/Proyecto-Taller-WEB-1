@@ -15,7 +15,9 @@ import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.Carrera;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.modelo.Materia;
+import ar.edu.unlam.tallerweb1.modelo.Solicitud;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
+import ar.edu.unlam.tallerweb1.util.enums.TipoSolicitud;
 import ar.edu.unlam.tallerweb1.util.enums.Turno;
 
 public class RepositorioGruposTest extends SpringTest{
@@ -25,7 +27,7 @@ public class RepositorioGruposTest extends SpringTest{
 	
 	@Test @Transactional @Rollback
 	public void testQuePodamosObtenerUnGrupoPorSuID () {
-		Usuario admin = givenExisteUnUsuario();
+		Usuario admin = givenExisteUnUsuario("admin");
 		Long id = givenUnGrupoPersistido(admin).getId();
 		
 		Grupo buscado = whenBuscoAlGrupoPorSuID(id);
@@ -35,7 +37,7 @@ public class RepositorioGruposTest extends SpringTest{
 	
 	@Test @Transactional @Rollback
 	public void testQuePodamosModificarGrupo () {
-		Usuario admin = givenExisteUnUsuario();
+		Usuario admin = givenExisteUnUsuario("admin");
 		Long id = givenUnGrupoPersistido(admin).getId();
 		
 		DatosDeGrupo formulario = givenDatosAModificar();
@@ -47,7 +49,7 @@ public class RepositorioGruposTest extends SpringTest{
 	
 	@Test @Transactional @Rollback
 	public void testQueSePuedaEliminarUnGrupo () {
-		Usuario admin = givenExisteUnUsuario();
+		Usuario admin = givenExisteUnUsuario("admin");
 		Long id = givenUnGrupoPersistido(admin).getId();
 		
 		whenEliminoElGrupo(id);
@@ -57,8 +59,8 @@ public class RepositorioGruposTest extends SpringTest{
 	
 	@Test @Transactional @Rollback
 	public void testQueNoBusqueLosGruposALosQuePertenezco () {
-		Usuario jorge = givenExisteUnUsuario();
-		Usuario manuel = givenExisteUnUsuario();
+		Usuario jorge = givenExisteUnUsuario("jorge");
+		Usuario manuel = givenExisteUnUsuario("manuel");
 		
 		givenUnGrupoPersistido(jorge);
 		
@@ -71,15 +73,29 @@ public class RepositorioGruposTest extends SpringTest{
 	
 	@Test @Transactional @Rollback
 	public void testQueSiNoTengoGrupoTraigaTodos() {
-		Usuario jorge = givenExisteUnUsuario();
-		Usuario manuel = givenExisteUnUsuario();
+		Usuario jorge = givenExisteUnUsuario("jorge");
+		Usuario manuel = givenExisteUnUsuario("manuel");
 		
 		givenUnGrupoPersistido(manuel);
 		givenUnGrupoPersistido(manuel);
 		
 		List<Grupo> encontrados = whenBuscoTodosLosGruposPara(jorge);
 		
-		thenObtenemosLaCantidadEsperada(encontrados);
+		thenObtenemosLaCantidadEsperada(encontrados, 2);
+	}
+	
+	@Test @Transactional @Rollback
+	public void testQueSiYaSoliciteAUnGrupoNoLoMuestre() {
+		Usuario jorge = givenExisteUnUsuario("jorge");
+		Usuario manuel = givenExisteUnUsuario("manuel");
+		
+		Grupo solicitado = givenUnGrupoPersistido(manuel);
+		givenUnGrupoPersistido(manuel);
+		givenUnaSolicitudPersistida(solicitado, jorge);
+		
+		List<Grupo> encontrados = whenBuscoTodosLosGruposPara(jorge);
+		
+		thenObtenemosLaCantidadEsperada(encontrados, 1);
 	}
 	
 	@Test @Transactional @Rollback
@@ -89,19 +105,26 @@ public class RepositorioGruposTest extends SpringTest{
 		
 		List<Grupo> encontrados = whenBuscoTodosLosForos();
 		
-		thenObtenemosLaCantidadEsperada(encontrados);
+		thenObtenemosLaCantidadEsperada(encontrados, 2);
 	}
 	
-
+	private void givenUnaSolicitudPersistida(Grupo solicitado, Usuario jorge) {
+		Solicitud soli = new Solicitud();
+		
+		soli.setOrigen(jorge);
+		soli.setObjetivo(solicitado);
+		soli.setTipo(TipoSolicitud.INCLUSION_GRUPO);
+		soli.setDestino(jorge);
+		
+		session().save(soli);
+	}
+	
 	private void givenUnForoPersistido() {
 		Materia materia = givenExisteUnaMateria();
 		Carrera carrera = givenExisteUnaCarrera();
-		Usuario global = new Usuario();
+		Usuario global = givenExisteUnUsuario("GLOBAL");
 		Grupo foro = givenUnForoDeMateria();
 		
-		session().save(carrera);
-		session().save(materia);
-		session().save(global);
 		
 		foro.setMateria(materia);
 		foro.setCarrera(carrera);
@@ -127,9 +150,9 @@ public class RepositorioGruposTest extends SpringTest{
 		return nuevoGrupo;
 	}
 
-	private void thenObtenemosLaCantidadEsperada(List<Grupo> encontrados) {
+	private void thenObtenemosLaCantidadEsperada(List<Grupo> encontrados, Integer cantidad) {
 		assertThat(encontrados).isNotNull();
-		assertThat(encontrados).hasSize(2);
+		assertThat(encontrados).hasSize(cantidad);
 	}
 
 	private void thenObtenemosLaCantidadEsperada(List<Grupo> encontrados, Grupo noDeseado) {
@@ -182,14 +205,9 @@ public class RepositorioGruposTest extends SpringTest{
 		Carrera carrera = givenExisteUnaCarrera();
 		Grupo grupo = givenExisteUnGrupo();
 		
-		session().save(carrera);
-		session().save(materia);
-		session().save(administrador);
-		
 		grupo.setCarrera(carrera);
 		grupo.setMateria(materia);
 		grupo.setAdministrador(administrador);
-		
 		
 		grupo.agregarUsuarioAlGrupo(administrador);
 		session().save(grupo);
@@ -197,10 +215,12 @@ public class RepositorioGruposTest extends SpringTest{
 		return grupo;
 	}
 	
-	private Usuario givenExisteUnUsuario() {
+	private Usuario givenExisteUnUsuario(String nombre) {
 		Usuario admin = new Usuario();
 		
-		admin.setNombre("Manuel");
+		admin.setNombre(nombre);
+		session().save(admin);
+		
 		return admin;
 	}
 
@@ -208,6 +228,8 @@ public class RepositorioGruposTest extends SpringTest{
 		Materia nuevaMateria = new Materia();
 		
 		nuevaMateria.setNombre("Basica 1");
+		session().save(nuevaMateria);
+		
 		return nuevaMateria;
 	}
 
@@ -215,6 +237,8 @@ public class RepositorioGruposTest extends SpringTest{
 		Carrera nuevaCarrera = new Carrera();
 		
 		nuevaCarrera.setNombre("Desarrollo WEB");
+		session().save(nuevaCarrera);
+		
 		return nuevaCarrera;
 	}
 	

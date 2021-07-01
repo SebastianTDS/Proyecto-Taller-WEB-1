@@ -62,7 +62,9 @@ public class RepositorioGrupoImpl implements RepositorioGrupo {
 
     @Override
     public List<Grupo> buscarTodos(Usuario logueado) {
-    	String sql = "SELECT g FROM Grupo g WHERE g.esMateria IS NULL AND g.id NOT IN(SELECT g FROM Grupo g JOIN g.listaDeUsuarios u WHERE u.id = " + logueado.getId() + ")";
+    	String sql = "SELECT g FROM Grupo g WHERE g.esMateria IS NULL "
+    			+ "AND g.id NOT IN(SELECT g.id FROM Solicitud s JOIN s.objetivo g WHERE s.origen.id = " + logueado.getId() +" AND s.tipo = 'INCLUSION_GRUPO')"
+    			+ "AND g.id NOT IN(SELECT g.id FROM Grupo g JOIN g.listaDeUsuarios u WHERE u.id = " + logueado.getId() + ")";
         return sessionFactory.getCurrentSession().createQuery(sql, Grupo.class).getResultList();
     }
     
