@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Service("servicioGrupos")
@@ -70,6 +71,11 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 	}
 
 	@Override
+	public List<Grupo> buscarGruposDeMateria() {
+		return repoGrupo.buscarGrupoMateria();
+	}
+
+	@Override
 	public void modificarGrupo(DatosDeGrupo formulario) {
 		Grupo objetivo = repoGrupo.getGrupoByID(formulario.getId());
 
@@ -106,7 +112,9 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 
 	@Override
 	public List<Grupo> buscarTodosMisGrupos(Usuario usuarioSesion) {
-		return repoGrupo.buscarTodosMisGrupos(usuarioSesion);
+		HashSet<Grupo> grupos= new HashSet<>(repoGrupo.buscarTodosMisGrupos(usuarioSesion));
+		List<Grupo> grupoList=new ArrayList<>(grupos);
+		return grupoList;
 	}
 
 	@Override
@@ -133,7 +141,9 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 
 	@Override
 	public List<Grupo> buscarTodos() {
-		return repoGrupo.buscarTodos();
+		HashSet<Grupo> grupos= new HashSet<>(repoGrupo.buscarTodos());
+		List<Grupo> grupoList=new ArrayList<>(grupos);
+		return grupoList;
 	}
 
 	@Override

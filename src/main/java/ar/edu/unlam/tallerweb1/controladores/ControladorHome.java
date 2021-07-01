@@ -75,7 +75,7 @@ public class ControladorHome {
 	@RequestMapping("/ir-a-foros-materias")
 	public ModelAndView IrAForosMaterias() {
 		ModelMap model = new ModelMap();
-		model.put("grupos",servicioGrupo.buscarTodos());
+		model.put("grupos",servicioGrupo.buscarGruposDeMateria());
 		return new  ModelAndView("vistaForosMaterias",model);
 	}
 }

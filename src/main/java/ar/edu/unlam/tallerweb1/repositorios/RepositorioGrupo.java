@@ -24,4 +24,5 @@ public interface RepositorioGrupo {
 
     List<Grupo> buscarTodosMisGrupos(Usuario usuario);
 
+    List<Grupo> buscarGrupoMateria();
 }
