@@ -38,12 +38,9 @@ public class RepositorioArchivoTest extends SpringTest {
         thenBuscoLosMsjDelGrupo(grupo);
     }
 
-
     private void thenBuscoLosMsjDelGrupo(Grupo grupo) {
         assertThat(repositorio.buscarArchivosPorGrupo(grupo.getId())).hasSize(3);
     }
-
-
 
     private Archivo givenQueExisteUnArchivo1(Grupo grupo, Usuario usuario) {
         archivo1.setFecha(LocalDateTime.now().withNano(0));
