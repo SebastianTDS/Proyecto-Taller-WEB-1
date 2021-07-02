@@ -108,6 +108,42 @@ public class RepositorioGruposTest extends SpringTest{
 		thenObtenemosLaCantidadEsperada(encontrados, 2);
 	}
 	
+	@Test @Transactional @Rollback
+	public void testQueSePuedaBuscarUnForoDeMateria() {
+		Grupo foro = givenUnForoPersistido();
+		
+		Grupo foroEncontrado = whenBuscoElForo(foro.getId());
+		
+		thenObtenemosElForoCorrecto(foroEncontrado, foro);
+	}
+	
+	@Test @Transactional @Rollback
+	public void testQueNoSeAccedaAlForoDeMateriaAlBuscarGrupo() {
+		Grupo foro = givenUnForoPersistido();
+		
+		Grupo foroEncontrado = whenBuscoUnGrupoConIdDelForo(foro.getId());
+		
+		thenNoObtenemosNada(foroEncontrado);
+	}
+	
+	
+	private void thenNoObtenemosNada(Grupo foroEncontrado) {
+		assertThat(foroEncontrado).isNull();
+	}
+
+	private Grupo whenBuscoUnGrupoConIdDelForo(Long id) {
+		return repository.getGrupoByID(id);
+	}
+
+	private void thenObtenemosElForoCorrecto(Grupo encontrado, Grupo buscado) {
+		assertThat(encontrado).isNotNull();
+		assertThat(encontrado).isEqualTo(buscado);
+	}
+
+	private Grupo whenBuscoElForo(Long id) {
+		return repository.buscarForo(id);
+	}
+
 	private void givenUnaSolicitudPersistida(Grupo solicitado, Usuario jorge) {
 		Solicitud soli = new Solicitud();
 		
@@ -119,7 +155,7 @@ public class RepositorioGruposTest extends SpringTest{
 		session().save(soli);
 	}
 	
-	private void givenUnForoPersistido() {
+	private Grupo givenUnForoPersistido() {
 		Materia materia = givenExisteUnaMateria();
 		Carrera carrera = givenExisteUnaCarrera();
 		Usuario global = givenExisteUnUsuario("GLOBAL");
@@ -131,6 +167,8 @@ public class RepositorioGruposTest extends SpringTest{
 		foro.setAdministrador(global);
 		
 		session().save(foro);
+		
+		return foro;
 	}
 
 	private List<Grupo> whenBuscoTodosLosForos() {
@@ -170,7 +208,14 @@ public class RepositorioGruposTest extends SpringTest{
 	}
 
 	private void whenEliminoElGrupo(Long id) {
-		Grupo objetivo = session().get(Grupo.class, id);
+		Grupo objetivo = repository.getGrupoByID(id);
+		
+		for(Usuario u : objetivo.getListaDeUsuarios()) {
+			u.getListaDeGrupos().clear();
+		}
+		
+		objetivo.getListaDeUsuarios().clear();
+		
 		repository.eliminarGrupo(objetivo);
 	}
 

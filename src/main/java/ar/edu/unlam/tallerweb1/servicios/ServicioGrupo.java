@@ -38,4 +38,6 @@ public interface ServicioGrupo {
 
     void IngresarUnMensajeAlGrupo(Long idUsuario, DatosDeMensaje mensaje);
 
+	Grupo buscarForo(Long id);
+
 }

@@ -29,7 +29,9 @@ public class RepositorioGrupoImpl implements RepositorioGrupo {
 
     @Override
     public Grupo getGrupoByID(Long id) {
-        return sessionFactory.getCurrentSession().get(Grupo.class, id);
+        return (Grupo) sessionFactory.getCurrentSession().createCriteria(Grupo.class)
+        		.add(Restrictions.eq("id", id))
+        		.add(Restrictions.isNull("esMateria")).uniqueResult();
     }
 
     @Override
@@ -53,6 +55,13 @@ public class RepositorioGrupoImpl implements RepositorioGrupo {
     @Override
 	public List<Grupo> buscarForos() {
 		return sessionFactory.getCurrentSession().createQuery("SELECT g FROM Grupo g WHERE g.esMateria IS NOT NULL", Grupo.class).getResultList();
+	}
+    
+    @Override
+	public Grupo buscarForo(Long id) {
+    	return (Grupo) sessionFactory.getCurrentSession().createCriteria(Grupo.class)
+        		.add(Restrictions.eq("id", id))
+        		.add(Restrictions.isNotNull("esMateria")).uniqueResult();
 	}
 
     @Override
@@ -95,5 +104,6 @@ public class RepositorioGrupoImpl implements RepositorioGrupo {
             cr.createCriteria("carrera").add(Restrictions.eq("id", datosDeGrupo.getCarrera()));
         }
     }
+
 
 }

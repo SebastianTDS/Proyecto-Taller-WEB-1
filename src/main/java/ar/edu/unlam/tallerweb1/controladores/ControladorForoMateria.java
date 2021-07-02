@@ -25,7 +25,7 @@ public class ControladorForoMateria {
         ModelMap model = new ModelMap();
         DatosDeMensaje mensaje = new DatosDeMensaje();
         model.put("msj", mensaje);
-        model.put("grupo",servicioGrupo.buscarGrupoPorID(id));
+        model.put("grupo",servicioGrupo.buscarForo(id));
         return new ModelAndView ("vistaForoMateria",model);
     }
 }

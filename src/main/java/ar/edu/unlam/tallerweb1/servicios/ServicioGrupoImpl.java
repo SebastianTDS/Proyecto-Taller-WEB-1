@@ -170,6 +170,11 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 	public List<Grupo> buscarForosMateria() {
 		return repoGrupo.buscarForos();
 	}
+	
+	@Override
+	public Grupo buscarForo(Long id) {
+		return repoGrupo.buscarForo(id);
+	}
 
 	private List<Grupo> filtrarPorCupo(List<Grupo> grupos, Disponibilidad disponibilidad) {
 		List<Grupo> prov = new ArrayList<Grupo>();
@@ -220,5 +225,6 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 			throw new FormularioDeGrupoIncompleto();
 		grupoGenerado.setCarrera(carreraEncontrada);
 	}
+
 
 }
