@@ -65,6 +65,13 @@ public class RepositorioGrupoImpl implements RepositorioGrupo {
 	}
 
     @Override
+    public List<Grupo> buscarGrupoMateria() {
+        Criteria cr = sessionFactory.getCurrentSession().createCriteria(Grupo.class);
+        cr.add(Restrictions.eq("esMateria", true));
+        return cr.list();
+    }
+
+    @Override
     public void guardarGrupo(Grupo grupoNuevo) {
         sessionFactory.getCurrentSession().save(grupoNuevo);
     }

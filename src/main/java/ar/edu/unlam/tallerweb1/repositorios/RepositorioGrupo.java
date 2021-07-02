@@ -10,22 +10,21 @@ import java.util.List;
 public interface RepositorioGrupo {
 
 
-    void guardarGrupo(Grupo grupoNuevo) ;
+  void guardarGrupo(Grupo grupoNuevo) ;
 
-    List<Grupo>buscarTodos(Usuario logueado);
+  List<Grupo>buscarTodos(Usuario logueado);
 
-    List<Grupo>buscarGrupoPorDatos(DatosDeGrupo datos);
+  List<Grupo>buscarGrupoPorDatos(DatosDeGrupo datos);
     
-    public Grupo getGrupoByID(Long id);
+  public Grupo getGrupoByID(Long id);
 
 	public void actualizarGrupo(Grupo objetivo);
 
 	public void eliminarGrupo(Grupo objetivo);
 
-    List<Grupo> buscarTodosMisGrupos(Usuario usuario);
+  List<Grupo> buscarTodosMisGrupos(Usuario usuario);
 
 	List<Grupo> buscarForos();
 
 	Grupo buscarForo(Long id);
-
 }

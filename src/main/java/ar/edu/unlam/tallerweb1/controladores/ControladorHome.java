@@ -84,6 +84,13 @@ public class ControladorHome {
 		return new ModelAndView("home", model);
 	}
 
+  @RequestMapping("/ir-a-foros-materias")
+	public ModelAndView IrAForosMaterias() {
+		ModelMap model = new ModelMap();
+		model.put("grupos",servicioGrupo.buscarForos());
+		return new  ModelAndView("vistaForosMaterias",model);
+	}
+
 	private Usuario validarSesion(HttpServletRequest request) {
 		Usuario objetivo = (Usuario) request.getSession().getAttribute("USUARIO");
 		
@@ -91,5 +98,5 @@ public class ControladorHome {
 			throw new UsuarioNoEncontradoException("");
 			
 		return objetivo;
-	}
+  }
 }

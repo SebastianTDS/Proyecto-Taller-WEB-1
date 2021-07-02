@@ -27,11 +27,9 @@ public class Grupo {
 	private Materia materia;
 
 	private Set<Usuario> listaDeUsuarios;
-	private Set<Mensaje> listaDeMensajes;
 
 	public Grupo() {
 		this.listaDeUsuarios = new HashSet<>();
-		this.listaDeMensajes = new HashSet<>();
 	}
 
 	@Override
@@ -64,15 +62,6 @@ public class Grupo {
 
 	public void setAdministrador(Usuario administrador) {
 		this.administrador = administrador;
-	}
-
-	@OneToMany(mappedBy = "grupo", fetch = FetchType.EAGER)
-	public Set<Mensaje> getListaDeMensajes() {
-		return listaDeMensajes;
-	}
-
-	public void setListaDeMensajes(Set<Mensaje> listaDeMensajes) {
-		this.listaDeMensajes = listaDeMensajes;
 	}
 
 	@ManyToMany(mappedBy = "listaDeGrupos", fetch = FetchType.EAGER)
@@ -190,20 +179,12 @@ public class Grupo {
 		this.esMateria = esMateria;
 	}
 
-	public TreeSet<Mensaje> ordenarMsj() {
-		TreeSet<Mensaje> mensajes = new TreeSet<Mensaje>();
-		mensajes.addAll(listaDeMensajes);
-		return mensajes;
-	}
+
 
 	@PreRemove
 	public void removerGruposDeUsuario() {
 		for (Usuario usuario : listaDeUsuarios) {
 			usuario.getListaDeGrupos().remove(this);
-		}
-		
-		for(Mensaje mensaje : listaDeMensajes) {
-			mensaje.setGrupo(null);
 		}
 	}
 

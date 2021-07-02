@@ -26,18 +26,18 @@ public interface ServicioGrupo {
     
     Grupo buscarGrupoPorID(Long idBuscado);
 
-	void modificarGrupo(DatosDeGrupo formulario);
+	  void modificarGrupo(DatosDeGrupo formulario);
 
-	void eliminarGrupo(Long idBuscado);
+	  void eliminarGrupo(Long idBuscado);
 
     void ingresarUsuarioAlGrupo(Long idUsuario, Long idGrupo);
 
     List<Grupo> buscarTodosMisGrupos(Usuario usuarioSesion);
 
-	void validarPermiso(Long idUsuario, Long idGrupo, Permiso permisoAValidar);
+	  void validarPermiso(Long idUsuario, Long idGrupo, Permiso permisoAValidar);
 
     void IngresarUnMensajeAlGrupo(Long idUsuario, DatosDeMensaje mensaje);
 
-	Grupo buscarForo(Long id);
+	  Grupo buscarForo(Long id);
 
 }
