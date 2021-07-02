@@ -32,7 +32,7 @@ public class ControladorGruposTest extends HttpSessionTest{
 	@Before
 	public void init() {
 		service = mock(ServicioGrupoImpl.class);
-		controller = new ControladorGrupos(service, mock(ServicioNotificacionesImpl.class),mock(ServicioMensajesImpl.class), mock(ServiciosArchivosImpl.class));
+		controller = new ControladorGrupos(service, mock(ServicioNotificacionesImpl.class),mock(ServicioMensajesImpl.class), mock(ServicioArchivosImpl.class));
 		usuarioEjemplo.setId(1L); 
 	}
 

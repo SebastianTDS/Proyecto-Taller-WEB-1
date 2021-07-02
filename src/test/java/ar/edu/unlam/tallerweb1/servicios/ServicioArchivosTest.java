@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeMensaje;
+import ar.edu.unlam.tallerweb1.modelo.Archivo;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.modelo.Mensaje;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
@@ -9,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -27,61 +29,41 @@ public class ServicioArchivosTest {
         repositorioUsuario = mock(RepositorioUsuarioImpl.class);
         repositorioGrupo = mock(RepositorioGrupoImpl.class);
         repositorioArchivos = mock(RepositorioArchivosImpl.class);
-        servicioArchivos = new ServiciosArchivosImpl(repositorioGrupo,repositorioUsuario,repositorioArchivos);
+        servicioArchivos = new ServicioArchivosImpl(repositorioGrupo,repositorioUsuario,repositorioArchivos);
     }
 
     @Test
-    public void queSePuedaBuscarLosMensjaesDeUnGrupo() {
-        Grupo losPicatecla1 = givenQueExisteUnGrupoConMensajes();
-        List<Mensaje> mensajesPresistidos = givenQueExistenMensajesPersistidos(losPicatecla1);
-        TreeSet<Mensaje> mensajesEncontrados = whenBuscoLosMsjDeUnGrupo(losPicatecla1,mensajesPresistidos);
-        thenVerificoQueElGrupoContengaMensajes(mensajesEncontrados);
+    public void queSePuedaBuscarLosArchivosDeUnGrupo() {
+        Grupo losPicatecla1 = givenQueExisteUnGrupo();
+        HashSet<Archivo> archivosPresistidos = givenQueExistenArchivosPersistidos(losPicatecla1);
+        TreeSet<Archivo> archivosEncontrados = whenBuscoLosMsjDeUnGrupo(losPicatecla1,archivosPresistidos);
+        thenVerificoQueElGrupoContengaArchivos(archivosEncontrados);
     }
 
-    private TreeSet<Mensaje> whenBuscoLosMsjDeUnGrupo(Grupo losPicatecla1,List<Mensaje>msjPresistidos) {
-        when(repositorioMsj.getMensajesByIDGrupo(losPicatecla1.getId())).thenReturn(msjPresistidos);
-        return servicioMensajes.buscarMensajesDeUnGrupo(losPicatecla1.getId());
+    private void thenVerificoQueElGrupoContengaArchivos(TreeSet<Archivo> archivosEncontrados) {
+        assertThat(archivosEncontrados).hasSize(2);
     }
 
-    private List<Mensaje> givenQueExistenMensajesPersistidos(Grupo grupo) {
-       List<Mensaje> mensajes=new ArrayList<>();
-        Mensaje mensaje1=new Mensaje();
-        mensaje1.setId(16L);
-        Mensaje mensaje2=new Mensaje();
-        mensaje2.setId(140L);
-        Mensaje mensaje3=new Mensaje();
-        mensaje3.setId(600L);
-
-
-        mensajes.add(mensaje1);
-        mensajes.add(mensaje2);
-        mensajes.add(mensaje3);
-
-        return mensajes;
+    private TreeSet<Archivo> whenBuscoLosMsjDeUnGrupo(Grupo losPicatecla1, HashSet<Archivo>presistidos) {
+        when(repositorioArchivos.buscarArchivosPorGrupo(losPicatecla1.getId())).thenReturn(presistidos);
+        return servicioArchivos.buscarArchivosPorGrupo(losPicatecla1.getId());
     }
 
-    @Test
-    public void queSePuedaEnviarUnMensajeAlGrupo() {
-        Grupo buscado = givenQueExisteUnGrupo();
-        Usuario usuario = givenQueExisteUnUsuario();
-        DatosDeMensaje datosMensaje = givenQueExisteUnDatosDeMensaje(buscado);
-        whenGuardoElMensaje(buscado,usuario,datosMensaje);
-        thenVerificoQueSeGuardeElMensaje();
+    private HashSet<Archivo> givenQueExistenArchivosPersistidos(Grupo grupo) {
+      HashSet<Archivo> archivos=new HashSet<>();
+        Archivo archivo1=new Archivo();
+        archivo1.setId(1L);
+        archivo1.setGrupo(grupo);
+        Archivo archivo2=new Archivo();
+        archivo2.setId(4L);
+        archivo2.setGrupo(grupo);
+
+        archivos.add(archivo1);
+        archivos.add(archivo2);
+
+        return archivos;
     }
 
-    private void thenVerificoQueSeGuardeElMensaje() {
-       verify(repositorioMsj, times(1)).save(anyObject());
-    }
-
-    private void thenVerificoQueElGrupoContengaMensajes(TreeSet<Mensaje> mensajes) {
-        assertThat(mensajes).hasSize(3);
-    }
-
-    private Grupo givenQueExisteUnGrupoConMensajes() {
-        Grupo grupo = new Grupo();
-        grupo.setId(1L);
-        return grupo;
-    }
 
     private Grupo givenQueExisteUnGrupo() {
         Grupo grupo = new Grupo();
@@ -97,16 +79,4 @@ public class ServicioArchivosTest {
         return usuario;
     }
 
-    private DatosDeMensaje givenQueExisteUnDatosDeMensaje(Grupo grupo) {
-        DatosDeMensaje mensaje = new DatosDeMensaje();
-        mensaje.setMensaje("MSJ DE PRUEBA");
-        mensaje.setId(grupo.getId());
-        return mensaje;
-    }
-
-    void whenGuardoElMensaje(Grupo buscado, Usuario usuario, DatosDeMensaje mensaje) {
-        when(repositorioGrupo.getGrupoByID(1L)).thenReturn(buscado);
-        when(repositorioUsuario.getUsuarioByID(usuario.getId())).thenReturn(usuario);
-        servicioMensajes.guardarUnMensaje(usuario.getId(), mensaje);
-    }
 }
