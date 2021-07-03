@@ -14,13 +14,15 @@ public interface ServicioGrupo {
 
     Grupo crearGrupo(DatosDeGrupo grupoNuevo);
 
-    List<Grupo> buscarTodos();
+    List<Grupo> buscarTodos(Usuario logueado);
+    
+    List<Grupo> buscarForosMateria();
 
     List<Carrera> buscarTodasLasCarreras();
 
     List<Materia> buscarTodasLasMaterias();
 
-    List<Grupo> buscarGrupoPorDatos(DatosDeGrupo datosParaBuscarUnGrupo);
+    List<Grupo> buscarGrupoPorDatos(DatosDeGrupo filtros);
     
     Grupo buscarGrupoPorID(Long idBuscado);
 
@@ -34,5 +36,6 @@ public interface ServicioGrupo {
 
 	void validarPermiso(Long idUsuario, Long idGrupo, Permiso permisoAValidar);
 
-    List<Grupo> buscarGruposDeMateria();
+	Grupo buscarForo(Long id);
+
 }

@@ -123,7 +123,7 @@ public class DatosDeGrupo {
 
 	public Integer tryGetCantidadMax(Integer valorInicial) {
 		if (!Check.isNull(cantidadMax) && !Check.isInRange(cantidadMax, 2, 7))
-			throw new LimiteDeUsuariosFueraDeRango(id);
+			throw new LimiteDeUsuariosFueraDeRango("El numero de integrantes debe de ser de entre 2 y 7 usuarios!" ,id);
 
 		return Check.isNull(cantidadMax) ? valorInicial : cantidadMax;
 	}

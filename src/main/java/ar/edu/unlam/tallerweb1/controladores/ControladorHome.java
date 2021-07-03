@@ -4,6 +4,7 @@ import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
 import ar.edu.unlam.tallerweb1.servicios.ServicioNotificaciones;
+import ar.edu.unlam.tallerweb1.util.exceptions.UsuarioNoEncontradoException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,7 +32,7 @@ public class ControladorHome {
 
 	@RequestMapping(value = "/ingresar-a-grupo", method = RequestMethod.POST)
 	public ModelAndView IngresarAGrupo(HttpServletRequest request, @RequestParam Long id) {
-		Usuario usuarioLogueado = (Usuario) request.getSession().getAttribute("USUARIO");
+		Usuario usuarioLogueado = validarSesion(request);
 
 		servicioGrupo.ingresarUsuarioAlGrupo(usuarioLogueado.getId(), id);
 		servicioNotificaciones.notificarNuevoIngreso(id, usuarioLogueado);
@@ -40,7 +41,8 @@ public class ControladorHome {
 	}
 
 	@RequestMapping(value = "/ir-a-crear-nuevo-grupo")
-	public ModelAndView irACrearGrupo() {
+	public ModelAndView irACrearGrupo(HttpServletRequest request) {
+		validarSesion(request);
 		ModelMap model = new ModelMap();
 
 		model.put("carreras", servicioGrupo.buscarTodasLasCarreras());
@@ -51,14 +53,24 @@ public class ControladorHome {
 	}
 
 	@RequestMapping("/ir-a-home")
-	public ModelAndView irAHome() {
-		return cargarModelAndViewHome(servicioGrupo.buscarTodos());
+	public ModelAndView irAHome(HttpServletRequest request) {
+		Usuario usuarioLogueado = validarSesion(request);
+		return cargarModelAndViewHome(servicioGrupo.buscarTodos(usuarioLogueado));
 
 	}
 
 	@RequestMapping("/buscar-grupos")
-	public ModelAndView buscarGrupos(@ModelAttribute DatosDeGrupo datosDeBusqueda) {
+	public ModelAndView buscarGrupos(HttpServletRequest request, @ModelAttribute DatosDeGrupo datosDeBusqueda) {
+		validarSesion(request);
 		return cargarModelAndViewHome(servicioGrupo.buscarGrupoPorDatos(datosDeBusqueda));
+	}
+
+	@RequestMapping("/ir-a-foros-materias")
+	public ModelAndView IrAForosMaterias(HttpServletRequest request) {
+		validarSesion(request);
+		ModelMap model = new ModelMap();
+		model.put("grupos", servicioGrupo.buscarForosMateria());
+		return new ModelAndView("vistaForosMaterias", model);
 	}
 
 	private ModelAndView cargarModelAndViewHome(List<Grupo> listadoDeGrupos) {
@@ -72,10 +84,12 @@ public class ControladorHome {
 		return new ModelAndView("home", model);
 	}
 
-	@RequestMapping("/ir-a-foros-materias")
-	public ModelAndView IrAForosMaterias() {
-		ModelMap model = new ModelMap();
-		model.put("grupos",servicioGrupo.buscarGruposDeMateria());
-		return new  ModelAndView("vistaForosMaterias",model);
+	private Usuario validarSesion(HttpServletRequest request) {
+		Usuario objetivo = (Usuario) request.getSession().getAttribute("USUARIO");
+
+		if (objetivo == null)
+			throw new UsuarioNoEncontradoException("");
+
+		return objetivo;
 	}
 }

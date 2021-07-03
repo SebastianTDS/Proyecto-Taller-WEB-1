@@ -4,6 +4,7 @@ import javax.inject.Inject;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -18,6 +19,11 @@ public abstract class SpringTest {
     // Tiene inyectado el session factory para que los test que hereden de éste tengan acceso al mismo
     @Inject
     private SessionFactory sessionFactory;
+    
+    @Before
+	public void init() {
+    	this.sessionFactory.getCurrentSession().clear();
+	}
 
     // Metodo para obtener una sesion de base de datos
     protected Session session() {

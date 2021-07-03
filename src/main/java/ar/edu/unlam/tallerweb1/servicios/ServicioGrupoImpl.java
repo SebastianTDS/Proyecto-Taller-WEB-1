@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
+import ar.edu.unlam.tallerweb1.dto.DatosDeMensaje;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.repositorios.*;
 import ar.edu.unlam.tallerweb1.util.auxClass.Check;
@@ -55,10 +56,11 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 	@Override
 	public void validarPermiso(Long idUsuario, Long idGrupo, Permiso permisoAValidar) {
 		Grupo objetivo = repoGrupo.getGrupoByID(idGrupo);
-		Usuario usuarioAValidar = repoUsuario.getUsuarioByID(idUsuario);
 
 		if (objetivo == null)
 			throw new GrupoInexistenteException("El grupo no existe");
+		
+		Usuario usuarioAValidar = repoUsuario.getUsuarioByID(idUsuario);
 
 		if (usuarioAValidar == null)
 			throw new UsuarioNoEncontradoException("El usuario no existe");
@@ -68,11 +70,6 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 
 		if (permisoAValidar == Permiso.MODIFICACION && !usuarioAValidar.equals(objetivo.getAdministrador()))
 			throw new UsuarioSinPermisosException("No tienes permiso para realizar esta operacion", idGrupo);
-	}
-
-	@Override
-	public List<Grupo> buscarGruposDeMateria() {
-		return repoGrupo.buscarGrupoMateria();
 	}
 
 	@Override
@@ -112,9 +109,7 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 
 	@Override
 	public List<Grupo> buscarTodosMisGrupos(Usuario usuarioSesion) {
-		HashSet<Grupo> grupos= new HashSet<>(repoGrupo.buscarTodosMisGrupos(usuarioSesion));
-		List<Grupo> grupoList=new ArrayList<>(grupos);
-		return grupoList;
+		return repoGrupo.buscarTodosMisGrupos(usuarioSesion);
 	}
 
 	@Override
@@ -140,10 +135,9 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 	}
 
 	@Override
-	public List<Grupo> buscarTodos() {
-		HashSet<Grupo> grupos= new HashSet<>(repoGrupo.buscarTodos());
-		List<Grupo> grupoList=new ArrayList<>(grupos);
-		return grupoList;
+
+	public List<Grupo> buscarTodos(Usuario logueado) {
+		return repoGrupo.buscarTodos(logueado);
 	}
 
 	@Override
@@ -157,9 +151,24 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 	}
 
 	@Override
-	public List<Grupo> buscarGrupoPorDatos(DatosDeGrupo datosParaBuscarUnGrupo) {
-		return filtrarPorCupo(repoGrupo.buscarGrupoPorDatos(datosParaBuscarUnGrupo),
-				datosParaBuscarUnGrupo.getDisponibilidad());
+	public List<Grupo> buscarGrupoPorDatos(DatosDeGrupo filtros) {
+		return filtrarPorCupo(repoGrupo.buscarGrupoPorDatos(filtros),
+				filtros.getDisponibilidad());
+	}
+	
+	@Override
+	public List<Grupo> buscarForosMateria() {
+		return repoGrupo.buscarForos();
+	}
+	
+	@Override
+	public Grupo buscarForo(Long id) {
+		Grupo encontrado = repoGrupo.buscarForoMateria(id);
+
+		if (Check.isNull(encontrado))
+			throw new GrupoInexistenteException("Foro buscado no encontrado");
+
+		return encontrado;
 	}
 
 	private List<Grupo> filtrarPorCupo(List<Grupo> grupos, Disponibilidad disponibilidad) {

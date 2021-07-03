@@ -82,8 +82,11 @@ public class ServicioGrupoTest {
 	@Test
 	public void queSePuedaSolicitarTodosLosGrupos() {
 		Grupo losPicatecla1 = givenDadoQueExisteUnGrupo();
+		Usuario visitante = givenQueExisteUnUsuario();
+		
 		List<Grupo> gruposPresistidos = givenQueSeGuardenTodosLosGruposExistentes(losPicatecla1);
-		List<Grupo> gruposEncontrados = whenBuscoTodosLosGrupos(gruposPresistidos);
+		List<Grupo> gruposEncontrados = whenBuscoTodosLosGrupos(gruposPresistidos, visitante);
+		
 		thenVerificoQueSeMuestrenTodosLosGrupos(gruposEncontrados);
 	}
 
@@ -109,10 +112,10 @@ public class ServicioGrupoTest {
 
 	@Test
 	public void queSeObtenganTodosLosGrupos() {
-
+		Usuario visitante = givenQueExisteUnUsuario();
 		List<Grupo> listaDeGrupos = givenQueExisteUnaListaDeGrupos();
 
-		List<Grupo> listaDeGruposEncontrada = whenbuscoTodosLosGrupos(listaDeGrupos);
+		List<Grupo> listaDeGruposEncontrada = whenbuscoTodosLosGrupos(listaDeGrupos, visitante);
 
 		thenObtengoLaListaDeGruposYVerificoQueTengaElTamanoCorrespondiente(listaDeGruposEncontrada);
 	}
@@ -157,9 +160,9 @@ public class ServicioGrupoTest {
 		return Arrays.asList(a, b);
 	}
 
-	private List<Grupo> whenbuscoTodosLosGrupos(List<Grupo> listaDeGrupos) {
-		when(repositorioGrupo.buscarTodos()).thenReturn(listaDeGrupos);
-		return servicioGrupo.buscarTodos();
+	private List<Grupo> whenbuscoTodosLosGrupos(List<Grupo> listaDeGrupos, Usuario visitante) {
+		when(repositorioGrupo.buscarTodos(visitante)).thenReturn(listaDeGrupos);
+		return servicioGrupo.buscarTodos(visitante);
 	}
 
 	private void thenObtengoLaListaDeGruposYVerificoQueTengaElTamanoCorrespondiente(
@@ -208,9 +211,9 @@ public class ServicioGrupoTest {
 		return servicioGrupo.buscarTodosMisGrupos(usuario);
 	}
 
-	private List<Grupo> whenBuscoTodosLosGrupos(List<Grupo> gruposPresistidos) {
-		when(repositorioGrupo.buscarTodos()).thenReturn(gruposPresistidos);
-		return servicioGrupo.buscarTodos();
+	private List<Grupo> whenBuscoTodosLosGrupos(List<Grupo> gruposPresistidos, Usuario visitante) {
+		when(repositorioGrupo.buscarTodos(visitante)).thenReturn(gruposPresistidos);
+		return servicioGrupo.buscarTodos(visitante);
 	}
 
 	private List<Grupo> givenQueSeGuardenTodosLosGruposExistentes(Grupo losPicatecla1) {

@@ -1,6 +1,9 @@
 package ar.edu.unlam.tallerweb1.repositorios;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Matchers.matches;
+
+import java.util.List;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +15,9 @@ import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.Carrera;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.modelo.Materia;
+import ar.edu.unlam.tallerweb1.modelo.Solicitud;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
+import ar.edu.unlam.tallerweb1.util.enums.TipoSolicitud;
 import ar.edu.unlam.tallerweb1.util.enums.Turno;
 
 public class RepositorioGruposTest extends SpringTest{
@@ -22,7 +27,8 @@ public class RepositorioGruposTest extends SpringTest{
 	
 	@Test @Transactional @Rollback
 	public void testQuePodamosObtenerUnGrupoPorSuID () {
-		Long id = givenUnGrupoPersistido();
+		Usuario admin = givenExisteUnUsuario("admin");
+		Long id = givenUnGrupoPersistido(admin).getId();
 		
 		Grupo buscado = whenBuscoAlGrupoPorSuID(id);
 		
@@ -31,7 +37,8 @@ public class RepositorioGruposTest extends SpringTest{
 	
 	@Test @Transactional @Rollback
 	public void testQuePodamosModificarGrupo () {
-		Long id = givenUnGrupoPersistido();
+		Usuario admin = givenExisteUnUsuario("admin");
+		Long id = givenUnGrupoPersistido(admin).getId();
 		
 		DatosDeGrupo formulario = givenDatosAModificar();
 		
@@ -42,19 +49,173 @@ public class RepositorioGruposTest extends SpringTest{
 	
 	@Test @Transactional @Rollback
 	public void testQueSePuedaEliminarUnGrupo () {
-		Long id = givenUnGrupoPersistido();
+		Usuario admin = givenExisteUnUsuario("admin");
+		Long id = givenUnGrupoPersistido(admin).getId();
 		
 		whenEliminoElGrupo(id);
 		
 		thenYaNoExisteEnPersistencia(id);
 	}
 	
+	@Test @Transactional @Rollback
+	public void testQueNoBusqueLosGruposALosQuePertenezco () {
+		Usuario jorge = givenExisteUnUsuario("jorge");
+		Usuario manuel = givenExisteUnUsuario("manuel");
+		
+		givenUnGrupoPersistido(jorge);
+		
+		Grupo grupoB = givenUnGrupoPersistido(manuel);
+		
+		List<Grupo> encontrados = whenBuscoTodosLosGruposPara(manuel);
+		
+		thenObtenemosLaCantidadEsperada(encontrados, grupoB);
+	}
+	
+	@Test @Transactional @Rollback
+	public void testQueSiNoTengoGrupoTraigaTodos() {
+		Usuario jorge = givenExisteUnUsuario("jorge");
+		Usuario manuel = givenExisteUnUsuario("manuel");
+		
+		givenUnGrupoPersistido(manuel);
+		givenUnGrupoPersistido(manuel);
+		
+		List<Grupo> encontrados = whenBuscoTodosLosGruposPara(jorge);
+		
+		thenObtenemosLaCantidadEsperada(encontrados, 2);
+	}
+	
+	@Test @Transactional @Rollback
+	public void testQueSiYaSoliciteAUnGrupoNoLoMuestre() {
+		Usuario jorge = givenExisteUnUsuario("jorge");
+		Usuario manuel = givenExisteUnUsuario("manuel");
+		
+		Grupo solicitado = givenUnGrupoPersistido(manuel);
+		givenUnGrupoPersistido(manuel);
+		givenUnaSolicitudPersistida(solicitado, jorge);
+		
+		List<Grupo> encontrados = whenBuscoTodosLosGruposPara(jorge);
+		
+		thenObtenemosLaCantidadEsperada(encontrados, 1);
+	}
+	
+	@Test @Transactional @Rollback
+	public void testQueSePuedaBuscarForosDeMateria() {
+		givenUnForoPersistido();
+		givenUnForoPersistido();
+		
+		List<Grupo> encontrados = whenBuscoTodosLosForos();
+		
+		thenObtenemosLaCantidadEsperada(encontrados, 2);
+	}
+	
+	@Test @Transactional @Rollback
+	public void testQueSePuedaBuscarUnForoDeMateria() {
+		Grupo foro = givenUnForoPersistido();
+		
+		Grupo foroEncontrado = whenBuscoElForo(foro.getId());
+		
+		thenObtenemosElForoCorrecto(foroEncontrado, foro);
+	}
+	
+	@Test @Transactional @Rollback
+	public void testQueNoSeAccedaAlForoDeMateriaAlBuscarGrupo() {
+		Grupo foro = givenUnForoPersistido();
+		
+		Grupo foroEncontrado = whenBuscoUnGrupoConIdDelForo(foro.getId());
+		
+		thenNoObtenemosNada(foroEncontrado);
+	}
+	
+	
+	private void thenNoObtenemosNada(Grupo foroEncontrado) {
+		assertThat(foroEncontrado).isNull();
+	}
+
+	private Grupo whenBuscoUnGrupoConIdDelForo(Long id) {
+		return repository.getGrupoByID(id);
+	}
+
+	private void thenObtenemosElForoCorrecto(Grupo encontrado, Grupo buscado) {
+		assertThat(encontrado).isNotNull();
+		assertThat(encontrado).isEqualTo(buscado);
+	}
+
+	private Grupo whenBuscoElForo(Long id) {
+		return repository.buscarForoMateria(id);
+	}
+
+	private void givenUnaSolicitudPersistida(Grupo solicitado, Usuario jorge) {
+		Solicitud soli = new Solicitud();
+		
+		soli.setOrigen(jorge);
+		soli.setObjetivo(solicitado);
+		soli.setTipo(TipoSolicitud.INCLUSION_GRUPO);
+		soli.setDestino(jorge);
+		
+		session().save(soli);
+	}
+	
+	private Grupo givenUnForoPersistido() {
+		Materia materia = givenExisteUnaMateria();
+		Carrera carrera = givenExisteUnaCarrera();
+		Usuario global = givenExisteUnUsuario("GLOBAL");
+		Grupo foro = givenUnForoDeMateria();
+		
+		
+		foro.setMateria(materia);
+		foro.setCarrera(carrera);
+		foro.setAdministrador(global);
+		
+		session().save(foro);
+		
+		return foro;
+	}
+
+	private List<Grupo> whenBuscoTodosLosForos() {
+		return repository.buscarForos();
+	}
+
+	private Grupo givenUnForoDeMateria() {
+		Grupo nuevoGrupo = new Grupo();
+		
+		nuevoGrupo.setCantidadMax(0);
+		nuevoGrupo.setDescripcion("Foro de Materia");
+		nuevoGrupo.setNombre("");
+		nuevoGrupo.setCerrado(false);
+		nuevoGrupo.setTurno(Turno.NOCHE);
+		nuevoGrupo.setEsMateria(true);
+		
+		return nuevoGrupo;
+	}
+
+	private void thenObtenemosLaCantidadEsperada(List<Grupo> encontrados, Integer cantidad) {
+		assertThat(encontrados).isNotNull();
+		assertThat(encontrados).hasSize(cantidad);
+	}
+
+	private void thenObtenemosLaCantidadEsperada(List<Grupo> encontrados, Grupo noDeseado) {
+		assertThat(encontrados).isNotNull();
+		assertThat(encontrados).hasSize(1);
+		assertThat(encontrados.get(0)).isNotEqualTo(noDeseado);
+	}
+
+	private List<Grupo> whenBuscoTodosLosGruposPara(Usuario manuel) {
+		return repository.buscarTodos(manuel);
+	}
+
 	private void thenYaNoExisteEnPersistencia(Long id) {
 		assertThat(repository.getGrupoByID(id)).isNull();
 	}
 
 	private void whenEliminoElGrupo(Long id) {
-		Grupo objetivo = session().get(Grupo.class, id);
+		Grupo objetivo = repository.getGrupoByID(id);
+		
+		for(Usuario u : objetivo.getListaDeUsuarios()) {
+			u.getListaDeGrupos().clear();
+		}
+		
+		objetivo.getListaDeUsuarios().clear();
+		
 		repository.eliminarGrupo(objetivo);
 	}
 
@@ -84,28 +245,27 @@ public class RepositorioGruposTest extends SpringTest{
 		return repository.getGrupoByID(id);
 	}
 
-	private Long givenUnGrupoPersistido() {
+	private Grupo givenUnGrupoPersistido(Usuario administrador) {
 		Materia materia = givenExisteUnaMateria();
 		Carrera carrera = givenExisteUnaCarrera();
-		Usuario administrador = givenExisteUnAdmin();
 		Grupo grupo = givenExisteUnGrupo();
-		
-		session().save(carrera);
-		session().save(materia);
-		session().save(administrador);
 		
 		grupo.setCarrera(carrera);
 		grupo.setMateria(materia);
 		grupo.setAdministrador(administrador);
+		
+		grupo.agregarUsuarioAlGrupo(administrador);
 		session().save(grupo);
 		
-		return grupo.getId();
+		return grupo;
 	}
 	
-	private Usuario givenExisteUnAdmin() {
+	private Usuario givenExisteUnUsuario(String nombre) {
 		Usuario admin = new Usuario();
 		
-		admin.setNombre("Manuel");
+		admin.setNombre(nombre);
+		session().save(admin);
+		
 		return admin;
 	}
 
@@ -113,6 +273,8 @@ public class RepositorioGruposTest extends SpringTest{
 		Materia nuevaMateria = new Materia();
 		
 		nuevaMateria.setNombre("Basica 1");
+		session().save(nuevaMateria);
+		
 		return nuevaMateria;
 	}
 
@@ -120,6 +282,8 @@ public class RepositorioGruposTest extends SpringTest{
 		Carrera nuevaCarrera = new Carrera();
 		
 		nuevaCarrera.setNombre("Desarrollo WEB");
+		session().save(nuevaCarrera);
+		
 		return nuevaCarrera;
 	}
 	

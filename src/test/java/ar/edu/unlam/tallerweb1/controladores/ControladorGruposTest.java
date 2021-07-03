@@ -172,7 +172,7 @@ public class ControladorGruposTest extends HttpSessionTest{
   
 	private ModelAndView whenBuscoPorLaURLConElIDCorrectoAlForo(Long idGrupoBuscado) {
 		when(service.buscarGrupoPorID(idGrupoBuscado)).thenReturn(new Grupo());
-		return controller.perfilDeGrupoForo(idGrupoBuscado);
+		return controller.perfilDeGrupoForo(request(), idGrupoBuscado);
 	}
   
 	private void thenObtengoLaVistaYElModeloDelForo(ModelAndView vistaObtenida) {
