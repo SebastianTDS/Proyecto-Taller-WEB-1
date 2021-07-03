@@ -89,13 +89,13 @@ public class ControladorGrupos {
     }
 
     @RequestMapping("/{id}/foro")
-    public ModelAndView perfilDeGrupoForo(@PathVariable Long id) {
-        Grupo buscado = servicioGrupo.buscarGrupoPorID(id);
+    public ModelAndView perfilDeGrupoForo(HttpServletRequest request, @PathVariable Long id) {
+    	validarSesion(request);
+    	
         ModelMap modelo = new ModelMap();
-        DatosDeMensaje mensaje = new DatosDeMensaje();
 
-        modelo.put("msj", mensaje);
-        modelo.put("grupo", buscado);
+        modelo.put("msj", new DatosDeMensaje());
+        modelo.put("grupo", servicioGrupo.buscarGrupoPorID(id));
         modelo.put("mensajes",servicioMensajes.buscarMensajesDeUnGrupo(id));
 
         return new ModelAndView("vistaGrupo", modelo);
@@ -103,18 +103,19 @@ public class ControladorGrupos {
 
     @RequestMapping("/{id}/foro/enviar-msj")
     public ModelAndView insertarMensajeEnElForo(HttpServletRequest request,@ModelAttribute("msj") DatosDeMensaje datosDeMensaje) {
-        Usuario usuarioLogueado = (Usuario) request.getSession().getAttribute("USUARIO");
+        Usuario usuarioLogueado = validarSesion(request);
         servicioMensajes.guardarUnMensaje(usuarioLogueado.getId(), datosDeMensaje);
         return new ModelAndView("redirect:/grupos/" + datosDeMensaje.getId() + "/foro");
 
     }
 
     @RequestMapping("/{id}/miembros")
-    public ModelAndView mostrarMiembrosDelGrupo(@PathVariable Long id) {
-        Grupo buscado = servicioGrupo.buscarGrupoPorID(id);
+    public ModelAndView mostrarMiembrosDelGrupo(HttpServletRequest request, @PathVariable Long id) {
+    	validarSesion(request);
+    	
         ModelMap modelo = new ModelMap();
 
-        modelo.put("grupo", buscado);
+        modelo.put("grupo", servicioGrupo.buscarGrupoPorID(id));
         modelo.put("integrantes", true);
         return new ModelAndView("vistaGrupo", modelo);
     }

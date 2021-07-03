@@ -141,7 +141,7 @@ public class RepositorioGruposTest extends SpringTest{
 	}
 
 	private Grupo whenBuscoElForo(Long id) {
-		return repository.buscarForo(id);
+		return repository.buscarForoMateria(id);
 	}
 
 	private void givenUnaSolicitudPersistida(Grupo solicitado, Usuario jorge) {

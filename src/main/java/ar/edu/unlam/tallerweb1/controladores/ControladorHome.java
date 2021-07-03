@@ -64,13 +64,13 @@ public class ControladorHome {
 		validarSesion(request);
 		return cargarModelAndViewHome(servicioGrupo.buscarGrupoPorDatos(datosDeBusqueda));
 	}
-	
+
 	@RequestMapping("/ir-a-foros-materias")
 	public ModelAndView IrAForosMaterias(HttpServletRequest request) {
 		validarSesion(request);
 		ModelMap model = new ModelMap();
-		model.put("grupos",servicioGrupo.buscarForosMateria());
-		return new  ModelAndView("vistaForosMaterias",model);
+		model.put("grupos", servicioGrupo.buscarForosMateria());
+		return new ModelAndView("vistaForosMaterias", model);
 	}
 
 	private ModelAndView cargarModelAndViewHome(List<Grupo> listadoDeGrupos) {
@@ -84,19 +84,12 @@ public class ControladorHome {
 		return new ModelAndView("home", model);
 	}
 
-  @RequestMapping("/ir-a-foros-materias")
-	public ModelAndView IrAForosMaterias() {
-		ModelMap model = new ModelMap();
-		model.put("grupos",servicioGrupo.buscarForos());
-		return new  ModelAndView("vistaForosMaterias",model);
-	}
-
 	private Usuario validarSesion(HttpServletRequest request) {
 		Usuario objetivo = (Usuario) request.getSession().getAttribute("USUARIO");
-		
-		if(objetivo == null)
+
+		if (objetivo == null)
 			throw new UsuarioNoEncontradoException("");
-			
+
 		return objetivo;
-  }
+	}
 }

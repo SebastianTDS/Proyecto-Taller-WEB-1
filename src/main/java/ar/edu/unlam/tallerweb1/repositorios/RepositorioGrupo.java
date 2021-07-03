@@ -26,5 +26,5 @@ public interface RepositorioGrupo {
 
 	List<Grupo> buscarForos();
 
-	Grupo buscarForo(Long id);
+	Grupo buscarForoMateria(Long id);
 }

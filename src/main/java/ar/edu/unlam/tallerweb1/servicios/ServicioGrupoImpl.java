@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
+import ar.edu.unlam.tallerweb1.dto.DatosDeMensaje;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.repositorios.*;
 import ar.edu.unlam.tallerweb1.util.auxClass.Check;
@@ -69,11 +70,6 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 
 		if (permisoAValidar == Permiso.MODIFICACION && !usuarioAValidar.equals(objetivo.getAdministrador()))
 			throw new UsuarioSinPermisosException("No tienes permiso para realizar esta operacion", idGrupo);
-	}
-
-	@Override
-	public List<Grupo> buscarGruposDeMateria() {
-		return repoGrupo.buscarGrupoMateria();
 	}
 
 	@Override
@@ -167,7 +163,12 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 	
 	@Override
 	public Grupo buscarForo(Long id) {
-		return repoGrupo.buscarForo(id);
+		Grupo encontrado = repoGrupo.buscarForoMateria(id);
+
+		if (Check.isNull(encontrado))
+			throw new GrupoInexistenteException("Foro buscado no encontrado");
+
+		return encontrado;
 	}
 
 	private List<Grupo> filtrarPorCupo(List<Grupo> grupos, Disponibilidad disponibilidad) {
@@ -206,6 +207,5 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 			throw new FormularioDeGrupoIncompleto();
 		grupoGenerado.setCarrera(carreraEncontrada);
 	}
-
 
 }
