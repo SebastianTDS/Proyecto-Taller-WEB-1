@@ -167,7 +167,6 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 
 		if (Check.isNull(encontrado))
 			throw new GrupoInexistenteException("Foro buscado no encontrado");
-
 		return encontrado;
 	}
 
