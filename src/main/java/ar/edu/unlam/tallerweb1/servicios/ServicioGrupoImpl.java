@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
+import ar.edu.unlam.tallerweb1.dto.DatosCalificaciones;
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.dto.DatosDeMensaje;
 import ar.edu.unlam.tallerweb1.modelo.*;
@@ -103,8 +104,8 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 				|| grupoAAcceder.getCerrado())
 			throw new FalloAlUnirseAlGrupo();
 
-		grupoAAcceder.agregarUsuarioAlGrupo(usuarioAInsertar);
 		grupoAAcceder.agregarUsuarioAListaHistorica(usuarioAInsertar);
+		grupoAAcceder.agregarUsuarioAlGrupo(usuarioAInsertar);
 		repoGrupo.actualizarGrupo(grupoAAcceder);
 	}
 
@@ -131,6 +132,7 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 		carreraNoSeaNull(grupoGenerado, datosDeGrupo.getCarrera());
 
 		grupoGenerado.agregarUsuarioAlGrupo(administrador);
+		grupoGenerado.agregarUsuarioAListaHistorica(administrador);
 		repoGrupo.guardarGrupo(grupoGenerado);
 		return grupoGenerado;
 	}
@@ -169,6 +171,14 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 		if (Check.isNull(encontrado))
 			throw new GrupoInexistenteException("Foro buscado no encontrado");
 		return encontrado;
+	}
+
+	@Override
+	public void borrarUsuarioDelGrupo(Long IDgrupo, Long IDusuario, DatosCalificaciones datosCalificaciones) {
+		Grupo grupoBorrar = repoGrupo.getGrupoByID(IDgrupo);
+		Usuario usuarioBorrar = repoUsuario.getUsuarioByID(IDusuario);
+		grupoBorrar.borrarUsuarioDelGrupo(usuarioBorrar);
+		repoGrupo.actualizarGrupo(grupoBorrar);
 	}
 
 	private List<Grupo> filtrarPorCupo(List<Grupo> grupos, Disponibilidad disponibilidad) {

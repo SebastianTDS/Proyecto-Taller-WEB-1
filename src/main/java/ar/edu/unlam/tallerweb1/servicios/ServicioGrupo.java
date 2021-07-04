@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.servicios;
 
 import java.util.List;
 
+import ar.edu.unlam.tallerweb1.dto.DatosCalificaciones;
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.dto.DatosDeMensaje;
 import ar.edu.unlam.tallerweb1.modelo.Carrera;
@@ -38,4 +39,5 @@ public interface ServicioGrupo {
 
 	Grupo buscarForo(Long id);
 
+    void borrarUsuarioDelGrupo(Long IDgrupo, Long IDusuario, DatosCalificaciones datosCalificaciones);
 }

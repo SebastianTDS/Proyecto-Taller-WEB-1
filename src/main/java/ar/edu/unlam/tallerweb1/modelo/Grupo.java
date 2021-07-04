@@ -59,7 +59,7 @@ public class Grupo {
 		return true;
 	}
 
-	@ManyToMany(mappedBy = "listaDeGruposHistorica", fetch = FetchType.EAGER)
+	@OneToMany(orphanRemoval = true)@JoinTable(name = "usuarioHistorico_grupo")
 	public Set<Usuario> getListaDeUsuariosHistorica() {
 		return listaDeUsuariosHistorica;
 	}
@@ -181,7 +181,6 @@ public class Grupo {
 			throw new YaEstoyEnElGrupo(id);
 
 		listaDeUsuariosHistorica.add(usuarioAInsertar);
-		usuarioAInsertar.agregarGrupoHistorico(this);
 	}
 	public Boolean grupoLleno() {
 		return listaDeUsuarios.size() >= cantidadMax;
@@ -208,4 +207,7 @@ public class Grupo {
 		}
 	}
 
+	public void borrarUsuarioDelGrupo(Usuario usuarioBorrar) {
+		listaDeUsuarios.remove(usuarioBorrar);
+	}
 }

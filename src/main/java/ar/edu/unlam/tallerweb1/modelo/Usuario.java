@@ -20,13 +20,11 @@ public class Usuario {
 	private String rol;
 	private String nombre;
 	private Set<Grupo> listaDeGrupos;
-	private Set<Grupo> listaDeGruposHistorica;
 	private int calificacion;
 
 	public Usuario() {
 
 		this.listaDeGrupos = new HashSet<Grupo>();
-		this.listaDeGruposHistorica = new HashSet<Grupo>();
 	}
 
 	@Override
@@ -96,16 +94,6 @@ public class Usuario {
 		this.listaDeGrupos = listaDeGrupos;
 	}
 
-	@JoinTable(name = "usuario_grupo_historico", joinColumns = @JoinColumn(name = "id_usuario", nullable = false), inverseJoinColumns = @JoinColumn(name = "id_grupo", nullable = false))
-	@ManyToMany
-	public Set<Grupo> getListaDeGruposHistorica() {
-		return listaDeGruposHistorica;
-	}
-
-	public void setListaDeGruposHistorica(Set<Grupo> listaDeGruposHistorica) {
-		this.listaDeGruposHistorica = listaDeGruposHistorica;
-	}
-
 	public String getNombre() {
 		return nombre;
 	}
@@ -117,9 +105,7 @@ public class Usuario {
 	public void agregarGrupo(Grupo grupo) {
 		listaDeGrupos.add(grupo);
 	}
-	public void agregarGrupoHistorico(Grupo grupo) {
-		listaDeGruposHistorica.add(grupo);
-	}
+
 	public int getCalificacion() {
 		return calificacion;
 	}
@@ -127,4 +113,6 @@ public class Usuario {
 	public void setCalificacion(int calificacion) {
 		this.calificacion = calificacion;
 	}
+
+
 }
