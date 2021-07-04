@@ -30,7 +30,9 @@ public class Grupo {
 	private Set<Usuario> listaDeUsuariosHistorica;
 
 	public Grupo() {
+
 		this.listaDeUsuarios = new HashSet<>();
+		this.listaDeUsuariosHistorica = new HashSet<>();
 	}
 
 
@@ -174,7 +176,13 @@ public class Grupo {
 		listaDeUsuarios.add(usuarioAInsertar);
 		usuarioAInsertar.agregarGrupo(this);
 	}
+	public void agregarUsuarioAListaHistorica(Usuario usuarioAInsertar) {
+		if (listaDeUsuariosHistorica.contains(usuarioAInsertar))
+			throw new YaEstoyEnElGrupo(id);
 
+		listaDeUsuariosHistorica.add(usuarioAInsertar);
+		usuarioAInsertar.agregarGrupoHistorico(this);
+	}
 	public Boolean grupoLleno() {
 		return listaDeUsuarios.size() >= cantidadMax;
 	}

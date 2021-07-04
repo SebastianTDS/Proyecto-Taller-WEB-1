@@ -36,6 +36,14 @@ public class ServicioGrupoTest {
 	}
 
 	@Test
+	public void queSePuedaUnirUnUsuarioAlGrupoYSeLoAgregeALaListaHistorica() {
+		Grupo buscado = givenQueExisteUnGrupo();
+		Usuario usuario = givenQueExisteUnUsuario();
+		whenAsignoElUsuarioAlGrupo(buscado, usuario);
+		thenVerificoQueElUsuarioFueAgregadoAlaListaHistorica(buscado,usuario);
+	}
+
+	@Test
 	public void queSePuedaUnirUnUsuarioAlGrupo() {
 		Grupo buscado = givenQueExisteUnGrupo();
 		Usuario usuario = givenQueExisteUnUsuario();
@@ -137,6 +145,10 @@ public class ServicioGrupoTest {
 		thenVerificoQueSeMuestrenTodosMisGrupos(gruposEncontrados);
 	}
 
+	private void thenVerificoQueElUsuarioFueAgregadoAlaListaHistorica(Grupo buscado,Usuario usuario) {
+		assertThat(buscado.getListaDeUsuariosHistorica().contains(usuario)).isTrue();
+		verify(repositorioGrupo, times(1)).actualizarGrupo(buscado);
+	}
 
 	private DatosDeGrupo givenQueExisteDatosDeGrupoParaBusqueda() {
 		DatosDeGrupo datosDeGrupoParaBusqueda = new DatosDeGrupo();

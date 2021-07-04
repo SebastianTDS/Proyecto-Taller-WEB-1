@@ -24,7 +24,9 @@ public class Usuario {
 	private int calificacion;
 
 	public Usuario() {
+
 		this.listaDeGrupos = new HashSet<Grupo>();
+		this.listaDeGruposHistorica = new HashSet<Grupo>();
 	}
 
 	@Override
@@ -115,7 +117,9 @@ public class Usuario {
 	public void agregarGrupo(Grupo grupo) {
 		listaDeGrupos.add(grupo);
 	}
-
+	public void agregarGrupoHistorico(Grupo grupo) {
+		listaDeGruposHistorica.add(grupo);
+	}
 	public int getCalificacion() {
 		return calificacion;
 	}

@@ -104,6 +104,7 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 			throw new FalloAlUnirseAlGrupo();
 
 		grupoAAcceder.agregarUsuarioAlGrupo(usuarioAInsertar);
+		grupoAAcceder.agregarUsuarioAListaHistorica(usuarioAInsertar);
 		repoGrupo.actualizarGrupo(grupoAAcceder);
 	}
 
