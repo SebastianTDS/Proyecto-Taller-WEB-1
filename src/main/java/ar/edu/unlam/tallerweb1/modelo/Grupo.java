@@ -27,10 +27,12 @@ public class Grupo {
 	private Materia materia;
 
 	private Set<Usuario> listaDeUsuarios;
+	private Set<Usuario> listaDeUsuariosHistorica;
 
 	public Grupo() {
 		this.listaDeUsuarios = new HashSet<>();
 	}
+
 
 	@Override
 	public int hashCode() {
@@ -55,6 +57,15 @@ public class Grupo {
 		return true;
 	}
 
+	@ManyToMany(mappedBy = "listaDeGruposHistorica", fetch = FetchType.EAGER)
+	public Set<Usuario> getListaDeUsuariosHistorica() {
+		return listaDeUsuariosHistorica;
+	}
+
+	public void setListaDeUsuariosHistorica(Set<Usuario> listaDeUsuariosHistorica) {
+		this.listaDeUsuariosHistorica = listaDeUsuariosHistorica;
+	}
+
 	@ManyToOne(optional = false)
 	public Usuario getAdministrador() {
 		return administrador;
@@ -68,6 +79,7 @@ public class Grupo {
 	public Set<Usuario> getListaDeUsuarios() {
 		return listaDeUsuarios;
 	}
+
 
 	public void setListaDeUsuarios(Set<Usuario> listaDeUsuarios) {
 		this.listaDeUsuarios = listaDeUsuarios;

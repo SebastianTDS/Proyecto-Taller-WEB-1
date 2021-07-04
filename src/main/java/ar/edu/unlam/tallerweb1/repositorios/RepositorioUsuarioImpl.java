@@ -39,5 +39,10 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 		sessionFactory.getCurrentSession().save(usuario);
 	}
 
+	@Override
+	public void actualizarUsuario(Usuario usuario) {
+		sessionFactory.getCurrentSession().update(usuario);
+	}
+
 
 }
