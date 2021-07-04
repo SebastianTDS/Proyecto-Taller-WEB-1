@@ -1,7 +1,7 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
+import ar.edu.unlam.tallerweb1.dto.DatosDeArchivo;
 import ar.edu.unlam.tallerweb1.dto.DatosDeMensaje;
-import ar.edu.unlam.tallerweb1.modelo.Archivo;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +12,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.util.enums.Permiso;
 import ar.edu.unlam.tallerweb1.util.exceptions.UsuarioNoEncontradoException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
@@ -100,13 +104,13 @@ public class ControladorGrupos {
 
         modelo.put("msj", mensaje);
         modelo.put("grupo", buscado);
-        modelo.put("mensajes",servicioMensajes.buscarMensajesDeUnGrupo(id));
+        modelo.put("mensajes", servicioMensajes.buscarMensajesDeUnGrupo(id));
 
         return new ModelAndView("vistaGrupo", modelo);
     }
 
     @RequestMapping("/{id}/foro/enviar-msj")
-    public ModelAndView insertarMensajeEnElForo(HttpServletRequest request,@ModelAttribute("msj") DatosDeMensaje datosDeMensaje) {
+    public ModelAndView insertarMensajeEnElForo(HttpServletRequest request, @ModelAttribute("msj") DatosDeMensaje datosDeMensaje) {
         Usuario usuarioLogueado = (Usuario) request.getSession().getAttribute("USUARIO");
         servicioMensajes.guardarUnMensaje(usuarioLogueado.getId(), datosDeMensaje);
         return new ModelAndView("redirect:/grupos/" + datosDeMensaje.getId() + "/foro");
@@ -131,14 +135,37 @@ public class ControladorGrupos {
 
         return objetivo;
     }
+
     @RequestMapping("/{id}/archivos")
     public ModelAndView perfilDeGrupoArchivos(@PathVariable Long id) {
         Grupo buscado = servicioGrupo.buscarGrupoPorID(id);
         ModelMap modelo = new ModelMap();
         modelo.put("vistaArchivos", true);
         modelo.put("grupo", buscado);
-        TreeSet<Archivo> archivos=servicioArchivos.buscarArchivosPorGrupo(id);
-        modelo.put("archivos", archivos);
+        //TreeSet<Archivo> archivos=servicioArchivos.buscarArchivosPorGrupo(id);
+        // modelo.put("archivos", archivos);
+
+        modelo.put("file", new DatosDeArchivo());
         return new ModelAndView("vistaGrupo", modelo);
     }
+
+    @RequestMapping(value = "/{id}/subir-archivo", method = RequestMethod.POST)
+    public ModelAndView subirArchivos( @RequestParam("file") MultipartFile file)throws IOException {
+        ModelMap modelo = new ModelMap();
+        modelo.put("vistaArchivos", true);
+        String filename = file.getOriginalFilename();
+
+        System.out.println("cargas/"  + filename);
+
+        byte[] bytes = file.getBytes();
+        BufferedOutputStream stream =new BufferedOutputStream(new FileOutputStream(
+                new File("cargas/" + File.separator + filename)));
+        stream.write(bytes);
+        stream.flush();
+        stream.close();
+        return new ModelAndView("vistaGrupo", modelo);
+
+    }
+
+
 }

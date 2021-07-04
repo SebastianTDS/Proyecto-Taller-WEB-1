@@ -5,16 +5,10 @@
 <div class="window col-12 col-sm-9 text-dark" style="max-height: 500px; overflow: scroll;">
     <h1 class="text-center border-bottom p-2">Archivos de ${grupo.nombre}</h1>
     <div>
-        <form:form method="POST" action="grupos/${grupo.getId()}/subir-archivo" enctype="multipart/form-data">
-            <table>
-                <tr>
-                    <td><input type="file" name="file"/></td>
-                </tr>
-                <tr>
-                    <td><input type="button" value="Submit"/></td>
-                </tr>
-            </table>
-        </form:form>
+        <form method="POST" action="grupos/${grupo.getId()}/subir-archivo" enctype="multipart/form-data">
+            <input type="file" name="archivo"/>
+            <input type="submit" value="Carga">
+        </form>
     </div>
     <table class="table">
         <thead>

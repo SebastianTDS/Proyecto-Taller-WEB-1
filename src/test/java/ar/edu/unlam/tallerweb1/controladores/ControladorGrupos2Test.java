@@ -2,15 +2,11 @@ package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.HttpSessionTest;
 import ar.edu.unlam.tallerweb1.modelo.Archivo;
-import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.HashSet;
-import java.util.List;
 import java.util.TreeSet;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -40,6 +36,10 @@ public class ControladorGrupos2Test  extends HttpSessionTest {
 
         thenObtengoLaVistaYElModeloDelArchivo(vistaObtenida);
     }
+
+
+
+
 
     private TreeSet<Archivo> givenListaDeArchivos() {
         TreeSet<Archivo>archivos=new TreeSet<>();

@@ -65,6 +65,7 @@
         <c:if test="${not empty vistaArchivos}">
             <jsp:include page="/templates/archivos.jsp"></jsp:include>
         </c:if>
+
     </div>
 </main>
 <jsp:include page="/templates/footer.jsp"></jsp:include>
