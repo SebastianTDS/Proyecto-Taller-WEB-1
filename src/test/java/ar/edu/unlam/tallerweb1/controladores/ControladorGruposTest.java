@@ -49,8 +49,6 @@ public class ControladorGruposTest extends HttpSessionTest{
 		thenElUsuarioYaNoExisteDelGrupo(postGrupoConUsuarioEliminado);
 	}
 
-
-
 	@Test
 	public void testQueAlPegarleALaURLTraigaLaVistaDelGrupo() {
 		Long idGrupoBuscado = 1L;

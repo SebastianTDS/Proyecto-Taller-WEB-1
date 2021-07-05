@@ -171,6 +171,12 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 	public void borrarUsuarioDelGrupo(Long IDgrupo, Long IDusuario) {
 		Grupo grupoBorrar = repoGrupo.getGrupoByID(IDgrupo);
 		Usuario usuarioBorrar = repoUsuario.getUsuarioByID(IDusuario);
+
+		if (Check.isNull(grupoBorrar))
+			throw new GrupoInexistenteException("Imposible unirse a grupo inexistente");
+		if (!grupoBorrar.getListaDeUsuarios().contains(usuarioBorrar))
+			throw new UsuarioNoEncontradoException("Imposible Salirse de un grupo que no estoy");
+
 		grupoBorrar.borrarUsuarioDelGrupo(usuarioBorrar);
 		repoGrupo.actualizarGrupo(grupoBorrar);
 	}

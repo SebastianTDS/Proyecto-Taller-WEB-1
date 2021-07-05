@@ -24,7 +24,6 @@ public class Usuario {
 	private Long cantidadDeCalificaciones;
 
 	public Usuario() {
-
 		this.listaDeGrupos = new HashSet<Grupo>();
 	}
 
