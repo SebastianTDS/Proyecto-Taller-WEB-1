@@ -102,7 +102,7 @@ public class RepositorioCalificacionTest extends SpringTest {
 	}
 
 	private Calificacion whenBuscamosLaCañificacion(Calificacion obtenida, Usuario manuela) {
-		return repository.buscarCalificacionPor(obtenida.getId(), manuela.getId());
+		return repository.buscarCalificacionPor(obtenida.getId());
 	}
 
 	private void thenEncontramosTodasSusCalificaciones(List<Calificacion> calificaiones, Integer tamanio) {

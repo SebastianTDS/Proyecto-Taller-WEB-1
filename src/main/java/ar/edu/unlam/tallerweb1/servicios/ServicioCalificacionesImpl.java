@@ -56,8 +56,8 @@ public class ServicioCalificacionesImpl implements ServicioCalificacion{
     @Override
     public void calificar(Long idUsuario, Long idcalificacion, Long calificacionRealizada) {
         Usuario usuarioCalificante = repoUsuario.getUsuarioByID(idUsuario);
-        Calificacion calificacion=repositorioCalificacion.buscarCalificacionPor(idUsuario,idcalificacion);
-        Usuario usuarioCalificado = repoUsuario.getUsuarioByID(calificacion.getDestino().getId());
+        Calificacion calificacion=repositorioCalificacion.buscarCalificacionPor(idcalificacion);
+        Usuario usuarioCalificado = repoUsuario.getUsuarioByID(calificacion.getOrigen().getId());
 
         if (usuarioCalificado == null)
             throw new UsuarioNoEncontradoException("No existe el usuario calificado!");
@@ -65,10 +65,14 @@ public class ServicioCalificacionesImpl implements ServicioCalificacion{
             throw new UsuarioNoEncontradoException("No existe el usuario calificante!");
 
         Long calificacionoriginal=usuarioCalificado.getCalificacion();
+        if (calificacionoriginal==null)
+            calificacionoriginal=0L;
         usuarioCalificado.setCalificacion(calificacionoriginal+calificacionRealizada);
 
         Long cantidadDeCalificacionesOriginal=usuarioCalificado.getCantidadDeCalificaciones();
-        usuarioCalificado.setCantidadDeCalificaciones(cantidadDeCalificacionesOriginal+1);
+        if (cantidadDeCalificacionesOriginal==null)
+            cantidadDeCalificacionesOriginal=0L;
+        usuarioCalificado.setCantidadDeCalificaciones(cantidadDeCalificacionesOriginal+1L);
 
         repoUsuario.actualizarUsuario(usuarioCalificado);
         repositorioCalificacion.borrarCalificacion(calificacion);

@@ -36,11 +36,9 @@ public class RepositorioCalificacionImpl implements RepositorioCalificacion{
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public Calificacion buscarCalificacionPor(Long idSolicitud, Long idUsuario) {
+	public Calificacion buscarCalificacionPor(Long Idcalificacion) {
 		return (Calificacion) sessionFactory.getCurrentSession().createCriteria(Calificacion.class)
-				.createAlias("destino", "usuarioJoin")
-				.add(Restrictions.eq("usuarioJoin.id", idUsuario))
-				.add(Restrictions.eq("id", idSolicitud)).uniqueResult();
+			.add(Restrictions.eq("id", Idcalificacion)).uniqueResult();
 	}
 
 	@Override

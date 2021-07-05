@@ -57,7 +57,7 @@ public class ServicioCalificacionesTest {
         Calificacion calificacion = givenExisteCalificacion();
         whenCalificoUsuario(idUsuario, calificacion,calificacionRealizada);
 
-        thenElUsuarioDestinoFueCalificadoYSeBorraLacalificacion(usuario2, calificacion,calificacionRealizada);
+        thenElUsuarioDestinoFueCalificadoYSeBorraLacalificacion(usuario1, calificacion,calificacionRealizada);
     }
 
     private void thenElUsuarioDestinoFueCalificadoYSeBorraLacalificacion(Usuario usuario2, Calificacion calificacion, Long calificacionRealizada) {
@@ -71,7 +71,7 @@ public class ServicioCalificacionesTest {
     private void whenCalificoUsuario(Long idUsuario, Calificacion calificacion, Long calificaionRealizada) {
         when(repoUsuario.getUsuarioByID(idUsuario)).thenReturn(usuario1);
         when(repoUsuario.getUsuarioByID(calificacion.getDestino().getId())).thenReturn(usuario2);
-        when(repoCalif.buscarCalificacionPor(idUsuario,calificacion.getId())).thenReturn(calificacion);
+        when(repoCalif.buscarCalificacionPor(calificacion.getId())).thenReturn(calificacion);
         service.calificar(idUsuario, calificacion.getId(), calificaionRealizada);
     }
 

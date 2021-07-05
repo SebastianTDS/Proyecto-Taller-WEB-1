@@ -12,7 +12,7 @@ public interface RepositorioCalificacion {
 
     void borrarCalificacion(Calificacion enviada);
 
-    Calificacion buscarCalificacionPor(Long idSolicitud, Long idUsuario);
+    Calificacion buscarCalificacionPor(Long idCalificacion);
 
     Calificacion getExistePendiente(Long idUsuario);
 }

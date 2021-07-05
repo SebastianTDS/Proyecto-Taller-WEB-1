@@ -43,15 +43,15 @@
 						<div class="list-group-item list-group-item-action flex-column">
 	                        <div class="d-flex w-100 justify-content-between align-items-center">
 	                            <small class="text-start">${notificacion.periodoTranscurrido() } > </small>
-	                            <span class="vertical-middle">Calificar a ${notificacion.destino.nombre}</span>
+	                            <span class="vertical-middle">Calificar a ${notificacion.origen.nombre}</span>
 	                            <div>
-                                    <form:form action="calificaiones/calificar" method="POST">
+                                    <form:form action="calificaciones/calificar" method="POST">
                                     <div class="input-box">
                                         <span class="details">Calificación</span>
-                                        <input id="calificacion" name="calificacion" type="number" class="form-control"/>
+                                        <input id="calificacion" name="calificaion" type="number" class="form-control"/>
                                     </div>
 		                            <div>
-		                            	<button type="submit" name="idSolicitudAceptada" value="${notificacion.destino.id}" class="btn btn-outline-success">Calificar</button>
+		                            	<button type="submit" name="idCalificacion" value="${notificacion.id}" class="btn btn-outline-success">Calificar</button>
 		                            </div>
                                     </form:form>
 	                            </div>
