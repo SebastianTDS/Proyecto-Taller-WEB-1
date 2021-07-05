@@ -34,15 +34,16 @@ public class ControladorCalificaciones {
 		
 		modelo.put("calificacionesPendientes", servicioCalificacion.buscarCalificaciones(usuarioEnSesion.getId()));
 		
-		return new ModelAndView("vistaCalificaiones", modelo);
+		return new ModelAndView("vistaCalificaciones", modelo);
 	}
 
 	
 	@RequestMapping("/calificar")
-	public ModelAndView calificar(HttpServletRequest request, @ModelAttribute("calificacion")Calificacion calificacion) {
+	public ModelAndView calificar(HttpServletRequest request, @RequestParam Long idCalificacion,@RequestParam Long calificaion) {
 		Usuario usuarioEnSesion = validarSesion(request);
 		ModelMap modelo = new ModelMap();
-		
+
+		servicioCalificacion.calificar(usuarioEnSesion.getId(),idCalificacion,calificaion);
 
 		modelo.put("mensaje", "Calificaion realizada");
 		

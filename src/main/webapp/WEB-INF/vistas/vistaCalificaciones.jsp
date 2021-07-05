@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -34,7 +35,6 @@
                 </ul>
             </div>
             <div class="window col-12 col-sm-9 text-dark">
-            	<form action="calificaiones/calificar" method="POST" id="calificar"></form>
                 <h1 class="mt-2">Calificaciones</h1>
                 <hr>
                 <div class="list-group">
@@ -45,13 +45,15 @@
 	                            <small class="text-start">${notificacion.periodoTranscurrido() } > </small>
 	                            <span class="vertical-middle">Calificar a ${notificacion.destino.nombre}</span>
 	                            <div>
+                                    <form:form action="calificaiones/calificar" method="POST">
                                     <div class="input-box">
-                                        <span class="details">Password</span>
-                                        <form:input path="calificacion" id="calificacion" type="number" class="form-control"/>
+                                        <span class="details">Calificación</span>
+                                        <input id="calificacion" name="calificacion" type="number" class="form-control"/>
                                     </div>
 		                            <div>
-		                            	<button type="submit" name="idSolicitudAceptada" form="calificar" class="btn btn-outline-success">Calificar</button>
+		                            	<button type="submit" name="idSolicitudAceptada" value="${notificacion.destino.id}" class="btn btn-outline-success">Calificar</button>
 		                            </div>
+                                    </form:form>
 	                            </div>
 	                        </div>
                     	</div>

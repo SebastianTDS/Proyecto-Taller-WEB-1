@@ -1,8 +1,11 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.HttpSessionTest;
+import ar.edu.unlam.tallerweb1.modelo.Calificacion;
 import ar.edu.unlam.tallerweb1.modelo.Solicitud;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
+import ar.edu.unlam.tallerweb1.servicios.ServicioCalificacion;
+import ar.edu.unlam.tallerweb1.servicios.ServicioCalificacionesImpl;
 import ar.edu.unlam.tallerweb1.servicios.ServicioSolicitud;
 import ar.edu.unlam.tallerweb1.servicios.ServicioSolicitudImpl;
 import ar.edu.unlam.tallerweb1.util.exceptions.UsuarioNoEncontradoException;
@@ -19,8 +22,8 @@ import static org.mockito.Mockito.*;
 
 public class ControladorCalificacionesTest extends HttpSessionTest{
 
-	private static ServicioSolicitud service = mock(ServicioSolicitudImpl.class);
-	private static ControladorSolicitudes controller = new ControladorSolicitudes(service);
+	private static ServicioCalificacion service = mock(ServicioCalificacionesImpl.class);
+	private static ControladorCalificaciones controller = new ControladorCalificaciones(service);
 	
 	private static Usuario usuarioEjemplo = new Usuario();
 	
@@ -30,97 +33,49 @@ public class ControladorCalificacionesTest extends HttpSessionTest{
 	}
 	
 	@Test
-	public void testQueSeCargueLaVistaDeSolicitudesDeUsuario () {
+	public void testQueSeCargueLaVistaDeCalificacionesDeUsuario () {
 		givenExisteUnUsuarioEnSesion();
 		
-		ModelAndView vista = whenQueremosVerSusSolicitudes();
+		ModelAndView vista = whenQueremosVerSusCalificaiones();
 		
 		thenObtenemosLaVistaDeseada(vista);
 	}
-	
-	@Test(expected = UsuarioNoEncontradoException.class)
-	public void testQueNoSeCargueLaVistaSiUsuarioNoExiste() {
-		givenNoExisteUnUsuarioEnSesion();
-		whenQueremosVerSusSolicitudes();
-	}
-	
 	@Test
-	public void testQueSePuedaSolicitarUnirseAUnGrupo () {
-		Long idGrupoSolicitado = 3L;
-		
+	public void testQueSePuedaCalificar () {
+		Long idCalificacion = 1L;
+		Long calificaion=100L;
+
 		givenExisteUnUsuarioEnSesion();
-		ModelAndView vista = whenSolicitamosUnirnosAUnGrupo(idGrupoSolicitado);
-		
-		thenSeEnviaLaSolicitud(vista, idGrupoSolicitado);
+		ModelAndView vista = whenCalificamos(idCalificacion,calificaion);
+
+		thenLaCalificaionSeRealiza(vista,idCalificacion,calificaion);
 	}
-	
-	@Test
-	public void testQueSePuedaAceptarUnaSolicitud () {
-		Long idSolicitudAceptada = 1L;
-		
-		givenExisteUnUsuarioEnSesion();
-		ModelAndView vista = whenAceptamosSolicitud(idSolicitudAceptada);
-		
-		thenLaSolicitudEsAprobada(vista, idSolicitudAceptada);
-	}
-	
-	@Test
-	public void testQueSePuedaRechazarSolicitud() {
-		Long idSolicitudRechazada = 2L;
-		
-		givenExisteUnUsuarioEnSesion();
-		ModelAndView vista = whenRechazamosSolicitud(idSolicitudRechazada);
-		
-		thenLaSolicitudEsRechazada(vista, idSolicitudRechazada);
-	}
-	
+
 	/* Metodos Auxiliares */
 
-	private ModelAndView whenRechazamosSolicitud(Long idSolicitudRechazada) {
-		return controller.rechazarUnaSolicitud(idSolicitudRechazada, request());
+	private void thenLaCalificaionSeRealiza(ModelAndView vista,Long idCalificacion,Long calificacion) {
+		assertThat(vista.getViewName()).isEqualTo("redirect:/calificaciones");
+		assertThat(vista.getModelMap().get("mensaje")).isEqualTo( "Calificaion realizada");
+		verify(service, times(1)).calificar(1L,idCalificacion,calificacion);
 	}
 
-	private void thenLaSolicitudEsRechazada(ModelAndView vista, Long idSolicitudRechazada) {
-		assertThat(vista.getViewName()).isEqualTo("redirect:/solicitudes");
-		assertThat(vista.getModelMap().get("mensaje")).isEqualTo("Solicitud Rechazada");
-		verify(service, times(1)).rechazarSolicitud(idSolicitudRechazada, usuarioEjemplo.getId());
+	private ModelAndView whenCalificamos(Long IDcalificaion, Long calificacion) {
+		return controller.calificar( request(),IDcalificaion,calificacion);
 	}
 
-	private void thenLaSolicitudEsAprobada(ModelAndView vista, Long idSolicitudAceptada) {
-		assertThat(vista.getViewName()).isEqualTo("redirect:/solicitudes");
-		assertThat(vista.getModelMap().get("mensaje")).isEqualTo("Solicitud Aceptada");
-		verify(service, times(1)).aprobarSolicitud(idSolicitudAceptada, usuarioEjemplo.getId());
-	}
-
-	private ModelAndView whenAceptamosSolicitud(Long idSolicitudAceptada) {
-		return controller.aceptarUnaSolicitud(idSolicitudAceptada, request());
-	}
-
-	private void thenSeEnviaLaSolicitud(ModelAndView vista, Long idGrupoSolicitado) {
-		assertThat(vista.getViewName()).isEqualTo("redirect:/ir-a-home");
-		verify(service, times(1)).solicitarInclusionAGrupo(idGrupoSolicitado, usuarioEjemplo.getId());
-	}
-
-	private ModelAndView whenSolicitamosUnirnosAUnGrupo(Long idGrupoSolicitado) {
-		return controller.solicitarUnirseAGrupo(idGrupoSolicitado, request());
-	}
-
-	private void givenNoExisteUnUsuarioEnSesion() {
-		when(request().getSession().getAttribute("USUARIO")).thenReturn(null);
-	}
 
 	@SuppressWarnings("unchecked")
 	private void thenObtenemosLaVistaDeseada(ModelAndView vista) {
-		List<Solicitud> solicitudes = (List<Solicitud>) vista.getModel().get("Solicitudes");
+		List<Solicitud> solicitudes = (List<Solicitud>) vista.getModel().get("calificacionesPendientes");
 		
-		assertThat(vista.getViewName()).isEqualTo("vistaSolicitudes");
+		assertThat(vista.getViewName()).isEqualTo("vistaCalificaciones");
 		assertThat(solicitudes).isNotNull();
 		assertThat(solicitudes).hasSize(2);
 	}
 
-	private ModelAndView whenQueremosVerSusSolicitudes() {
-		when(service.buscarSolicitudes(anyLong())).thenReturn(Arrays.asList(new Solicitud(), new Solicitud()));
-		return controller.verSolicitudes(request());
+	private ModelAndView whenQueremosVerSusCalificaiones() {
+		when(service.buscarCalificaciones(anyLong())).thenReturn(Arrays.asList(new Calificacion(), new Calificacion()));
+		return controller.verCalificaciones(request());
 	}
 
 	private void givenExisteUnUsuarioEnSesion() {
