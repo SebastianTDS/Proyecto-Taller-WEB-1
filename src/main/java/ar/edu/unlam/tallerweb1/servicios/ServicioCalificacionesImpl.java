@@ -64,6 +64,11 @@ public class ServicioCalificacionesImpl implements ServicioCalificacion{
         if (usuarioCalificante == null)
             throw new UsuarioNoEncontradoException("No existe el usuario calificante!");
 
+        if (calificacionRealizada==null|| calificacionRealizada<0)
+            calificacionRealizada=0L;
+        if (calificacionRealizada>100)
+            calificacionRealizada=100L;
+
         Long calificacionoriginal=usuarioCalificado.getCalificacion();
         if (calificacionoriginal==null)
             calificacionoriginal=0L;
