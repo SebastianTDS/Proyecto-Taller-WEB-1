@@ -40,6 +40,16 @@ public class ControladorGruposTest extends HttpSessionTest{
 		controller = new ControladorGrupos(service, mock(ServicioNotificacionesImpl.class),mock(ServicioMensajesImpl.class));
 		usuarioEjemplo.setId(1L); 
 	}
+	@Test
+	public void testQueElUsuarioPuedaRetirarseSuGrupo() {
+		Long idGrupoBuscado = 1L;
+
+		ModelAndView postGrupoConUsuarioEliminado = whenSalirDelGrupo(idGrupoBuscado);
+
+		thenElUsuarioYaNoExisteDelGrupo(postGrupoConUsuarioEliminado);
+	}
+
+
 
 	@Test
 	public void testQueAlPegarleALaURLTraigaLaVistaDelGrupo() {
@@ -140,7 +150,14 @@ public class ControladorGruposTest extends HttpSessionTest{
 		
 		controller.perfilDeGrupo(idGrupoBuscado, request());
 	}
-
+	private ModelAndView whenSalirDelGrupo(Long idGrupoBuscado) {
+		when(request().getSession().getAttribute("USUARIO")).thenReturn(usuarioEjemplo);
+		return controller.salirDelGrupo(idGrupoBuscado, request());
+	}
+	private void thenElUsuarioYaNoExisteDelGrupo(ModelAndView postGrupoEliminado) {
+		assertThat(postGrupoEliminado.getViewName()).isEqualTo("redirect:/ir-a-home");
+		assertThat(postGrupoEliminado.getModel().get("mensaje")).isEqualTo("Se ha salido con exito!");
+	}
 	private void whenIntentoCargoLaModificacionDeLosDatos(Long idGrupoBuscado, DatosDeGrupo formulario) {
 		when(request().getSession().getAttribute("USUARIO")).thenReturn(usuarioEjemplo);
 		doThrow(UsuarioSinPermisosException.class).when(service).validarPermiso(usuarioEjemplo.getId(), idGrupoBuscado, Permiso.MODIFICACION);

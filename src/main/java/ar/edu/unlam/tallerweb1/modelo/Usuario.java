@@ -20,7 +20,8 @@ public class Usuario {
 	private String rol;
 	private String nombre;
 	private Set<Grupo> listaDeGrupos;
-	private int calificacion;
+	private Long calificacion;
+	private Long cantidadDeCalificaciones;
 
 	public Usuario() {
 
@@ -106,13 +107,23 @@ public class Usuario {
 		listaDeGrupos.add(grupo);
 	}
 
-	public int getCalificacion() {
+	public Long getCalificacion() {
 		return calificacion;
 	}
 
-	public void setCalificacion(int calificacion) {
+	public void setCalificacion(Long calificacion) {
 		this.calificacion = calificacion;
 	}
 
+	public Long getCantidadDeCalificaciones() {
+		return cantidadDeCalificaciones;
+	}
 
+	public void setCantidadDeCalificaciones(Long cantidadDeCalificaciones) {
+		this.cantidadDeCalificaciones = cantidadDeCalificaciones;
+	}
+
+	public void borrarGrupoDelUsuario(Grupo grupo) {
+		listaDeGrupos.remove(grupo);
+	}
 }

@@ -1,6 +1,5 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
-import ar.edu.unlam.tallerweb1.dto.DatosCalificaciones;
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.repositorios.*;
@@ -36,42 +35,32 @@ public class ServicioGrupoTest {
         servicioGrupo = new ServicioGrupoImpl(repositorioGrupo, repositorioCarrera, repositorioMateria, repositorioUsuario);
     }
 
-    @Test
-    public void queSePuedaUnirUnUsuarioAlGrupoYSeLoAgregeALaListaHistorica() {
-        Grupo buscado = givenQueExisteUnGrupo();
-        Usuario usuario = givenQueExisteUnUsuario();
-        whenAsignoElUsuarioAlGrupo(buscado, usuario);
-        thenVerificoQueElUsuarioFueAgregadoAlaListaHistorica(buscado, usuario);
-    }
+
 
     @Test
     public void queSePuedaBorrarUnUsuarioDeUnGrupo() {
         Grupo buscado = givenQueExisteUnGrupo();
-        DatosCalificaciones datosCalificaciones = givenDadoQueExisteDatosCalificaciones();
         Usuario usuario = givenQueExisteUnUsuario();
-        Usuario usuario1 = givenQueExisteUnUsuario();
+        Usuario usuario1 = givenQueExisteUnUsuario1();
         whenAsignoElUsuarioAlGrupo(buscado, usuario);
         whenAsignoElUsuarioAlGrupo(buscado, usuario1);
 
-        whenBorroElUsuarioDelGrupo(buscado, usuario, datosCalificaciones);
+        whenBorroElUsuarioDelGrupo(buscado, usuario);
         thenVerificoQueElUsuarioFueBorradoDelGrupo(buscado, usuario);
     }
 
-    private DatosCalificaciones givenDadoQueExisteDatosCalificaciones() {
-        DatosCalificaciones datosCalificaciones = new DatosCalificaciones();
-        return datosCalificaciones;
-    }
 
-    private void whenBorroElUsuarioDelGrupo(Grupo buscado, Usuario usuario,DatosCalificaciones datosCalificaciones) {
+
+    private void whenBorroElUsuarioDelGrupo(Grupo buscado, Usuario usuario) {
         when(repositorioGrupo.getGrupoByID(buscado.getId())).thenReturn(buscado);
         when(repositorioUsuario.getUsuarioByID(usuario.getId())).thenReturn(usuario);
 
-        servicioGrupo.borrarUsuarioDelGrupo(buscado.getId(),usuario.getId(),datosCalificaciones);
+        servicioGrupo.borrarUsuarioDelGrupo(buscado.getId(),usuario.getId());
     }
 
     private void thenVerificoQueElUsuarioFueBorradoDelGrupo(Grupo buscado, Usuario usuario) {
         assertThat(buscado.getListaDeUsuarios().contains(usuario)).isFalse();
-        verify(repositorioGrupo, times(2)).actualizarGrupo(buscado);
+        verify(repositorioGrupo, times(3)).actualizarGrupo(buscado);
     }
 
     @Test
@@ -174,11 +163,6 @@ public class ServicioGrupoTest {
         List<Grupo> gruposPresistidos = givenQueSeGuardenTodosLosGruposExistentes(losPicatecla1);
         List<Grupo> gruposEncontrados = whenBuscoTodosMisGrupos(gruposPresistidos);
         thenVerificoQueSeMuestrenTodosMisGrupos(gruposEncontrados);
-    }
-
-    private void thenVerificoQueElUsuarioFueAgregadoAlaListaHistorica(Grupo buscado, Usuario usuario) {
-        assertThat(buscado.getListaDeUsuariosHistorica().contains(usuario)).isTrue();
-        verify(repositorioGrupo, times(1)).actualizarGrupo(buscado);
     }
 
     private DatosDeGrupo givenQueExisteDatosDeGrupoParaBusqueda() {
@@ -327,8 +311,8 @@ public class ServicioGrupoTest {
     }
 
     private void whenAsignoElUsuarioAlGrupo(Grupo buscado, Usuario usuario) {
-        when(repositorioGrupo.getGrupoByID(buscado.getId())).thenReturn(buscado);
-        when(repositorioUsuario.getUsuarioByID(usuario.getId())).thenReturn(usuario);
+        when(repositorioGrupo.getGrupoByID(anyObject())).thenReturn(buscado);
+        when(repositorioUsuario.getUsuarioByID(anyObject())).thenReturn(usuario);
 
         servicioGrupo.ingresarUsuarioAlGrupo(buscado.getId(), usuario.getId());
     }
@@ -338,7 +322,10 @@ public class ServicioGrupoTest {
         usuario.setId(1L);
         return usuario;
     }
-
+    private Usuario givenQueExisteUnUsuario1() {
+        Usuario usuario = new Usuario();
+        return usuario;
+    }
     private Grupo givenQueExisteUnGrupo() {
         Grupo grupo = new Grupo();
         grupo.setId(1L);

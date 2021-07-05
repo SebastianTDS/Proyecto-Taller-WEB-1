@@ -27,12 +27,9 @@ public class Grupo {
 	private Materia materia;
 
 	private Set<Usuario> listaDeUsuarios;
-	private Set<Usuario> listaDeUsuariosHistorica;
 
 	public Grupo() {
-
 		this.listaDeUsuarios = new HashSet<>();
-		this.listaDeUsuariosHistorica = new HashSet<>();
 	}
 
 
@@ -57,15 +54,6 @@ public class Grupo {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}
-
-	@OneToMany(orphanRemoval = true)@JoinTable(name = "usuarioHistorico_grupo")
-	public Set<Usuario> getListaDeUsuariosHistorica() {
-		return listaDeUsuariosHistorica;
-	}
-
-	public void setListaDeUsuariosHistorica(Set<Usuario> listaDeUsuariosHistorica) {
-		this.listaDeUsuariosHistorica = listaDeUsuariosHistorica;
 	}
 
 	@ManyToOne(optional = false)
@@ -176,12 +164,7 @@ public class Grupo {
 		listaDeUsuarios.add(usuarioAInsertar);
 		usuarioAInsertar.agregarGrupo(this);
 	}
-	public void agregarUsuarioAListaHistorica(Usuario usuarioAInsertar) {
-		if (listaDeUsuariosHistorica.contains(usuarioAInsertar))
-			throw new YaEstoyEnElGrupo(id);
 
-		listaDeUsuariosHistorica.add(usuarioAInsertar);
-	}
 	public Boolean grupoLleno() {
 		return listaDeUsuarios.size() >= cantidadMax;
 	}
@@ -198,7 +181,10 @@ public class Grupo {
 		this.esMateria = esMateria;
 	}
 
-
+	public void borrarUsuarioDelGrupo(Usuario usuarioBorrar) {
+		listaDeUsuarios.remove(usuarioBorrar);
+		usuarioBorrar.borrarGrupoDelUsuario(this);
+	}
 
 	@PreRemove
 	public void removerGruposDeUsuario() {
@@ -207,7 +193,5 @@ public class Grupo {
 		}
 	}
 
-	public void borrarUsuarioDelGrupo(Usuario usuarioBorrar) {
-		listaDeUsuarios.remove(usuarioBorrar);
-	}
+
 }

@@ -128,4 +128,15 @@ public class ControladorGrupos {
 
         return objetivo;
     }
+    @RequestMapping(path = "/salir", method = RequestMethod.POST)
+    public ModelAndView salirDelGrupo(@RequestParam Long id, HttpServletRequest request) {
+        Usuario usuarioEnSesion = validarSesion(request);
+        ModelMap modelo = new ModelMap();
+
+        servicioNotificacion.notificarRetiroDeGrupo(id,usuarioEnSesion);
+        servicioGrupo.borrarUsuarioDelGrupo(id,usuarioEnSesion.getId());
+
+        modelo.put("mensaje", "Se ha salido con exito!");
+        return new ModelAndView("redirect:/ir-a-home", modelo);
+    }
 }

@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.servicios;
 
 import java.util.List;
 
+import ar.edu.unlam.tallerweb1.util.exceptions.UsuarioNoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,6 +71,24 @@ public class ServicioNotificacionesImpl implements ServicioNotificaciones {
 	public Boolean hayPendientes(Long idUsuario) {
 		return !Check.isNull(repoNotificaciones.getExistePendiente(idUsuario))
 				|| !Check.isNull(repoSolicitudes.getExistePendiente(idUsuario));
+	}
+
+	@Override
+	public void notificarRetiroDeGrupo(Long id, Usuario usuarioARetirar) {
+		Grupo grupoObjetivo = repoGrupo.getGrupoByID(id);
+
+		if (Check.isNull(grupoObjetivo))
+			throw new GrupoInexistenteException("Imposible unirse a grupo inexistente");
+		if (!grupoObjetivo.getListaDeUsuarios().contains(usuarioARetirar))
+			throw new UsuarioNoEncontradoException("Imposible Salirse de un grupo que no estoy");
+
+		for (Usuario integrante : grupoObjetivo.getListaDeUsuarios()) {
+			String titulo = integrante.getId() == usuarioARetirar.getId()
+					? "Te has retirado del grupo \"" + grupoObjetivo.getNombre() + "\""
+					: usuarioARetirar.getNombre() + " se ha retirado del grupo \"" + grupoObjetivo.getNombre() + "\"";
+
+			notificar(titulo, integrante);
+		}
 	}
 
 	private void notificar(String titulo, Usuario destinatario) {

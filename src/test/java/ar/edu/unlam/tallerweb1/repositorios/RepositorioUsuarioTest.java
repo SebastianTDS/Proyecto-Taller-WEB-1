@@ -30,12 +30,12 @@ public class RepositorioUsuarioTest extends SpringTest {
 
     private void whenActualizoElUsuario(Usuario usuario) {
         Usuario usuarioActualizar=repositorio.getUsuarioByID(usuario.getId());
-        usuarioActualizar.setCalificacion(25);
+        usuarioActualizar.setCalificacion(25L);
        repositorio.actualizarUsuario(usuarioActualizar);
     }
 
     private void thenVerificoQueElUsuarioSeActualice(Usuario usuario) {
-        assertThat(25).isEqualTo(repositorio.getUsuarioByID(usuario.getId()).getCalificacion());
+        assertThat(25L).isEqualTo(repositorio.getUsuarioByID(usuario.getId()).getCalificacion());
     }
 
 
