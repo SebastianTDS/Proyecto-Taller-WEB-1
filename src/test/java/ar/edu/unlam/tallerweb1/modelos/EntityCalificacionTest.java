@@ -33,7 +33,6 @@ public class EntityCalificacionTest extends SpringTest {
 
         Calificacion calificacion = new Calificacion();
 
-        calificacion.setCalificacion(100L);
         calificacion.setOrigen(usuario);
         calificacion.setDestino(usuario);
 

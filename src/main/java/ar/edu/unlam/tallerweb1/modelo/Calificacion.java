@@ -13,7 +13,6 @@ public class Calificacion {
 	private LocalDateTime fecha;
 	private Usuario destino;
 	private Usuario origen;
-	private Long calificacion;
 
 	public Calificacion() {
 		this.fecha = LocalDateTime.now();
@@ -53,15 +52,6 @@ public class Calificacion {
 
 	public void setOrigen(Usuario origen) {
 		this.origen = origen;
-	}
-
-
-	public Long getCalificacion() {
-		return calificacion;
-	}
-
-	public void setCalificacion(Long calificacion) {
-		this.calificacion = calificacion;
 	}
 
 	public String periodoTranscurrido() {

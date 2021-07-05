@@ -11,6 +11,6 @@ public interface ServicioCalificacion {
 
 	void crearCalificacion(Long idGrupo, Long idUsuario);
 
-	void calificar(Long idUsuario, Calificacion calificacion);
+	void calificar(Long idUsuario, Long idcalificacion, Long calificacionRealizada);
 
 }

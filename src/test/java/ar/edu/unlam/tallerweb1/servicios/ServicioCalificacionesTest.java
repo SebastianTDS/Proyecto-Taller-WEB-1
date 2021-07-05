@@ -53,24 +53,26 @@ public class ServicioCalificacionesTest {
     @Test
     public void testQueSePuedaCalificar() {
         Long idUsuario = 1L;
+        Long calificacionRealizada=100L;
         Calificacion calificacion = givenExisteCalificacion();
-        whenCalificoUsuario(idUsuario, calificacion);
+        whenCalificoUsuario(idUsuario, calificacion,calificacionRealizada);
 
-        thenElUsuarioDestinoFueCalificadoYSeBorraLacalificacion(usuario2, calificacion);
+        thenElUsuarioDestinoFueCalificadoYSeBorraLacalificacion(usuario2, calificacion,calificacionRealizada);
     }
 
-    private void thenElUsuarioDestinoFueCalificadoYSeBorraLacalificacion(Usuario usuario2, Calificacion calificacion) {
+    private void thenElUsuarioDestinoFueCalificadoYSeBorraLacalificacion(Usuario usuario2, Calificacion calificacion, Long calificacionRealizada) {
         assertThat(1L).isEqualTo(usuario2.getCantidadDeCalificaciones());
-        assertThat(calificacion.getCalificacion()).isEqualTo(usuario2.getCalificacion());
+        assertThat(calificacionRealizada).isEqualTo(usuario2.getCalificacion());
         verify(repoUsuario, times(1)).actualizarUsuario(anyObject());
         verify(repoCalif, times(1)).borrarCalificacion(anyObject());
     }
 
 
-    private void whenCalificoUsuario(Long idUsuario, Calificacion calificacion) {
+    private void whenCalificoUsuario(Long idUsuario, Calificacion calificacion, Long calificaionRealizada) {
         when(repoUsuario.getUsuarioByID(idUsuario)).thenReturn(usuario1);
         when(repoUsuario.getUsuarioByID(calificacion.getDestino().getId())).thenReturn(usuario2);
-        service.calificar(idUsuario, calificacion);
+        when(repoCalif.buscarCalificacionPor(idUsuario,calificacion.getId())).thenReturn(calificacion);
+        service.calificar(idUsuario, calificacion.getId(), calificaionRealizada);
     }
 
     private Calificacion givenExisteCalificacion() {
@@ -79,7 +81,6 @@ public class ServicioCalificacionesTest {
         usuario2.setId(2L);
         calificacion.setOrigen(usuario1);
         calificacion.setDestino(usuario2);
-        calificacion.setCalificacion(100L);
         return calificacion;
     }
 
