@@ -25,8 +25,6 @@ public class Usuario {
 
 	public Usuario() {
 		this.listaDeGrupos = new HashSet<Grupo>();
-		calificacion=0L;
-		cantidadDeCalificaciones=0L;
 	}
 
 	@Override

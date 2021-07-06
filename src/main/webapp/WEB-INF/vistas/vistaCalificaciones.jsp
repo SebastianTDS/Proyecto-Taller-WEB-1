@@ -38,38 +38,39 @@
                 <h1 class="mt-2">Calificaciones</h1>
                 <hr>
                 <div class="list-group">
-				<form action="grupos/eliminar" method="POST" id="delete"></form>                
                     <c:forEach items="${calificacionesPendientes}" var="notificacion">
-						<div class="list-group-item list-group-item-action flex-column">
+						<div class="list-group-item list-group-item-action flex-column" onmouseover="animarEstrellas(${notificacion.id})" onmouseout="setearEstrellas(${notificacion.id})">
 	                        <div class="d-flex w-100 justify-content-between align-items-center">
 	                            <small class="text-start">${notificacion.periodoTranscurrido() } > </small>
 	                            <span class="vertical-middle">Calificar a ${notificacion.origen.nombre} del grupo ${notificacion.nombreDeGrupo}</span>
 	                            <div class="d-flex justify-content-between">
-                                    <form:form action="calificaciones/calificar" method="POST">
                                     <div class="input-box d-flex justify-content-between">
-                                        <img src="img/estrellaApagada.png" class="m-1" id="estrellaA1" style="width: 30px; height: 30px">
-                                        <img src="img/estrellaEncendida.png" class="m-1" id="estrellaE1" style="width: 30px; height: 30px;display: none">
 
-                                        <img src="img/estrellaApagada.png" class="m-1" id="estrellaA2" style="width: 30px; height: 30px">
-                                        <img src="img/estrellaEncendida.png" class="m-1" id="estrellaE2" style="width: 30px; height: 30px;display: none">
+                                        <img src="img/estrellaApagada.png" class="p-2" id="estrellaA1${notificacion.id}" style="width: 60px; height: 60px">
+                                        <img src="img/estrellaEncendida.png" class="p-2" id="estrellaE1${notificacion.id}" style="width: 60px; height: 60px;display: none">
 
-                                        <img src="img/estrellaApagada.png" class="m-1" id="estrellaA3" style="width: 30px; height: 30px">
-                                        <img src="img/estrellaEncendida.png" class="m-1" id="estrellaE3" style="width: 30px; height: 30px;display: none">
+                                        <img src="img/estrellaApagada.png" class="p-2" id="estrellaA2${notificacion.id}" style="width: 60px; height: 60px">
+                                        <img src="img/estrellaEncendida.png" class="p-2" id="estrellaE2${notificacion.id}" style="width: 60px; height: 60px;display: none">
 
-                                        <img src="img/estrellaApagada.png" class="m-1" id="estrellaA4" style="width: 30px; height: 30px">
-                                        <img src="img/estrellaEncendida.png" class="m-1" id="estrellaE4" style="width: 30px; height: 30px;display: none">
+                                        <img src="img/estrellaApagada.png" class="p-2" id="estrellaA3${notificacion.id}" style="width: 60px; height: 60px">
+                                        <img src="img/estrellaEncendida.png" class="p-2" id="estrellaE3${notificacion.id}" style="width: 60px; height: 60px;display: none">
 
-                                        <img src="img/estrellaApagada.png" class="m-1" id="estrellaA5" style="width: 30px; height: 30px">
-                                        <img src="img/estrellaEncendida.png" class="m-1" id="estrellaE5" style="width: 30px; height: 30px;display: none">
+                                        <img src="img/estrellaApagada.png" class="p-2" id="estrellaA4${notificacion.id}" style="width: 60px; height: 60px">
+                                        <img src="img/estrellaEncendida.png" class="p-2" id="estrellaE4${notificacion.id}" style="width: 60px; height: 60px;display: none">
 
-                                        <input id="calificacion" name="calificaion" type="number" class="form-control m-1" placeholder="Calificación" style="display: none"/>
-                                        <button type="submit" id="enviarCalificacion" name="idCalificacion" value="${notificacion.id}" class="btn btn-outline-success m-1" style="display: none">Calificar</button>
+                                        <img src="img/estrellaApagada.png" class="p-2" id="estrellaA5${notificacion.id}" style="width: 60px; height: 60px">
+                                        <img src="img/estrellaEncendida.png" class="p-2" id="estrellaE5${notificacion.id}" style="width: 60px; height: 60px;display: none">
+
+                                        <button type="submit" form="formCalificacion" id="enviarCalificacion${notificacion.id}" name="idCalificacion" value="${notificacion.id}" class="btn btn-outline-success m-1"style="display: none">Calificar</button>
 		                            </div>
-                                    </form:form>
+
 	                            </div>
 	                        </div>
                     	</div>
 					</c:forEach>
+                    <form:form action="calificaciones/calificar" id="formCalificacion" method="POST">
+                        <input id="calificacion" name="calificaion" type="number" class="form-control m-1" placeholder="Calificación" style="display: none"/>
+                    </form:form>
                 </div>
             </div>
         </div>
