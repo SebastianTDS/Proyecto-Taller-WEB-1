@@ -32,6 +32,7 @@ public class Grupo {
 		this.listaDeUsuarios = new HashSet<>();
 	}
 
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -68,6 +69,7 @@ public class Grupo {
 	public Set<Usuario> getListaDeUsuarios() {
 		return listaDeUsuarios;
 	}
+
 
 	public void setListaDeUsuarios(Set<Usuario> listaDeUsuarios) {
 		this.listaDeUsuarios = listaDeUsuarios;
@@ -179,7 +181,10 @@ public class Grupo {
 		this.esMateria = esMateria;
 	}
 
-
+	public void borrarUsuarioDelGrupo(Usuario usuarioBorrar) {
+		listaDeUsuarios.remove(usuarioBorrar);
+		usuarioBorrar.borrarGrupoDelUsuario(this);
+	}
 
 	@PreRemove
 	public void removerGruposDeUsuario() {
@@ -187,5 +192,6 @@ public class Grupo {
 			usuario.getListaDeGrupos().remove(this);
 		}
 	}
+
 
 }

@@ -2,8 +2,7 @@ package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeMensaje;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
-import ar.edu.unlam.tallerweb1.servicios.ServicioMensajes;
-import ar.edu.unlam.tallerweb1.servicios.ServicioMensajesImpl;
+import ar.edu.unlam.tallerweb1.servicios.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,8 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
-import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
-import ar.edu.unlam.tallerweb1.servicios.ServicioNotificaciones;
 import ar.edu.unlam.tallerweb1.util.enums.Permiso;
 import ar.edu.unlam.tallerweb1.util.exceptions.UsuarioNoEncontradoException;
 
@@ -27,118 +24,131 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/grupos")
 public class ControladorGrupos {
 
-	private final ServicioGrupo servicioGrupo;
-	private final ServicioNotificaciones servicioNotificacion;
-	private final ServicioMensajes servicioMensajes;
+    private final ServicioGrupo servicioGrupo;
+    private final ServicioNotificaciones servicioNotificacion;
+    private final ServicioMensajes servicioMensajes;
+    private final ServicioCalificacion servicioCalificacion;
 
-	@Autowired
-	public ControladorGrupos(ServicioGrupo servicioGrupo, ServicioNotificaciones servicioNotificacion,
-			ServicioMensajes servicioMensajes) {
-		this.servicioGrupo = servicioGrupo;
-		this.servicioNotificacion = servicioNotificacion;
-		this.servicioMensajes = servicioMensajes;
-	}
+    @Autowired
+    public ControladorGrupos(ServicioGrupo servicioGrupo, ServicioNotificaciones servicioNotificacion,
+                             ServicioMensajes servicioMensajes,ServicioCalificacion servicioCaligicacion) {
+        this.servicioGrupo = servicioGrupo;
+        this.servicioNotificacion = servicioNotificacion;
+        this.servicioMensajes = servicioMensajes;
+        this.servicioCalificacion=servicioCaligicacion;
+    }
 
-	@RequestMapping("/{id}")
-	public ModelAndView perfilDeGrupo(@PathVariable Long id, HttpServletRequest request) {
-		Usuario usuarioEnSesion = validarSesion(request);
-		Grupo buscado = servicioGrupo.buscarGrupoPorID(id);
-		ModelMap modelo = new ModelMap();
+    @RequestMapping("/{id}")
+    public ModelAndView perfilDeGrupo(@PathVariable Long id, HttpServletRequest request) {
+        Usuario usuarioEnSesion = validarSesion(request);
+        Grupo buscado = servicioGrupo.buscarGrupoPorID(id);
+        ModelMap modelo = new ModelMap();
 
-		servicioGrupo.validarPermiso(usuarioEnSesion.getId(), buscado.getId(), Permiso.VISTA);
+        servicioGrupo.validarPermiso(usuarioEnSesion.getId(), buscado.getId(), Permiso.VISTA);
 
-		modelo.put("grupo", buscado);
-		return new ModelAndView("vistaGrupo", modelo);
-	}
+        modelo.put("grupo", buscado);
+        return new ModelAndView("vistaGrupo", modelo);
+    }
 
-	@RequestMapping("/{id}/edicion")
-	public ModelAndView perfilDeGrupoEdicion(@PathVariable Long id, HttpServletRequest request) {
-		Usuario usuarioEnSesion = validarSesion(request);
-		Grupo buscado = servicioGrupo.buscarGrupoPorID(id);
-		ModelMap modelo = new ModelMap();
+    @RequestMapping("/{id}/edicion")
+    public ModelAndView perfilDeGrupoEdicion(@PathVariable Long id, HttpServletRequest request) {
+        Usuario usuarioEnSesion = validarSesion(request);
+        Grupo buscado = servicioGrupo.buscarGrupoPorID(id);
+        ModelMap modelo = new ModelMap();
 
-		servicioGrupo.validarPermiso(usuarioEnSesion.getId(), buscado.getId(), Permiso.MODIFICACION);
+        servicioGrupo.validarPermiso(usuarioEnSesion.getId(), buscado.getId(), Permiso.MODIFICACION);
 
-		modelo.put("grupo", buscado);
-		modelo.put("formulario", new Grupo());
-		return new ModelAndView("vistaGrupo", modelo);
-	}
+        modelo.put("grupo", buscado);
+        modelo.put("formulario", new Grupo());
+        return new ModelAndView("vistaGrupo", modelo);
+    }
 
-	@RequestMapping(path = "/modificar", method = RequestMethod.POST)
-	public ModelAndView cambiarDatosGrupo(@ModelAttribute("formulario") DatosDeGrupo form, HttpServletRequest request) {
-		Usuario usuarioEnSesion = validarSesion(request);
-		ModelMap modelo = new ModelMap();
+    @RequestMapping(path = "/modificar", method = RequestMethod.POST)
+    public ModelAndView cambiarDatosGrupo(@ModelAttribute("formulario") DatosDeGrupo form, HttpServletRequest request) {
+        Usuario usuarioEnSesion = validarSesion(request);
+        ModelMap modelo = new ModelMap();
 
-		servicioGrupo.validarPermiso(usuarioEnSesion.getId(), form.getId(), Permiso.MODIFICACION);
-		servicioGrupo.modificarGrupo(form);
-		modelo.put("mensaje", "Datos actualizados");
+        servicioGrupo.validarPermiso(usuarioEnSesion.getId(), form.getId(), Permiso.MODIFICACION);
+        servicioGrupo.modificarGrupo(form);
+        modelo.put("mensaje", "Datos actualizados");
 
-		return new ModelAndView("redirect:/grupos/" + form.getId(), modelo);
-	}
+        return new ModelAndView("redirect:/grupos/" + form.getId(), modelo);
+    }
 
-	@RequestMapping(path = "/eliminar", method = RequestMethod.POST)
-	public ModelAndView eliminarGrupo(@RequestParam Long id, HttpServletRequest request) {
-		Usuario usuarioEnSesion = validarSesion(request);
-		ModelMap modelo = new ModelMap();
+    @RequestMapping(path = "/eliminar", method = RequestMethod.POST)
+    public ModelAndView eliminarGrupo(@RequestParam Long id, HttpServletRequest request) {
+        Usuario usuarioEnSesion = validarSesion(request);
+        ModelMap modelo = new ModelMap();
 
-		servicioGrupo.validarPermiso(usuarioEnSesion.getId(), id, Permiso.MODIFICACION);
+        servicioGrupo.validarPermiso(usuarioEnSesion.getId(), id, Permiso.MODIFICACION);
+        servicioCalificacion.crearCalificacion(id,usuarioEnSesion.getId());
 
-		servicioNotificacion.notificarEliminacionDeGrupo(id);
-		servicioGrupo.eliminarGrupo(id);
-		modelo.put("mensaje", "Grupo eliminado con exito!");
-		return new ModelAndView("redirect:/ir-a-home", modelo);
-	}
+        servicioNotificacion.notificarEliminacionDeGrupo(id);
+        servicioGrupo.eliminarGrupo(id);
+        modelo.put("mensaje", "Grupo eliminado con exito!");
+        return new ModelAndView("redirect:/ir-a-home", modelo);
+    }
 
-	@RequestMapping("/{id}/foro")
-	public ModelAndView perfilDeGrupoForo(HttpServletRequest request, @PathVariable Long id) {
-		validarSesion(request);
+    @RequestMapping("/{id}/foro")
+    public ModelAndView perfilDeGrupoForo(HttpServletRequest request, @PathVariable Long id) {
+    	validarSesion(request);
+    	
+        ModelMap modelo = new ModelMap();
 
-		ModelMap modelo = new ModelMap();
+        modelo.put("msj", new DatosDeMensaje());
+        modelo.put("grupo", servicioGrupo.buscarGrupoPorID(id));
+        modelo.put("mensajes",servicioMensajes.buscarMensajesDeUnGrupo(id));
 
-		modelo.put("msj", new DatosDeMensaje());
-		modelo.put("grupo", servicioGrupo.buscarGrupoPorID(id));
-		modelo.put("mensajes", servicioMensajes.buscarMensajesDeUnGrupo(id));
+        return new ModelAndView("vistaGrupo", modelo);
+    }
 
-		return new ModelAndView("vistaGrupo", modelo);
-	}
+    @RequestMapping("/{id}/foro/enviar-msj")
+    public ModelAndView insertarMensajeEnElForo(HttpServletRequest request,@ModelAttribute("msj") DatosDeMensaje datosDeMensaje) {
+        Usuario usuarioLogueado = validarSesion(request);
+        servicioMensajes.guardarUnMensaje(usuarioLogueado.getId(), datosDeMensaje);
+        return new ModelAndView("redirect:/grupos/" + datosDeMensaje.getId() + "/foro");
+    }
 
-	@RequestMapping("/{id}/foro/enviar-msj")
-	public ModelAndView insertarMensajeEnElForo(HttpServletRequest request,
-			@ModelAttribute("msj") DatosDeMensaje datosDeMensaje) {
-		Usuario usuarioLogueado = validarSesion(request);
-		servicioMensajes.guardarUnMensaje(usuarioLogueado.getId(), datosDeMensaje);
-		return new ModelAndView("redirect:/grupos/" + datosDeMensaje.getId() + "/foro");
+    @RequestMapping("/{id}/miembros")
+    public ModelAndView mostrarMiembrosDelGrupo(HttpServletRequest request, @PathVariable Long id) {
+    	validarSesion(request);
+    	
+        ModelMap modelo = new ModelMap();
 
-	}
+        modelo.put("grupo", servicioGrupo.buscarGrupoPorID(id));
+        modelo.put("integrantes", true);
+        return new ModelAndView("vistaGrupo", modelo);
+    }
+  
+    @RequestMapping(path = "/salir", method = RequestMethod.POST)
+    public ModelAndView salirDelGrupo(@RequestParam Long id, HttpServletRequest request) {
+        Usuario usuarioEnSesion = validarSesion(request);
+        ModelMap modelo = new ModelMap();
 
-	@RequestMapping("/{id}/miembros")
-	public ModelAndView mostrarMiembrosDelGrupo(HttpServletRequest request, @PathVariable Long id) {
-		validarSesion(request);
+        servicioNotificacion.notificarRetiroDeGrupo(id,usuarioEnSesion);
+        servicioCalificacion.crearCalificacion(id,usuarioEnSesion.getId());
+        servicioGrupo.borrarUsuarioDelGrupo(id,usuarioEnSesion.getId());
 
-		ModelMap modelo = new ModelMap();
+        modelo.put("mensaje", "Se ha salido con exito!");
+        return new ModelAndView("redirect:/ir-a-home", modelo);
+    }
+  
+    @RequestMapping("/{id}/calendario")
+    public ModelAndView verCalendario(HttpServletRequest request, @PathVariable Long id) {
+      validarSesion(request);
 
-		modelo.put("grupo", servicioGrupo.buscarGrupoPorID(id));
-		modelo.put("integrantes", true);
-		return new ModelAndView("vistaGrupo", modelo);
-	}
+      ModelMap modelo = new ModelMap();
 
-	@RequestMapping("/{id}/calendario")
-	public ModelAndView verCalendario(HttpServletRequest request, @PathVariable Long id) {
-		validarSesion(request);
+      modelo.put("grupo", servicioGrupo.buscarGrupoPorID(id));
+      return new ModelAndView("vistaCalendario", modelo);
+    }
 
-		ModelMap modelo = new ModelMap();
+    private Usuario validarSesion(HttpServletRequest request) {
+        Usuario objetivo = (Usuario) request.getSession().getAttribute("USUARIO");
 
-		modelo.put("grupo", servicioGrupo.buscarGrupoPorID(id));
-		return new ModelAndView("vistaCalendario", modelo);
-	}
+        if (objetivo == null)
+            throw new UsuarioNoEncontradoException("No existe un usuario logueado!");
 
-	private Usuario validarSesion(HttpServletRequest request) {
-		Usuario objetivo = (Usuario) request.getSession().getAttribute("USUARIO");
-
-		if (objetivo == null)
-			throw new UsuarioNoEncontradoException("No existe un usuario logueado!");
-
-		return objetivo;
-	}
-
+        return objetivo;
+    }
 }
