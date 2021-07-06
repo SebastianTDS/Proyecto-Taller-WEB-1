@@ -9,70 +9,80 @@ import org.springframework.web.servlet.ModelAndView;
 @ControllerAdvice
 public class ControladorExcepciones {
 
-    @ExceptionHandler(value = LimiteDeUsuariosFueraDeRango.class)
-    public ModelAndView errorAlModificarGrupo(LimiteDeUsuariosFueraDeRango e) {
-        ModelMap model = new ModelMap();
+	@ExceptionHandler(value = LimiteDeUsuariosFueraDeRango.class)
+	public ModelAndView errorAlModificarGrupo(LimiteDeUsuariosFueraDeRango e) {
+		ModelMap model = new ModelMap();
 
-        model.put("error", e.getMessage());
+		model.put("error", e.getMessage());
 
-        return new ModelAndView("redirect:/grupos/" + e.getIdGrupoError(), model);
-    }
+		return new ModelAndView("redirect:/grupos/" + e.getIdGrupoError(), model);
+	}
 
-    @ExceptionHandler(value = FormularioDeGrupoIncompleto.class)
-    public ModelAndView errorPorCamposIncompletos(FormularioDeGrupoIncompleto e) {
-        ModelMap model = new ModelMap();
-        model.put("error", e.getMessage());
-        return new ModelAndView("redirect:/ir-a-crear-nuevo-grupo", model);
-    }
+	@ExceptionHandler(value = FormularioDeGrupoIncompleto.class)
+	public ModelAndView errorPorCamposIncompletos(FormularioDeGrupoIncompleto e) {
+		ModelMap model = new ModelMap();
+		model.put("error", e.getMessage());
+		return new ModelAndView("redirect:/ir-a-crear-nuevo-grupo", model);
+	}
 
-    @ExceptionHandler(value = {GrupoInexistenteException.class, NoEsMiembroException.class})
-    public ModelAndView errorAlBuscarGrupo(RuntimeException e) {
-        ModelMap model = new ModelMap();
+	@ExceptionHandler(value = { GrupoInexistenteException.class, NoEsMiembroException.class })
+	public ModelAndView errorAlBuscarGrupo(RuntimeException e) {
+		ModelMap model = new ModelMap();
 
-        model.put("error", e.getMessage());
+		model.put("error", e.getMessage());
 
-        return new ModelAndView("redirect:/ir-a-home", model);
-    }
+		return new ModelAndView("redirect:/ir-a-home", model);
+	}
 
-    @ExceptionHandler(value = FalloAlUnirseAlGrupo.class)
-    public ModelAndView errorAlUnirseAlGrupo(FalloAlUnirseAlGrupo e) {
-        ModelMap model = new ModelMap();
-        model.put("error", e.getMessage());
+	@ExceptionHandler(value = FalloAlUnirseAlGrupo.class)
+	public ModelAndView errorAlUnirseAlGrupo(FalloAlUnirseAlGrupo e) {
+		ModelMap model = new ModelMap();
+		model.put("error", e.getMessage());
 
-        return new ModelAndView("redirect:/ir-a-home", model);
-    }
+		return new ModelAndView("redirect:/ir-a-home", model);
+	}
 
-    @ExceptionHandler(value = YaEstoyEnElGrupo.class)
-    public ModelAndView errorAlUnirseAlGrupoQueYaSoyMiembro(YaEstoyEnElGrupo e) {
-        return new ModelAndView("redirect:/grupos/" + e.getMessage());
-    }
-    @ExceptionHandler(value = NoSeEnvioElMensaje.class)
-    public ModelAndView errorAlEnviarUnMensaje(NoSeEnvioElMensaje e) {
-        ModelMap model = new ModelMap();
-        model.put("error", "No se envio el mensaje");
-        return new ModelAndView("redirect:/grupos/" + e.getMessage()+"/foro",model);
-    }
-    @ExceptionHandler(value = UsuarioNoEncontradoException.class)
-    public ModelAndView errorAlLoguearUsuario(UsuarioNoEncontradoException e){
-    	ModelMap model = new ModelMap();
-        model.put("error", e.getMessage());
+	@ExceptionHandler(value = YaEstoyEnElGrupo.class)
+	public ModelAndView errorAlUnirseAlGrupoQueYaSoyMiembro(YaEstoyEnElGrupo e) {
+		return new ModelAndView("redirect:/grupos/" + e.getMessage());
+	}
 
-        return new ModelAndView("redirect:/ir-a-login", model);
-    }
-    
-    @ExceptionHandler(value = UsuarioSinPermisosException.class)
-    public ModelAndView errorAlVerificarPermiso(UsuarioSinPermisosException e) {
-    	ModelMap model = new ModelMap();
-        model.put("error", e.getMessage());
+	@ExceptionHandler(value = NoSeEnvioElMensaje.class)
+	public ModelAndView errorAlEnviarUnMensaje(NoSeEnvioElMensaje e) {
+		ModelMap model = new ModelMap();
+		model.put("error", "No se envio el mensaje");
+		return new ModelAndView("redirect:/grupos/" + e.getMessage() + "/foro", model);
+	}
 
-        return new ModelAndView("redirect:/grupos/" + e.getIdGrupo(), model);
-    }
-    
-    @ExceptionHandler(value = FalloAlProcesarSolicitud.class)
-    public ModelAndView falloAlProcesarSolicitud(FalloAlProcesarSolicitud e) {
-    	ModelMap model = new ModelMap();
-        model.put("error", e.getMessage());
+	@ExceptionHandler(value = UsuarioNoEncontradoException.class)
+	public ModelAndView errorAlLoguearUsuario(UsuarioNoEncontradoException e) {
+		ModelMap model = new ModelMap();
+		model.put("error", e.getMessage());
 
-        return new ModelAndView("redirect:/solicitudes" , model);
-    }
+		return new ModelAndView("redirect:/ir-a-login", model);
+	}
+
+	@ExceptionHandler(value = UsuarioSinPermisosException.class)
+	public ModelAndView errorAlVerificarPermiso(UsuarioSinPermisosException e) {
+		ModelMap model = new ModelMap();
+		model.put("error", e.getMessage());
+
+		return new ModelAndView("redirect:/grupos/" + e.getIdGrupo(), model);
+	}
+
+	@ExceptionHandler(value = FalloAlProcesarSolicitud.class)
+	public ModelAndView falloAlProcesarSolicitud(FalloAlProcesarSolicitud e) {
+		ModelMap model = new ModelMap();
+		model.put("error", e.getMessage());
+
+		return new ModelAndView("redirect:/solicitudes", model);
+	}
+
+	@ExceptionHandler(value = FalloAlInvitarUsuario.class)
+	public ModelAndView falloAlInvitarUsuario(FalloAlInvitarUsuario e) {
+		ModelMap model = new ModelMap();
+		model.put("error", e.getMessage());
+
+		return new ModelAndView("redirect:/grupos/" + e.getGrupo(), model);
+	}
 }

@@ -13,10 +13,11 @@ import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupo;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioSolicitud;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioUsuario;
 import ar.edu.unlam.tallerweb1.util.enums.TipoSolicitud;
+import ar.edu.unlam.tallerweb1.util.exceptions.FalloAlInvitarUsuario;
 import ar.edu.unlam.tallerweb1.util.exceptions.FalloAlProcesarSolicitud;
-import ar.edu.unlam.tallerweb1.util.exceptions.FalloAlUnirseAlGrupo;
 import ar.edu.unlam.tallerweb1.util.exceptions.GrupoInexistenteException;
 import ar.edu.unlam.tallerweb1.util.exceptions.UsuarioNoEncontradoException;
+import ar.edu.unlam.tallerweb1.util.exceptions.UsuarioSinPermisosException;
 import ar.edu.unlam.tallerweb1.util.exceptions.YaEstoyEnElGrupo;
 
 @Service
@@ -47,11 +48,12 @@ public class ServicioSolicitudImpl implements ServicioSolicitud {
 	@Override
 	public void solicitarInclusionAGrupo(Long idGrupo, Long idUsuario) {
 		Grupo solicitado = repoGrupo.getGrupoByID(idGrupo);
-		Usuario solicitante = repoUsuario.getUsuarioByID(idUsuario);
 
 		if (solicitado == null)
 			throw new GrupoInexistenteException("No se puede enviar solicitud a grupo inexistente");
 
+		Usuario solicitante = repoUsuario.getUsuarioByID(idUsuario);
+		
 		if (solicitante == null)
 			throw new UsuarioNoEncontradoException("No existe el usuario solicitante!");
 		
@@ -61,6 +63,29 @@ public class ServicioSolicitudImpl implements ServicioSolicitud {
 		generarSolicitud(solicitado, solicitante, solicitado.getAdministrador(), TipoSolicitud.INCLUSION_GRUPO);
 
 	}
+	
+	@Override
+	public void invitarUsuario(Long anfitrion, String correo, Long grupo) {
+		Grupo solicitante = repoGrupo.getGrupoByID(grupo);
+
+		if (solicitante == null)
+			throw new GrupoInexistenteException("No se puede invitar a grupo inexistente");
+
+		Usuario administrador = repoUsuario.getUsuarioByID(anfitrion);
+		
+		if (administrador == null)
+			throw new UsuarioNoEncontradoException("No existe el usuario que manda la invitacion!");
+		
+		if(!solicitante.getAdministrador().equals(administrador))
+			throw new UsuarioSinPermisosException("No tienes permiso para invitar nuevos miembros", grupo);
+		
+		Usuario invitado = repoUsuario.getUsuarioByEmail(correo);
+		
+		if(invitado == null)
+			throw new FalloAlInvitarUsuario(grupo);
+		
+		generarSolicitud(solicitante, administrador, invitado, TipoSolicitud.INVITACION_GRUPO);
+	}
 
 	@Override
 	public void aprobarSolicitud(Long idSolicitudAceptada, Long idUsuario) {
@@ -69,13 +94,7 @@ public class ServicioSolicitudImpl implements ServicioSolicitud {
 		if (aprobada == null)
 			throw new FalloAlProcesarSolicitud("La Solicitud que intenta aprobar no existe o fue eliminada");
 
-		switch (aprobada.getTipo()) {
-		case INCLUSION_GRUPO:
-			unirUsuarioSolicitanteAGrupo(aprobada);
-			break;
-		case INVITACION_GRUPO:
-			break;
-		}
+		unirUsuarioAGrupo(aprobada);
 	}
 
 	@Override
@@ -87,28 +106,35 @@ public class ServicioSolicitudImpl implements ServicioSolicitud {
 		
 		repoSolicitudes.borrarSolicitud(rechazada);
 	}
-
-	private void generarSolicitud(Grupo solicitado, Usuario solicitante, Usuario destino, TipoSolicitud tipoSolicitud) {
+	
+	private void generarSolicitud(Grupo grupo, Usuario origen, Usuario destino, TipoSolicitud tipoSolicitud) {
 		Solicitud nuevaSolicitud = new Solicitud();
 
 		nuevaSolicitud.setDestino(destino);
-		nuevaSolicitud.setObjetivo(solicitado);
-		nuevaSolicitud.setOrigen(solicitante);
+		nuevaSolicitud.setObjetivo(grupo);
+		nuevaSolicitud.setOrigen(origen);
 		nuevaSolicitud.setTipo(tipoSolicitud);
 
 		repoSolicitudes.cargarSolicitud(nuevaSolicitud);
 	}
 
-	private void unirUsuarioSolicitanteAGrupo(Solicitud aprobada) {
+	private void unirUsuarioAGrupo(Solicitud aprobada) {
 		if (aprobada.getObjetivo() == null || aprobada.getOrigen() == null || aprobada.getObjetivo().grupoLleno()) {
 			repoSolicitudes.borrarSolicitud(aprobada);
 			throw new FalloAlProcesarSolicitud("No es posible aprobar esta solicitud");
 		}
 
-		aprobada.getObjetivo().agregarUsuarioAlGrupo(aprobada.getOrigen());
-		repoGrupo.actualizarGrupo(aprobada.getObjetivo());
+		if(aprobada.getTipo() == TipoSolicitud.INCLUSION_GRUPO) {
+			aprobada.getObjetivo().agregarUsuarioAlGrupo(aprobada.getOrigen());
+			repoGrupo.actualizarGrupo(aprobada.getObjetivo());
+			servicioNotificaciones.notificarNuevoIngreso(aprobada.getObjetivo().getId(), aprobada.getOrigen());
+		}
+		else if(aprobada.getTipo() == TipoSolicitud.INVITACION_GRUPO) {
+			aprobada.getObjetivo().agregarUsuarioAlGrupo(aprobada.getDestino());
+			repoGrupo.actualizarGrupo(aprobada.getObjetivo());
+			servicioNotificaciones.notificarNuevoIngreso(aprobada.getObjetivo().getId(), aprobada.getDestino());
+		}
 		
-		servicioNotificaciones.notificarNuevoIngreso(aprobada.getObjetivo().getId(), aprobada.getOrigen());
 		repoSolicitudes.borrarSolicitud(aprobada);
 	}
 

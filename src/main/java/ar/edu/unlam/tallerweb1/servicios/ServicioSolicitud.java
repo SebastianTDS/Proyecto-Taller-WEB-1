@@ -14,4 +14,6 @@ public interface ServicioSolicitud {
 
 	void rechazarSolicitud(Long idSolicitudRechazada, Long idUsuario);
 
+	void invitarUsuario(Long anfitrion, String correo, Long grupo);
+
 }
