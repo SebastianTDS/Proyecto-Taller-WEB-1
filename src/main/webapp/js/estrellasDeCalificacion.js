@@ -45,14 +45,13 @@ function animarEstrellas(id) {
     }
 
     function mouseOver1() {
-        document.getElementById("estrellaE1"+id).style.display = "none";
+        document.getElementById("estrellaE1"+id).style.display = "block";
 
-        document.getElementById("estrellaA1"+id).style.display = "block";
+        document.getElementById("estrellaA1"+id).style.display = "none";
         document.getElementById("estrellaA2"+id).style.display = "block";
         document.getElementById("estrellaA3"+id).style.display = "block";
         document.getElementById("estrellaA4"+id).style.display = "block";
         document.getElementById("estrellaA5"+id).style.display = "block";
-
     }
 
     function mouseOver2() {
@@ -107,7 +106,7 @@ function animarEstrellas(id) {
     }
 
 
-    document.getElementById("estrellaA1"+id).onclick = function () {
+    document.getElementById("estrellaE1"+id).onclick = function () {
         enviarCalificacion(0,id)
     };
     document.getElementById("estrellaE2"+id).onclick = function () {
@@ -124,7 +123,6 @@ function animarEstrellas(id) {
     };
 
     function enviarCalificacion(calificacion,id) {
-
         document.getElementById("calificacion").value = calificacion;
         document.getElementById("enviarCalificacion"+id).click();
     }
@@ -142,5 +140,4 @@ function setearEstrellas(id) {
     document.getElementById("estrellaA3"+id).style.display = "block";
     document.getElementById("estrellaA4"+id).style.display = "block";
     document.getElementById("estrellaA5"+id).style.display = "block";
-
 }
