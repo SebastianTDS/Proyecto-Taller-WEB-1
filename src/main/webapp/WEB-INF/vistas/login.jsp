@@ -22,7 +22,7 @@
             </div>
 
 
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-6 mt-5">
                 <div class="containerr">
                     <div class="title">Iniciar Sesion</div>
                     <div class="content">
@@ -42,7 +42,7 @@
                                 </div>
                             </div>
                             <div class="text-end">
-	                            <button class="btn btn-lg btn btn-primary btn-sm" Type="Submit">Iniciar</button>
+	                            <button class="btn btn-lg btn-primary btn-block mt-2 mb-3" Type="Submit">Iniciar</button>
                             </div>
                         </form:form>
                     </div>

@@ -59,4 +59,16 @@ public class DatosDeUsuario {
 		return generado;
 	}
 
+    public Usuario crearUsuario() {
+        Usuario usuario = new Usuario();
+
+        usuario.setNombre(nombre);
+        usuario.setEmail(email);
+        usuario.setPassword(clave);
+        usuario.setCalificacion(0L);
+        usuario.setCantidadDeCalificaciones(0L);
+
+        return usuario;
+    }
+
 }

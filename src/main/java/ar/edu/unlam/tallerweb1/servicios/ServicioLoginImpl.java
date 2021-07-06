@@ -26,7 +26,7 @@ public class ServicioLoginImpl implements ServicioLogin {
 		Usuario buscado = servicioLoginDao.consultarUsuario(usuario.generarUsuario());
 		
 		if(Check.isNull(buscado))
-			throw new UsuarioNoEncontradoException("Usuario o contraseña incorrectos");
+			throw new UsuarioNoEncontradoException("Usuario o contraseï¿½a incorrectos");
 		
 		return buscado;
 	}

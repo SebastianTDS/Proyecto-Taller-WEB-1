@@ -9,4 +9,6 @@ public interface RepositorioUsuario {
 	Usuario getUsuarioByID(Long id);
 
     void guardarUsuario(Usuario usuario);
+
+    Usuario getUsuarioByEmail(String email);
 }

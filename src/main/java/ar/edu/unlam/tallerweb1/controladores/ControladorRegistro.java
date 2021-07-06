@@ -14,7 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ControladorRegistro {
 
-
     private final ServicioUsuario servicioUsuarios;
 
     @Autowired
@@ -22,30 +21,18 @@ public class ControladorRegistro {
         this.servicioUsuarios = servicioUsuarios;
     }
 
-
     @RequestMapping("/ir-a-registro")
     public ModelAndView irARegistro() {
         DatosDeUsuario datosDeRegistro = new DatosDeUsuario();
         ModelMap model = new ModelMap();
-        model.put("datosDeRegistro",datosDeRegistro);
-        return new ModelAndView("registro",model);
+        model.put("datosDeRegistro", datosDeRegistro);
+        return new ModelAndView("registro", model);
     }
 
-    @RequestMapping(path="/registrarse", method = RequestMethod.POST)
+    @RequestMapping(path = "/registrarse", method = RequestMethod.POST)
     public ModelAndView registrarUsuario(@ModelAttribute("datosDeRegistro") DatosDeUsuario datos) {
-            ModelMap model=new ModelMap();
-
-       if(servicioUsuarios.registrar(datos).equals("Registro Existoso")){
-            return new ModelAndView("redirect:/home");
-
-        }else if (servicioUsuarios.registrar(datos).equals("Las claves no coinciden,error al registrar")){
-          model.put("error","Las claves no coinciden,error al registrar");
-            return new ModelAndView("registro",model);
-       }else{
-          model.put("error", "Usuario ya existente");
-       return new ModelAndView("registro", model);
-
-        }
-
+        servicioUsuarios.registrar(datos);
+        return new ModelAndView("redirect:/ir-a-login");
     }
+
 }
