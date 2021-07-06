@@ -43,15 +43,27 @@
 						<div class="list-group-item list-group-item-action flex-column">
 	                        <div class="d-flex w-100 justify-content-between align-items-center">
 	                            <small class="text-start">${notificacion.periodoTranscurrido() } > </small>
-	                            <span class="vertical-middle">Calificar a ${notificacion.origen.nombre}</span>
-	                            <div>
+	                            <span class="vertical-middle">Calificar a ${notificacion.origen.nombre} del grupo ${notificacion.nombreDeGrupo}</span>
+	                            <div class="d-flex justify-content-between">
                                     <form:form action="calificaciones/calificar" method="POST">
-                                    <div class="input-box">
-                                        <span class="details">Calificación</span>
-                                        <input id="calificacion" name="calificaion" type="number" class="form-control"/>
-                                    </div>
-		                            <div>
-		                            	<button type="submit" name="idCalificacion" value="${notificacion.id}" class="btn btn-outline-success">Calificar</button>
+                                    <div class="input-box d-flex justify-content-between">
+                                        <img src="img/estrellaApagada.png" class="m-1" id="estrellaA1" style="width: 30px; height: 30px">
+                                        <img src="img/estrellaEncendida.png" class="m-1" id="estrellaE1" style="width: 30px; height: 30px;display: none">
+
+                                        <img src="img/estrellaApagada.png" class="m-1" id="estrellaA2" style="width: 30px; height: 30px">
+                                        <img src="img/estrellaEncendida.png" class="m-1" id="estrellaE2" style="width: 30px; height: 30px;display: none">
+
+                                        <img src="img/estrellaApagada.png" class="m-1" id="estrellaA3" style="width: 30px; height: 30px">
+                                        <img src="img/estrellaEncendida.png" class="m-1" id="estrellaE3" style="width: 30px; height: 30px;display: none">
+
+                                        <img src="img/estrellaApagada.png" class="m-1" id="estrellaA4" style="width: 30px; height: 30px">
+                                        <img src="img/estrellaEncendida.png" class="m-1" id="estrellaE4" style="width: 30px; height: 30px;display: none">
+
+                                        <img src="img/estrellaApagada.png" class="m-1" id="estrellaA5" style="width: 30px; height: 30px">
+                                        <img src="img/estrellaEncendida.png" class="m-1" id="estrellaE5" style="width: 30px; height: 30px;display: none">
+
+                                        <input id="calificacion" name="calificaion" type="number" class="form-control m-1" placeholder="Calificación" style="display: none"/>
+                                        <button type="submit" id="enviarCalificacion" name="idCalificacion" value="${notificacion.id}" class="btn btn-outline-success m-1" style="display: none">Calificar</button>
 		                            </div>
                                     </form:form>
 	                            </div>
@@ -63,6 +75,8 @@
         </div>
     </main>
     <!-- Fin Contenido Real -->
+    <script src="js/estrellasDeCalificacion.js"></script>
+
     <jsp:include page="/templates/footer.jsp"></jsp:include>
 </body>
 

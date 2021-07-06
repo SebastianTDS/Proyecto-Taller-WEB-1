@@ -47,8 +47,8 @@ public class ServicioCalificacionesImpl implements ServicioCalificacion{
 
         for (Usuario destino : grupoSolicitado.getListaDeUsuarios()){
             if (destino.getId()!=solicitante.getId()){
-                generarCalificacion(solicitante, destino);
-                generarCalificacion(destino,solicitante);
+                generarCalificacion(solicitante, destino,grupoSolicitado.getNombre());
+                generarCalificacion(destino,solicitante,grupoSolicitado.getNombre());
             }
         }
     }
@@ -83,12 +83,12 @@ public class ServicioCalificacionesImpl implements ServicioCalificacion{
         repositorioCalificacion.borrarCalificacion(calificacion);
     }
 
-    private void generarCalificacion(Usuario solicitante, Usuario destino) {
+    private void generarCalificacion(Usuario solicitante, Usuario destino, String nombreDelGrupo) {
         Calificacion calificacion=new Calificacion();
 
         calificacion.setOrigen(destino);
         calificacion.setDestino(solicitante);
-
+calificacion.setNombreDeGrupo(nombreDelGrupo);
         repositorioCalificacion.cargarCalificacion(calificacion);
     }
 

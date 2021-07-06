@@ -13,6 +13,7 @@ public class Calificacion {
 	private LocalDateTime fecha;
 	private Usuario destino;
 	private Usuario origen;
+	private String nombreDeGrupo;
 
 	public Calificacion() {
 		this.fecha = LocalDateTime.now();
@@ -58,4 +59,11 @@ public class Calificacion {
 		return Algorithm.getTiempoTranscurrido(fecha);
 	}
 
+	public String getNombreDeGrupo() {
+		return nombreDeGrupo;
+	}
+
+	public void setNombreDeGrupo(String nombreDeGrupo) {
+		this.nombreDeGrupo = nombreDeGrupo;
+	}
 }

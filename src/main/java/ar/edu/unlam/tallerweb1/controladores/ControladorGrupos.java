@@ -81,6 +81,7 @@ public class ControladorGrupos {
         ModelMap modelo = new ModelMap();
 
         servicioGrupo.validarPermiso(usuarioEnSesion.getId(), id, Permiso.MODIFICACION);
+        servicioCalificacion.crearCalificacion(id,usuarioEnSesion.getId());
 
         servicioNotificacion.notificarEliminacionDeGrupo(id);
         servicioGrupo.eliminarGrupo(id);
