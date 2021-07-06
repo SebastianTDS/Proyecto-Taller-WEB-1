@@ -27,7 +27,7 @@ public class ControladorGrupos {
     private final ServicioGrupo servicioGrupo;
     private final ServicioNotificaciones servicioNotificacion;
     private final ServicioMensajes servicioMensajes;
-    private  final ServicioCalificacion servicioCalificacion;
+    private final ServicioCalificacion servicioCalificacion;
 
     @Autowired
     public ControladorGrupos(ServicioGrupo servicioGrupo, ServicioNotificaciones servicioNotificacion,
@@ -107,7 +107,6 @@ public class ControladorGrupos {
         Usuario usuarioLogueado = validarSesion(request);
         servicioMensajes.guardarUnMensaje(usuarioLogueado.getId(), datosDeMensaje);
         return new ModelAndView("redirect:/grupos/" + datosDeMensaje.getId() + "/foro");
-
     }
 
     @RequestMapping("/{id}/miembros")
@@ -120,15 +119,7 @@ public class ControladorGrupos {
         modelo.put("integrantes", true);
         return new ModelAndView("vistaGrupo", modelo);
     }
-
-    private Usuario validarSesion(HttpServletRequest request) {
-        Usuario objetivo = (Usuario) request.getSession().getAttribute("USUARIO");
-
-        if (objetivo == null)
-            throw new UsuarioNoEncontradoException("No existe un usuario logueado!");
-
-        return objetivo;
-    }
+  
     @RequestMapping(path = "/salir", method = RequestMethod.POST)
     public ModelAndView salirDelGrupo(@RequestParam Long id, HttpServletRequest request) {
         Usuario usuarioEnSesion = validarSesion(request);
@@ -140,5 +131,24 @@ public class ControladorGrupos {
 
         modelo.put("mensaje", "Se ha salido con exito!");
         return new ModelAndView("redirect:/ir-a-home", modelo);
+    }
+  
+    @RequestMapping("/{id}/calendario")
+    public ModelAndView verCalendario(HttpServletRequest request, @PathVariable Long id) {
+      validarSesion(request);
+
+      ModelMap modelo = new ModelMap();
+
+      modelo.put("grupo", servicioGrupo.buscarGrupoPorID(id));
+      return new ModelAndView("vistaCalendario", modelo);
+    }
+
+    private Usuario validarSesion(HttpServletRequest request) {
+        Usuario objetivo = (Usuario) request.getSession().getAttribute("USUARIO");
+
+        if (objetivo == null)
+            throw new UsuarioNoEncontradoException("No existe un usuario logueado!");
+
+        return objetivo;
     }
 }

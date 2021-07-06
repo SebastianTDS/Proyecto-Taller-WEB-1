@@ -42,7 +42,7 @@
                     <li><a class="text-white" href="grupos/${grupo.getId()}">Información General</a></li>
                     <li><a class="text-white" href="grupos/${grupo.getId()}/miembros">Miembros del grupo</a></li>
                     <li><a class="text-white" href="#">Archivos</a></li>
-                    <li><a class="text-white" href="#">Calendario</a></li>
+                    <li><a class="text-white" href="grupos/${grupo.getId()}/calendario">Calendario</a></li>
                     <li><a class="text-white" href="grupos/${grupo.getId()}/foro">Foro</a></li>
                 </ul>
 

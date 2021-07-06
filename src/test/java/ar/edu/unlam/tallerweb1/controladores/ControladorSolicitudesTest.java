@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.controladores;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Matchers.anyLong;
+import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -21,63 +22,85 @@ import ar.edu.unlam.tallerweb1.servicios.ServicioSolicitud;
 import ar.edu.unlam.tallerweb1.servicios.ServicioSolicitudImpl;
 import ar.edu.unlam.tallerweb1.util.exceptions.UsuarioNoEncontradoException;
 
-public class ControladorSolicitudesTest extends HttpSessionTest{
+public class ControladorSolicitudesTest extends HttpSessionTest {
 
 	private static ServicioSolicitud service = mock(ServicioSolicitudImpl.class);
 	private static ControladorSolicitudes controller = new ControladorSolicitudes(service);
-	
+
 	private static Usuario usuarioEjemplo = new Usuario();
-	
+
 	@Before
 	public void init() {
 		usuarioEjemplo.setId(1L);
 	}
-	
+
 	@Test
-	public void testQueSeCargueLaVistaDeSolicitudesDeUsuario () {
+	public void testQueSeCargueLaVistaDeSolicitudesDeUsuario() {
 		givenExisteUnUsuarioEnSesion();
-		
+
 		ModelAndView vista = whenQueremosVerSusSolicitudes();
-		
+
 		thenObtenemosLaVistaDeseada(vista);
 	}
-	
+
 	@Test(expected = UsuarioNoEncontradoException.class)
 	public void testQueNoSeCargueLaVistaSiUsuarioNoExiste() {
 		givenNoExisteUnUsuarioEnSesion();
 		whenQueremosVerSusSolicitudes();
 	}
-	
+
 	@Test
-	public void testQueSePuedaSolicitarUnirseAUnGrupo () {
+	public void testQueSePuedaSolicitarUnirseAUnGrupo() {
 		Long idGrupoSolicitado = 3L;
-		
+
 		givenExisteUnUsuarioEnSesion();
 		ModelAndView vista = whenSolicitamosUnirnosAUnGrupo(idGrupoSolicitado);
-		
+
 		thenSeEnviaLaSolicitud(vista, idGrupoSolicitado);
 	}
-	
+
 	@Test
-	public void testQueSePuedaAceptarUnaSolicitud () {
+	public void testQueSePuedaAceptarUnaSolicitud() {
 		Long idSolicitudAceptada = 1L;
-		
+
 		givenExisteUnUsuarioEnSesion();
 		ModelAndView vista = whenAceptamosSolicitud(idSolicitudAceptada);
-		
+
 		thenLaSolicitudEsAprobada(vista, idSolicitudAceptada);
 	}
-	
+
 	@Test
 	public void testQueSePuedaRechazarSolicitud() {
 		Long idSolicitudRechazada = 2L;
-		
+
 		givenExisteUnUsuarioEnSesion();
 		ModelAndView vista = whenRechazamosSolicitud(idSolicitudRechazada);
-		
+
 		thenLaSolicitudEsRechazada(vista, idSolicitudRechazada);
 	}
-	
+
+	@Test
+	public void testQueSePuedaInvitarUnUsuarioAUnGrupo() {
+		String correo = "pepito@gmail.com";
+		Long idGrupo = 1L;
+
+		ModelAndView vista = whenInvitamosUnUsuarioAUnGrupo(correo, idGrupo);
+
+		thenSeEnviaCorrectamente(vista, correo, idGrupo);
+	}
+
+	private void thenSeEnviaCorrectamente(ModelAndView vista, String correo, Long idGrupo) {
+		verify(request().getSession(), atLeast(1)).getAttribute("USUARIO");
+		verify(service, times(1)).invitarUsuario(usuarioEjemplo.getId(), correo, idGrupo);
+		assertThat(vista).isNotNull();
+		assertThat(vista.getViewName()).isEqualTo("redirect:/grupos/" + idGrupo);
+	}
+
+	private ModelAndView whenInvitamosUnUsuarioAUnGrupo(String correo, Long idGrupo) {
+		when(request().getSession().getAttribute("USUARIO")).thenReturn(usuarioEjemplo);
+		return controller.invitarAGrupo(request(), correo, idGrupo);
+	}
+
 	/* Metodos Auxiliares */
 
 	private ModelAndView whenRechazamosSolicitud(Long idSolicitudRechazada) {
@@ -116,7 +139,7 @@ public class ControladorSolicitudesTest extends HttpSessionTest{
 	@SuppressWarnings("unchecked")
 	private void thenObtenemosLaVistaDeseada(ModelAndView vista) {
 		List<Solicitud> solicitudes = (List<Solicitud>) vista.getModel().get("Solicitudes");
-		
+
 		assertThat(vista.getViewName()).isEqualTo("vistaSolicitudes");
 		assertThat(solicitudes).isNotNull();
 		assertThat(solicitudes).hasSize(2);
