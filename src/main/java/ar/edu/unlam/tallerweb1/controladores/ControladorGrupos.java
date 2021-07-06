@@ -2,8 +2,7 @@ package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeMensaje;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
-import ar.edu.unlam.tallerweb1.servicios.ServicioMensajes;
-import ar.edu.unlam.tallerweb1.servicios.ServicioMensajesImpl;
+import ar.edu.unlam.tallerweb1.servicios.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,8 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
-import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
-import ar.edu.unlam.tallerweb1.servicios.ServicioNotificaciones;
 import ar.edu.unlam.tallerweb1.util.enums.Permiso;
 import ar.edu.unlam.tallerweb1.util.exceptions.UsuarioNoEncontradoException;
 
@@ -30,12 +27,15 @@ public class ControladorGrupos {
     private final ServicioGrupo servicioGrupo;
     private final ServicioNotificaciones servicioNotificacion;
     private final ServicioMensajes servicioMensajes;
+    private  final ServicioCalificacion servicioCalificacion;
 
     @Autowired
-    public ControladorGrupos(ServicioGrupo servicioGrupo, ServicioNotificaciones servicioNotificacion, ServicioMensajes servicioMensajes) {
+    public ControladorGrupos(ServicioGrupo servicioGrupo, ServicioNotificaciones servicioNotificacion,
+                             ServicioMensajes servicioMensajes,ServicioCalificacion servicioCaligicacion) {
         this.servicioGrupo = servicioGrupo;
         this.servicioNotificacion = servicioNotificacion;
         this.servicioMensajes = servicioMensajes;
+        this.servicioCalificacion=servicioCaligicacion;
     }
 
     @RequestMapping("/{id}")
@@ -81,6 +81,7 @@ public class ControladorGrupos {
         ModelMap modelo = new ModelMap();
 
         servicioGrupo.validarPermiso(usuarioEnSesion.getId(), id, Permiso.MODIFICACION);
+        servicioCalificacion.crearCalificacion(id,usuarioEnSesion.getId());
 
         servicioNotificacion.notificarEliminacionDeGrupo(id);
         servicioGrupo.eliminarGrupo(id);
@@ -127,5 +128,17 @@ public class ControladorGrupos {
             throw new UsuarioNoEncontradoException("No existe un usuario logueado!");
 
         return objetivo;
+    }
+    @RequestMapping(path = "/salir", method = RequestMethod.POST)
+    public ModelAndView salirDelGrupo(@RequestParam Long id, HttpServletRequest request) {
+        Usuario usuarioEnSesion = validarSesion(request);
+        ModelMap modelo = new ModelMap();
+
+        servicioNotificacion.notificarRetiroDeGrupo(id,usuarioEnSesion);
+        servicioCalificacion.crearCalificacion(id,usuarioEnSesion.getId());
+        servicioGrupo.borrarUsuarioDelGrupo(id,usuarioEnSesion.getId());
+
+        modelo.put("mensaje", "Se ha salido con exito!");
+        return new ModelAndView("redirect:/ir-a-home", modelo);
     }
 }

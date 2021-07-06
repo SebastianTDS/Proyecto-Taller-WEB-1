@@ -1,11 +1,9 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.modelo.Solicitud;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
@@ -14,7 +12,6 @@ import ar.edu.unlam.tallerweb1.repositorios.RepositorioSolicitud;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioUsuario;
 import ar.edu.unlam.tallerweb1.util.enums.TipoSolicitud;
 import ar.edu.unlam.tallerweb1.util.exceptions.FalloAlProcesarSolicitud;
-import ar.edu.unlam.tallerweb1.util.exceptions.FalloAlUnirseAlGrupo;
 import ar.edu.unlam.tallerweb1.util.exceptions.GrupoInexistenteException;
 import ar.edu.unlam.tallerweb1.util.exceptions.UsuarioNoEncontradoException;
 import ar.edu.unlam.tallerweb1.util.exceptions.YaEstoyEnElGrupo;

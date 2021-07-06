@@ -1,7 +1,6 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
-import ar.edu.unlam.tallerweb1.dto.DatosDeMensaje;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.repositorios.*;
 import ar.edu.unlam.tallerweb1.util.auxClass.Check;
@@ -19,9 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 @Service("servicioGrupos")
@@ -168,6 +165,20 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 		if (Check.isNull(encontrado))
 			throw new GrupoInexistenteException("Foro buscado no encontrado");
 		return encontrado;
+	}
+
+	@Override
+	public void borrarUsuarioDelGrupo(Long IDgrupo, Long IDusuario) {
+		Grupo grupoBorrar = repoGrupo.getGrupoByID(IDgrupo);
+		Usuario usuarioBorrar = repoUsuario.getUsuarioByID(IDusuario);
+
+		if (Check.isNull(grupoBorrar))
+			throw new GrupoInexistenteException("Imposible unirse a grupo inexistente");
+		if (!grupoBorrar.getListaDeUsuarios().contains(usuarioBorrar))
+			throw new UsuarioNoEncontradoException("Imposible Salirse de un grupo que no estoy");
+
+		grupoBorrar.borrarUsuarioDelGrupo(usuarioBorrar);
+		repoGrupo.actualizarGrupo(grupoBorrar);
 	}
 
 	private List<Grupo> filtrarPorCupo(List<Grupo> grupos, Disponibilidad disponibilidad) {

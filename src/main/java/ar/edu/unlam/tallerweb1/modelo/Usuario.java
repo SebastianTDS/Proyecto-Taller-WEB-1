@@ -20,6 +20,8 @@ public class Usuario {
 	private String rol;
 	private String nombre;
 	private Set<Grupo> listaDeGrupos;
+	private Long calificacion;
+	private Long cantidadDeCalificaciones;
 
 	public Usuario() {
 		this.listaDeGrupos = new HashSet<Grupo>();
@@ -102,5 +104,25 @@ public class Usuario {
 
 	public void agregarGrupo(Grupo grupo) {
 		listaDeGrupos.add(grupo);
+	}
+
+	public Long getCalificacion() {
+		return calificacion;
+	}
+
+	public void setCalificacion(Long calificacion) {
+		this.calificacion = calificacion;
+	}
+
+	public Long getCantidadDeCalificaciones() {
+		return cantidadDeCalificaciones;
+	}
+
+	public void setCantidadDeCalificaciones(Long cantidadDeCalificaciones) {
+		this.cantidadDeCalificaciones = cantidadDeCalificaciones;
+	}
+
+	public void borrarGrupoDelUsuario(Grupo grupo) {
+		listaDeGrupos.remove(grupo);
 	}
 }
