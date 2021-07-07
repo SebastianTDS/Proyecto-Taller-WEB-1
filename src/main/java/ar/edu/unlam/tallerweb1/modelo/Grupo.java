@@ -27,6 +27,7 @@ public class Grupo {
 	private Materia materia;
 
 	private Set<Usuario> listaDeUsuarios;
+	private List<Evento> eventos;
 
 	public Grupo() {
 		this.listaDeUsuarios = new HashSet<>();
@@ -63,6 +64,15 @@ public class Grupo {
 
 	public void setAdministrador(Usuario administrador) {
 		this.administrador = administrador;
+	}
+	
+	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "grupo" )
+	public List<Evento> getEventos() {
+		return eventos;
+	}
+
+	public void setEventos(List<Evento> eventos) {
+		this.eventos = eventos;
 	}
 
 	@ManyToMany(mappedBy = "listaDeGrupos", fetch = FetchType.EAGER)
@@ -192,6 +202,5 @@ public class Grupo {
 			usuario.getListaDeGrupos().remove(this);
 		}
 	}
-
 
 }
