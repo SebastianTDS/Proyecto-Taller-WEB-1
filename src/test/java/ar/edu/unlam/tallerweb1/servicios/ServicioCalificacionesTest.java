@@ -60,6 +60,26 @@ public class ServicioCalificacionesTest {
         thenElUsuarioDestinoFueCalificadoYSeBorraLacalificacion(usuario1, calificacion,calificacionRealizada);
     }
 
+    @Test
+    public void testQueSeCrearCalificacionesAlEliminarGrupo() {
+        Long idUsuario = 1L;
+
+        Grupo grupo = givenGrupoConUsuarios();
+        whencalificarTodosConTodos(grupo);
+
+        thenSeEnviaSolicitudAtodosPorEliminarGrupo(grupo);
+    }
+
+    private void thenSeEnviaSolicitudAtodosPorEliminarGrupo(Grupo grupo) {
+        int repeticiones = (grupo.getListaDeUsuarios().size() - 1) * grupo.getListaDeUsuarios().size();
+        verify(repoCalif, times(repeticiones)).cargarCalificacion(anyObject());
+    }
+
+    private void whencalificarTodosConTodos(Grupo grupo) {
+        when(repoGrupo.getGrupoByID(grupo.getId())).thenReturn(grupo);
+        service.crearCalificacionPorElinimarGrupo(grupo.getId());
+    }
+
     private void thenElUsuarioDestinoFueCalificadoYSeBorraLacalificacion(Usuario usuario2, Calificacion calificacion, Long calificacionRealizada) {
         assertThat(1L).isEqualTo(usuario2.getCantidadDeCalificaciones());
         assertThat(calificacionRealizada).isEqualTo(usuario2.getCalificacion());
