@@ -46,7 +46,7 @@ public class RepositorioCalificacionTest extends SpringTest {
 		givenExisteUnaCalificacion(manuela);
 		givenExisteUnaCalificacion(jorge);
 
-		Calificacion buscada = whenBuscamosLaCañificacion(calificacion, manuela);
+		Calificacion buscada = whenBuscamosLaCalificacion(calificacion, manuela);
 
 		thenLaCalificaionEsLaRequerida(buscada, manuela);
 	}
@@ -101,7 +101,7 @@ public class RepositorioCalificacionTest extends SpringTest {
 		assertThat(buscada.getDestino()).isEqualTo(destino);
 	}
 
-	private Calificacion whenBuscamosLaCañificacion(Calificacion obtenida, Usuario manuela) {
+	private Calificacion whenBuscamosLaCalificacion(Calificacion obtenida, Usuario manuela) {
 		return repository.buscarCalificacionPor(obtenida.getId());
 	}
 
