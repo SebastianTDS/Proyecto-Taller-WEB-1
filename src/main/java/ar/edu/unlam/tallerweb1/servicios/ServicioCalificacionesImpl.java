@@ -84,6 +84,22 @@ public class ServicioCalificacionesImpl implements ServicioCalificacion {
         repositorioCalificacion.borrarCalificacion(calificacion);
     }
 
+    @Override
+    public void crearCalificacionPorElinimarGrupo(Long idGrupo) {
+        Grupo grupoSolicitado = repoGrupo.getGrupoByID(idGrupo);
+
+        if (grupoSolicitado == null)
+            throw new GrupoInexistenteException("No se puede enviar calificacion a grupo inexistente");
+
+        for (Usuario solicitante : grupoSolicitado.getListaDeUsuarios()) {
+            for (Usuario destino : grupoSolicitado.getListaDeUsuarios()) {
+                if (destino.getId() != solicitante.getId()) {
+                    generarCalificacion(solicitante, destino, grupoSolicitado.getNombre());
+                }
+            }
+        }
+    }
+
     private void generarCalificacion(Usuario solicitante, Usuario destino, String nombreDelGrupo) {
         Calificacion calificacion = new Calificacion();
 
