@@ -11,6 +11,26 @@
 		<div class="alert alert-primary d-flex flex-column" style="width: 80%">
 			<h5>${usuario.nombre}</h5>
 			<h6>Email: ${usuario.email}</h6>
+
+
+			<div>
+				<c:if test="${usuario.cantidadDeEstrellas()>=1}">
+					<img src="img/estrellaEncendida.png" class="p-2" style="width: 40px; height: 40px">
+				</c:if>
+				<c:if test="${usuario.cantidadDeEstrellas()>=2}">
+					<img src="img/estrellaEncendida.png" class="p-2" style="width: 40px; height: 40px">
+				</c:if>
+				<c:if test="${usuario.cantidadDeEstrellas()>=3}">
+					<img src="img/estrellaEncendida.png" class="p-2" style="width: 40px; height: 40px">
+				</c:if>
+				<c:if test="${usuario.cantidadDeEstrellas()>=4}">
+					<img src="img/estrellaEncendida.png" class="p-2" style="width: 40px; height: 40px">
+				</c:if>
+				<c:if test="${usuario.cantidadDeEstrellas()>=5}">
+					<img src="img/estrellaEncendida.png" class="p-2" style="width: 40px; height: 40px">
+				</c:if>
+			</div>
+
 		</div>
 	</c:forEach>
 	<c:if test="${grupo.getAdministrador().equals(sessionScope.USUARIO) }">

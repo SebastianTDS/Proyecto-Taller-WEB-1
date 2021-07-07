@@ -125,4 +125,21 @@ public class Usuario {
 	public void borrarGrupoDelUsuario(Grupo grupo) {
 		listaDeGrupos.remove(grupo);
 	}
+
+	public int cantidadDeEstrellas(){
+		if (cantidadDeCalificaciones==0)
+			return 0;
+		int estrellas= (int)(calificacion/cantidadDeCalificaciones);
+		if (estrellas>0 && estrellas<=20)
+			return 1;
+		if (estrellas>21 && estrellas<=40)
+			return 2;
+		if (estrellas>41 && estrellas<=60)
+			return 3;
+		if (estrellas>61 && estrellas<=81)
+			return 4;
+		return 5;
+	}
+
+
 }
