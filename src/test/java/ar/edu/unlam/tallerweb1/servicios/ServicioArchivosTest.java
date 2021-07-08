@@ -20,16 +20,12 @@ import static org.mockito.Mockito.*;
 public class ServicioArchivosTest {
 
     private ServicioArchivos servicioArchivos;
-    private RepositorioGrupo repositorioGrupo;
-    private RepositorioUsuario repositorioUsuario;
     private RepositorioArchivos repositorioArchivos;
 
     @Before
     public void init() {
-        repositorioUsuario = mock(RepositorioUsuarioImpl.class);
-        repositorioGrupo = mock(RepositorioGrupoImpl.class);
         repositorioArchivos = mock(RepositorioArchivosImpl.class);
-        servicioArchivos = new ServicioArchivosImpl(repositorioGrupo,repositorioUsuario,repositorioArchivos);
+        servicioArchivos = new ServicioArchivosImpl(repositorioArchivos,null,null);
     }
 
     @Test

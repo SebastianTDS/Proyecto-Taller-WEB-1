@@ -18,6 +18,16 @@
 
     </bean>
 
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- one of the properties available; the maximum file size in bytes -->
+        <property name="defaultEncoding" value="UTF-8" />
+        <property name="maxUploadSize" value="209715200" />
+        <property name="uploadTempDir" value="archivos"/>
+        <!-- 20M -->
+        <!-- To create an upload folder under WebContent <property name="uploadTempDir" value="upload"/> -->
+    </bean>
+
 
 
     <mvc:resources mapping="/css/**" location="/css/" />
@@ -25,6 +35,5 @@
     <mvc:resources mapping="/fonts/**" location="/fonts/" />
     <mvc:resources mapping="/img/**" location="/img/" />
     <mvc:resources mapping="/templates/**" location="/templates/" />
-    <bean id="multipartResolver"
-          class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+
 </beans>

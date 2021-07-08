@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeArchivo;
 import ar.edu.unlam.tallerweb1.dto.DatosDeMensaje;
+import ar.edu.unlam.tallerweb1.modelo.Archivo;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +21,14 @@ import ar.edu.unlam.tallerweb1.util.enums.Permiso;
 import ar.edu.unlam.tallerweb1.util.exceptions.UsuarioNoEncontradoException;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.TreeSet;
+
 
 @Controller
 @RequestMapping("/grupos")
@@ -121,7 +123,6 @@ public class ControladorGrupos {
     public ModelAndView mostrarMiembrosDelGrupo(@PathVariable Long id) {
         Grupo buscado = servicioGrupo.buscarGrupoPorID(id);
         ModelMap modelo = new ModelMap();
-
         modelo.put("grupo", buscado);
         modelo.put("integrantes", true);
         return new ModelAndView("vistaGrupo", modelo);
@@ -142,30 +143,34 @@ public class ControladorGrupos {
         ModelMap modelo = new ModelMap();
         modelo.put("vistaArchivos", true);
         modelo.put("grupo", buscado);
-        //TreeSet<Archivo> archivos=servicioArchivos.buscarArchivosPorGrupo(id);
-        // modelo.put("archivos", archivos);
-
-        modelo.put("file", new DatosDeArchivo());
+        TreeSet<Archivo> archivos=servicioArchivos.buscarArchivosPorGrupo(id);
+        modelo.put("archivos", archivos);
+        modelo.put("datosDeArchivo", new DatosDeArchivo());
         return new ModelAndView("vistaGrupo", modelo);
     }
 
     @RequestMapping(value = "/{id}/subir-archivo", method = RequestMethod.POST)
-    public ModelAndView subirArchivos( @RequestParam("file") MultipartFile file)throws IOException {
-        ModelMap modelo = new ModelMap();
-        modelo.put("vistaArchivos", true);
-        String filename = file.getOriginalFilename();
+    public ModelAndView subirArchivos(@ModelAttribute("datosDeArchivo") DatosDeArchivo archivo, HttpSession session)throws IOException {
+        String path = session.getServletContext().getRealPath("/archivos/");
+        servicioArchivos.subirArchivoACarpeta(archivo,path);
+        return new ModelAndView("redirect:/grupos/"+archivo.getIdGrupo()+ "/archivos");
+    }
 
-        System.out.println("cargas/"  + filename);
+    @RequestMapping(value = "/{id}/descargar-archivo", method=RequestMethod.POST)
+    public ModelAndView descargarArchivo(@RequestParam("idGrupo")Long idGrupo,@RequestParam("id_archivo")Long idArchivo, HttpSession session, HttpServletResponse response) throws IOException {
+        String downloadFolder = session.getServletContext().getRealPath("/archivos/");
+         servicioArchivos.descargarArchivo(downloadFolder,idArchivo,response);
+        return new ModelAndView("redirect:/grupos/"+idGrupo+ "/archivos");
+    }
 
-        byte[] bytes = file.getBytes();
-        BufferedOutputStream stream =new BufferedOutputStream(new FileOutputStream(
-                new File("cargas/" + File.separator + filename)));
-        stream.write(bytes);
-        stream.flush();
-        stream.close();
-        return new ModelAndView("vistaGrupo", modelo);
+    @RequestMapping(value="/{id}/borrar-archivo",method=RequestMethod.POST)
+    public ModelAndView borrarArchivo(@RequestParam("idGrupo")Long idGrupo,@RequestParam("id_archivo") Long idArchivo,HttpSession session){
+        String path = session.getServletContext().getRealPath("/archivos/"+idArchivo);
+        servicioArchivos.borrarArchivo(idArchivo,path);
+        return new ModelAndView("redirect:/grupos/"+idGrupo+ "/archivos");
+
+    }
 
     }
 
 
-}

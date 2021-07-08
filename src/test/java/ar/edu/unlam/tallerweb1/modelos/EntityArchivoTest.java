@@ -57,10 +57,11 @@ public class EntityArchivoTest extends SpringTest{
 
 	private Long whenPersistimosArchivo(Usuario usuario, Grupo grupo) {
 		Archivo archivo=new Archivo();
-		archivo.setNombre("foto.jpg");
+		archivo.setNombre("nombreDelArchivo.extension");
 		archivo.setUsuario(usuario);
 		archivo.setGrupo(grupo);
-		return (Long) session().save(archivo);
+		session().save(archivo);
+		return archivo.getId();
 	}
 
 	private Usuario givenUsuarioPersistido() {

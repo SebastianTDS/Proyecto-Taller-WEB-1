@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.HttpSessionTest;
 import ar.edu.unlam.tallerweb1.modelo.Archivo;
+import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.*;
 import org.junit.Before;
@@ -33,12 +34,8 @@ public class ControladorGrupos2Test  extends HttpSessionTest {
         Long idGrupoBuscado = 1L;
         TreeSet<Archivo> archivos=givenListaDeArchivos();
         ModelAndView vistaObtenida = whenBuscoPorLaURLConElIDCorrectoAlArchvos(idGrupoBuscado,archivos);
-
         thenObtengoLaVistaYElModeloDelArchivo(vistaObtenida);
     }
-
-
-
 
 
     private TreeSet<Archivo> givenListaDeArchivos() {
@@ -53,6 +50,7 @@ public class ControladorGrupos2Test  extends HttpSessionTest {
         when(serviceArchivos.buscarArchivosPorGrupo(id)).thenReturn(archivos);
         return controller.perfilDeGrupoArchivos(id);
     }
+
     private void thenObtengoLaVistaYElModeloDelArchivo(ModelAndView vistaObtenida) {
         assertThat(vistaObtenida.getViewName()).isEqualTo("vistaGrupo");
         assertThat(vistaObtenida.getModel()).isNotNull();

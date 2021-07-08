@@ -22,10 +22,24 @@ public class RepositorioArchivosImpl implements RepositorioArchivos{
     public HashSet<Archivo> buscarArchivosPorGrupo(Long id) {
         Criteria cr = sessionFactory.getCurrentSession().createCriteria(Archivo.class);
         cr.createCriteria("grupo").add(Restrictions.eq("id", id));
-        HashSet<Archivo>archivos=new HashSet<>(cr.list());
-        return archivos;
+        return new HashSet<>(cr.list());
     }
 
+    @Override
+    public Long crearRegistroDeArchivo(Archivo archivo) {
+        sessionFactory.getCurrentSession().save(archivo);
+        return archivo.getId();
+    }
+
+    @Override
+    public Archivo buscarArchivosPorId(Long idArchivo) {
+      return sessionFactory.getCurrentSession().get(Archivo.class,idArchivo);
+    }
+
+    @Override
+    public void borrarArchivoPorId(Archivo archivo) {
+        sessionFactory.getCurrentSession().delete(archivo);
+    }
 
 
 }

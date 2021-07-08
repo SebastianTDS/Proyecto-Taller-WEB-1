@@ -27,7 +27,7 @@ public class ControladorGruposTest extends HttpSessionTest{
 
 	private static ControladorGrupos controller;
 	private static ServicioGrupo service;
-	private static Usuario usuarioEjemplo = new Usuario();
+	private static final Usuario usuarioEjemplo = new Usuario();
 
 	@Before
 	public void init() {

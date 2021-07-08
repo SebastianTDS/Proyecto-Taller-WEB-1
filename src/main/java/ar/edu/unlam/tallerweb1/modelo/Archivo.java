@@ -11,9 +11,14 @@ import java.util.Objects;
 public class Archivo implements Comparable<Archivo> {
     private Long id;
     private String nombre;
+    private String nombreOriginal;
     private Usuario usuario;
     private LocalDateTime fecha;
     private Grupo grupo;
+
+    public Archivo() {
+        this.fecha = LocalDateTime.now().withNano(0);
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,6 +68,14 @@ public class Archivo implements Comparable<Archivo> {
 
     public String tiempoDePublicacion(){
         return Algorithm.getTiempoTranscurrido(fecha);
+    }
+
+    public String getNombreOriginal() {
+        return nombreOriginal;
+    }
+
+    public void setNombreOriginal(String nombreOriginal) {
+        this.nombreOriginal = nombreOriginal;
     }
 
     @Override
