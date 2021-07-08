@@ -6,7 +6,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,11 +18,13 @@ import ar.edu.unlam.tallerweb1.dto.EventoDTO;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioEventos;
 import ar.edu.unlam.tallerweb1.servicios.ServicioEventosImpl;
+import ar.edu.unlam.tallerweb1.servicios.ServicioGrupo;
+import ar.edu.unlam.tallerweb1.servicios.ServicioGrupoImpl;
 
 public class EventosControllerTest extends HttpSessionTest{
 
-	public final ServicioEventos service = mock(ServicioEventosImpl.class);
-	public final EventosRESTController controller = new EventosRESTController(service);
+	private final ServicioEventos service = mock(ServicioEventosImpl.class);
+	private final EventosRESTController controller = new EventosRESTController(service);
 	
 	@Test
 	public void testQueObtengaListadoDeEventos () {
@@ -41,10 +42,33 @@ public class EventosControllerTest extends HttpSessionTest{
 		
 		ResponseEntity<String> respuesta = whenSolicitoGuardarUnEvento(nuevoEvento, idGrupo);
 		
-		thenElEventoSePersiste(respuesta, nuevoEvento, idGrupo);
+		thenObtenemosStatusOK(respuesta, nuevoEvento, idGrupo);
+	}
+	
+	@Test
+	public void testQueSiFallaElGuardarEventoEnvieBadRequest () {
+		Long idGrupo = 1L;
+		EventoDTO nuevoEvento = givenUnEvento();
+		
+		ResponseEntity<String> respuesta = whenSolicitoGuardarUnEventoErroneamente(nuevoEvento, idGrupo);
+		
+		thenObtenemosStatusBADREQUEST(respuesta, nuevoEvento, idGrupo);
 	}
 
-	private void thenElEventoSePersiste(ResponseEntity<String> respuesta, EventoDTO nuevoEvento, Long idGrupo) {
+	private void thenObtenemosStatusBADREQUEST(ResponseEntity<String> respuesta, EventoDTO nuevoEvento, Long idGrupo) {
+		assertThat(respuesta).isNotNull();
+		assertThat(respuesta.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+		assertThat(respuesta.getBody()).isEqualTo("Fallo al cargar evento");
+		verify(service, times(1)).cargarEvento(nuevoEvento, idGrupo);
+	}
+
+	private ResponseEntity<String> whenSolicitoGuardarUnEventoErroneamente(EventoDTO nuevoEvento, Long idGrupo) {
+		when(request().getSession().getAttribute("USUARIO")).thenReturn(new Usuario());
+		when(service.cargarEvento(nuevoEvento, idGrupo)).thenReturn(false);
+		return controller.anotarEvento(request(),nuevoEvento, idGrupo);
+	}
+
+	private void thenObtenemosStatusOK(ResponseEntity<String> respuesta, EventoDTO nuevoEvento, Long idGrupo) {
 		assertThat(respuesta).isNotNull();
 		assertThat(respuesta.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(respuesta.getBody()).isEqualTo("Evento Cargado");
@@ -53,6 +77,7 @@ public class EventosControllerTest extends HttpSessionTest{
 
 	private ResponseEntity<String> whenSolicitoGuardarUnEvento(EventoDTO nuevoEvento, Long idGrupo) {
 		when(request().getSession().getAttribute("USUARIO")).thenReturn(new Usuario());
+		when(service.cargarEvento(nuevoEvento, idGrupo)).thenReturn(true);
 		return controller.anotarEvento(request(),nuevoEvento, idGrupo);
 	}
 
@@ -73,7 +98,7 @@ public class EventosControllerTest extends HttpSessionTest{
 
 	private List<EventoDTO> whenSolicitoEventosDeUnGrupo(Long idGrupo) {
 		when(service.buscarEventosPor(idGrupo)).thenReturn(givenListaDeEventos());
-		return controller.verEventos(idGrupo);
+		return controller.verEventos(request(), idGrupo);
 	}
 
 	private List<EventoDTO> givenListaDeEventos() {

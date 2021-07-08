@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var url = window.location.href.charAt(36);
 
   var modalInitJS = new BSN.Modal('#myModal', {
-    backdrop: false,
+    backdrop: 'static',
     keyboard: true
   });
 

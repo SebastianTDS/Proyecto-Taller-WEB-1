@@ -31,24 +31,28 @@ public class EventosRESTController {
 	}
 	
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public List<EventoDTO> verEventos(@RequestParam Long grupo) {
+	public List<EventoDTO> verEventos(HttpServletRequest request, @RequestParam Long grupo) {
+		validarSesion(request);
+		
 		return servicioEventos.buscarEventosPor(grupo);
 	}
 
 	@RequestMapping(value = "/{id}/nuevo", method = RequestMethod.POST)
 	public ResponseEntity<String> anotarEvento(HttpServletRequest request, @ModelAttribute EventoDTO nuevoEvento, @PathVariable Long id) {
-		Usuario sesion = validarSesion(request);
+		validarSesion(request);
 		
-		servicioEventos.cargarEvento(nuevoEvento, id);
+		if(servicioEventos.cargarEvento(nuevoEvento, id))
+			return new ResponseEntity<String>("Evento Cargado", HttpStatus.OK);
+		else
+			return new ResponseEntity<String>("Fallo al cargar evento", HttpStatus.BAD_REQUEST);
 		
-		return new ResponseEntity<String>("Evento Cargado", HttpStatus.OK);
 	}
 	
 	private Usuario validarSesion(HttpServletRequest request) {
 		Usuario objetivo = (Usuario) request.getSession().getAttribute("USUARIO");
 
 		if (objetivo == null)
-			throw new UsuarioNoEncontradoException("");
+			throw new UsuarioNoEncontradoException("No existe un usuario logueado!");
 
 		return objetivo;
 	}

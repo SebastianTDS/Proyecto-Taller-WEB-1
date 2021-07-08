@@ -39,11 +39,50 @@ public class ServicioEventosTest {
 	@Test
 	public void testQueSePuedaGuardarUnEvento () {
 		Long idGrupo = 1L;
-		EventoDTO nuevoEvento = givenEventoDTO();
+		EventoDTO nuevoEvento = givenEventoDTO("2021-07-09T10:00:00", "2021-07-09T16:00:00", "Almuerzo");
 		
 		whenQuieroCargarEvento(nuevoEvento, idGrupo);
 		
 		thenElEventoSeGuarda(nuevoEvento, idGrupo);
+	}
+	
+	@Test
+	public void testQueNoSeGuardeUnEventoSinGrupo () {
+		Long idGrupo = 1L;
+		EventoDTO nuevoEvento = givenEventoDTO("2021-07-09T10:00:00", "2021-07-09T16:00:00", "Almuerzo");
+		
+		whenQuieroCargarEventoConGrupoInvalido(nuevoEvento, idGrupo);
+		
+		thenElEventoNoSeGuarda(nuevoEvento, idGrupo);
+	}
+	
+	@Test
+	public void testQueNoSeGuardeUnEventoConFechasIncoherentes () {
+		Long idGrupo = 1L;
+		EventoDTO nuevoEvento = givenEventoDTO("2021-07-09T19:00:00", "2021-07-09T12:00:00", "Almuerzo");
+		
+		whenQuieroCargarEvento(nuevoEvento, idGrupo);
+		
+		thenElEventoNoSeGuarda(nuevoEvento, idGrupo);
+	}
+	
+	@Test
+	public void testQueNoSePuedaGuardarUnEventoPosteriorALaFecha () {
+		Long idGrupo = 1L;
+		EventoDTO nuevoEvento = givenEventoDTO("2021-07-06T19:00:00", LocalDateTime.now().toString(), "Almuerzo");
+		
+		whenQuieroCargarEvento(nuevoEvento, idGrupo);
+		
+		thenElEventoNoSeGuarda(nuevoEvento, idGrupo);
+	}
+
+	private void thenElEventoNoSeGuarda(EventoDTO nuevoEvento, Long idGrupo) {
+		verify(repoEventos, times(0)).guardarEvento(anyObject());
+	}
+
+	private void whenQuieroCargarEventoConGrupoInvalido(EventoDTO nuevoEvento, Long idGrupo) {
+		when(repoGrupo.getGrupoByID(idGrupo)).thenReturn(null);
+		service.cargarEvento(nuevoEvento, idGrupo);
 	}
 
 	private void thenElEventoSeGuarda(EventoDTO nuevoEvento, Long idGrupo) {
@@ -55,12 +94,12 @@ public class ServicioEventosTest {
 		service.cargarEvento(nuevoEvento, idGrupo);
 	}
 
-	private EventoDTO givenEventoDTO() {
+	private EventoDTO givenEventoDTO(String inicio, String fin, String titulo) {
 		EventoDTO nuevoEvento = new EventoDTO();
 		
-		nuevoEvento.setStart("2021-07-09T10:00:00");
-		nuevoEvento.setEnd("2021-07-09T16:00:00");
-		nuevoEvento.setTitle("Almuerzo");
+		nuevoEvento.setStart(inicio);
+		nuevoEvento.setEnd(fin);
+		nuevoEvento.setTitle(titulo);
 		
 		return nuevoEvento;
 	}

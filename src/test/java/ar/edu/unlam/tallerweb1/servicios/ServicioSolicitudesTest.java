@@ -22,8 +22,10 @@ import ar.edu.unlam.tallerweb1.repositorios.RepositorioSolicitudImpl;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioUsuario;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioUsuarioImpl;
 import ar.edu.unlam.tallerweb1.util.enums.TipoSolicitud;
+import ar.edu.unlam.tallerweb1.util.exceptions.FalloAlInvitarUsuario;
 import ar.edu.unlam.tallerweb1.util.exceptions.GrupoInexistenteException;
 import ar.edu.unlam.tallerweb1.util.exceptions.UsuarioNoEncontradoException;
+import ar.edu.unlam.tallerweb1.util.exceptions.UsuarioSinPermisosException;
 import ar.edu.unlam.tallerweb1.util.exceptions.YaEstoyEnElGrupo;
 
 public class ServicioSolicitudesTest {
@@ -106,12 +108,81 @@ public class ServicioSolicitudesTest {
 		thenLaSolicitudSeEnvia(anfitrion, correo, grupo);
 	}
 	
+	@Test(expected = UsuarioNoEncontradoException.class)
+	public void testQueSiElAdminNoExisteLaInvitacionFalle () {
+		Long anfitrion = 1L;
+		Long grupo = 2L;
+		String correo = "pepe@gmail.com";
+		
+		whenUnAdminInexistenteInvitaUsuarioAGrupo(anfitrion, correo, grupo);
+	}
+	
+	@Test(expected = GrupoInexistenteException.class)
+	public void testSiElGrupoSolicitanteNoExisteFalleAlInvitar () {
+		Long anfitrion = 1L;
+		Long grupo = 2L;
+		String correo = "pepe@gmail.com";
+		
+		whenUnGrupoInexistenteInvitaUsuarioAGrupo(anfitrion, correo, grupo);
+	}
+	
+	@Test(expected = UsuarioSinPermisosException.class)
+	public void testSiQuienInvitaNoEsAdminFalleAlInvitar () {
+		Long anfitrion = 1L;
+		Long grupo = 2L;
+		String correo = "pepe@gmail.com";
+		
+		whenUsuarioSinPermisosInvitaUsuarioAGrupo(anfitrion, correo, grupo);
+	}
+	
+	@Test(expected = FalloAlInvitarUsuario.class)
+	public void testQueSiElCorreoNoEsValidoFalleAlInvitar () {
+		Long anfitrion = 1L;
+		Long grupo = 2L;
+		String correo = "pepe@gmail.com";
+		
+		whenInvitamosUsuarioInexistenteAGrupo(anfitrion, correo, grupo);
+	}
+	
+	private void whenInvitamosUsuarioInexistenteAGrupo(Long anfitrion, String correo, Long grupo) {
+		Grupo solicitante = givenGrupoConUsuario();
+		
+		when(repoGrupo.getGrupoByID(grupo)).thenReturn(solicitante);
+		when(repoUsuario.getUsuarioByID(anfitrion)).thenReturn(solicitante.getAdministrador());
+		when(repoUsuario.getUsuarioByEmail(correo)).thenReturn(null);
+		service.invitarUsuario(anfitrion, correo, grupo);
+	}
+
+	private void whenUsuarioSinPermisosInvitaUsuarioAGrupo(Long anfitrion, String correo, Long grupo) {
+		Grupo solicitante = givenGrupoConUsuario();
+		
+		when(repoGrupo.getGrupoByID(grupo)).thenReturn(solicitante);
+		when(repoUsuario.getUsuarioByID(anfitrion)).thenReturn(new Usuario());
+		when(repoUsuario.getUsuarioByEmail(correo)).thenReturn(new Usuario());
+		service.invitarUsuario(anfitrion, correo, grupo);
+	}
+
+	private void whenUnGrupoInexistenteInvitaUsuarioAGrupo(Long anfitrion, String correo, Long grupo) {
+		when(repoGrupo.getGrupoByID(grupo)).thenReturn(null);
+		when(repoUsuario.getUsuarioByID(anfitrion)).thenReturn(null);
+		when(repoUsuario.getUsuarioByEmail(correo)).thenReturn(new Usuario());
+		service.invitarUsuario(anfitrion, correo, grupo);
+	}
+
+	private void whenUnAdminInexistenteInvitaUsuarioAGrupo(Long anfitrion, String correo, Long grupo) {
+		Grupo solicitante = givenGrupoConUsuario();
+		
+		when(repoGrupo.getGrupoByID(grupo)).thenReturn(solicitante);
+		when(repoUsuario.getUsuarioByID(anfitrion)).thenReturn(null);
+		when(repoUsuario.getUsuarioByEmail(correo)).thenReturn(new Usuario());
+		service.invitarUsuario(anfitrion, correo, grupo);
+	}
+
 	private void thenLaSolicitudSeEnvia(Long anfitrion, String correo, Long grupo) {
 		verify(repoSolis, times(1)).cargarSolicitud(anyObject());
 		verify(repoGrupo, times(1)).getGrupoByID(grupo);
 		verify(repoUsuario, times(1)).getUsuarioByID(anfitrion);
 		verify(repoUsuario, times(1)).getUsuarioByEmail(correo);
-		
 	}
 
 	private void whenInvitamosUsuarioAGrupo(Long anfitrion, String correo, Long grupo) {

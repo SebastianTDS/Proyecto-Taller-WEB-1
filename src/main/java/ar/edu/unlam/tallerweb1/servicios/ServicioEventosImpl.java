@@ -46,6 +46,9 @@ public class ServicioEventosImpl implements ServicioEventos{
 		if(LocalDateTime.parse(nuevoEvento.getEnd()).isBefore(LocalDateTime.parse(nuevoEvento.getStart())))
 			return false;
 		
+		if(LocalDateTime.now().isAfter(LocalDateTime.parse(nuevoEvento.getEnd())) || LocalDateTime.now().isEqual(LocalDateTime.parse(nuevoEvento.getEnd())))
+			return false;
+		
 		Evento evento = nuevoEvento.toEvento();
 		evento.setGrupo(objetivo);
 		
