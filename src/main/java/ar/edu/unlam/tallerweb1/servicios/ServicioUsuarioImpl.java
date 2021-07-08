@@ -23,7 +23,7 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
 
     @Override
     public void registrar(DatosDeUsuario datos) {
-        if(datos.getEmail() == null || datos.getEmail() == "")
+        if(datos.getEmail().isBlank() || datos.getNombre().isBlank() || datos.getClave().isBlank() || datos.getRepiteClave().isBlank())
             throw new CampoVacioException("Los campos tienen que estar llenos");
 
         if(repoUsuario.getUsuarioByEmail(datos.getEmail()) != null)
