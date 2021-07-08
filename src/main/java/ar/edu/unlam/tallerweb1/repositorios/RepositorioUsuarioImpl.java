@@ -46,5 +46,15 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
                 .uniqueResult();
     }
 
+	@Override
+	public Usuario getUsuarioByEmail(String correo) {
+		return (Usuario) sessionFactory.getCurrentSession().createCriteria(Usuario.class)
+				.add(Restrictions.eq("email", correo))
+				.uniqueResult();
+	}
+
+	public void actualizarUsuario(Usuario usuario) {
+		sessionFactory.getCurrentSession().update(usuario);
+	}
 
 }

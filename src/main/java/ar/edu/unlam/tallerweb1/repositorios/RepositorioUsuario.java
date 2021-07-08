@@ -11,4 +11,7 @@ public interface RepositorioUsuario {
     void guardarUsuario(Usuario usuario);
 
     Usuario getUsuarioByEmail(String email);
+	  void actualizarUsuario(Usuario usuario);
+
+
 }

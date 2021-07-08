@@ -88,7 +88,7 @@ public class ControladorHome {
 		Usuario objetivo = (Usuario) request.getSession().getAttribute("USUARIO");
 
 		if (objetivo == null)
-			throw new UsuarioNoEncontradoException("");
+			throw new UsuarioNoEncontradoException("No existe un usuario logueado!");
 
 		return objetivo;
 	}

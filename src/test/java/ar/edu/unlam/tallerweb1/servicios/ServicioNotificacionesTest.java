@@ -59,7 +59,19 @@ public class ServicioNotificacionesTest {
 		
 		thenSeLesCargaLaNotificacion(objetivo.getListaDeUsuarios().size());
 	}
-	
+
+	@Test
+	public void testQueSeNotifiqueAlUsuarioCuandoSeVaAlguienDelGrupo() {
+		Grupo objetivo = givenExisteUnGrupo();
+		Usuario nuevoIntegrante = givenNuevoIntegrante();
+		objetivo= givenInsertoUsuarioEnGrupo(objetivo,nuevoIntegrante);
+		whenNotificamosAlUsuarioQueAlguienSeFueDelGrupo(objetivo, nuevoIntegrante);
+
+		thenSeLesCargaLaNotificacion(objetivo.getListaDeUsuarios().size());
+	}
+
+
+
 	@Test
 	public void testQueTeAviseSiExistenNotificacionesNuevas () {
 		Long usuario = 1L;
@@ -85,7 +97,10 @@ public class ServicioNotificacionesTest {
 		when(repositoryGr.getGrupoByID(objetivo.getId())).thenReturn(objetivo);
 		service.notificarEliminacionDeGrupo(objetivo.getId());
 	}
-
+	private void whenNotificamosAlUsuarioQueAlguienSeFueDelGrupo(Grupo objetivo, Usuario usuario) {
+		when(repositoryGr.getGrupoByID(objetivo.getId())).thenReturn(objetivo);
+		service.notificarRetiroDeGrupo(objetivo.getId(), usuario);
+	}
 	private void thenSeLesCargaLaNotificacion(Integer veces) {
 		verify(repositoryNt, times(veces)).guardarNotificacion(anyObject());
 	}
@@ -109,6 +124,10 @@ public class ServicioNotificacionesTest {
 		objetivo.setId(1L);
 		objetivo.setNombre("Equipo Dinamita");
 		objetivo.setListaDeUsuarios(new HashSet<Usuario>(Arrays.asList(givenUnUsuario(5L), givenUnUsuario(4L))));
+		return objetivo;
+	}
+	private Grupo givenInsertoUsuarioEnGrupo(Grupo objetivo, Usuario nuevoIntegrante) {
+		objetivo.agregarUsuarioAlGrupo(nuevoIntegrante);
 		return objetivo;
 	}
 

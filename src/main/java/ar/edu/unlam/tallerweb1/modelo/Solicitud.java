@@ -91,7 +91,7 @@ public class Solicitud {
 		case INCLUSION_GRUPO:
 			return origen.getNombre() + " Ha solicitado unirse al grupo " + objetivo.getNombre();
 		case INVITACION_GRUPO:
-			return origen.getNombre() + " Te ha invitado a unirte a su grupo" + objetivo.getNombre();
+			return origen.getNombre() + " Te ha invitado a unirte a su grupo " + objetivo.getNombre();
 		default:
 			return null;
 		}

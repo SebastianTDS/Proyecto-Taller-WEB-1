@@ -27,10 +27,12 @@ public class Grupo {
 	private Materia materia;
 
 	private Set<Usuario> listaDeUsuarios;
+	private List<Evento> eventos;
 
 	public Grupo() {
 		this.listaDeUsuarios = new HashSet<>();
 	}
+
 
 	@Override
 	public int hashCode() {
@@ -63,11 +65,21 @@ public class Grupo {
 	public void setAdministrador(Usuario administrador) {
 		this.administrador = administrador;
 	}
+	
+	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "grupo" )
+	public List<Evento> getEventos() {
+		return eventos;
+	}
+
+	public void setEventos(List<Evento> eventos) {
+		this.eventos = eventos;
+	}
 
 	@ManyToMany(mappedBy = "listaDeGrupos", fetch = FetchType.EAGER)
 	public Set<Usuario> getListaDeUsuarios() {
 		return listaDeUsuarios;
 	}
+
 
 	public void setListaDeUsuarios(Set<Usuario> listaDeUsuarios) {
 		this.listaDeUsuarios = listaDeUsuarios;
@@ -179,7 +191,10 @@ public class Grupo {
 		this.esMateria = esMateria;
 	}
 
-
+	public void borrarUsuarioDelGrupo(Usuario usuarioBorrar) {
+		listaDeUsuarios.remove(usuarioBorrar);
+		usuarioBorrar.borrarGrupoDelUsuario(this);
+	}
 
 	@PreRemove
 	public void removerGruposDeUsuario() {

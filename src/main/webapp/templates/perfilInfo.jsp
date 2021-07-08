@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page session = "true" %>
 <div class="window col-12 col-sm-9 text-dark">
 	<form action="grupos/eliminar" method="POST" id="delete"></form>
@@ -19,6 +20,10 @@
         	<p>${grupo.getDescripcion()}</p>
         </li>
         <li class="text-end mt-auto">
+            <c:if test="${!grupo.getAdministrador().equals(sessionScope.USUARIO) }">
+                <form:form action="grupos/salir" method="POST" id="salir"></form:form>
+                <button type="submit" class="btn btn-outline-danger" name="id" form="salir" value="${grupo.getId()}">Salir del Grupo</button>
+            </c:if>
 	        <c:if test="${grupo.getAdministrador().equals(sessionScope.USUARIO) }">
 	        	<a href="grupos/${grupo.getId()}/edicion" class="btn btn-outline-primary">Editar Info</a>
 	        	<button type="submit" class="btn btn-outline-danger" name="id" form="delete" value="${grupo.getId()}">Eliminar Grupo</button>
