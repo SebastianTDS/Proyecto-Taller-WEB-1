@@ -85,4 +85,11 @@ public class ControladorExcepciones {
 
 		return new ModelAndView("redirect:/grupos/" + e.getGrupo(), model);
 	}
+
+	@ExceptionHandler(value=ArchivoNoEncontradoException.class)
+	public ModelAndView errorAlBuscarArchivo(ArchivoNoEncontradoException e){
+		ModelMap model = new ModelMap();
+		model.put("error",e.getMessage());
+		return new ModelAndView("redirect:/grupos/",model);
+	}
 }
