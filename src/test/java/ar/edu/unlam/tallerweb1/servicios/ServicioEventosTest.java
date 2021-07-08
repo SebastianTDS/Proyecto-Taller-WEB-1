@@ -1,7 +1,10 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
@@ -12,13 +15,17 @@ import org.junit.Test;
 
 import ar.edu.unlam.tallerweb1.dto.EventoDTO;
 import ar.edu.unlam.tallerweb1.modelo.Evento;
+import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioEventos;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioEventosImpl;
+import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupo;
+import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupoImpl;
 
 public class ServicioEventosTest {
 
-	public final RepositorioEventos repository = mock(RepositorioEventosImpl.class);
-	public final ServicioEventos service = new ServicioEventosImpl(repository);
+	public final RepositorioEventos repoEventos = mock(RepositorioEventosImpl.class);
+	public final RepositorioGrupo repoGrupo = mock(RepositorioGrupoImpl.class);
+	public final ServicioEventos service = new ServicioEventosImpl(repoEventos, repoGrupo);
 	
 	@Test
 	public void testQueSePuedaObtenerLosEventosEnDTO () {
@@ -28,9 +35,38 @@ public class ServicioEventosTest {
 		
 		thenObtengoLaListaDeEventos(eventos);
 	}
+	
+	@Test
+	public void testQueSePuedaGuardarUnEvento () {
+		Long idGrupo = 1L;
+		EventoDTO nuevoEvento = givenEventoDTO();
+		
+		whenQuieroCargarEvento(nuevoEvento, idGrupo);
+		
+		thenElEventoSeGuarda(nuevoEvento, idGrupo);
+	}
+
+	private void thenElEventoSeGuarda(EventoDTO nuevoEvento, Long idGrupo) {
+		verify(repoEventos, times(1)).guardarEvento(anyObject());
+	}
+
+	private void whenQuieroCargarEvento(EventoDTO nuevoEvento, Long idGrupo) {
+		when(repoGrupo.getGrupoByID(idGrupo)).thenReturn(new Grupo());
+		service.cargarEvento(nuevoEvento, idGrupo);
+	}
+
+	private EventoDTO givenEventoDTO() {
+		EventoDTO nuevoEvento = new EventoDTO();
+		
+		nuevoEvento.setStart("2021-07-09T10:00:00");
+		nuevoEvento.setEnd("2021-07-09T16:00:00");
+		nuevoEvento.setTitle("Almuerzo");
+		
+		return nuevoEvento;
+	}
 
 	private List<EventoDTO> whenSolicitoEventosDeUnGrupo(Long idGrupo) {
-		when(repository.buscarEventosPor(idGrupo)).thenReturn(givenListaDeEventos());
+		when(repoEventos.buscarEventosPor(idGrupo)).thenReturn(givenListaDeEventos());
 		return service.buscarEventosPor(idGrupo);
 	}
 	

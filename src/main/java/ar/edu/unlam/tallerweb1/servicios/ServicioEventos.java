@@ -8,4 +8,6 @@ public interface ServicioEventos {
 
 	List<EventoDTO> buscarEventosPor(Long idGrupo);
 
+	Boolean cargarEvento(EventoDTO nuevoEvento, Long id);
+
 }

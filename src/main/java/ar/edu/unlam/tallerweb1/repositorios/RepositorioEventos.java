@@ -8,4 +8,6 @@ public interface RepositorioEventos {
 
 	List<Evento> buscarEventosPor(Long idGrupo);
 
+	void guardarEvento(Evento nuevoEvento);
+
 }
