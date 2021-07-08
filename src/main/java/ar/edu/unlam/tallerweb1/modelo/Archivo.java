@@ -15,6 +15,8 @@ public class Archivo implements Comparable<Archivo> {
     private Usuario usuario;
     private LocalDateTime fecha;
     private Grupo grupo;
+    private float pesoArchivo;
+    private String extension;
 
     public Archivo() {
         this.fecha = LocalDateTime.now().withNano(0);
@@ -76,6 +78,22 @@ public class Archivo implements Comparable<Archivo> {
 
     public void setNombreOriginal(String nombreOriginal) {
         this.nombreOriginal = nombreOriginal;
+    }
+
+    public float getPesoArchivo() {
+        return pesoArchivo;
+    }
+
+    public void setPesoArchivo(float pesoArchivo) {
+        this.pesoArchivo = pesoArchivo;
+    }
+
+    public String getExtension() {
+        return extension;
+    }
+
+    public void setExtension(String extension) {
+        this.extension = extension;
     }
 
     @Override

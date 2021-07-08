@@ -5,13 +5,13 @@
 <%@ page session="true" %>
 <div class="window col-12 col-sm-9 text-dark" style="max-height: 500px; overflow: scroll;">
     <h1 class="text-center border-bottom p-2">Archivos de ${grupo.nombre}</h1>
-    <div>
-        <form:form method="POST" action="grupos/${grupo.getId()}/subir-archivo" modelAtributte="datosDeArchivo" enctype="multipart/form-data">
-            <input path="archivo"  type="file" name="archivo"/>
-            <input path="nombre" type="text" name="nombre"/>
-            <input path="idGrupo" value="${grupo.getId()}" class="d-none" type="number" name="idGrupo"/>
+    <div class="d-flex justify-content-between">
+        <form:form method="POST" action="grupos/${grupo.getId()}/subir-archivo" modelAtributte="datosDeArchivo" enctype="multipart/form-data" class="d-flex justify-content-between">
+            <input path="archivo" id="file"  type="file" name="archivo" class="form-control m-1" style="width: 400px"/>
+            <input path="nombre" type="text" name="nombre" class="form-control m-1" placeholder="Nombre de archivo" style="width: 400px"/>
+            <input path="idGrupo" value="${grupo.getId()}" class="d-none m-1" type="number" name="idGrupo"/>
             <input path="idUsuario" value="${sessionScope.USUARIO.id}" class="d-none" type="number" name="idUsuario"/>
-            <button class="btn btn-lg btn btn-primary btn-sm" Type="Submit">Subir archivo</button>
+            <button class="btn btn-lg btn btn-primary btn-sm m-1" Type="Submit"><i class="fas fa-cloud-upload-alt fa-lg" style="width: 50px"></i></button>
         </form:form>
     </div>
 
@@ -21,6 +21,8 @@
             <th scope="col">Nombre</th>
             <th scope="col">Subido por</th>
             <th scope="col">Fecha</th>
+            <th scope="col">Peso</th>
+            <th scope="col">Tipo</th>
             <th scope="col">Acciones</th>
         </tr>
         </thead>
@@ -30,13 +32,16 @@
                 <td>${archivo.nombre}</td>
                 <td>${archivo.usuario.nombre}</td>
                 <td>${archivo.fecha}</td>
+                <td>${archivo.pesoArchivo} Mb</td>
+                <td>.${archivo.extension}</td>
+
                 <td>
                     <button  name="id_archivo" value="${archivo.id}" form="descargar"
-                             class="btn btn-outline-primary"  Type="Submit" >Descargar
+                             class="btn btn-success"  Type="Submit" ><i class="fas fa-file-download fa-lg"></i>
                     </button>
                     <c:if test="${sessionScope.USUARIO.id==archivo.usuario.id}">
                         <button  name="id_archivo" value="${archivo.id}" form="borrar"
-                                 class="btn btn-outline-primary"  Type="Submit">Borrar
+                                 class="btn btn-danger"  Type="Submit"><i class="fas fa-trash fa-lg"></i>
                         </button>
                     </c:if>
                 </td>

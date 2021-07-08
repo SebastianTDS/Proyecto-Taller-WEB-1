@@ -114,6 +114,10 @@ public class ServicioArchivosImpl implements ServicioArchivos {
         archivo.setUsuario(usuario);
         archivo.setNombreOriginal(datosDeArchivo.getArchivo().getOriginalFilename());
         archivo.setNombre(datosDeArchivo.getNombre());
+        int index = archivo.getNombreOriginal().lastIndexOf('.');
+        String extension = archivo.getNombreOriginal().substring(index+1);
+        archivo.setExtension(extension);
+        archivo.setPesoArchivo((float) datosDeArchivo.getArchivo().getSize()/(1000*1000));
         return repositorioArchivos.crearRegistroDeArchivo(archivo);
     }
 
