@@ -3,6 +3,7 @@ package ar.edu.unlam.tallerweb1.controladores;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -23,7 +24,7 @@ import ar.edu.unlam.tallerweb1.util.exceptions.LimiteDeUsuariosFueraDeRango;
 import ar.edu.unlam.tallerweb1.util.exceptions.NoEsMiembroException;
 import ar.edu.unlam.tallerweb1.util.exceptions.UsuarioSinPermisosException;
 
-public class ControladorGruposTest extends HttpSessionTest{
+public class ControladorGruposTest extends HttpSessionTest {
 
 	private static ControladorGrupos controller;
 	private static ServicioGrupo service;
@@ -32,8 +33,17 @@ public class ControladorGruposTest extends HttpSessionTest{
 	@Before
 	public void init() {
 		service = mock(ServicioGrupoImpl.class);
-		controller = new ControladorGrupos(service, mock(ServicioNotificacionesImpl.class),mock(ServicioMensajesImpl.class), mock(ServicioArchivosImpl.class));
+		controller = new ControladorGrupos(service, mock(ServicioNotificacionesImpl.class), mock(ServicioMensajesImpl.class), mock(ServicioCalificacionesImpl.class),mock(ServicioArchivosImpl.class));
 		usuarioEjemplo.setId(1L); 
+	}
+  
+	@Test
+	public void testQueElUsuarioPuedaRetirarseSuGrupo() {
+		Long idGrupoBuscado = 1L;
+
+		ModelAndView postGrupoConUsuarioEliminado = whenSalirDelGrupo(idGrupoBuscado);
+
+		thenElUsuarioYaNoExisteDelGrupo(postGrupoConUsuarioEliminado);
 	}
 
 	@Test
@@ -90,21 +100,21 @@ public class ControladorGruposTest extends HttpSessionTest{
 		Long idGrupoBuscado = 1L;
 		whenBuscoPorLaURLDeEdicionConElIDIncorrectoLanzaExcepcion(idGrupoBuscado);
 	}
-	
+
 	@Test(expected = UsuarioSinPermisosException.class)
-	public void testQueSiElUsuarioNoTienePermisosNoPuedaEditarGrupo () {
+	public void testQueSiElUsuarioNoTienePermisosNoPuedaEditarGrupo() {
 		Long idGrupoBuscado = 1L;
 		DatosDeGrupo formulario = givenCompletamosFormulario(idGrupoBuscado);
 
 		whenIntentoCargoLaModificacionDeLosDatos(idGrupoBuscado, formulario);
 	}
-	
+
 	@Test(expected = NoEsMiembroException.class)
 	public void testQueSiElUsuarioNoEsMiembroNoPuedaVerElGrupo() {
 		Long idGrupoBuscado = 1L;
 		whenBuscoGrupoExistentePeroSinPermiso(idGrupoBuscado);
 	}
-	
+
 	@Test
 	public void testQuePodamosAccederAlForoDeGrupo() {
 		Long idGrupoBuscado = 1L;
@@ -112,64 +122,96 @@ public class ControladorGruposTest extends HttpSessionTest{
 
 		thenObtengoLaVistaYElModeloDelForo(vistaObtenida);
 	}
-  
+
 	@Test
 	public void testQuePodamosInsertarUnMensajeEnElGrupo() {
 		Long idGrupoBuscado = 1L;
-		DatosDeMensaje datosDeMensaje= givenCompletamosDeMensaje(idGrupoBuscado);
+		DatosDeMensaje datosDeMensaje = givenCompletamosDeMensaje(idGrupoBuscado);
 
 		ModelAndView vista = whenCargoLosDatosDeMensaje(idGrupoBuscado, datosDeMensaje);
 
 		thenObtengoLaVistaYElModeloDelForoDespuesDeEnviarUnMsj(vista);
-  }
-
-	/* Metodos Auxiliares */
-  
-  private void whenBuscoGrupoExistentePeroSinPermiso(Long idGrupoBuscado) {
-		Grupo objetivo = new Grupo();
-		objetivo.setId(idGrupoBuscado);
+	}
+	
+	@Test
+	public void testQueCargueElCalendarioDeUnGrupo () {
+		Long idGrupo = 1L;
 		
-		when(request().getSession().getAttribute("USUARIO")).thenReturn(usuarioEjemplo);
-		when(service.buscarGrupoPorID(idGrupoBuscado)).thenReturn(objetivo);
-		doThrow(NoEsMiembroException.class).when(service).validarPermiso(usuarioEjemplo.getId(), idGrupoBuscado, Permiso.VISTA);
+		ModelAndView vista = whenSolicitoElDeCalendarioDeUnGrupo(idGrupo);
 		
-		controller.perfilDeGrupo(idGrupoBuscado, request());
+		thenLaVistaEsLaDeseada(vista, idGrupo);
 	}
 
+	/* Metodos Auxiliares */
+	
+	private void thenLaVistaEsLaDeseada(ModelAndView vista, Long idGrupo) {
+		assertThat(vista).isNotNull();
+		assertThat(vista.getViewName()).isEqualTo("vistaCalendario");
+		verify(service, times(1)).buscarGrupoPorID(idGrupo);
+		verify(request().getSession(), atLeast(1)).getAttribute("USUARIO");
+	}
+
+	private ModelAndView whenSolicitoElDeCalendarioDeUnGrupo(Long idGrupo) {
+		when(request().getSession().getAttribute("USUARIO")).thenReturn(new Usuario());
+		when(service.buscarGrupoPorID(idGrupo)).thenReturn(new Grupo());
+		return controller.verCalendario(request(), idGrupo);
+	}
+
+	private void whenBuscoGrupoExistentePeroSinPermiso(Long idGrupoBuscado) {
+		Grupo objetivo = new Grupo();
+		objetivo.setId(idGrupoBuscado);
+
+		when(request().getSession().getAttribute("USUARIO")).thenReturn(usuarioEjemplo);
+		when(service.buscarGrupoPorID(idGrupoBuscado)).thenReturn(objetivo);
+		doThrow(NoEsMiembroException.class).when(service).validarPermiso(usuarioEjemplo.getId(), idGrupoBuscado,
+				Permiso.VISTA);
+
+		controller.perfilDeGrupo(idGrupoBuscado, request());
+	}
+	private ModelAndView whenSalirDelGrupo(Long idGrupoBuscado) {
+		when(request().getSession().getAttribute("USUARIO")).thenReturn(usuarioEjemplo);
+		return controller.salirDelGrupo(idGrupoBuscado, request());
+	}
+	private void thenElUsuarioYaNoExisteDelGrupo(ModelAndView postGrupoEliminado) {
+		assertThat(postGrupoEliminado.getViewName()).isEqualTo("redirect:/ir-a-home");
+		assertThat(postGrupoEliminado.getModel().get("mensaje")).isEqualTo("Se ha salido con exito!");
+	}
 	private void whenIntentoCargoLaModificacionDeLosDatos(Long idGrupoBuscado, DatosDeGrupo formulario) {
 		when(request().getSession().getAttribute("USUARIO")).thenReturn(usuarioEjemplo);
-		doThrow(UsuarioSinPermisosException.class).when(service).validarPermiso(usuarioEjemplo.getId(), idGrupoBuscado, Permiso.MODIFICACION);
-		
+		doThrow(UsuarioSinPermisosException.class).when(service).validarPermiso(usuarioEjemplo.getId(), idGrupoBuscado,
+				Permiso.MODIFICACION);
+
 		controller.cambiarDatosGrupo(formulario, request());
-  }
-  
+	}
+
 	private void thenObtengoLaVistaYElModeloDelForoDespuesDeEnviarUnMsj(ModelAndView vistaObtenida) {
 		assertThat(vistaObtenida.getViewName()).isEqualTo("redirect:/grupos/1/foro");
 	}
 
 	private ModelAndView whenCargoLosDatosDeMensaje(Long idGrupoBuscado, DatosDeMensaje datosDeMensaje) {
 		givenUnUsuarioDeLaSesion();
-		Usuario  usuario=(Usuario) request().getSession().getAttribute("USUARIO");
-		return controller.insertarMensajeEnElForo(request(),datosDeMensaje);
+		Usuario usuario = (Usuario) request().getSession().getAttribute("USUARIO");
+		return controller.insertarMensajeEnElForo(request(), datosDeMensaje);
 	}
 
 	private DatosDeMensaje givenCompletamosDeMensaje(Long idGrupoBuscado) {
-		DatosDeMensaje datosDeMensaje=new DatosDeMensaje();
+		DatosDeMensaje datosDeMensaje = new DatosDeMensaje();
 		datosDeMensaje.setId(1L);
 		datosDeMensaje.setMensaje("MENSAJE 1");
 		return datosDeMensaje;
 	}
+
 	private void givenUnUsuarioDeLaSesion() {
 		Usuario usuario = new Usuario();
 		usuario.setId(1L);
 		when(request().getSession().getAttribute("USUARIO")).thenReturn(usuario);
 	}
-  
+
 	private ModelAndView whenBuscoPorLaURLConElIDCorrectoAlForo(Long idGrupoBuscado) {
 		when(service.buscarGrupoPorID(idGrupoBuscado)).thenReturn(new Grupo());
-		return controller.perfilDeGrupoForo(idGrupoBuscado);
+		return controller.perfilDeGrupoForo(request(), idGrupoBuscado);
 	}
-  
+
 	private void thenObtengoLaVistaYElModeloDelForo(ModelAndView vistaObtenida) {
 		assertThat(vistaObtenida.getViewName()).isEqualTo("vistaGrupo");
 		assertThat(vistaObtenida.getModel().get("msj")).isNotNull();
@@ -212,7 +254,7 @@ public class ControladorGruposTest extends HttpSessionTest{
 
 	private void thenSusDatosSeCambian(ModelAndView cambiosRealizados) {
 		assertThat(cambiosRealizados.getModel().get("mensaje")).isEqualTo("Datos actualizados");
-		verify(service, times(1)).validarPermiso(eq(usuarioEjemplo.getId()), anyLong() , eq(Permiso.MODIFICACION));
+		verify(service, times(1)).validarPermiso(eq(usuarioEjemplo.getId()), anyLong(), eq(Permiso.MODIFICACION));
 	}
 
 	private ModelAndView whenCargoLaModificacionDeLosDatos(Long idGrupoBuscado, DatosDeGrupo formulario) {

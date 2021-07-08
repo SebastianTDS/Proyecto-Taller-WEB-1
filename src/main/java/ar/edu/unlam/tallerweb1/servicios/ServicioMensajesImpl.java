@@ -5,6 +5,7 @@ import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.modelo.Mensaje;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.repositorios.*;
+import ar.edu.unlam.tallerweb1.util.exceptions.GrupoInexistenteException;
 import ar.edu.unlam.tallerweb1.util.exceptions.NoSeEnvioElMensaje;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,12 +31,20 @@ public class ServicioMensajesImpl implements ServicioMensajes{
     }
 
     @Override
-    public void guardarUnMensaje(Long idUsuario, DatosDeMensaje datosMensaje) {
-        Grupo grupoAAcceder = repoGrupo.getGrupoByID(datosMensaje.getId());
-        Usuario usuarioAInsertar = repoUsuario.getUsuarioByID(idUsuario);
-        if (grupoAAcceder == null || usuarioAInsertar == null || verificarDatosDeMSJ(datosMensaje))
-            throw new NoSeEnvioElMensaje(grupoAAcceder.getId());
-        Mensaje mensajeCreado = crearMensaje(usuarioAInsertar, grupoAAcceder, datosMensaje);
+    public void guardarUnMensaje(Long idUsuario, DatosDeMensaje mensaje) {
+        Grupo foroObjetivo = mensaje.getEsMateria() 
+        		? repoGrupo.buscarForoMateria(mensaje.getId())
+        		: repoGrupo.getGrupoByID(mensaje.getId());
+        
+        if (foroObjetivo == null)
+        	throw new GrupoInexistenteException("El mensaje no puede guardarse ya que el foro no existe!");
+        	
+        Usuario remitente = repoUsuario.getUsuarioByID(idUsuario);
+        
+        if(remitente == null || verificarDatosDeMSJ(mensaje))
+            throw new NoSeEnvioElMensaje(foroObjetivo.getId());
+        
+        Mensaje mensajeCreado = crearMensaje(remitente, foroObjetivo, mensaje);
         repoMsj.save(mensajeCreado);
     }
 
@@ -50,6 +59,7 @@ public class ServicioMensajesImpl implements ServicioMensajes{
         return datosMensaje.getMensaje() == null || datosMensaje.getMensaje().isBlank()
                 || datosMensaje.getMensaje().equals("<p><br></p>");
     }
+    
     private Mensaje crearMensaje(Usuario usuarioAInsertar, Grupo grupoAAcceder, DatosDeMensaje datosMensaje) {
         Mensaje mensaje = new Mensaje();
         mensaje.setUsuario(usuarioAInsertar);

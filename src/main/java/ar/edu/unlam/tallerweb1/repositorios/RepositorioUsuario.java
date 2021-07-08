@@ -8,5 +8,10 @@ public interface RepositorioUsuario {
 
 	Usuario getUsuarioByID(Long id);
 
-    void guardarUsuario(Usuario usuario);
+  void guardarUsuario(Usuario usuario);
+
+	Usuario getUsuarioByEmail(String correo);
+
+	void actualizarUsuario(Usuario usuario);
+
 }

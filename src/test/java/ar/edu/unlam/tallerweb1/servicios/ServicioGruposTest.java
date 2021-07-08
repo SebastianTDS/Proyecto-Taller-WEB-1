@@ -71,6 +71,7 @@ public class ServicioGruposTest {
 	private Grupo givenExisteUnGrupo() {
 		Grupo nuevoGrupo = new Grupo();
 		nuevoGrupo.setId(1L);
+		nuevoGrupo.setCantidadMax(2);
 		return nuevoGrupo;
 	}
 

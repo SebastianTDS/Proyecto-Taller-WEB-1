@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
+import ar.edu.unlam.tallerweb1.HttpSessionTest;
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 
 import ar.edu.unlam.tallerweb1.modelo.*;
@@ -19,17 +20,12 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class ControladorHomeTest {
+public class ControladorHomeTest extends HttpSessionTest{
     private ControladorHome controladorHome;
     private ServicioGrupo servicioGrupo;
-    private static HttpServletRequest request;
-    private static HttpSession session;
     
     @Before
     public void init(){
-        session=mock(HttpSession.class);
-        request = mock(HttpServletRequest.class);
-        when(request.getSession()).thenReturn(session);
         servicioGrupo = mock(ServicioGrupo.class);
         controladorHome = new ControladorHome(servicioGrupo, mock(ServicioNotificacionesImpl.class));
     }
@@ -60,7 +56,7 @@ public class ControladorHomeTest {
 
     @Test
     public void QueMeRedirigaALaVistaHomeAlFiltarGrupos(){
-
+    	givenUnUsuarioDeLaSesion();
         ModelAndView mvc= whenDoyClickAFiltar();
         thenMeMuestraLaPaginaDeGruposFiltrados(mvc);
     }
@@ -68,6 +64,7 @@ public class ControladorHomeTest {
     @Test
     public void QueMeMuestreTodosLosGrupos(){
         List<Grupo>grupos=givenGruposPersistidos();
+        givenUnUsuarioDeLaSesion();
         ModelAndView mvc= whenGuardoLosGruposEnElModel(grupos);
         thenMeMuestreLosGrupos(mvc,grupos);
     }
@@ -94,9 +91,9 @@ public class ControladorHomeTest {
 
     @Test
     public void queMeRedirigaALaVistaForoMaterias(){
-                ModelAndView mvc=whenDoyClickAForoMaterias();
-                thenMeMuestraLaVistaForoMaterias(mvc);
-
+    	givenUnUsuarioDeLaSesion();
+        ModelAndView mvc=whenDoyClickAForoMaterias();
+        thenMeMuestraLaVistaForoMaterias(mvc);
     }
 
     private void thenMeMuestraLaVistaForoMaterias(ModelAndView mvc) {
@@ -104,18 +101,18 @@ public class ControladorHomeTest {
     }
 
     private ModelAndView whenDoyClickAForoMaterias() {
-        return controladorHome.IrAForosMaterias();
+        return controladorHome.IrAForosMaterias(request());
     }
 
 
     private void givenUnUsuarioDeLaSesion() {
 		Usuario usuario = new Usuario();
 		usuario.setId(1L);
-		when(request.getSession().getAttribute("USUARIO")).thenReturn(usuario);
+		when(request().getSession().getAttribute("USUARIO")).thenReturn(usuario);
 	}
     
     private ModelAndView whenElUsuarioIngresaAlGrupo(Long idGrupo) {
-		return controladorHome.IngresarAGrupo(request, idGrupo);
+		return controladorHome.IngresarAGrupo(request(), idGrupo);
 	}
     
     private void thenVerificoLaVista(ModelAndView mvc) {
@@ -141,7 +138,7 @@ public class ControladorHomeTest {
     private ModelAndView whenGuardoLasCarrerasEnElModel(List<Carrera> carreras){
         DatosDeGrupo datosDeGrupo=new DatosDeGrupo();
         when(servicioGrupo.buscarTodasLasCarreras()).thenReturn(carreras);
-        return controladorHome.buscarGrupos(datosDeGrupo);
+        return controladorHome.buscarGrupos(request(),datosDeGrupo);
     }
 
     void thenMeMuestreLasMaterias(ModelAndView mvc, List<Materia>materias){
@@ -158,7 +155,7 @@ public class ControladorHomeTest {
     private ModelAndView whenGuardoLasMateriasEnElModel(List<Materia> materias){
     	DatosDeGrupo datosDeGrupo=new DatosDeGrupo();
         when(servicioGrupo.buscarTodasLasMaterias()).thenReturn(materias);
-        return controladorHome.buscarGrupos(datosDeGrupo);
+        return controladorHome.buscarGrupos(request(),datosDeGrupo);
     }
 
     private List<Grupo> givenGruposPersistidos() {
@@ -170,8 +167,9 @@ public class ControladorHomeTest {
 
     private ModelAndView whenGuardoLosGruposEnElModel(List<Grupo> grupos) {
     	DatosDeGrupo datosDeGrupo=new DatosDeGrupo();
+    	
         when(servicioGrupo.buscarGrupoPorDatos(datosDeGrupo)).thenReturn(grupos);
-        return controladorHome.buscarGrupos(datosDeGrupo);
+        return controladorHome.buscarGrupos(request(),datosDeGrupo);
     }
 
     private void thenMeMuestreLosGrupos(ModelAndView mvc, List<Grupo>grupos) {
@@ -183,11 +181,11 @@ public class ControladorHomeTest {
     }
 
     private ModelAndView whenDoyClickACrearGrupo() {
-      return controladorHome.irACrearGrupo();
+      return controladorHome.irACrearGrupo(request());
     }
 
     private ModelAndView whenDoyClickAFiltar() {
-        return controladorHome.buscarGrupos(new DatosDeGrupo());
+        return controladorHome.buscarGrupos(request(),new DatosDeGrupo());
     }
 
     private void thenMeMuestraLaPaginaDeGruposFiltrados(ModelAndView mvc ) {

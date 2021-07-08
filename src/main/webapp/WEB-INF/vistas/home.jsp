@@ -83,7 +83,6 @@
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 clo-xl-12 container-fluid row d-flex justify-content-center " style=" overflow: scroll; max-height: 800px">
                 <c:if test="${not empty grupos}">
                     <c:forEach items="${grupos}" var="grupo">
-                        <c:if test="${grupo.esMateria!=true}">
                         <div class="bg-light text-dark col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 m-3 d-flex flex-wrap align-content-between hover-shadow bg-body rounded">
                             <div class="card-body container-fluid">
                                 <h5 class="card-title text-center">${grupo.nombre}</h5>
@@ -132,13 +131,12 @@
                                 </div>
                             </div>
                         </div>
-                        </c:if>
                     </c:forEach>
                     <form action="ingresar-a-grupo" id="unirte" method="POST"></form>
                     <form action="solicitudes/solicitar-inclusion" id="solicitarUnirse" method="POST"></form>
                 </c:if>
                 <c:if test="${empty grupos}">
-                	<div>
+                	<div class="text-center">
                 		No se encontraron resultados!
                 	</div>
                 </c:if>

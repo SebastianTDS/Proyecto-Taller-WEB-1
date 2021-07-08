@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.util.enums.Turno;
+import ar.edu.unlam.tallerweb1.util.exceptions.LimiteDeUsuariosFueraDeRango;
 import ar.edu.unlam.tallerweb1.util.exceptions.YaEstoyEnElGrupo;
 
 @Entity
@@ -26,10 +27,12 @@ public class Grupo {
 	private Materia materia;
 
 	private Set<Usuario> listaDeUsuarios;
+	private List<Evento> eventos;
 
 	public Grupo() {
 		this.listaDeUsuarios = new HashSet<>();
 	}
+
 
 	@Override
 	public int hashCode() {
@@ -62,11 +65,21 @@ public class Grupo {
 	public void setAdministrador(Usuario administrador) {
 		this.administrador = administrador;
 	}
+	
+	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "grupo" )
+	public List<Evento> getEventos() {
+		return eventos;
+	}
+
+	public void setEventos(List<Evento> eventos) {
+		this.eventos = eventos;
+	}
 
 	@ManyToMany(mappedBy = "listaDeGrupos", fetch = FetchType.EAGER)
 	public Set<Usuario> getListaDeUsuarios() {
 		return listaDeUsuarios;
 	}
+
 
 	public void setListaDeUsuarios(Set<Usuario> listaDeUsuarios) {
 		this.listaDeUsuarios = listaDeUsuarios;
@@ -149,6 +162,9 @@ public class Grupo {
 		descripcion = formulario.tryGetDescripcion(descripcion);
 		cerrado = formulario.tryGetEstaCerrado(cerrado);
 		cantidadMax = formulario.tryGetCantidadMax(cantidadMax);
+		
+		if(cantidadMax < listaDeUsuarios.size())
+			throw new LimiteDeUsuariosFueraDeRango("La cantidad Maxima no puede ser menor al numero de miembros" ,id);
 	}
 
 	public void agregarUsuarioAlGrupo(Usuario usuarioAInsertar) {
@@ -175,7 +191,10 @@ public class Grupo {
 		this.esMateria = esMateria;
 	}
 
-
+	public void borrarUsuarioDelGrupo(Usuario usuarioBorrar) {
+		listaDeUsuarios.remove(usuarioBorrar);
+		usuarioBorrar.borrarGrupoDelUsuario(this);
+	}
 
 	@PreRemove
 	public void removerGruposDeUsuario() {

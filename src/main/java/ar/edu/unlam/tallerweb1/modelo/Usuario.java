@@ -20,6 +20,8 @@ public class Usuario {
 	private String rol;
 	private String nombre;
 	private Set<Grupo> listaDeGrupos;
+	private Long calificacion;
+	private Long cantidadDeCalificaciones;
 
 	public Usuario() {
 		this.listaDeGrupos = new HashSet<Grupo>();
@@ -103,4 +105,41 @@ public class Usuario {
 	public void agregarGrupo(Grupo grupo) {
 		listaDeGrupos.add(grupo);
 	}
+
+	public Long getCalificacion() {
+		return calificacion;
+	}
+
+	public void setCalificacion(Long calificacion) {
+		this.calificacion = calificacion;
+	}
+
+	public Long getCantidadDeCalificaciones() {
+		return cantidadDeCalificaciones;
+	}
+
+	public void setCantidadDeCalificaciones(Long cantidadDeCalificaciones) {
+		this.cantidadDeCalificaciones = cantidadDeCalificaciones;
+	}
+
+	public void borrarGrupoDelUsuario(Grupo grupo) {
+		listaDeGrupos.remove(grupo);
+	}
+
+	public int cantidadDeEstrellas(){
+		if (cantidadDeCalificaciones==0)
+			return 0;
+		int estrellas= (int)(calificacion/cantidadDeCalificaciones);
+		if (estrellas>0 && estrellas<=20)
+			return 1;
+		if (estrellas>21 && estrellas<=40)
+			return 2;
+		if (estrellas>41 && estrellas<=60)
+			return 3;
+		if (estrellas>61 && estrellas<=81)
+			return 4;
+		return 5;
+	}
+
+
 }

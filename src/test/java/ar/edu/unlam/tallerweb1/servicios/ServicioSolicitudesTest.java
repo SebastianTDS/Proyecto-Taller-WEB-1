@@ -95,6 +95,34 @@ public class ServicioSolicitudesTest {
 		thenSeLimpiaLaSolicitudDeLaBaseDeDatos(aprobada);
 	}
 	
+	@Test
+	public void testQueSePuedaInvitarUsuarioAGrupo () {
+		Long anfitrion = 1L;
+		Long grupo = 2L;
+		String correo = "pepe@gmail.com";
+		
+		whenInvitamosUsuarioAGrupo(anfitrion, correo, grupo);
+		
+		thenLaSolicitudSeEnvia(anfitrion, correo, grupo);
+	}
+	
+	private void thenLaSolicitudSeEnvia(Long anfitrion, String correo, Long grupo) {
+		verify(repoSolis, times(1)).cargarSolicitud(anyObject());
+		verify(repoGrupo, times(1)).getGrupoByID(grupo);
+		verify(repoUsuario, times(1)).getUsuarioByID(anfitrion);
+		verify(repoUsuario, times(1)).getUsuarioByEmail(correo);
+		
+	}
+
+	private void whenInvitamosUsuarioAGrupo(Long anfitrion, String correo, Long grupo) {
+		Grupo solicitante = givenGrupoConUsuario();
+		
+		when(repoGrupo.getGrupoByID(grupo)).thenReturn(solicitante);
+		when(repoUsuario.getUsuarioByID(anfitrion)).thenReturn(solicitante.getAdministrador());
+		when(repoUsuario.getUsuarioByEmail(correo)).thenReturn(new Usuario());
+		service.invitarUsuario(anfitrion, correo, grupo);
+	}
+
 	private void whenUnUsuarioSolicitaUnirseAGrupoDelQueYaFormaParte(Grupo solicitado) {
 		when(repoGrupo.getGrupoByID(solicitado.getId())).thenReturn(solicitado);
 		when(repoUsuario.getUsuarioByID(solicitado.getAdministrador().getId())).thenReturn(solicitado.getAdministrador());

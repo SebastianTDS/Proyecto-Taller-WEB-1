@@ -106,7 +106,9 @@ public class RepositorioGrupoTest extends SpringTest {
         Grupo losPicatecla3 = givenQueExisteUnGrupoConCarreraYMateria();
 
         givenQueGuardoVariosGruposEnElRepositorio(losPicatecla1, losPicatecla2, losPicatecla3);
-        List<Grupo> grupos = whenCuandoBuscoTodosLosGrupos();
+        Usuario visitante = givenUnUsuario();
+        
+        List<Grupo> grupos = whenCuandoBuscoTodosLosGrupos(visitante);
         thenVerificoTodosQueTodosLosGruposSeMuestren(grupos);
     }
 
@@ -248,8 +250,8 @@ public class RepositorioGrupoTest extends SpringTest {
         repositorio.guardarGrupo(losPicatecla1);
     }
 
-    private List<Grupo> whenCuandoBuscoTodosLosGrupos() {
-        return repositorio.buscarTodos();
+    private List<Grupo> whenCuandoBuscoTodosLosGrupos(Usuario visitante) {
+        return repositorio.buscarTodos(visitante);
     }
 
     private void givenQueGuardoVariosGruposEnElRepositorio(Grupo losPicatecla1, Grupo losPicatecla2, Grupo losPicatecla3) {

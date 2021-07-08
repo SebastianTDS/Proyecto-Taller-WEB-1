@@ -18,9 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -56,10 +54,11 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 	@Override
 	public void validarPermiso(Long idUsuario, Long idGrupo, Permiso permisoAValidar) {
 		Grupo objetivo = repoGrupo.getGrupoByID(idGrupo);
-		Usuario usuarioAValidar = repoUsuario.getUsuarioByID(idUsuario);
 
 		if (objetivo == null)
 			throw new GrupoInexistenteException("El grupo no existe");
+		
+		Usuario usuarioAValidar = repoUsuario.getUsuarioByID(idUsuario);
 
 		if (usuarioAValidar == null)
 			throw new UsuarioNoEncontradoException("El usuario no existe");
@@ -69,11 +68,6 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 
 		if (permisoAValidar == Permiso.MODIFICACION && !usuarioAValidar.equals(objetivo.getAdministrador()))
 			throw new UsuarioSinPermisosException("No tienes permiso para realizar esta operacion", idGrupo);
-	}
-
-	@Override
-	public List<Grupo> buscarGruposDeMateria() {
-		return repoGrupo.buscarGrupoMateria();
 	}
 
 	@Override
@@ -113,9 +107,7 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 
 	@Override
 	public List<Grupo> buscarTodosMisGrupos(Usuario usuarioSesion) {
-		HashSet<Grupo> grupos= new HashSet<>(repoGrupo.buscarTodosMisGrupos(usuarioSesion));
-		List<Grupo> grupoList=new ArrayList<>(grupos);
-		return grupoList;
+		return repoGrupo.buscarTodosMisGrupos(usuarioSesion);
 	}
 
 	@Override
@@ -141,10 +133,9 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 	}
 
 	@Override
-	public List<Grupo> buscarTodos() {
-		HashSet<Grupo> grupos= new HashSet<>(repoGrupo.buscarTodos());
-		List<Grupo> grupoList=new ArrayList<>(grupos);
-		return grupoList;
+
+	public List<Grupo> buscarTodos(Usuario logueado) {
+		return repoGrupo.buscarTodos(logueado);
 	}
 
 	@Override
@@ -158,9 +149,37 @@ public class ServicioGrupoImpl implements ServicioGrupo {
 	}
 
 	@Override
-	public List<Grupo> buscarGrupoPorDatos(DatosDeGrupo datosParaBuscarUnGrupo) {
-		return filtrarPorCupo(repoGrupo.buscarGrupoPorDatos(datosParaBuscarUnGrupo),
-				datosParaBuscarUnGrupo.getDisponibilidad());
+	public List<Grupo> buscarGrupoPorDatos(DatosDeGrupo filtros) {
+		return filtrarPorCupo(repoGrupo.buscarGrupoPorDatos(filtros),
+				filtros.getDisponibilidad());
+	}
+	
+	@Override
+	public List<Grupo> buscarForosMateria() {
+		return repoGrupo.buscarForos();
+	}
+	
+	@Override
+	public Grupo buscarForo(Long id) {
+		Grupo encontrado = repoGrupo.buscarForoMateria(id);
+
+		if (Check.isNull(encontrado))
+			throw new GrupoInexistenteException("Foro buscado no encontrado");
+		return encontrado;
+	}
+
+	@Override
+	public void borrarUsuarioDelGrupo(Long IDgrupo, Long IDusuario) {
+		Grupo grupoBorrar = repoGrupo.getGrupoByID(IDgrupo);
+		Usuario usuarioBorrar = repoUsuario.getUsuarioByID(IDusuario);
+
+		if (Check.isNull(grupoBorrar))
+			throw new GrupoInexistenteException("Imposible unirse a grupo inexistente");
+		if (!grupoBorrar.getListaDeUsuarios().contains(usuarioBorrar))
+			throw new UsuarioNoEncontradoException("Imposible Salirse de un grupo que no estoy");
+
+		grupoBorrar.borrarUsuarioDelGrupo(usuarioBorrar);
+		repoGrupo.actualizarGrupo(grupoBorrar);
 	}
 
 	private List<Grupo> filtrarPorCupo(List<Grupo> grupos, Disponibilidad disponibilidad) {

@@ -15,4 +15,5 @@ public interface ServicioNotificaciones {
 
 	Boolean hayPendientes(Long idUsuario);
 
+    void notificarRetiroDeGrupo(Long id, Usuario usuarioARetirar);
 }

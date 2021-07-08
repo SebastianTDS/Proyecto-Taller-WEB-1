@@ -38,11 +38,6 @@
                         </div>
                     </c:forEach>
                 </c:if>
-                <c:if test="${empty grupos}">
-                    <div>
-                        No se encontraron resultados!
-                    </div>
-                </c:if>
             </div>
         </div>
     </div>

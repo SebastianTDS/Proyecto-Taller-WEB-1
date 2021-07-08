@@ -38,14 +38,17 @@ public class ControladorGrupos {
     private final ServicioNotificaciones servicioNotificacion;
     private final ServicioMensajes servicioMensajes;
     private final ServicioArchivos servicioArchivos;
-
+    private final ServicioCalificacion servicioCalificacion;
 
     @Autowired
-    public ControladorGrupos(ServicioGrupo servicioGrupo, ServicioNotificaciones servicioNotificacion, ServicioMensajes servicioMensajes, ServicioArchivos serviceArchivos) {
+    public ControladorGrupos(ServicioGrupo servicioGrupo, ServicioNotificaciones servicioNotificacion,
+                             ServicioMensajes servicioMensajes,ServicioCalificacion servicioCaligicacion,ServicioArchivos serviceArchivos) {
         this.servicioGrupo = servicioGrupo;
         this.servicioArchivos = serviceArchivos;
         this.servicioNotificacion = servicioNotificacion;
         this.servicioMensajes = servicioMensajes;
+        this.servicioCalificacion=servicioCaligicacion;
+        this.servicioArchivos=serviceArchivos;
     }
 
     @RequestMapping("/{id}")
@@ -91,6 +94,7 @@ public class ControladorGrupos {
         ModelMap modelo = new ModelMap();
 
         servicioGrupo.validarPermiso(usuarioEnSesion.getId(), id, Permiso.MODIFICACION);
+        servicioCalificacion.crearCalificacionPorElinimarGrupo(id);
 
         servicioNotificacion.notificarEliminacionDeGrupo(id);
         servicioGrupo.eliminarGrupo(id);
@@ -99,33 +103,55 @@ public class ControladorGrupos {
     }
 
     @RequestMapping("/{id}/foro")
-    public ModelAndView perfilDeGrupoForo(@PathVariable Long id) {
-        Grupo buscado = servicioGrupo.buscarGrupoPorID(id);
+    public ModelAndView perfilDeGrupoForo(HttpServletRequest request, @PathVariable Long id) {
+    	validarSesion(request);
+    	
         ModelMap modelo = new ModelMap();
-        DatosDeMensaje mensaje = new DatosDeMensaje();
-
-        modelo.put("msj", mensaje);
-        modelo.put("grupo", buscado);
-        modelo.put("mensajes", servicioMensajes.buscarMensajesDeUnGrupo(id));
+        modelo.put("msj", new DatosDeMensaje());
+        modelo.put("grupo", servicioGrupo.buscarGrupoPorID(id));
+        modelo.put("mensajes",servicioMensajes.buscarMensajesDeUnGrupo(id));
 
         return new ModelAndView("vistaGrupo", modelo);
     }
 
     @RequestMapping("/{id}/foro/enviar-msj")
-    public ModelAndView insertarMensajeEnElForo(HttpServletRequest request, @ModelAttribute("msj") DatosDeMensaje datosDeMensaje) {
-        Usuario usuarioLogueado = (Usuario) request.getSession().getAttribute("USUARIO");
+    public ModelAndView insertarMensajeEnElForo(HttpServletRequest request,@ModelAttribute("msj") DatosDeMensaje datosDeMensaje) {
+        Usuario usuarioLogueado = validarSesion(request);
         servicioMensajes.guardarUnMensaje(usuarioLogueado.getId(), datosDeMensaje);
         return new ModelAndView("redirect:/grupos/" + datosDeMensaje.getId() + "/foro");
-
     }
 
     @RequestMapping("/{id}/miembros")
-    public ModelAndView mostrarMiembrosDelGrupo(@PathVariable Long id) {
-        Grupo buscado = servicioGrupo.buscarGrupoPorID(id);
+    public ModelAndView mostrarMiembrosDelGrupo(HttpServletRequest request, @PathVariable Long id) {
+    	validarSesion(request);
+    	
         ModelMap modelo = new ModelMap();
-        modelo.put("grupo", buscado);
+        modelo.put("grupo", servicioGrupo.buscarGrupoPorID(id));
         modelo.put("integrantes", true);
         return new ModelAndView("vistaGrupo", modelo);
+    }
+  
+    @RequestMapping(path = "/salir", method = RequestMethod.POST)
+    public ModelAndView salirDelGrupo(@RequestParam Long id, HttpServletRequest request) {
+        Usuario usuarioEnSesion = validarSesion(request);
+        ModelMap modelo = new ModelMap();
+
+        servicioNotificacion.notificarRetiroDeGrupo(id,usuarioEnSesion);
+        servicioCalificacion.crearCalificacion(id,usuarioEnSesion.getId());
+        servicioGrupo.borrarUsuarioDelGrupo(id,usuarioEnSesion.getId());
+
+        modelo.put("mensaje", "Se ha salido con exito!");
+        return new ModelAndView("redirect:/ir-a-home", modelo);
+    }
+  
+    @RequestMapping("/{id}/calendario")
+    public ModelAndView verCalendario(HttpServletRequest request, @PathVariable Long id) {
+      validarSesion(request);
+
+      ModelMap modelo = new ModelMap();
+
+      modelo.put("grupo", servicioGrupo.buscarGrupoPorID(id));
+      return new ModelAndView("vistaCalendario", modelo);
     }
 
     private Usuario validarSesion(HttpServletRequest request) {

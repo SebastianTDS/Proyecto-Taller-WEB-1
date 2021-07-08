@@ -39,10 +39,12 @@
                 </div>
 
                 <ul class="opciones">
-                    <li><a class="text-white" href="grupos/${grupo.getId()}">Informaci�n General</a></li>
+                    <li><a class="text-white" href="grupos/${grupo.getId()}">Información General</a></li>
                     <li><a class="text-white" href="grupos/${grupo.getId()}/miembros">Miembros del grupo</a></li>
+
                     <li><a class="text-white" href="grupos/${grupo.getId()}/archivos">Archivos</a></li>
-                    <li><a class="text-white" href="#">Calendario</a></li>
+                    <li><a class="text-white" href="grupos/${grupo.getId()}/calendario">Calendario</a></li>
+
                     <li><a class="text-white" href="grupos/${grupo.getId()}/foro">Foro</a></li>
                 </ul>
 
@@ -57,7 +59,13 @@
             <jsp:include page="/templates/perfilInfo.jsp"></jsp:include>
         </c:if>
         <c:if test="${not empty msj }">
-            <jsp:include page="/templates/perfilForo.jsp"></jsp:include>
+        	<jsp:include page="/templates/perfilForo.jsp"></jsp:include>
+        	<form:form action="grupos/${grupo.getId()}/foro/enviar-msj" method="POST" id="formulario" modelAttribute="msj">
+				<input type="hidden" name="id" id="id" value="${grupo.getId()}">
+			    <div class="col-sm-10">
+			        <textarea name="mensaje" id="mensaje" rows="10" class="form-control container-fluid" style="display: none"></textarea>
+			    </div>
+			</form:form>
         </c:if>
         <c:if test="${not empty integrantes }">
             <jsp:include page="/templates/miembros.jsp"></jsp:include>

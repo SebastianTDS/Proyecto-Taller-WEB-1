@@ -6,19 +6,26 @@ import java.util.TreeSet;
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.dto.DatosDeMensaje;
 import ar.edu.unlam.tallerweb1.modelo.*;
+import ar.edu.unlam.tallerweb1.modelo.Carrera;
+import ar.edu.unlam.tallerweb1.modelo.Grupo;
+import ar.edu.unlam.tallerweb1.modelo.Materia;
+import ar.edu.unlam.tallerweb1.modelo.Usuario;
+
 import ar.edu.unlam.tallerweb1.util.enums.Permiso;
 
 public interface ServicioGrupo {
 
     Grupo crearGrupo(DatosDeGrupo grupoNuevo);
 
-    List<Grupo> buscarTodos();
+    List<Grupo> buscarTodos(Usuario logueado);
+    
+    List<Grupo> buscarForosMateria();
 
     List<Carrera> buscarTodasLasCarreras();
 
     List<Materia> buscarTodasLasMaterias();
 
-    List<Grupo> buscarGrupoPorDatos(DatosDeGrupo datosParaBuscarUnGrupo);
+    List<Grupo> buscarGrupoPorDatos(DatosDeGrupo filtros);
     
     Grupo buscarGrupoPorID(Long idBuscado);
 
@@ -32,6 +39,8 @@ public interface ServicioGrupo {
 
 	void validarPermiso(Long idUsuario, Long idGrupo, Permiso permisoAValidar);
 
-    List<Grupo> buscarGruposDeMateria();
+	    Grupo buscarForo(Long id);
+
+    void borrarUsuarioDelGrupo(Long IDgrupo, Long IDusuario);
 
 }

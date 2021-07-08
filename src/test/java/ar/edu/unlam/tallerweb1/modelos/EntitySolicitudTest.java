@@ -7,10 +7,13 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.unlam.tallerweb1.SpringTest;
+import ar.edu.unlam.tallerweb1.modelo.Carrera;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
+import ar.edu.unlam.tallerweb1.modelo.Materia;
 import ar.edu.unlam.tallerweb1.modelo.Solicitud;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.util.enums.TipoSolicitud;
+import ar.edu.unlam.tallerweb1.util.enums.Turno;
 
 public class EntitySolicitudTest extends SpringTest{
 
@@ -19,22 +22,45 @@ public class EntitySolicitudTest extends SpringTest{
 	@Rollback
 	public void testQueSePuedaPersistirUnaSolicitud () {
 		Usuario usuario = givenUnUsuario();
-		Grupo grupo = givenUnGrupo();
+		Grupo grupo = givenUnGrupo(usuario);
 		Solicitud solicitud = whenPersistimosSolicitud(usuario, grupo);
 		
 		thenLaEncontramosEnLaDB(solicitud);
 	}
 
-	private Grupo givenUnGrupo() {
+	private Grupo givenUnGrupo(Usuario admin) {
 		Grupo nuevoGrupo = new Grupo();
 		
 		nuevoGrupo.setNombre("Grupo A");
+		nuevoGrupo.setAdministrador(admin);
+		nuevoGrupo.setCantidadMax(2);
+		nuevoGrupo.setCarrera(givenUnaCarrera());
+		nuevoGrupo.setMateria(givenUnaMateria());
+		nuevoGrupo.setCerrado(false);
+		nuevoGrupo.setTurno(Turno.MANIANA);
+		session().save(nuevoGrupo);
 		
 		return nuevoGrupo;
 	}
 
+	private Materia givenUnaMateria() {
+		Materia materia = new Materia();
+		
+		session().save(materia);
+		
+		return materia;
+	}
+
+	private Carrera givenUnaCarrera() {
+		Carrera carrera = new Carrera();
+		
+		session().save(carrera);
+		
+		return carrera;
+	}
+
 	private void thenLaEncontramosEnLaDB(Solicitud solicitud) {
-		Solicitud encontrada = session().get(Solicitud.class, 1L);
+		Solicitud encontrada = session().get(Solicitud.class, solicitud.getId());
 		assertThat(encontrada).isNotNull();
 		assertThat(encontrada.getDestino()).isNotNull();
 		assertThat(encontrada.getDestino().getEmail()).isEqualTo("pepe@hotmail.com");

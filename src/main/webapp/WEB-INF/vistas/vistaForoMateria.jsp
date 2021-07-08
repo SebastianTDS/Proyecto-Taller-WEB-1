@@ -30,7 +30,13 @@
                 </div>
             </div>
         </div>
-            <jsp:include page="/templates/perfilForo.jsp"></jsp:include>
+        <jsp:include page="/templates/perfilForo.jsp"></jsp:include>
+        <form:form action="ingresar-a-foro/${grupo.getId()}/enviar-msj" method="POST" id="formulario" modelAttribute="msj">
+			<input type="hidden" name="id" id="id" value="${grupo.getId()}">
+		    <div class="col-sm-10">
+		        <textarea name="mensaje" id="mensaje" rows="10" class="form-control container-fluid" style="display: none"></textarea>
+		    </div>
+		</form:form>
     </div>
 </main>
 <jsp:include page="/templates/footer.jsp"></jsp:include>
