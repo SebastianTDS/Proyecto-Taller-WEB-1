@@ -92,4 +92,28 @@ public class ControladorExcepciones {
 		model.put("error",e.getMessage());
 		return new ModelAndView("redirect:/grupos/",model);
 	}
+
+	@ExceptionHandler(value = UsuarioExistenteException.class)
+	public ModelAndView usuarioExistenteEnRegistrar(UsuarioExistenteException e) {
+		ModelMap model = new ModelMap();
+		model.put("error", e.getMessage());
+
+		return new ModelAndView("redirect:/ir-a-registro" , model);
+	}
+
+	@ExceptionHandler(value = NoCoincidenContraseniasException.class)
+	public ModelAndView noCoincidenContraseniasException(NoCoincidenContraseniasException e) {
+		ModelMap model = new ModelMap();
+		model.put("error", e.getMessage());
+
+		return new ModelAndView("redirect:/ir-a-registro" , model);
+	}
+
+	@ExceptionHandler(value = CampoVacioException.class)
+	public ModelAndView campoVacioException(CampoVacioException e) {
+		ModelMap model = new ModelMap();
+		model.put("error", e.getMessage());
+
+		return new ModelAndView("redirect:/ir-a-registro" , model);
+	}
 }
