@@ -10,6 +10,7 @@
 	<link rel="stylesheet" href="css/main.css" type="text/CSS">
 	<link rel="stylesheet" href="css/main.min.css" type="text/CSS">
 	<script src="js/main.min.js"></script>
+	<script src="js/bootstrap-native.min.js"></script>
 	<script src="js/es.js"></script>
 	<script src="js/configCalendar.js"></script>
 </head>
@@ -48,7 +49,7 @@
 								General</a></li>
 						<li><a class="text-white" href="grupos/${grupo.getId()}/miembros">Miembros del grupo</a></li>
 						<li><a class="text-white" href="#">Archivos</a></li>
-						<li><a class="text-white" href="#">Calendario</a></li>
+						<li><a class="text-white" href="grupos/${grupo.getId()}/calendario">Calendario</a></li>
 						<li><a class="text-white" href="grupos/${grupo.getId()}/foro">Foro</a></li>
 					</ul>
 
@@ -59,6 +60,37 @@
 				<div id="calendario" class="m-4"></div>
 				<div id="cargando">Cargando Eventos</div>
 				<div id="error" style="display: none;">La api no esta corriendo</div>
+				<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h3>Nuevo Evento</h3>
+							</div>
+							<div class="modal-body">
+								<form action="#" method="post" id="nuevoEvento">
+									<div class="d-flex align-items-center">
+										<label for="start" class="form-label mb-0 me-2">Inicio Evento: </label>
+										<input type="datetime-local" class="form-control" name="start" id="start" required>
+									</div>
+									<div class="d-flex align-items-center">
+										<label for="end" class="form-label mb-0 me-2">Cierre Evento: </label>
+										<input type="datetime-local" class="form-control" name="end" id="end" required>
+									</div>
+									<div class="d-flex align-items-center">
+										<label for="title" class="form-label mb-0 me-2">Titulo: </label>
+										<input type="text" class="form-control" name="title" id="title" required>
+									</div>
+								</form>
+							</div>
+							<div class="modal-footer">
+								<div class="text-end">
+									<button type="submit" class="btn btn-outline-success" form="nuevoEvento">Cargar Evento</button>
+									<button id="cerrarModal" class="btn btn-outline-danger">Cerrar</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</main>

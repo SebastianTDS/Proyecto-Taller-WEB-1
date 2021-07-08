@@ -1,5 +1,7 @@
 package ar.edu.unlam.tallerweb1.dto;
 
+import java.time.LocalDateTime;
+
 import ar.edu.unlam.tallerweb1.modelo.Evento;
 
 public class EventoDTO {
@@ -50,6 +52,16 @@ public class EventoDTO {
 		dto.setEnd(evento.getFin().toString());
 		
 		return dto;
+	}
+
+	public Evento toEvento() {
+		Evento evento = new Evento();
+		
+		evento.setTitulo(this.title);
+		evento.setInicio(LocalDateTime.parse(this.start));
+		evento.setFin(LocalDateTime.parse(this.end));
+		
+		return evento;
 	}
 
 }

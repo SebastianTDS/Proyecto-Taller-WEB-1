@@ -27,4 +27,9 @@ public class RepositorioEventosImpl implements RepositorioEventos {
 				.list();
 	}
 
+	@Override
+	public void guardarEvento(Evento nuevoEvento) {
+		sessionFactory.getCurrentSession().save(nuevoEvento);
+	}
+
 }
