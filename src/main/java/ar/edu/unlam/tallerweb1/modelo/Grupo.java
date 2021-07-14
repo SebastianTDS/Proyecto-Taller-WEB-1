@@ -21,7 +21,7 @@ public class Grupo {
 	private Boolean esMateria;
 
 	private Turno turno;
-
+	private List<Archivo> archivos;
 	private Usuario administrador;
 	private Carrera carrera;
 	private Materia materia;
@@ -31,6 +31,7 @@ public class Grupo {
 
 	public Grupo() {
 		this.listaDeUsuarios = new HashSet<>();
+		this.archivos = new ArrayList<>();
 	}
 
 
@@ -55,6 +56,14 @@ public class Grupo {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "grupo" )
+	public List<Archivo> getArchivos() {
+		return archivos;
+	}
+
+	public void setArchivos(List<Archivo> archivos) {
+		this.archivos = archivos;
 	}
 
 	@ManyToOne(optional = false)

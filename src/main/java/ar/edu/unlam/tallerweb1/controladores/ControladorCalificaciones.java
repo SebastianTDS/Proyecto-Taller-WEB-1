@@ -45,7 +45,7 @@ public class ControladorCalificaciones {
 
 		servicioCalificacion.calificar(usuarioEnSesion.getId(),idCalificacion,calificaion);
 
-		modelo.put("mensaje", "Calificaion realizada");
+		modelo.put("mensaje", "Calificacion realizada");
 		
 		return new ModelAndView("redirect:/calificaciones", modelo);
 	}

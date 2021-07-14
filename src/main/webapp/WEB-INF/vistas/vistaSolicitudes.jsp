@@ -45,7 +45,15 @@
 	                        <div class="d-flex w-100 justify-content-between align-items-center">
 	                            <small class="text-start">${notificacion.periodoTranscurrido() } > </small>
 	                            <span class="vertical-middle">${notificacion.mensaje() }</span>
-	                            <div>
+                               <div>
+                                <c:if test="${notificacion.origen.cantidadDeEstrellas().size()==0}">
+                                    <span class="vertical-middle">Sin calificaciones</span>
+                                </c:if>
+                                <c:forEach items="${notificacion.origen.cantidadDeEstrellas()}" var="calificacion">
+                                    <img src="img/estrellaEncendida.png" class="" style="width: 30px; height: 30px">
+                                </c:forEach>
+                            </div>
+                                <div>
 		                            <div>
 		                            	<button type="submit" name="idSolicitudAceptada" form="aceptarSolicitud" value="${notificacion.getId()}" class="btn btn-outline-success">Aceptar</button>
 		                            	<button type="submit" name="idSolicitudRechazada" form="rechazarSolicitud" value="${notificacion.getId()}" class="btn btn-outline-danger">Rechazar</button>

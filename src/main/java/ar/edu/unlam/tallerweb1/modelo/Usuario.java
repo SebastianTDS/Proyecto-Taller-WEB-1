@@ -1,6 +1,8 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -126,19 +128,39 @@ public class Usuario {
 		listaDeGrupos.remove(grupo);
 	}
 
-	public int cantidadDeEstrellas(){
-		if (cantidadDeCalificaciones==0)
-			return 0;
-		int estrellas= (int)(calificacion/cantidadDeCalificaciones);
-		if (estrellas>0 && estrellas<=20)
-			return 1;
-		if (estrellas>21 && estrellas<=40)
-			return 2;
-		if (estrellas>41 && estrellas<=60)
-			return 3;
-		if (estrellas>61 && estrellas<=81)
-			return 4;
-		return 5;
+	public List<Integer> cantidadDeEstrellas(){
+		List<Integer> integers=new ArrayList<>();
+		int estrellas=0;
+
+		if (cantidadDeCalificaciones!=0)
+		estrellas= (int)(calificacion/cantidadDeCalificaciones);
+
+		if (estrellas>0 && estrellas<=20){
+			integers.add(1);
+		}
+		if (estrellas>21 && estrellas<=40){
+			integers.add(1);
+			integers.add(2);
+		}
+		if (estrellas>41 && estrellas<=60){
+			integers.add(1);
+			integers.add(2);
+			integers.add(3);
+		}
+		if (estrellas>61 && estrellas<=80) {
+			integers.add(1);
+			integers.add(2);
+			integers.add(2);
+			integers.add(3);
+		}
+		if (estrellas>81) {
+			integers.add(1);
+			integers.add(2);
+			integers.add(3);
+			integers.add(4);
+			integers.add(5);
+		}
+		return integers;
 	}
 
 
