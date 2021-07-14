@@ -55,7 +55,7 @@ public class ControladorCalificacionesTest extends HttpSessionTest{
 
 	private void thenLaCalificaionSeRealiza(ModelAndView vista,Long idCalificacion,Long calificacion) {
 		assertThat(vista.getViewName()).isEqualTo("redirect:/calificaciones");
-		assertThat(vista.getModelMap().get("mensaje")).isEqualTo( "Calificaion realizada");
+		assertThat(vista.getModelMap().get("mensaje")).isEqualTo( "Calificacion realizada");
 		verify(service, times(1)).calificar(1L,idCalificacion,calificacion);
 	}
 
