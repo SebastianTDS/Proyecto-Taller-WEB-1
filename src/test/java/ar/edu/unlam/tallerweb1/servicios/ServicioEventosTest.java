@@ -26,53 +26,53 @@ public class ServicioEventosTest {
 	public final RepositorioEventos repoEventos = mock(RepositorioEventosImpl.class);
 	public final RepositorioGrupo repoGrupo = mock(RepositorioGrupoImpl.class);
 	public final ServicioEventos service = new ServicioEventosImpl(repoEventos, repoGrupo);
-	
+
 	@Test
 	public void testQueSePuedaObtenerLosEventosEnDTO () {
 		Long idGrupo = 1L;
-				
+
 		List<EventoDTO> eventos = whenSolicitoEventosDeUnGrupo(idGrupo);
-		
+
 		thenObtengoLaListaDeEventos(eventos);
 	}
-	
+
 	@Test
 	public void testQueSePuedaGuardarUnEvento () {
 		Long idGrupo = 1L;
-		EventoDTO nuevoEvento = givenEventoDTO("2021-07-09T10:00:00", "2021-07-09T16:00:00", "Almuerzo");
-		
+		EventoDTO nuevoEvento = givenEventoDTO("2021-07-09T10:00:00", "2021-08-09T16:00:00", "Almuerzo");
+
 		whenQuieroCargarEvento(nuevoEvento, idGrupo);
-		
+
 		thenElEventoSeGuarda(nuevoEvento, idGrupo);
 	}
-	
+
 	@Test
 	public void testQueNoSeGuardeUnEventoSinGrupo () {
 		Long idGrupo = 1L;
-		EventoDTO nuevoEvento = givenEventoDTO("2021-07-09T10:00:00", "2021-07-09T16:00:00", "Almuerzo");
-		
+		EventoDTO nuevoEvento = givenEventoDTO("2021-07-09T10:00:00", "2021-08-09T16:00:00", "Almuerzo");
+
 		whenQuieroCargarEventoConGrupoInvalido(nuevoEvento, idGrupo);
-		
+
 		thenElEventoNoSeGuarda(nuevoEvento, idGrupo);
 	}
-	
+
 	@Test
 	public void testQueNoSeGuardeUnEventoConFechasIncoherentes () {
 		Long idGrupo = 1L;
 		EventoDTO nuevoEvento = givenEventoDTO("2021-07-09T19:00:00", "2021-07-09T12:00:00", "Almuerzo");
-		
+
 		whenQuieroCargarEvento(nuevoEvento, idGrupo);
-		
+
 		thenElEventoNoSeGuarda(nuevoEvento, idGrupo);
 	}
-	
+
 	@Test
 	public void testQueNoSePuedaGuardarUnEventoPosteriorALaFecha () {
 		Long idGrupo = 1L;
 		EventoDTO nuevoEvento = givenEventoDTO("2021-07-06T19:00:00", LocalDateTime.now().toString(), "Almuerzo");
-		
+
 		whenQuieroCargarEvento(nuevoEvento, idGrupo);
-		
+
 		thenElEventoNoSeGuarda(nuevoEvento, idGrupo);
 	}
 
@@ -96,11 +96,11 @@ public class ServicioEventosTest {
 
 	private EventoDTO givenEventoDTO(String inicio, String fin, String titulo) {
 		EventoDTO nuevoEvento = new EventoDTO();
-		
+
 		nuevoEvento.setStart(inicio);
 		nuevoEvento.setEnd(fin);
 		nuevoEvento.setTitle(titulo);
-		
+
 		return nuevoEvento;
 	}
 
@@ -108,7 +108,7 @@ public class ServicioEventosTest {
 		when(repoEventos.buscarEventosPor(idGrupo)).thenReturn(givenListaDeEventos());
 		return service.buscarEventosPor(idGrupo);
 	}
-	
+
 	private void thenObtengoLaListaDeEventos(List<EventoDTO> eventos) {
 		assertThat(eventos).isNotNull();
 		assertThat(eventos).hasSize(3);
@@ -116,22 +116,22 @@ public class ServicioEventosTest {
 
 	private List<Evento> givenListaDeEventos() {
 		List<Evento> eventos = new ArrayList<Evento>();
-		
+
 		eventos.add(givenEvento(1L, "Reunion", "2021-07-07T10:00:00", "2021-07-07T12:00:00"));
 		eventos.add(givenEvento(2L, "Almuerzo", "2021-07-08T10:00:00", "2021-07-08T12:00:00"));
 		eventos.add(givenEvento(3L, "Presentacion", "2021-07-09T10:00:00", "2021-07-09T12:00:00"));
-		
+
 		return eventos;
 	}
 
 	private Evento givenEvento(Long id, String titulo, String inicio, String fin) {
 		Evento evento = new Evento();
-		
+
 		evento.setId(id);
 		evento.setTitulo(titulo);
 		evento.setInicio(LocalDateTime.parse(inicio));
 		evento.setFin(LocalDateTime.parse(fin));
-		
+
 		return evento;
 	}
 }
