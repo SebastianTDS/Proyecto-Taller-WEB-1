@@ -1,5 +1,7 @@
 package ar.edu.unlam.tallerweb1.util.auxClass;
 
+import java.time.LocalDateTime;
+
 public class Check {
 	
 	public static Boolean empty(String str) {
@@ -17,4 +19,10 @@ public class Check {
 	public static Boolean outOfLength(String descripcion, Integer maxLength) {
 		return descripcion.length() > maxLength;
 	}
+	
+	public static Boolean rangoFechasPositivo(String inicio, String fin) {
+		return LocalDateTime.parse(inicio)
+				.isBefore(LocalDateTime.parse(fin));
+	}
+	
 }

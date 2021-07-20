@@ -13,6 +13,7 @@ import ar.edu.unlam.tallerweb1.modelo.Evento;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioEventos;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioGrupo;
+import ar.edu.unlam.tallerweb1.util.auxClass.Check;
 
 @Service
 @Transactional
@@ -43,13 +44,13 @@ public class ServicioEventosImpl implements ServicioEventos{
 		if(objetivo == null)
 			return false;
 		
-		if(LocalDateTime.parse(nuevoEvento.getEnd()).isBefore(LocalDateTime.parse(nuevoEvento.getStart())))
+		if(!Check.rangoFechasPositivo(nuevoEvento.getStart(), nuevoEvento.getEnd()))
 			return false;
 		
-		if(LocalDateTime.now().isAfter(LocalDateTime.parse(nuevoEvento.getEnd())) || LocalDateTime.now().isEqual(LocalDateTime.parse(nuevoEvento.getEnd())))
+		if(!Check.rangoFechasPositivo(LocalDateTime.now().toString(), nuevoEvento.getEnd()))
 			return false;
 		
-		Evento evento = nuevoEvento.toEvento();
+		Evento evento = new Evento(nuevoEvento);
 		evento.setGrupo(objetivo);
 		
 		repoEventos.guardarEvento(evento);

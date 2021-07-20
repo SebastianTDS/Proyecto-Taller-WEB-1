@@ -39,7 +39,7 @@ public class ServicioEventosTest {
 	@Test
 	public void testQueSePuedaGuardarUnEvento () {
 		Long idGrupo = 1L;
-		EventoDTO nuevoEvento = givenEventoDTO("2021-07-09T10:00:00", "2021-08-09T16:00:00", "Almuerzo");
+		EventoDTO nuevoEvento = givenEventoDTO("2022-07-09T10:00:00", "2022-08-09T16:00:00", "Almuerzo");
 
 		whenQuieroCargarEvento(nuevoEvento, idGrupo);
 
@@ -49,7 +49,7 @@ public class ServicioEventosTest {
 	@Test
 	public void testQueNoSeGuardeUnEventoSinGrupo () {
 		Long idGrupo = 1L;
-		EventoDTO nuevoEvento = givenEventoDTO("2021-07-09T10:00:00", "2021-08-09T16:00:00", "Almuerzo");
+		EventoDTO nuevoEvento = givenEventoDTO("2022-07-09T10:00:00", "2022-08-09T16:00:00", "Almuerzo");
 
 		whenQuieroCargarEventoConGrupoInvalido(nuevoEvento, idGrupo);
 
@@ -59,7 +59,7 @@ public class ServicioEventosTest {
 	@Test
 	public void testQueNoSeGuardeUnEventoConFechasIncoherentes () {
 		Long idGrupo = 1L;
-		EventoDTO nuevoEvento = givenEventoDTO("2021-07-09T19:00:00", "2021-07-09T12:00:00", "Almuerzo");
+		EventoDTO nuevoEvento = givenEventoDTO("2022-07-09T19:00:00", "2022-07-09T12:00:00", "Almuerzo");
 
 		whenQuieroCargarEvento(nuevoEvento, idGrupo);
 
