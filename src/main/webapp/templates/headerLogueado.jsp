@@ -28,7 +28,7 @@
                 	</div>
 	                <div>
 		                <a href="perfil/ir-a-mis-grupos" class="me-2 link-light">Mis Grupos</a>
-		                <a href="cerrar-sesion" class="link-light">Salir</a>
+		                <a href="cerrar-sesion" class="link-light">Salir <i class="fas fa-sign-out-alt"></i></a>
 	                </div>
                 </div>
                 <div class="pt-2 ms-2">

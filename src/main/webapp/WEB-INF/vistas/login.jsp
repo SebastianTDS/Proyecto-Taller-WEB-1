@@ -31,14 +31,14 @@
                                 <div class="input-box">
                                     <span class="details">Usuario</span>
                                     <form:input path="email" id="email" type="text"
-                                                class="form-control"/>
+                                                class="form-control" placeholder="Email"/>
                                 </div>
                             </div>
                             <div class="my-3">
                                 <div class="input-box">
                                     <span class="details">Password</span>
                                     <form:input path="clave" id="clave" type="password"
-                                                class="form-control"/>
+                                                class="form-control" placeholder="Password"/>
                                 </div>
                             </div>
                             <div class="text-end">

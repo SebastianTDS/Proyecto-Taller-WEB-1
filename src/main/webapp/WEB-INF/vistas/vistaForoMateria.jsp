@@ -23,7 +23,7 @@
             </div>
 
             <div class="text-center text-white mb-5">
-                <h3 class="mb-3">${grupo.materia.nombre}</h3>
+                <h3 class="mb-3"> ${grupo.materia.nombre}</h3>
                 <div class="row justify-content-center align-items-center">
                     <div class="col-12 col-md-6 text-md-end p-0">
                     </div>
