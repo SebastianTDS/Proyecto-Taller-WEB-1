@@ -16,10 +16,10 @@
 
         <div class="d-flex flex-wrap justify-content-center row my-5 mx-2">
 
-			<c:if test="${error != null}">
-	        	<div class="col-12 alert alert-danger" role="alert">
-					${error}
-				</div>
+          <c:if test="${error != null}">
+              <div class="col-12 alert alert-danger" role="alert">
+                  ${error}
+              </div>
 	        </c:if>
 
             <div class="col-12 col-md-6">
@@ -35,32 +35,32 @@
                                 <div class="input-box">
                                     <span class="details">Nombre de usuario</span>
                                     <form:input path="nombre" id="nombre" type="text" class="form-control"
-                                                placeholder="nombre"/>
+                                                placeholder="Nombre y Apellido"/>
                                 </div>
                             </div>
                             <div class="my-3">
                                 <div class="input-box">
                                     <span class="details">Email</span>
                                     <form:input path="email" type="email" id="email" class="form-control"
-                                                placeholder="email"/>
+                                                placeholder="Email"/>
                                 </div>
                             </div>
                             <div class="my-3">
                                 <div class="input-box">
                                     <span class="details">Clave</span>
                                     <form:input path="clave" id="password" type="password" class="form-control"
-                                                placeholder="clave"/>
+                                                placeholder="Password"/>
                                 </div>
                             </div>
                             <div class="my-3">
                                 <div class="input-box">
                                     <span class="details">Repetir clave</span>
                                     <form:input path="repiteClave" type="password" id="password" class="form-control"
-                                                placeholder="repetir clave"/>
+                                                placeholder="Repita el Password"/>
                                 </div>
                             </div>
                             <div class="text-end">
-                                <button class="btn btn-lg btn-primary btn-block mt-2 mb-3" Type="Submit">Registrarte
+                                <button class="btn btn-outline-primary btn-block mt-2 mb-3" Type="Submit">Registrarte
                                 </button>
                             </div>
                         </form:form>

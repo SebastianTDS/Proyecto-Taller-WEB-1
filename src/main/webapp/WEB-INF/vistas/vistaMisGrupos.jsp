@@ -14,9 +14,7 @@
     <main class="container-fluid">
         <div id="main" class="row text-white">
             <div class="info col-12 col-sm-3 bg-dark p-0">
-                <div class="mt-3 me-3 text-white text-end">
-                    <button class="btn btn-outline-gray rounded">></button>
-                </div>
+
 
                 <div class="perfil mx-auto mb-2 ">
                     <img class="w-100 h-100 p-1" src="./img/placeholder.png">
@@ -27,7 +25,7 @@
                 </div>
 
                 <ul class="opciones">
-                    <li><a class="text-white" href="perfil">Información General</a></li>
+                    <li><a class="text-white" href="perfil">Informaciï¿½n General</a></li>
                     <li><a class="text-white" href="perfil/ir-a-mis-grupos">Mis Grupos</a></li>
                     <li><a class="text-white" href="perfil/notificaciones">Notificaciones</a></li>
                     <li><a class="text-white" href="solicitudes">Solicitudes</a></li>
@@ -44,8 +42,8 @@
 	                        <div class="bg-light text-dark col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 m-3 d-flex flex-wrap align-content-between hover-shadow bg-body rounded">
 	                            <div class="card-body container-fluid">
 	                                <h5 class="card-title text-center">${miGrupo.nombre}</h5>
-	                                <p class="card-text">${miGrupo.carrera.nombre}</p>
-	                                <p class="card-text">${miGrupo.materia.nombre}</p>
+                                    <p class="card-text"><i class="fas fa-university" data-bs-toggle="tooltip" data-bs-placement="top" title="Carrera"></i> ${miGrupo.carrera.nombre}</p>
+                                    <p class="card-text"> <i class="fas fa-book" data-bs-toggle="tooltip" data-bs-placement="top" title="Materia"></i> ${miGrupo.materia.nombre}</p>
 	                                    <div class="text-center container m-1">
 	                                        <img src="img/Logosolo.ico" style="width: 100px">
 	                                    </div>
@@ -68,6 +66,12 @@
     </main>
     <!-- Fin Contenido Real -->
     <jsp:include page="/templates/footer.jsp"></jsp:include>
+    <script>
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    </script>
 </body>
 
 </html>

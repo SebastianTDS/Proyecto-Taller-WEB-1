@@ -25,39 +25,80 @@
 	</form:form>
 </div>
 
-<table class="table">
-	<thead>
-		<tr>
-			<th scope="col">Nombre</th>
-			<th scope="col">Subido por</th>
-			<th scope="col">Fecha</th>
-			<th scope="col">Peso</th>
-			<th scope="col">Tipo</th>
-			<th scope="col">Acciones</th>
-		</tr>
-	</thead>
-	<tbody>
-		<c:forEach items="${archivos}" var="archivo">
-			<tr>
-				<td>${archivo.nombre}</td>
-				<td>${archivo.usuario.nombre}</td>
-				<td>${archivo.fecha}</td>
-				<td>${archivo.pesoArchivo}Mb</td>
-				<td>.${archivo.extension}</td>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">Subido por</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Peso</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach items="${archivos}" var="archivo">
+            <tr>
+                <td>${archivo.nombre}</td>
+                <td>${archivo.usuario.nombre}</td>
+                <td>${archivo.fecha}</td>
+                <td>${archivo.pesoArchivo} Mb</td>
+                <c:set var="val" value="0"/>
+                <c:if test="${archivo.extension=='mp3'}">
+                    <td><img src="https://img.icons8.com/emoji/48/000000/musical-note-emoji.png"/></td>
+                    <c:set var="val" value="1"/>
+                </c:if>
+                <c:if test="${archivo.extension=='mp4'}">
+                    <td><img src="https://img.icons8.com/fluent/48/000000/video.png"/></td>
+                    <c:set var="val" value="1"/>
+                </c:if>
+                <c:if test="${archivo.extension=='docx'}">
+                    <td><img src="https://img.icons8.com/fluent/48/000000/microsoft-word-2019.png"/></td>
+                    <c:set var="val" value="1"/>
+                </c:if>
+                <c:if test="${archivo.extension=='xlsx'}">
+                    <td><img src="https://img.icons8.com/fluent/48/000000/microsoft-excel-2019.png"/></td>
+                    <c:set var="val" value="1"/>
+                </c:if>
+                <c:if test="${archivo.extension=='pdf'}">
+                    <td><img src="https://img.icons8.com/color/48/000000/pdf-2--v2.png"/></td>
+                    <c:set var="val" value="1"/>
+                </c:if>
+                <c:if test="${archivo.extension=='png' || archivo.extension=='jpg'||archivo.extension=='PNG' }">
+                    <td><img src="https://img.icons8.com/office/40/000000/picture.png"/></td>
+                    <c:set var="val" value="1"/>
+                </c:if>
+                <c:if test="${archivo.extension=='txt'}">
+                    <td><img src="https://img.icons8.com/ultraviolet/40/000000/txt.png"/></td>
+                    <c:set var="val" value="1"/>
+                </c:if>
+                <c:if test="${archivo.extension=='rar' || archivo.extension=='zip'}">
+                    <td><img src="https://img.icons8.com/fluent/48/000000/winrar.png"/></td>
+                    <c:set var="val" value="1"/>
+                </c:if>
+                <c:if test="${val==0}">
+                    <td><img src="https://img.icons8.com/officel/40/000000/file.png"/></td>
+                </c:if>
 
-				<td>
-					<button name="id_archivo" value="${archivo.id}" form="descargar"
-						class="btn btn-success" Type="Submit">
-						<i class="fas fa-file-download fa-lg"></i>
-					</button> <c:if test="${sessionScope.USUARIO.id==archivo.usuario.id}">
-						<button name="id_archivo" value="${archivo.id}" form="borrar"
-							class="btn btn-danger" Type="Submit">
-							<i class="fas fa-trash fa-lg"></i>
-						</button>
-					</c:if>
-				</td>
-			</tr>
-		</c:forEach>
+
+
+
+
+
+                <td>
+                    <button  name="id_archivo" value="${archivo.id}" form="descargar"
+                             class="btn btn-success"  Type="Submit" ><i class="fas fa-file-download fa-lg"></i>
+                    </button>
+                    <c:if test="${sessionScope.USUARIO.id==archivo.usuario.id}">
+                        <button  name="id_archivo" value="${archivo.id}" form="borrar"
+                                 class="btn btn-danger"  Type="Submit"><i class="fas fa-trash fa-lg"></i>
+                        </button>
+                    </c:if>
+                </td>
+
+
+            </tr>
+        </c:forEach>
 
 		<form action="grupos/${grupo.getId()}/descargar-archivo"
 			id="descargar" method="POST">

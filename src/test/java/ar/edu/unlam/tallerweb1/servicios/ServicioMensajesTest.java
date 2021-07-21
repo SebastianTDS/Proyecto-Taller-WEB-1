@@ -46,15 +46,11 @@ public class ServicioMensajesTest {
        List<Mensaje> mensajes=new ArrayList<>();
         Mensaje mensaje1=new Mensaje();
         mensaje1.setId(16L);
-        Mensaje mensaje2=new Mensaje();
-        mensaje2.setId(140L);
-        Mensaje mensaje3=new Mensaje();
-        mensaje3.setId(600L);
+
 
 
         mensajes.add(mensaje1);
-        mensajes.add(mensaje2);
-        mensajes.add(mensaje3);
+
 
         return mensajes;
     }
@@ -73,7 +69,7 @@ public class ServicioMensajesTest {
     }
 
     private void thenVerificoQueElGrupoContengaMensajes(TreeSet<Mensaje> mensajes) {
-        assertThat(mensajes).hasSize(3);
+        assertThat(mensajes).hasSize(1);
     }
 
     private Grupo givenQueExisteUnGrupoConMensajes() {
