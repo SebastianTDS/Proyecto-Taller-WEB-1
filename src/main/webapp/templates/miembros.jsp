@@ -22,22 +22,6 @@
 
 		</div>
 	</c:forEach>
-	<c:if test="${grupo.getAdministrador().equals(sessionScope.USUARIO) }">
-		<div class="alert alert-success">
-			<form action="solicitudes/invitar" method="post">
-				<input type="hidden" name="grupo" id="grupo" value="${grupo.getId()}">
-				<h3>Invite un usuario al grupo!</h3>
-				<hr>
-				<div class="d-flex align-items-center">
-					<label for="correo" class="form-label mb-0 me-2">Correo: </label>
-					<input type="email" class="form-control me-2" name="correo" id="correo" placeholder="name@example.com">
-					<button type="submit" class="btn btn-outline-success">Invitar</button>
-				</div>
-			</form>
-		</div>
-
-	</div>
-</c:forEach>
 <c:if test="${grupo.getAdministrador().equals(sessionScope.USUARIO) }">
 	<div class="alert alert-success">
 		<form action="solicitudes/invitar" method="post">
