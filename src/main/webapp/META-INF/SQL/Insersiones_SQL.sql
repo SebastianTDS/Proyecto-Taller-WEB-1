@@ -13,7 +13,7 @@ VALUES ('Basica I'),
        ('Taller web II'),
        ('Programacion web I'),
        ('Programacion web II'),
-       ('DiseÒo de aplicaciones web');
+       ('Dise√±o de aplicaciones web');
 
 INSERT INTO usuario(email, cantidadDeCalificaciones, calificacion, nombre, password, rol)
 VALUES ('GLOBAL', 0, 0, 'GLOBAL', 'GLOBAL', 'GLOBAL');
@@ -22,13 +22,13 @@ INSERT INTO usuario(email, cantidadDeCalificaciones, calificacion, nombre, passw
 VALUES ('usuario3@outlook.com', 0, 0, 'Marcelo Zelaya', '1234', 'Admin');
 
 INSERT INTO usuario(email, cantidadDeCalificaciones, calificacion, nombre, password, rol)
-VALUES ('usuario1@outlook.com', 0, 0, 'Gonzalo Fern·ndez', '1234', 'Admin');
+VALUES ('usuario1@outlook.com', 0, 0, 'Gonzalo Fern√°ndez', '1234', 'Admin');
 
 INSERT INTO usuario(email, cantidadDeCalificaciones, calificacion, nombre, password, rol)
-VALUES ('usuario2@outlook.com', 0, 0, 'Sebasti·n Trillo', '1234', 'Admin');
+VALUES ('usuario2@outlook.com', 0, 0, 'Sebasti√°n Trillo', '1234', 'Admin');
 
 INSERT INTO usuario(email, nombre, password, rol)
-VALUES ('usuario4@outlook.com', 0, 0, 'Angelo GarcÌa', '1234', 'Admin');
+VALUES ('usuario4@outlook.com', 0, 0, 'Angelo Garc√≠a', '1234', 'Admin');
 
 INSERT INTO grupo(cantidadMax, descripcion, nombre, cerrado, turno, carrera_id, materia_id, esMateria, administrador_id)
 VALUES (1, 'Foro de la materia', '', 1, 'NOCHE', 1, 1, 1, 4),

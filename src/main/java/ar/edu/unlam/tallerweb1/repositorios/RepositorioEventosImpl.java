@@ -3,6 +3,7 @@ package ar.edu.unlam.tallerweb1.repositorios;
 import java.util.List;
 
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -23,6 +24,7 @@ public class RepositorioEventosImpl implements RepositorioEventos {
 	@Override
 	public List<Evento> buscarEventosPor(Long idGrupo) {
 		return sessionFactory.getCurrentSession().createCriteria(Evento.class)
+				.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY)
 				.add(Restrictions.eq("grupo.id", idGrupo))
 				.list();
 	}

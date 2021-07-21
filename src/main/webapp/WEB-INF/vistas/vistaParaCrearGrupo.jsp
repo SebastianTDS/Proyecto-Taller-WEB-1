@@ -15,8 +15,14 @@
   <div class="container-fluid">
 
     <div class=" d-flex flex-wrap justify-content-center row m-5">
+        <c:if test="${error != null}">
+            <div class="col-12 mt-3 alert alert-danger" role="alert" style="max-height:57px;">
+                ${error}
+            </div>
+        </c:if>
 
       <div class=" col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  mt-5">
+
 
         <img src="img/crear_grupo.svg" class=" img-fluid ilustraciones-index mt-5" alt="imagen">
 

@@ -24,7 +24,7 @@
             </div>
 
             <ul class="opciones">
-                <li><a class="text-white" href="perfil">Informaci�n General</a></li>
+                <li><a class="text-white" href="perfil">Información General</a></li>
                 <li><a class="text-white" href="perfil/ir-a-mis-grupos">Mis Grupos</a></li>
                 <li><a class="text-white" href="perfil/notificaciones">Notificaciones</a></li>
                 <li><a class="text-white" href="solicitudes">Solicitudes</a></li>
@@ -32,6 +32,11 @@
             </ul>
         </div>
         <div class="window col-12 col-sm-9 text-dark">
+            <c:if test="${error != null}">
+                <div class="m-3 alert alert-danger" role="alert">
+                    ${error}
+                </div>
+		        </c:if>
             <form action="solicitudes/aceptar-solicitud" method="POST" id="aceptarSolicitud"></form>
             <form action="solicitudes/rechazar-solicitud" method="POST" id="rechazarSolicitud"></form>
             <h1 class="mt-2">Solicitudes</h1>

@@ -178,7 +178,7 @@ public class Grupo {
 
 	public void agregarUsuarioAlGrupo(Usuario usuarioAInsertar) {
 		if (listaDeUsuarios.contains(usuarioAInsertar)) 
-			throw new YaEstoyEnElGrupo(id);
+			throw new YaEstoyEnElGrupo("Ya eres miembro de este grupo!", id);
 			
 		listaDeUsuarios.add(usuarioAInsertar);
 		usuarioAInsertar.agregarGrupo(this);

@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import ar.edu.unlam.tallerweb1.dto.EventoDTO;
+
 @Entity
 public class Evento {
 
@@ -17,6 +19,14 @@ public class Evento {
 	private LocalDateTime fin;
 
 	private Grupo grupo;
+	
+	public Evento() {}
+	
+	public Evento(EventoDTO evento) {
+		this.titulo = evento.getTitle();
+		this.inicio = LocalDateTime.parse(evento.getStart());
+		this.fin = LocalDateTime.parse(evento.getEnd());
+	}
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
