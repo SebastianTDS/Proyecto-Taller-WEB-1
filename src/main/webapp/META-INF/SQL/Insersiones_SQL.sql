@@ -1,4 +1,5 @@
-USE db;
+USE
+db;
 
 INSERT INTO carrera(nombre)
 VALUES ('Desarrollo Web'),
@@ -18,16 +19,16 @@ INSERT INTO usuario(email, cantidadDeCalificaciones, calificacion, nombre, passw
 VALUES ('GLOBAL', 0, 0, 'GLOBAL', 'GLOBAL', 'GLOBAL');
 
 INSERT INTO usuario(email, cantidadDeCalificaciones, calificacion, nombre, password, rol)
-VALUES ('usuario3@outlook.com', 0, 0, 'Marcelo ZELAYA', '1234', 'Admin');
+VALUES ('usuario3@outlook.com', 0, 0, 'Marcelo Zelaya', '1234', 'Admin');
 
 INSERT INTO usuario(email, cantidadDeCalificaciones, calificacion, nombre, password, rol)
-VALUES ('usuario1@outlook.com', 0, 0, 'Gonzalo FERNANDEZ', '1234', 'Admin');
+VALUES ('usuario1@outlook.com', 0, 0, 'Gonzalo Fernández', '1234', 'Admin');
 
 INSERT INTO usuario(email, cantidadDeCalificaciones, calificacion, nombre, password, rol)
-VALUES ('usuario2@outlook.com', 0, 0, 'Sebastián TRILLO', '1234', 'Admin');
+VALUES ('usuario2@outlook.com', 0, 0, 'Sebastián Trillo', '1234', 'Admin');
 
 INSERT INTO usuario(email, nombre, password, rol)
-VALUES ('usuario4@outlook.com', 'Angelo ORDOÑES', '1234', 'Admin');
+VALUES ('usuario4@outlook.com', 0, 0, 'Angelo García', '1234', 'Admin');
 
 INSERT INTO grupo(cantidadMax, descripcion, nombre, cerrado, turno, carrera_id, materia_id, esMateria, administrador_id)
 VALUES (1, 'Foro de la materia', '', 1, 'NOCHE', 1, 1, 1, 4),
