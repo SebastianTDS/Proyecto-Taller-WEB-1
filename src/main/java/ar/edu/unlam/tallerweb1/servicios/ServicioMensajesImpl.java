@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.TreeSet;
 
 @Service("servicioMensjaes")
@@ -50,8 +49,7 @@ public class ServicioMensajesImpl implements ServicioMensajes{
 
     @Override
     public TreeSet<Mensaje> buscarMensajesDeUnGrupo(Long id) {
-        HashSet<Mensaje>limpiar= new HashSet<>(repoMsj.getMensajesByIDGrupo(id));
-        TreeSet<Mensaje> mensajes= new TreeSet<>(limpiar);
+        TreeSet<Mensaje> mensajes= new TreeSet<>(repoMsj.getMensajesByIDGrupo(id));
 
         return mensajes;
     }
