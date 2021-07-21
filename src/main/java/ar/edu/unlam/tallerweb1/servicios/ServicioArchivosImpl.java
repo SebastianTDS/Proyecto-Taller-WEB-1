@@ -57,7 +57,7 @@ public class ServicioArchivosImpl implements ServicioArchivos {
         Archivo archivo = repositorioArchivos.buscarArchivosPorId(idArchivo);
 
         if(archivo==null){
-            throw new ArchivoNoEncontradoException("No se encontro el Archivo");
+            throw new ArchivoNoEncontradoException();
         }
 
         descargar(downloadFolder,archivo,response);

@@ -49,28 +49,35 @@
             </c:if>
 
         </div>
-        <!--   Agregar Import  -->
-        <c:if test="${not empty formulario }">
-            <jsp:include page="/templates/perfilMod.jsp"></jsp:include>
-        </c:if>
-        <c:if test="${empty formulario and empty msj and empty integrantes and empty vistaArchivos}">
-            <jsp:include page="/templates/perfilInfo.jsp"></jsp:include>
-        </c:if>
-        <c:if test="${not empty msj }">
-        	<jsp:include page="/templates/perfilForo.jsp"></jsp:include>
-        	<form:form action="grupos/${grupo.getId()}/foro/enviar-msj" method="POST" id="formulario" modelAttribute="msj">
-				<input type="hidden" name="id" id="id" value="${grupo.getId()}">
-			    <div class="col-sm-10">
-			        <textarea name="mensaje" id="mensaje" rows="10" class="form-control container-fluid" style="display: none"></textarea>
-			    </div>
-			</form:form>
-        </c:if>
-        <c:if test="${not empty integrantes }">
-            <jsp:include page="/templates/miembros.jsp"></jsp:include>
-        </c:if>
-        <c:if test="${not empty vistaArchivos}">
-            <jsp:include page="/templates/archivos.jsp"></jsp:include>
-        </c:if>
+        <div class="window col-12 col-sm-9 text-dark">
+	        <c:if test="${error != null}">
+	        	<div class="m-3 alert alert-danger" role="alert">
+					${error}
+				</div>
+	        </c:if>
+	        <!--   Agregar Import  -->
+	        <c:if test="${not empty formulario }">
+	            <jsp:include page="/templates/perfilMod.jsp"></jsp:include>
+	        </c:if>
+	        <c:if test="${empty formulario and empty msj and empty integrantes and empty vistaArchivos}">
+	            <jsp:include page="/templates/perfilInfo.jsp"></jsp:include>
+	        </c:if>
+	        <c:if test="${not empty msj }">
+	        	<jsp:include page="/templates/perfilForo.jsp"></jsp:include>
+	        	<form:form action="grupos/${grupo.getId()}/foro/enviar-msj" method="POST" id="formulario" modelAttribute="msj">
+					<input type="hidden" name="id" id="id" value="${grupo.getId()}">
+				    <div class="col-sm-10">
+				        <textarea name="mensaje" id="mensaje" rows="10" class="form-control container-fluid" style="display: none"></textarea>
+				    </div>
+				</form:form>
+	        </c:if>
+	        <c:if test="${not empty integrantes }">
+	            <jsp:include page="/templates/miembros.jsp"></jsp:include>
+	        </c:if>
+	        <c:if test="${not empty vistaArchivos}">
+	            <jsp:include page="/templates/archivos.jsp"></jsp:include>
+	        </c:if>
+	     </div>
     </div>
 </main>
 <jsp:include page="/templates/footer.jsp"></jsp:include>

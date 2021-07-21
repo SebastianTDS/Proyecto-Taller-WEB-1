@@ -16,8 +16,14 @@
 
         <div class="d-flex flex-wrap justify-content-center row my-5 mx-2">
 
+			<c:if test="${error != null}">
+	        	<div class="col-12 alert alert-danger" role="alert">
+					${error}
+				</div>
+	        </c:if>
+
             <div class="col-12 col-md-6">
-                <img src="img/undraw_press_play_bx2d.svg" class="img-fluid ilustraciones-index" alt="imagen">
+                <img src="img/undraw_Development_re_g5hq.svg" class="img-fluid ilustraciones-index" alt="imagen">
             </div>
 
             <div class="col-12 col-md-6">

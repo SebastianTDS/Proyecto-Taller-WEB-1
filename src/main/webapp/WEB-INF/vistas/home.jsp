@@ -18,13 +18,18 @@
 <main style="min-height: 500px">
 
     <div class="container-fluid row ">
+    	<c:if test="${error != null}">
+        	<div class="col-12 mt-3 alert alert-danger" role="alert" style="max-height:57px;">
+				${error}
+			</div>
+        </c:if>
         <div class="col-5 col-sm-4 col-md-3 col-lg-2 col-xl-2 container-fluid"
              style="min-height: 500px">
             <jsp:include page="/templates/nav.jsp"></jsp:include>
         </div>
         <div class="col-7 col-sm-8 col-md-9 col-lg-10 col-xl-10 border-start row container-fluid"
              style="min-height: 500px">
-
+			
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 clo-xl-12 container-fluid row d-flex justify-content-center flex-wrap align-content-center">
                 <form:form action="buscar-grupos" method="POST" modelAttribute="datosParaBuscarUnGrupo"
                            class="row text-center">

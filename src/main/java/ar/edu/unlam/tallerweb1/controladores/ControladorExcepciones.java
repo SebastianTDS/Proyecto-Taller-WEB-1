@@ -1,119 +1,106 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.util.exceptions.*;
-import org.springframework.ui.ModelMap;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.FlashMap;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 @ControllerAdvice
 public class ControladorExcepciones {
 
 	@ExceptionHandler(value = LimiteDeUsuariosFueraDeRango.class)
-	public ModelAndView errorAlModificarGrupo(LimiteDeUsuariosFueraDeRango e) {
-		ModelMap model = new ModelMap();
-
-		model.put("error", e.getMessage());
-
-		return new ModelAndView("redirect:/grupos/" + e.getIdGrupoError(), model);
+	public String errorAlModificarGrupo(LimiteDeUsuariosFueraDeRango e, HttpServletRequest request) {
+		errorMsg(request, e.getMessage());
+		return "redirect:/grupos/" + e.getIdGrupoError();
 	}
 
 	@ExceptionHandler(value = FormularioDeGrupoIncompleto.class)
-	public ModelAndView errorPorCamposIncompletos(FormularioDeGrupoIncompleto e) {
-		ModelMap model = new ModelMap();
-		model.put("error", e.getMessage());
-		return new ModelAndView("redirect:/ir-a-crear-nuevo-grupo", model);
+	public String errorPorCamposIncompletos(FormularioDeGrupoIncompleto e, HttpServletRequest request) {
+		errorMsg(request, e.getMessage());
+		return "redirect:/ir-a-crear-nuevo-grupo";
 	}
 
 	@ExceptionHandler(value = { GrupoInexistenteException.class, NoEsMiembroException.class })
-	public ModelAndView errorAlBuscarGrupo(RuntimeException e) {
-		ModelMap model = new ModelMap();
-
-		model.put("error", e.getMessage());
-
-		return new ModelAndView("redirect:/ir-a-home", model);
+	public String errorAlBuscarGrupo(RuntimeException e, HttpServletRequest request) {
+		errorMsg(request, e.getMessage());
+		return "redirect:/ir-a-home";
 	}
 
 	@ExceptionHandler(value = FalloAlUnirseAlGrupo.class)
-	public ModelAndView errorAlUnirseAlGrupo(FalloAlUnirseAlGrupo e) {
-		ModelMap model = new ModelMap();
-		model.put("error", e.getMessage());
-
-		return new ModelAndView("redirect:/ir-a-home", model);
+	public String errorAlUnirseAlGrupo(FalloAlUnirseAlGrupo e, HttpServletRequest request) {
+		errorMsg(request, e.getMessage());
+		return "redirect:/ir-a-home";
 	}
 
 	@ExceptionHandler(value = YaEstoyEnElGrupo.class)
-	public ModelAndView errorAlUnirseAlGrupoQueYaSoyMiembro(YaEstoyEnElGrupo e) {
-		return new ModelAndView("redirect:/grupos/" + e.getMessage());
+	public String errorAlUnirseAlGrupoQueYaSoyMiembro(YaEstoyEnElGrupo e, HttpServletRequest request) {
+		errorMsg(request, e.getMessage());
+		return "redirect:/grupos/" + e.getIdGrupo();
 	}
 
 	@ExceptionHandler(value = NoSeEnvioElMensaje.class)
-	public ModelAndView errorAlEnviarUnMensaje(NoSeEnvioElMensaje e) {
-		ModelMap model = new ModelMap();
-		model.put("error", "No se envio el mensaje");
-		return new ModelAndView("redirect:/grupos/" + e.getMessage() + "/foro", model);
+	public String errorAlEnviarUnMensaje(NoSeEnvioElMensaje e, HttpServletRequest request) {
+		errorMsg(request, e.getMessage());
+		return "redirect:/grupos/" + e.getIdGrupo();
 	}
 
 	@ExceptionHandler(value = UsuarioNoEncontradoException.class)
-	public ModelAndView errorAlLoguearUsuario(UsuarioNoEncontradoException e) {
-		ModelMap model = new ModelMap();
-		model.put("error", e.getMessage());
-
-		return new ModelAndView("redirect:/ir-a-login", model);
+	public String errorAlLoguearUsuario(UsuarioNoEncontradoException e, HttpServletRequest request) {
+		errorMsg(request, e.getMessage());
+		return "redirect:/ir-a-login";
 	}
 
 	@ExceptionHandler(value = UsuarioSinPermisosException.class)
-	public ModelAndView errorAlVerificarPermiso(UsuarioSinPermisosException e) {
-		ModelMap model = new ModelMap();
-		model.put("error", e.getMessage());
-
-		return new ModelAndView("redirect:/grupos/" + e.getIdGrupo(), model);
+	public String errorAlVerificarPermiso(UsuarioSinPermisosException e, HttpServletRequest request) {
+		errorMsg(request, e.getMessage());
+		return "redirect:/grupos/" + e.getIdGrupo();
 	}
 
 	@ExceptionHandler(value = FalloAlProcesarSolicitud.class)
-	public ModelAndView falloAlProcesarSolicitud(FalloAlProcesarSolicitud e) {
-		ModelMap model = new ModelMap();
-		model.put("error", e.getMessage());
-
-		return new ModelAndView("redirect:/solicitudes", model);
+	public String falloAlProcesarSolicitud(FalloAlProcesarSolicitud e, HttpServletRequest request) {
+		errorMsg(request, e.getMessage());
+		return "redirect:/solicitudes";
 	}
 
 	@ExceptionHandler(value = FalloAlInvitarUsuario.class)
-	public ModelAndView falloAlInvitarUsuario(FalloAlInvitarUsuario e) {
-		ModelMap model = new ModelMap();
-		model.put("error", e.getMessage());
-
-		return new ModelAndView("redirect:/grupos/" + e.getGrupo(), model);
+	public String falloAlInvitarUsuario(FalloAlInvitarUsuario e, HttpServletRequest request) {
+		errorMsg(request, e.getMessage());
+		return "redirect:/grupos/" + e.getGrupo();
 	}
 
-	@ExceptionHandler(value=ArchivoNoEncontradoException.class)
-	public ModelAndView errorAlBuscarArchivo(ArchivoNoEncontradoException e){
-		ModelMap model = new ModelMap();
-		model.put("error",e.getMessage());
-		return new ModelAndView("redirect:/grupos/",model);
+	@ExceptionHandler(value = ArchivoNoEncontradoException.class)
+	public String errorAlBuscarArchivo(ArchivoNoEncontradoException e, HttpServletRequest request) {
+		errorMsg(request, e.getMessage());
+		return "redirect:/ir-a-home";
 	}
 
 	@ExceptionHandler(value = UsuarioExistenteException.class)
-	public ModelAndView usuarioExistenteEnRegistrar(UsuarioExistenteException e) {
-		ModelMap model = new ModelMap();
-		model.put("error", e.getMessage());
-
-		return new ModelAndView("redirect:/ir-a-registro" , model);
+	public String usuarioExistenteEnRegistrar(UsuarioExistenteException e, HttpServletRequest request) {
+		errorMsg(request, e.getMessage());
+		return "redirect:/ir-a-registro";
 	}
 
 	@ExceptionHandler(value = NoCoincidenContraseniasException.class)
-	public ModelAndView noCoincidenContraseniasException(NoCoincidenContraseniasException e) {
-		ModelMap model = new ModelMap();
-		model.put("error", e.getMessage());
-
-		return new ModelAndView("redirect:/ir-a-registro" , model);
+	public String noCoincidenContraseniasException(NoCoincidenContraseniasException e, HttpServletRequest request) {
+		errorMsg(request, e.getMessage());
+		return "redirect:/ir-a-registro";
 	}
 
 	@ExceptionHandler(value = CampoVacioException.class)
-	public ModelAndView campoVacioException(CampoVacioException e) {
-		ModelMap model = new ModelMap();
-		model.put("error", e.getMessage());
-
-		return new ModelAndView("redirect:/ir-a-registro" , model);
+	public String campoVacioException(CampoVacioException e, HttpServletRequest request) {
+		errorMsg(request, e.getMessage());
+		return "redirect:/ir-a-registro";
 	}
+
+	private void errorMsg(HttpServletRequest request, String mensaje) {
+		FlashMap outputFlashMap = RequestContextUtils.getOutputFlashMap(request);
+		if (outputFlashMap != null) {
+			outputFlashMap.put("error", mensaje);
+		}
+	}
+
 }

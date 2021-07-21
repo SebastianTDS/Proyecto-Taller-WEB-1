@@ -56,7 +56,7 @@ public class ServicioSolicitudImpl implements ServicioSolicitud {
 			throw new UsuarioNoEncontradoException("No existe el usuario solicitante!");
 		
 		if(solicitado.getListaDeUsuarios().contains(solicitante))
-			throw new YaEstoyEnElGrupo(idGrupo);
+			throw new YaEstoyEnElGrupo("Ya eres miembro de este grupo!", idGrupo);
 
 		generarSolicitud(solicitado, solicitante, solicitado.getAdministrador(), TipoSolicitud.INCLUSION_GRUPO);
 
