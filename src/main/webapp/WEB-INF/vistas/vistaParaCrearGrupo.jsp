@@ -16,9 +16,9 @@
 
     <div class=" d-flex flex-wrap justify-content-center row m-5">
 
-      <div class=" col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  ">
+      <div class=" col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  mt-5">
 
-        <img src="img/crear_grupo.svg" class=" img-fluid ilustraciones-index" alt="imagen">
+        <img src="img/crear_grupo.svg" class=" img-fluid ilustraciones-index mt-5" alt="imagen">
 
       </div>
 
@@ -61,7 +61,7 @@
                 <div class="input-box">
                   <span class="details">Turno</span>
 	              <form:select path="turno" id="turno" class="form-control form-control-sm">
-		               <option value="<%=Turno.MANIANA%>">Mañana</option>
+		               <option value="<%=Turno.MANIANA%>">Maï¿½ana</option>
 		               <option value="<%=Turno.TARDE%>">Tarde</option>
 		               <option value="<%=Turno.NOCHE%>">Noche</option>
 	              </form:select>

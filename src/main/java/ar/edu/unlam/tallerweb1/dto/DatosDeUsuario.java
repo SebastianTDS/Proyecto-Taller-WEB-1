@@ -66,6 +66,7 @@ public class DatosDeUsuario {
         usuario.setPassword(clave);
         usuario.setCalificacion(0L);
         usuario.setCantidadDeCalificaciones(0L);
+        usuario.setRol("Admin");
         return usuario;
     }
 

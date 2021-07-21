@@ -17,12 +17,12 @@
         <div class="d-flex flex-wrap justify-content-center row my-5 mx-2">
 
 
-            <div class="col-12 col-md-6">
-                <img src="img/undraw_remotely_2j6y.svg" class="img-fluid ilustraciones-index" alt="imagen">
+            <div class="col-12 col-md-6 my-5">
+                <img src="img/undraw_Login_re_4vu2.svg" class="img-fluid ilustraciones-index" alt="imagen">
             </div>
 
 
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-6 mt-5">
                 <div class="containerr">
                     <div class="title">Iniciar Sesion</div>
                     <div class="content">
@@ -42,7 +42,7 @@
                                 </div>
                             </div>
                             <div class="text-end">
-	                            <button class="btn btn-lg btn btn-primary btn-sm" Type="Submit">Iniciar</button>
+	                            <button class="btn btn-outline-primary" Type="Submit">Iniciar</button>
                             </div>
                         </form:form>
                     </div>

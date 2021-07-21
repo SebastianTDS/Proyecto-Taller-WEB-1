@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page session = "true" %>
-<header class="container-fluid bg-dark text-warning ">
+<header class="container-fluid bg-dark text-warning">
     <div class="row">
         <div class="col-5 p-2 text-left my-2">
             <a href="ir-a-home"><img src="img/umatch.png" width="150px"></a>
