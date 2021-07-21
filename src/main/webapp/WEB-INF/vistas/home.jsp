@@ -80,53 +80,108 @@
                 </form:form>
             </div>
 
-            <div class="col-12 col-sm-12 col-md-12 col-lg-12 clo-xl-12 container-fluid row d-flex justify-content-center " style=" overflow: scroll; max-height: 800px">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 clo-xl-12 container-fluid row d-flex justify-content-center "
+                 style=" overflow: scroll; max-height: 800px">
                 <c:if test="${not empty grupos}">
                     <c:forEach items="${grupos}" var="grupo">
                         <div class="bg-light text-dark col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 m-3 d-flex flex-wrap align-content-between hover-shadow bg-body rounded">
                             <div class="card-body container-fluid">
                                 <h5 class="card-title text-center fw-bold">${grupo.nombre}</h5>
-                                <p class="card-text"><i class="fas fa-university" data-bs-toggle="tooltip" data-bs-placement="top" title="Carrera"></i>${grupo.carrera.nombre}</p>
-                                <p class="card-text"> <i class="fas fa-book" data-bs-toggle="tooltip" data-bs-placement="top" title="Materia"></i> ${grupo.materia.nombre}</p>
+                                <p class="card-text"><i class="fas fa-university" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top"
+                                                        title="Carrera"></i>${grupo.carrera.nombre}</p>
+                                <p class="card-text"><i class="fas fa-book" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top"
+                                                        title="Materia"></i> ${grupo.materia.nombre}</p>
                                 <div>
                                     <div>
-                                        <p><i class="fas fa-users"></i> Integrantes:${grupo.cantidadDeIntegrantes()}/${grupo.cantidadMax}</p>
-                                        <p class="card-text"><i class="fas fa-clock" data-bs-toggle="tooltip" data-bs-placement="top" title="Turno"></i> ${grupo.turno}</p>
+
+
+                                        <p><i class="fas fa-users"></i>
+                                            Integrantes:${grupo.cantidadDeIntegrantes()}/${grupo.cantidadMax}</p>
+                                        <p class="card-text"><i class="fas fa-clock" data-bs-toggle="tooltip"
+                                                                data-bs-placement="top"
+                                                                title="Turno"></i> ${grupo.turno}</p>
                                         <c:if test="${grupo.cerrado==true}">
-                                             <p class="card-text" data-bs-toggle="tooltip" data-bs-placement="top" title="Privacidad"><i class="fas fa-lock"></i> Cerrado</p>
+                                            <p class="card-text" data-bs-toggle="tooltip" data-bs-placement="top"
+                                               title="Privacidad"><i class="fas fa-lock"></i> Cerrado</p>
                                         </c:if>
                                         <c:if test="${grupo.cerrado==false}">
-                                            <p class="card-text" ><i class="fas fa-unlock" data-bs-toggle="tooltip" data-bs-placement="top" title="Privacidad"></i> Abierto</p>
+                                            <p class="card-text"><i class="fas fa-unlock" data-bs-toggle="tooltip"
+                                                                    data-bs-placement="top" title="Privacidad"></i>
+                                                Abierto</p>
+                                        </c:if>
+                                        Ranking:
+                                        <c:if test="${grupo.calificacionGrupo()==0}">
+                                            <span class="vertical-middle m-1">Grupo sin calificaciones</span>
+                                        </c:if>
+                                        <c:if test="${grupo.calificacionGrupo()==1}">
+                                            <img src="img/estrellaEncendida.png" class=""
+                                                 style="width: 20px; height: 20px">
+                                        </c:if>
+                                        <c:if test="${grupo.calificacionGrupo()==2}">
+                                            <img src="img/estrellaEncendida.png" class=""
+                                                 style="width: 20px; height: 20px">
+                                            <img src="img/estrellaEncendida.png" class=""
+                                                 style="width: 20px; height: 20px">
+                                        </c:if>
+                                        <c:if test="${grupo.calificacionGrupo()==3}">
+                                            <img src="img/estrellaEncendida.png" class=""
+                                                 style="width: 20px; height: 20px">
+                                            <img src="img/estrellaEncendida.png" class=""
+                                                 style="width: 20px; height: 20px">
+                                            <img src="img/estrellaEncendida.png" class=""
+                                                 style="width: 20px; height: 20px">
+                                        </c:if>
+                                        <c:if test="${grupo.calificacionGrupo()==4}">
+                                            <img src="img/estrellaEncendida.png" class=""
+                                                 style="width: 20px; height: 20px">
+                                            <img src="img/estrellaEncendida.png" class=""
+                                                 style="width: 20px; height: 20px">
+                                            <img src="img/estrellaEncendida.png" class=""
+                                                 style="width: 20px; height: 20px">
+                                            <img src="img/estrellaEncendida.png" class=""
+                                                 style="width: 20px; height: 20px">
+                                        </c:if>
+                                        <c:if test="${grupo.calificacionGrupo()==5}">
+                                            <img src="img/estrellaEncendida.png" class=""
+                                                 style="width: 20px; height: 20px">
+                                            <img src="img/estrellaEncendida.png" class=""
+                                                 style="width: 20px; height: 20px">
+                                            <img src="img/estrellaEncendida.png" class=""
+                                                 style="width: 20px; height: 20px">
+                                            <img src="img/estrellaEncendida.png" class=""
+                                                 style="width: 20px; height: 20px">
+                                            <img src="img/estrellaEncendida.png" class=""
+                                                 style="width: 20px; height: 20px">
                                         </c:if>
                                     </div>
-                                    <div class="text-center container m-1">
+                                    <div class="text-center container m-1 mt-3">
                                         <img src="img/Logosolo.ico" style="width: 80px">
                                     </div>
                                 </div>
                                 <div class="d-flex justify-content-center m-3">
                                     <c:choose>
-
                                         <c:when test="${grupo.grupoLleno()==true}">
                                             <button type="submit" class="btn btn-secondary mt-3" disabled>Lleno
                                             </button>
                                         </c:when>
-
                                         <c:otherwise>
-
-                                        	<c:choose>
-                                        		<c:when test="${grupo.getCerrado()==false}">
-                                        			<button type="submit" class="btn btn-success mt-3" name="id" form="unirte"
-                                                    value="${grupo.id}">Unirte</button>
-                                        		</c:when>
-
-                                        		<c:otherwise>
-                                            		<button type="submit" class="btn btn-success mt-3" name="idGrupo" form="solicitarUnirse"
-                                                    value="${grupo.id}">Solicitar Unirse</button>
-                                       		 	</c:otherwise>
-                                   		 	</c:choose>
-
+                                            <c:choose>
+                                                <c:when test="${grupo.getCerrado()==false}">
+                                                    <button type="submit" class="btn btn-success mt-3" name="id"
+                                                            form="unirte"
+                                                            value="${grupo.id}">Unirte
+                                                    </button>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <button type="submit" class="btn btn-success mt-3" name="idGrupo"
+                                                            form="solicitarUnirse"
+                                                            value="${grupo.id}">Solicitar Unirse
+                                                    </button>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </c:otherwise>
-
                                     </c:choose>
                                 </div>
                             </div>
@@ -136,9 +191,9 @@
                     <form action="solicitudes/solicitar-inclusion" id="solicitarUnirse" method="POST"></form>
                 </c:if>
                 <c:if test="${empty grupos}">
-                	<div class="text-center">
-                		No se encontraron resultados!
-                	</div>
+                    <div class="text-center">
+                        No se encontraron resultados!
+                    </div>
                 </c:if>
             </div>
         </div>
