@@ -13,6 +13,51 @@
 		<h3>${grupo.getMateria().getNombre()}-
 			${grupo.getCarrera().getNombre()} - Turno ${grupo.getTurno().name()}</h3>
 	</li>
+	<li>
+        <c:if test="${grupo.calificacionGrupo()==0}">
+            <span class="vertical-middle m-1">Grupo sin calificaciones</span>
+        </c:if>
+        <c:if test="${grupo.calificacionGrupo()==1}">
+            <img src="img/estrellaEncendida.png" class=""
+                 style="width: 20px; height: 20px">
+        </c:if>
+        <c:if test="${grupo.calificacionGrupo()==2}">
+            <img src="img/estrellaEncendida.png" class=""
+                 style="width: 20px; height: 20px">
+            <img src="img/estrellaEncendida.png" class=""
+                 style="width: 20px; height: 20px">
+        </c:if>
+        <c:if test="${grupo.calificacionGrupo()==3}">
+            <img src="img/estrellaEncendida.png" class=""
+                 style="width: 20px; height: 20px">
+            <img src="img/estrellaEncendida.png" class=""
+                 style="width: 20px; height: 20px">
+            <img src="img/estrellaEncendida.png" class=""
+                 style="width: 20px; height: 20px">
+        </c:if>
+        <c:if test="${grupo.calificacionGrupo()==4}">
+            <img src="img/estrellaEncendida.png" class=""
+                 style="width: 20px; height: 20px">
+            <img src="img/estrellaEncendida.png" class=""
+                 style="width: 20px; height: 20px">
+            <img src="img/estrellaEncendida.png" class=""
+                 style="width: 20px; height: 20px">
+            <img src="img/estrellaEncendida.png" class=""
+                 style="width: 20px; height: 20px">
+        </c:if>
+        <c:if test="${grupo.calificacionGrupo()==5}">
+            <img src="img/estrellaEncendida.png" class=""
+                 style="width: 20px; height: 20px">
+            <img src="img/estrellaEncendida.png" class=""
+                 style="width: 20px; height: 20px">
+            <img src="img/estrellaEncendida.png" class=""
+                 style="width: 20px; height: 20px">
+            <img src="img/estrellaEncendida.png" class=""
+                 style="width: 20px; height: 20px">
+            <img src="img/estrellaEncendida.png" class=""
+                 style="width: 20px; height: 20px">
+        </c:if>
+	</li>
 	<hr>
 	<li><h4>Integrantes:
 			${grupo.getListaDeUsuarios().size()}/${grupo.getCantidadMax()}</h4></li>

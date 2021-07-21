@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
   var calendarEl = document.getElementById('calendario');
-  var url = window.location.href.charAt(36);
+  var url = window.location.href.split("/")[5];
 
   var modalInitJS = new BSN.Modal('#myModal', {
     backdrop: 'static',

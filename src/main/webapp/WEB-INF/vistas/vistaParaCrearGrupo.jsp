@@ -67,7 +67,7 @@
                 <div class="input-box">
                   <span class="details">Turno</span>
 	              <form:select path="turno" id="turno" class="form-control form-control-sm">
-		               <option value="<%=Turno.MANIANA%>">MaÃ±ana</option>
+		               <option value="<%=Turno.MANIANA%>">Mañana</option>
 		               <option value="<%=Turno.TARDE%>">Tarde</option>
 		               <option value="<%=Turno.NOCHE%>">Noche</option>
 	              </form:select>

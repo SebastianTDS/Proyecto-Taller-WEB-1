@@ -25,7 +25,6 @@
             </div>
 
             <ul class="opciones">
-                <li><a class="text-white" href="perfil">Informaci�n General</a></li>
                 <li><a class="text-white" href="perfil/ir-a-mis-grupos">Mis Grupos</a></li>
                 <li><a class="text-white" href="perfil/notificaciones">Notificaciones</a></li>
                 <li><a class="text-white" href="solicitudes">Solicitudes</a></li>

@@ -45,7 +45,7 @@
 					</div>
 
 					<ul class="opciones">
-						<li><a class="text-white" href="grupos/${grupo.getId()}">Informaciï¿½n
+						<li><a class="text-white" href="grupos/${grupo.getId()}">Información
 								General</a></li>
 						<li><a class="text-white" href="grupos/${grupo.getId()}/miembros">Miembros del grupo</a></li>
 						<li><a class="text-white" href="grupos/${grupo.getId()}/archivos">Archivos</a></li>

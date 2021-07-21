@@ -25,7 +25,6 @@
                 </div>
 
                 <ul class="opciones">
-                    <li><a class="text-white" href="perfil">Informaci�n General</a></li>
                     <li><a class="text-white" href="perfil/ir-a-mis-grupos">Mis Grupos</a></li>
                     <li><a class="text-white" href="perfil/notificaciones">Notificaciones</a></li>
                     <li><a class="text-white" href="solicitudes">Solicitudes</a></li>
@@ -47,7 +46,51 @@
 	                                    <div class="text-center container m-1">
 	                                        <img src="img/Logosolo.ico" style="width: 100px">
 	                                    </div>
-	
+									<div class="text-center">
+                                        <c:if test="${miGrupo.calificacionGrupo()==0}">
+                                            <span class="vertical-middle m-1">Sin Calificar</span>
+                                        </c:if>
+                                        <c:if test="${miGrupo.calificacionGrupo()==1}">
+                                            <img src="img/estrellaEncendida.png" class=""
+                                                 style="width: 20px; height: 20px">
+                                        </c:if>
+                                        <c:if test="${miGrupo.calificacionGrupo()==2}">
+                                            <img src="img/estrellaEncendida.png" class=""
+                                                 style="width: 20px; height: 20px">
+                                            <img src="img/estrellaEncendida.png" class=""
+                                                 style="width: 20px; height: 20px">
+                                        </c:if>
+                                        <c:if test="${miGrupo.calificacionGrupo()==3}">
+                                            <img src="img/estrellaEncendida.png" class=""
+                                                 style="width: 20px; height: 20px">
+                                            <img src="img/estrellaEncendida.png" class=""
+                                                 style="width: 20px; height: 20px">
+                                            <img src="img/estrellaEncendida.png" class=""
+                                                 style="width: 20px; height: 20px">
+                                        </c:if>
+                                        <c:if test="${miGrupo.calificacionGrupo()==4}">
+                                            <img src="img/estrellaEncendida.png" class=""
+                                                 style="width: 20px; height: 20px">
+                                            <img src="img/estrellaEncendida.png" class=""
+                                                 style="width: 20px; height: 20px">
+                                            <img src="img/estrellaEncendida.png" class=""
+                                                 style="width: 20px; height: 20px">
+                                            <img src="img/estrellaEncendida.png" class=""
+                                                 style="width: 20px; height: 20px">
+                                        </c:if>
+                                        <c:if test="${miGrupo.calificacionGrupo()==5}">
+                                            <img src="img/estrellaEncendida.png" class=""
+                                                 style="width: 20px; height: 20px">
+                                            <img src="img/estrellaEncendida.png" class=""
+                                                 style="width: 20px; height: 20px">
+                                            <img src="img/estrellaEncendida.png" class=""
+                                                 style="width: 20px; height: 20px">
+                                            <img src="img/estrellaEncendida.png" class=""
+                                                 style="width: 20px; height: 20px">
+                                            <img src="img/estrellaEncendida.png" class=""
+                                                 style="width: 20px; height: 20px">
+                                        </c:if>
+									</div>
 	                                <div class="d-flex justify-content-center m-3">
 	                                    <a href="grupos/${miGrupo.id}">
 	                                        <button type="button" class="btn btn-outline-success mt-3">Ver</button>

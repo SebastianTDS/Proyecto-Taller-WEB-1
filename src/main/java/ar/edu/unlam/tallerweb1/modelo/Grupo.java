@@ -28,10 +28,10 @@ public class Grupo {
 
 	private Set<Usuario> listaDeUsuarios;
 	private List<Evento> eventos;
+	private List<Mensaje> mensajes;
 
 	public Grupo() {
 		this.listaDeUsuarios = new HashSet<>();
-		this.archivos = new ArrayList<>();
 	}
 
 
@@ -57,6 +57,7 @@ public class Grupo {
 			return false;
 		return true;
 	}
+	
 	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "grupo" )
 	public List<Archivo> getArchivos() {
 		return archivos;
@@ -82,6 +83,15 @@ public class Grupo {
 
 	public void setEventos(List<Evento> eventos) {
 		this.eventos = eventos;
+	}
+
+	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "grupo" )
+	public List<Mensaje> getMensajes() {
+		return mensajes;
+	}
+
+	public void setMensajes(List<Mensaje> mensajes) {
+		this.mensajes = mensajes;
 	}
 
 	@ManyToMany(mappedBy = "listaDeGrupos", fetch = FetchType.EAGER)
@@ -215,9 +225,6 @@ public class Grupo {
 
 		return calif;
 	}
-
-
-
 
 	@PreRemove
 	public void removerGruposDeUsuario() {

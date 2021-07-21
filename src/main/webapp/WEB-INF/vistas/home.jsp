@@ -55,7 +55,7 @@
                     <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-2  p-2">
                         <form:select path="turno" id="turno" class="form-control form-control-sm">
                             <option value="">Turno</option>
-                            <option value="<%=Turno.MANIANA%>">Maï¿½ana</option>
+                            <option value="<%=Turno.MANIANA%>">Mañana</option>
                             <option value="<%=Turno.TARDE%>">Tarde</option>
                             <option value="<%=Turno.NOCHE%>">Noche</option>
 
@@ -118,7 +118,7 @@
                                         </c:if>
                                         Ranking:
                                         <c:if test="${grupo.calificacionGrupo()==0}">
-                                            <span class="vertical-middle m-1">Grupo sin calificaciones</span>
+                                            <span class="vertical-middle m-1">Ninguno</span>
                                         </c:if>
                                         <c:if test="${grupo.calificacionGrupo()==1}">
                                             <img src="img/estrellaEncendida.png" class=""
