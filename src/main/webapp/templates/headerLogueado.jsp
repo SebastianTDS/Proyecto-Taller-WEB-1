@@ -3,9 +3,9 @@
 <header class="container-fluid bg-dark text-warning">
     <div class="row">
         <div class="col-5 p-2 text-left my-2">
-            <a href="ir-a-home"><img src="img/umatch.png" width="150px"></a>
+            <a href="ir-a-home"><img src="img/umatch.png" class="ms-5" width="150px"></a>
         </div>
-        <div class="col-7 d-flex flex-wrap justify-content-end align-items-center flex-wrap align-content-center">
+        <div class="col-7 d-flex flex-wrap justify-content-end align-items-center align-content-center">
             <div class=" btn-group-lg d-flex text-white my-2">
                 
                 <div class="text-end">

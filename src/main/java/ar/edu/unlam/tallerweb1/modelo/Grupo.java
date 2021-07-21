@@ -205,6 +205,20 @@ public class Grupo {
 		usuarioBorrar.borrarGrupoDelUsuario(this);
 	}
 
+	public int calificacionGrupo(){
+		int calif=0;
+
+		for (Usuario aux : listaDeUsuarios){
+			calif+=aux.cantidadDeEstrellas().size();
+		}
+		calif=calif/listaDeUsuarios.size();
+
+		return calif;
+	}
+
+
+
+
 	@PreRemove
 	public void removerGruposDeUsuario() {
 		for (Usuario usuario : listaDeUsuarios) {

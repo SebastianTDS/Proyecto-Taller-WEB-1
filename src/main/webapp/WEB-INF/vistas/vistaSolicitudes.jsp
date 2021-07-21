@@ -13,9 +13,7 @@
 <main class="container-fluid">
     <div id="main" class="row text-white">
         <div class="info col-12 col-sm-3 bg-dark p-0">
-            <div class="mt-3 me-3 text-white text-end">
-                <button class="btn btn-outline-secondary rounded">></button>
-            </div>
+
 
             <div class="perfil mx-auto mb-2 ">
                 <img class="w-100 h-100 p-1" src="./img/placeholder.png">
