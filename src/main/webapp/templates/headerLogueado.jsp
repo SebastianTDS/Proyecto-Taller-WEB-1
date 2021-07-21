@@ -17,6 +17,14 @@
 	                   		<a href="perfil/notificaciones" class="link-warning"><i class="far fa-bell me-2"></i></a>
 	                	</c:if>
 		                <a href="modificar-datos-usuario" class="link-light"><h5 class="mb-0 d-inline-block">${sessionScope.USUARIO.nombre}</h5></a>
+						<div>
+							<c:if test="${sessionScope.USUARIO.cantidadDeEstrellas().size()==0}">
+								<span class="vertical-middle m-1">No te han calificado</span>
+							</c:if>
+							<c:forEach items="${sessionScope.USUARIO.cantidadDeEstrellas()}" var="calificacion">
+								<img src="img/estrellaEncendida.png" class="" style="width: 20px; height: 20px">
+							</c:forEach>
+						</div>
                 	</div>
 	                <div>
 		                <a href="perfil/ir-a-mis-grupos" class="me-2 link-light">Mis Grupos</a>
