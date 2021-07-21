@@ -16,9 +16,9 @@
 
     <div class=" d-flex flex-wrap justify-content-center row m-5">
 
-      <div class=" col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  ">
+      <div class=" col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  mt-5">
 
-        <img src="img/crear_grupo.svg" class=" img-fluid ilustraciones-index" alt="imagen">
+        <img src="img/crear_grupo.svg" class=" img-fluid ilustraciones-index mt-5" alt="imagen">
 
       </div>
 
@@ -32,15 +32,15 @@
             <div class="user-details">
               <div class="input-box">
                 <span class="details">Nombre del equipo</span>
-                <form:input path="nombre" id="nombre" type="text"  class="form-control form-control-sm"/>
+                <form:input path="nombre" id="nombre" type="text"  class="form-control form-control-sm" placeholder="Ingrese un nombre"/>
               </div>
               <div class="input-box">
                 <span class="details">Descripcion del grupo</span>
-                <form:input path="descripcion" id="descripcion" type="textarea"  class="form-control form-control-sm"/>
+                <form:input path="descripcion" id="descripcion" type="textarea"  class="form-control form-control-sm" placeholder="Ingrese una descripcion"/>
               </div>
               <div class="input-box">
                 <span class="details">Cantidad De Integrantes</span>
-                <form:input path="cantidadMax" id="cantidadMax" type="number" class="form-control form-control-sm"/>
+                <form:input path="cantidadMax" id="cantidadMax" type="number" class="form-control form-control-sm" placeholder="Ingrese un numero"/>
               </div>
               <div class="input-box">
                 <span class="details mb-3">Carrera</span>
@@ -61,7 +61,7 @@
                 <div class="input-box">
                   <span class="details">Turno</span>
 	              <form:select path="turno" id="turno" class="form-control form-control-sm">
-		               <option value="<%=Turno.MANIANA%>">Mañana</option>
+		               <option value="<%=Turno.MANIANA%>">MaÃ±ana</option>
 		               <option value="<%=Turno.TARDE%>">Tarde</option>
 		               <option value="<%=Turno.NOCHE%>">Noche</option>
 	              </form:select>
@@ -78,7 +78,7 @@
 					</div>
                 </div>
                 
-              <button class="btn btn-lg btn btn-primary btn-sm" Type="Submit">Crear!</button>
+              <button class="btn btn-outline-primary" Type="Submit">Crear !</button>
               </form:form>
             </div>
           </div>

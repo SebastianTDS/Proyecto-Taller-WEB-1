@@ -27,7 +27,7 @@
                     <c:forEach items="${grupos}" var="grupo">
                         <div class="bg-light text-dark col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 m-3 d-flex flex-wrap align-content-between hover-shadow bg-body rounded">
                             <div class="card-body container-fluid">
-                                <h5 class="card-title text-center">${grupo.materia.nombre}</h5>
+                                <h5 class="card-title text-center"><i class="fas fa-book"></i> ${grupo.materia.nombre}</h5>
                                     <div class="text-center container m-1">
                                         <img src="img/Logosolo.ico" style="width: 80px">
                                     </div>

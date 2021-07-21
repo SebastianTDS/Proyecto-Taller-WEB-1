@@ -85,18 +85,18 @@
                     <c:forEach items="${grupos}" var="grupo">
                         <div class="bg-light text-dark col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 m-3 d-flex flex-wrap align-content-between hover-shadow bg-body rounded">
                             <div class="card-body container-fluid">
-                                <h5 class="card-title text-center">${grupo.nombre}</h5>
-                                <p class="card-text">${grupo.carrera.nombre}</p>
-                                <p class="card-text">${grupo.materia.nombre}</p>
+                                <h5 class="card-title text-center fw-bold">${grupo.nombre}</h5>
+                                <p class="card-text"><i class="fas fa-university" data-bs-toggle="tooltip" data-bs-placement="top" title="Carrera"></i>${grupo.carrera.nombre}</p>
+                                <p class="card-text"> <i class="fas fa-book" data-bs-toggle="tooltip" data-bs-placement="top" title="Materia"></i> ${grupo.materia.nombre}</p>
                                 <div>
                                     <div>
-                                        <p>Integrantes:${grupo.cantidadDeIntegrantes()}/${grupo.cantidadMax}</p>
-                                        <p class="card-text">${grupo.turno}</p>
+                                        <p><i class="fas fa-users"></i> Integrantes:${grupo.cantidadDeIntegrantes()}/${grupo.cantidadMax}</p>
+                                        <p class="card-text"><i class="fas fa-clock" data-bs-toggle="tooltip" data-bs-placement="top" title="Turno"></i> ${grupo.turno}</p>
                                         <c:if test="${grupo.cerrado==true}">
-                                            <p class="card-text">Cerrado</p>
+                                             <p class="card-text" data-bs-toggle="tooltip" data-bs-placement="top" title="Privacidad"><i class="fas fa-lock"></i> Cerrado</p>
                                         </c:if>
                                         <c:if test="${grupo.cerrado==false}">
-                                            <p class="card-text">Abierto</p>
+                                            <p class="card-text" ><i class="fas fa-unlock" data-bs-toggle="tooltip" data-bs-placement="top" title="Privacidad"></i> Abierto</p>
                                         </c:if>
                                     </div>
                                     <div class="text-center container m-1">
@@ -105,28 +105,28 @@
                                 </div>
                                 <div class="d-flex justify-content-center m-3">
                                     <c:choose>
-                                    
+
                                         <c:when test="${grupo.grupoLleno()==true}">
                                             <button type="submit" class="btn btn-secondary mt-3" disabled>Lleno
                                             </button>
                                         </c:when>
-                                        
+
                                         <c:otherwise>
-                                        
+
                                         	<c:choose>
                                         		<c:when test="${grupo.getCerrado()==false}">
                                         			<button type="submit" class="btn btn-success mt-3" name="id" form="unirte"
                                                     value="${grupo.id}">Unirte</button>
                                         		</c:when>
-                                        		
+
                                         		<c:otherwise>
                                             		<button type="submit" class="btn btn-success mt-3" name="idGrupo" form="solicitarUnirse"
                                                     value="${grupo.id}">Solicitar Unirse</button>
                                        		 	</c:otherwise>
                                    		 	</c:choose>
-                                   		 	
+
                                         </c:otherwise>
-                                        
+
                                     </c:choose>
                                 </div>
                             </div>
@@ -146,7 +146,12 @@
 </main>
 
 <jsp:include page="/templates/footer.jsp"></jsp:include>
-
+<script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+</script>
 </body>
 
 </html>

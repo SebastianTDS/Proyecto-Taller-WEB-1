@@ -50,7 +50,8 @@ public class ServicioMensajesImpl implements ServicioMensajes{
 
     @Override
     public TreeSet<Mensaje> buscarMensajesDeUnGrupo(Long id) {
-        TreeSet<Mensaje> mensajes= new TreeSet<>(repoMsj.getMensajesByIDGrupo(id));
+        HashSet<Mensaje>limpiar= new HashSet<>(repoMsj.getMensajesByIDGrupo(id));
+        TreeSet<Mensaje> mensajes= new TreeSet<>(limpiar);
 
         return mensajes;
     }

@@ -14,21 +14,12 @@
 
 
 			<div>
-				<c:if test="${usuario.cantidadDeEstrellas()>=1}">
-					<img src="img/estrellaEncendida.png" class="p-2" style="width: 40px; height: 40px">
+				<c:if test="${usuario.cantidadDeEstrellas().size()==0}">
+					<span class="vertical-middle">Sin calificaciones</span>
 				</c:if>
-				<c:if test="${usuario.cantidadDeEstrellas()>=2}">
-					<img src="img/estrellaEncendida.png" class="p-2" style="width: 40px; height: 40px">
-				</c:if>
-				<c:if test="${usuario.cantidadDeEstrellas()>=3}">
-					<img src="img/estrellaEncendida.png" class="p-2" style="width: 40px; height: 40px">
-				</c:if>
-				<c:if test="${usuario.cantidadDeEstrellas()>=4}">
-					<img src="img/estrellaEncendida.png" class="p-2" style="width: 40px; height: 40px">
-				</c:if>
-				<c:if test="${usuario.cantidadDeEstrellas()>=5}">
-					<img src="img/estrellaEncendida.png" class="p-2" style="width: 40px; height: 40px">
-				</c:if>
+				<c:forEach items="${usuario.cantidadDeEstrellas()}" var="calificacion">
+					<img src="img/estrellaEncendida.png" class="" style="width: 30px; height: 30px">
+				</c:forEach>
 			</div>
 
 		</div>
