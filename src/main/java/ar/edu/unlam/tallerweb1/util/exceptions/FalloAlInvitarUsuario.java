@@ -5,8 +5,8 @@ public class FalloAlInvitarUsuario extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 	private Long grupo;
 
-	public FalloAlInvitarUsuario(Long id) {
-		super("El usuario invitado no existe!");
+	public FalloAlInvitarUsuario(String mensaje, Long id) {
+		super(mensaje);
 		this.grupo = id;
 	}
 

@@ -32,6 +32,16 @@
             </ul>
         </div>
         <div class="window col-12 col-sm-9 text-dark">
+        	<c:if test="${mensaje != null}">
+	        	<div class="m-3 alert alert-success" role="alert">
+					${mensaje}
+				</div>
+	        </c:if>
+	        <c:if test="${error != null}">
+	        	<div class="m-3 alert alert-danger" role="alert">
+					${error}
+				</div>
+	        </c:if>
             <h1 class="mt-2">Calificaciones</h1>
             <hr>
             <div class="list-group">
@@ -80,6 +90,11 @@
                         </div>
                     </div>
                 </c:forEach>
+                <c:if test="${empty calificacionesPendientes}">
+                	<div class="m-3 alert alert-info" role="alert">
+						<h5>No tienes ninguna Calificación pendiente!</h5>
+					</div>
+                </c:if>
                 <form:form action="calificaciones/calificar" id="formCalificacion" method="POST">
                     <input id="calificacion" name="calificaion" type="number" class="form-control m-1"
                            placeholder="CalificaciÃ³n" style="display: none"/>

@@ -23,6 +23,11 @@
 				${error}
 			</div>
         </c:if>
+        <c:if test="${mensaje != null}">
+	        	<div class="m-3 alert alert-success" role="alert">
+					${mensaje}
+				</div>
+	    </c:if>
         <div class="col-5 col-sm-4 col-md-3 col-lg-2 col-xl-2 container-fluid"
              style="min-height: 500px">
             <jsp:include page="/templates/nav.jsp"></jsp:include>
@@ -196,9 +201,10 @@
                     <form action="solicitudes/solicitar-inclusion" id="solicitarUnirse" method="POST"></form>
                 </c:if>
                 <c:if test="${empty grupos}">
-                    <div class="text-center">
-                        No se encontraron resultados!
-                    </div>
+                    <div class=" alert alert-info" role="alert" style="max-height:100px;">
+						<h3>Parece que no hay grupos Disponibles...</h3>
+						<p>Prueba crear un nuevo grupo! <a href="ir-a-crear-nuevo-grupo">Crear Grupo</a></p>
+					</div>
                 </c:if>
             </div>
         </div>

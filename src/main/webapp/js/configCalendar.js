@@ -63,7 +63,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
+      	document.getElementById("error").style.display = "none";
         calendar.refetchEvents();
+      }else if(this.readyState == 4){
+      	document.getElementById("error").style.display = "block";
+      	document.getElementById("errorMsg").innerHTML = this.responseText;
       }
     };
     xhttp.open(metodo, url);

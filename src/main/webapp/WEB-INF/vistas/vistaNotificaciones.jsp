@@ -48,6 +48,11 @@
 	                        </div>
                     	</div>
 					</c:forEach>
+				<c:if test="${empty Notificaciones}">
+                	<div class="m-3 alert alert-info" role="alert">
+						<h5>No tienes ninguna Notificación pendiente!</h5>
+					</div>
+                </c:if>
                 </div>
             </div>
         </div>

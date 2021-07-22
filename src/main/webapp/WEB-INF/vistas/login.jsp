@@ -20,7 +20,11 @@
 					${error}
 				</div>
         	</c:if>
-
+			<c:if test="${mensaje != null}">
+	        	<div class="m-3 alert alert-success" role="alert">
+					${mensaje}
+				</div>
+	        </c:if>
             <div class="col-12 col-md-6 my-5">
                 <img src="img/undraw_Login_re_4vu2.svg" class="img-fluid ilustraciones-index" alt="imagen">
             </div>

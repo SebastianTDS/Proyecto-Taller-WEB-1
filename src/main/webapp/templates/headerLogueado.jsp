@@ -17,7 +17,7 @@
 	                   		<a href="perfil/notificaciones" class="link-warning"><i class="far fa-bell me-2"></i></a>
 	                	</c:if>
 		                <a href="perfil/ir-a-mis-grupos" class="link-light"><h5 class="mb-0 d-inline-block">${sessionScope.USUARIO.nombre}</h5></a>
-		                <div class="d-flex justify-content-between">
+		                <div class="d-flex justify-content-between align-items-center">
 		                	<div class="mb-0 me-1">
 								<c:if test="${sessionScope.USUARIO.cantidadDeEstrellas().size()==0}">
 									<span class="vertical-middle ">Sin calificar</span>
@@ -26,7 +26,7 @@
 									<img src="img/estrellaEncendida.png" class="" style="width: 20px; height: 20px">
 								</c:forEach>
 							</div>
-							<div class="mt-1">
+							<div class="">
 			                	<a href="cerrar-sesion" class="link-light">Salir <i class="fas fa-sign-out-alt"></i></a>
 		                	</div>
 		                </div>

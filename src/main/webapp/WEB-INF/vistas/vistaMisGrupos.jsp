@@ -100,8 +100,11 @@
 	                        </div>
 	                    </c:forEach>
 	                </c:if>
-	                <c:if test="${not empty error}">
-	                    ${error}
+	                <c:if test="${empty misGrupos}">
+	                    <div class="alert alert-info" role="alert">
+							<h3>Parece que no eres parte de ningun grupo.</h3>
+							<p>Prueba sumarte a uno! <a href="ir-a-home">Ver grupos</a></p>
+						</div>
 	                </c:if>
 	            </div>
             </div>

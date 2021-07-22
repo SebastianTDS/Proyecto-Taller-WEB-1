@@ -98,29 +98,29 @@ public class ControladorSolicitudesTest extends HttpSessionTest {
 
 	private ModelAndView whenInvitamosUnUsuarioAUnGrupo(String correo, Long idGrupo) {
 		when(request().getSession().getAttribute("USUARIO")).thenReturn(usuarioEjemplo);
-		return controller.invitarAGrupo(request(), correo, idGrupo);
+		return controller.invitarAGrupo(request(), modelo(), correo, idGrupo);
 	}
 
 	/* Metodos Auxiliares */
 
 	private ModelAndView whenRechazamosSolicitud(Long idSolicitudRechazada) {
-		return controller.rechazarUnaSolicitud(idSolicitudRechazada, request());
+		return controller.rechazarUnaSolicitud(idSolicitudRechazada, modelo(), request());
 	}
 
 	private void thenLaSolicitudEsRechazada(ModelAndView vista, Long idSolicitudRechazada) {
 		assertThat(vista.getViewName()).isEqualTo("redirect:/solicitudes");
-		assertThat(vista.getModelMap().get("mensaje")).isEqualTo("Solicitud Rechazada");
+		verify(modelo(), times(1)).addFlashAttribute("mensaje", "Solicitud Rechazada");
 		verify(service, times(1)).rechazarSolicitud(idSolicitudRechazada, usuarioEjemplo.getId());
 	}
 
 	private void thenLaSolicitudEsAprobada(ModelAndView vista, Long idSolicitudAceptada) {
 		assertThat(vista.getViewName()).isEqualTo("redirect:/solicitudes");
-		assertThat(vista.getModelMap().get("mensaje")).isEqualTo("Solicitud Aceptada");
+		verify(modelo(), times(1)).addFlashAttribute("mensaje", "Solicitud Aceptada");
 		verify(service, times(1)).aprobarSolicitud(idSolicitudAceptada, usuarioEjemplo.getId());
 	}
 
 	private ModelAndView whenAceptamosSolicitud(Long idSolicitudAceptada) {
-		return controller.aceptarUnaSolicitud(idSolicitudAceptada, request());
+		return controller.aceptarUnaSolicitud(idSolicitudAceptada, modelo(), request());
 	}
 
 	private void thenSeEnviaLaSolicitud(ModelAndView vista, Long idGrupoSolicitado) {
@@ -129,7 +129,7 @@ public class ControladorSolicitudesTest extends HttpSessionTest {
 	}
 
 	private ModelAndView whenSolicitamosUnirnosAUnGrupo(Long idGrupoSolicitado) {
-		return controller.solicitarUnirseAGrupo(idGrupoSolicitado, request());
+		return controller.solicitarUnirseAGrupo(idGrupoSolicitado, modelo(), request());
 	}
 
 	private void givenNoExisteUnUsuarioEnSesion() {

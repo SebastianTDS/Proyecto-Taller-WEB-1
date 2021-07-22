@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ar.edu.unlam.tallerweb1.dto.DatosDeGrupo;
 import ar.edu.unlam.tallerweb1.modelo.Grupo;
@@ -72,15 +73,14 @@ public class ControladorGrupos {
     }
 
     @RequestMapping(path = "/modificar", method = RequestMethod.POST)
-    public ModelAndView cambiarDatosGrupo(@ModelAttribute("formulario") DatosDeGrupo form, HttpServletRequest request) {
+    public ModelAndView cambiarDatosGrupo(@ModelAttribute("formulario") DatosDeGrupo form, RedirectAttributes modelo, HttpServletRequest request) {
         Usuario usuarioEnSesion = validarSesion(request);
-        ModelMap modelo = new ModelMap();
 
         servicioGrupo.validarPermiso(usuarioEnSesion.getId(), form.getId(), Permiso.MODIFICACION);
         servicioGrupo.modificarGrupo(form);
-        modelo.put("mensaje", "Datos actualizados");
+        modelo.addFlashAttribute("mensaje", "Datos actualizados");
 
-        return new ModelAndView("redirect:/grupos/" + form.getId(), modelo);
+        return new ModelAndView("redirect:/grupos/" + form.getId());
     }
 
     @RequestMapping(path = "/eliminar", method = RequestMethod.POST)

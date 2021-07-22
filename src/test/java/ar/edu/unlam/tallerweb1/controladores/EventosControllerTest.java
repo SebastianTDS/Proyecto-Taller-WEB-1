@@ -58,7 +58,7 @@ public class EventosControllerTest extends HttpSessionTest{
 	private void thenObtenemosStatusBADREQUEST(ResponseEntity<String> respuesta, EventoDTO nuevoEvento, Long idGrupo) {
 		assertThat(respuesta).isNotNull();
 		assertThat(respuesta.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-		assertThat(respuesta.getBody()).isEqualTo("Fallo al cargar evento");
+		assertThat(respuesta.getBody()).isEqualTo("Los eventos programados deben ser posterior al día de hoy");
 		verify(service, times(1)).cargarEvento(nuevoEvento, idGrupo);
 	}
 
