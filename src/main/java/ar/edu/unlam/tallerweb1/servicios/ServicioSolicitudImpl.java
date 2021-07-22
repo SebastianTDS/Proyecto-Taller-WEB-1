@@ -80,7 +80,10 @@ public class ServicioSolicitudImpl implements ServicioSolicitud {
 		Usuario invitado = repoUsuario.getUsuarioByEmail(correo);
 		
 		if(invitado == null)
-			throw new FalloAlInvitarUsuario(grupo);
+			throw new FalloAlInvitarUsuario("El usuario que desea invitar no existe!",grupo);
+		
+		if(solicitante.getListaDeUsuarios().contains(invitado))
+			throw new FalloAlInvitarUsuario("El usuario que desea invitar ya es miembro!",grupo);
 		
 		generarSolicitud(solicitante, administrador, invitado, TipoSolicitud.INVITACION_GRUPO);
 	}
