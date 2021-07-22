@@ -44,7 +44,7 @@ public class EventosRESTController {
 		if(servicioEventos.cargarEvento(nuevoEvento, id))
 			return new ResponseEntity<String>("Evento Cargado", HttpStatus.OK);
 		else
-			return new ResponseEntity<String>("Fallo al cargar evento", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("Los eventos programados deben ser posterior al día de hoy", HttpStatus.BAD_REQUEST);
 		
 	}
 	

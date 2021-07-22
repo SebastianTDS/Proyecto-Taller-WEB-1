@@ -201,9 +201,10 @@
                     <form action="solicitudes/solicitar-inclusion" id="solicitarUnirse" method="POST"></form>
                 </c:if>
                 <c:if test="${empty grupos}">
-                    <div class="text-center">
-                        No se encontraron resultados!
-                    </div>
+                    <div class=" alert alert-info" role="alert" style="max-height:100px;">
+						<h3>Parece que no hay grupos Disponibles...</h3>
+						<p>Prueba crear un nuevo grupo! <a href="ir-a-crear-nuevo-grupo">Crear Grupo</a></p>
+					</div>
                 </c:if>
             </div>
         </div>

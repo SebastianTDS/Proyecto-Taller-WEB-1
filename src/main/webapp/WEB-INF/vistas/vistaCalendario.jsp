@@ -57,9 +57,13 @@
 
 			</div>
 			<div class="window col-12 col-sm-9 text-dark">
+				<div id="error" style="display: none;">
+					<div class="m-3 alert alert-danger" role="alert">
+						<b id="errorMsg">La Api no esta corriendo!</b>
+					</div>
+				</div>
 				<div id="calendario" class="m-4"></div>
 				<div id="cargando">Cargando Eventos</div>
-				<div id="error" style="display: none;">La api no esta corriendo</div>
 				<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
 					<div class="modal-dialog">
 						<div class="modal-content">

@@ -90,6 +90,11 @@
                         </div>
                     </div>
                 </c:forEach>
+                <c:if test="${empty calificacionesPendientes}">
+                	<div class="m-3 alert alert-info" role="alert">
+						<h5>No tienes ninguna Calificación pendiente!</h5>
+					</div>
+                </c:if>
                 <form:form action="calificaciones/calificar" id="formCalificacion" method="POST">
                     <input id="calificacion" name="calificaion" type="number" class="form-control m-1"
                            placeholder="CalificaciÃ³n" style="display: none"/>

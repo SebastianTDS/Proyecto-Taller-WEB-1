@@ -73,6 +73,11 @@
                         </div>
                     </div>
                 </c:forEach>
+                <c:if test="${empty Solicitudes}">
+                	<div class="m-3 alert alert-info" role="alert">
+						<h5>No tienes ninguna Solicitud pendiente!</h5>
+					</div>
+                </c:if>
             </div>
         </div>
     </div>
