@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class ControladorRegistro {
@@ -30,8 +31,9 @@ public class ControladorRegistro {
     }
 
     @RequestMapping(path = "/registrarse", method = RequestMethod.POST)
-    public ModelAndView registrarUsuario(@ModelAttribute("datosDeRegistro") DatosDeUsuario datos) {
+    public ModelAndView registrarUsuario(@ModelAttribute("datosDeRegistro") DatosDeUsuario datos, RedirectAttributes modelo) {
         servicioUsuarios.registrar(datos);
+        modelo.addFlashAttribute("mensaje", "Usuario creado con exito!");
         return new ModelAndView("redirect:/ir-a-login");
     }
 

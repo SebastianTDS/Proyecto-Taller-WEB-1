@@ -23,6 +23,11 @@
 				${error}
 			</div>
         </c:if>
+        <c:if test="${mensaje != null}">
+	        	<div class="m-3 alert alert-success" role="alert">
+					${mensaje}
+				</div>
+	    </c:if>
         <div class="col-5 col-sm-4 col-md-3 col-lg-2 col-xl-2 container-fluid"
              style="min-height: 500px">
             <jsp:include page="/templates/nav.jsp"></jsp:include>

@@ -6,9 +6,6 @@ import ar.edu.unlam.tallerweb1.modelo.Solicitud;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioCalificacion;
 import ar.edu.unlam.tallerweb1.servicios.ServicioCalificacionesImpl;
-import ar.edu.unlam.tallerweb1.servicios.ServicioSolicitud;
-import ar.edu.unlam.tallerweb1.servicios.ServicioSolicitudImpl;
-import ar.edu.unlam.tallerweb1.util.exceptions.UsuarioNoEncontradoException;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
@@ -55,12 +52,12 @@ public class ControladorCalificacionesTest extends HttpSessionTest{
 
 	private void thenLaCalificaionSeRealiza(ModelAndView vista,Long idCalificacion,Long calificacion) {
 		assertThat(vista.getViewName()).isEqualTo("redirect:/calificaciones");
-		assertThat(vista.getModelMap().get("mensaje")).isEqualTo( "Calificacion realizada");
+		verify(modelo(), times(1)).addFlashAttribute("mensaje", "Ha calificado a un usuario.");
 		verify(service, times(1)).calificar(1L,idCalificacion,calificacion);
 	}
 
 	private ModelAndView whenCalificamos(Long IDcalificaion, Long calificacion) {
-		return controller.calificar( request(),IDcalificaion,calificacion);
+		return controller.calificar( request(),modelo(),IDcalificaion,calificacion);
 	}
 
 

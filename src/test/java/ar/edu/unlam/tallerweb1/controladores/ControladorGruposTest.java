@@ -183,7 +183,7 @@ public class ControladorGruposTest extends HttpSessionTest {
 		doThrow(UsuarioSinPermisosException.class).when(service).validarPermiso(usuarioEjemplo.getId(), idGrupoBuscado,
 				Permiso.MODIFICACION);
 
-		controller.cambiarDatosGrupo(formulario, request());
+		controller.cambiarDatosGrupo(formulario, modelo(), request());
 	}
 
 	private void thenObtengoLaVistaYElModeloDelForoDespuesDeEnviarUnMsj(ModelAndView vistaObtenida) {
@@ -241,7 +241,7 @@ public class ControladorGruposTest extends HttpSessionTest {
 	private void whenIntentamosModificarGrupoLanzaException(Long idGrupoBuscado, DatosDeGrupo formulario) {
 		when(request().getSession().getAttribute("USUARIO")).thenReturn(usuarioEjemplo);
 		doThrow(LimiteDeUsuariosFueraDeRango.class).when(service).modificarGrupo(formulario);
-		controller.cambiarDatosGrupo(formulario, request());
+		controller.cambiarDatosGrupo(formulario, modelo(), request());
 	}
 
 	private ModelAndView whenEliminoElGrupo(Long idGrupoBuscado) {
@@ -255,13 +255,13 @@ public class ControladorGruposTest extends HttpSessionTest {
 	}
 
 	private void thenSusDatosSeCambian(ModelAndView cambiosRealizados) {
-		assertThat(cambiosRealizados.getModel().get("mensaje")).isEqualTo("Datos actualizados");
+		verify(modelo(), times(1)).addFlashAttribute("mensaje", "Datos actualizados");
 		verify(service, times(1)).validarPermiso(eq(usuarioEjemplo.getId()), anyLong(), eq(Permiso.MODIFICACION));
 	}
 
 	private ModelAndView whenCargoLaModificacionDeLosDatos(Long idGrupoBuscado, DatosDeGrupo formulario) {
-		when(request().getSession().getAttribute("Usuario")).thenReturn(usuarioEjemplo);
-		return controller.cambiarDatosGrupo(formulario, request());
+		when(request().getSession().getAttribute("USUARIO")).thenReturn(usuarioEjemplo);
+		return controller.cambiarDatosGrupo(formulario, modelo(), request());
 	}
 
 	private DatosDeGrupo givenCompletamosFormulario(Long idGrupoBuscado) {

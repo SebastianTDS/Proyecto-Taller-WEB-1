@@ -1,18 +1,15 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
-import ar.edu.unlam.tallerweb1.dto.DatosDeMensaje;
-import ar.edu.unlam.tallerweb1.modelo.Calificacion;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioCalificacion;
-import ar.edu.unlam.tallerweb1.servicios.ServicioSolicitud;
 import ar.edu.unlam.tallerweb1.util.exceptions.UsuarioNoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -39,15 +36,14 @@ public class ControladorCalificaciones {
 
 	
 	@RequestMapping("/calificar")
-	public ModelAndView calificar(HttpServletRequest request, @RequestParam Long idCalificacion,@RequestParam Long calificaion) {
+	public ModelAndView calificar(HttpServletRequest request, RedirectAttributes model, @RequestParam Long idCalificacion,@RequestParam Long calificaion) {
 		Usuario usuarioEnSesion = validarSesion(request);
-		ModelMap modelo = new ModelMap();
 
 		servicioCalificacion.calificar(usuarioEnSesion.getId(),idCalificacion,calificaion);
 
-		modelo.put("mensaje", "Calificacion realizada");
+		model.addFlashAttribute("mensaje", "Ha calificado a un usuario.");
 		
-		return new ModelAndView("redirect:/calificaciones", modelo);
+		return new ModelAndView("redirect:/calificaciones");
 	}
 	
 
@@ -56,7 +52,7 @@ public class ControladorCalificaciones {
 		Usuario objetivo = (Usuario) request.getSession().getAttribute("USUARIO");
 		
 		if(objetivo == null)
-			throw new UsuarioNoEncontradoException("");
+			throw new UsuarioNoEncontradoException("No existe un usuario Logueado!");
 			
 		return objetivo;
 	}

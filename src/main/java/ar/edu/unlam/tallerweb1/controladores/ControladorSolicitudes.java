@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioSolicitud;
@@ -36,51 +37,47 @@ public class ControladorSolicitudes {
 	}
 
 	@RequestMapping("/solicitar-inclusion")
-	public ModelAndView solicitarUnirseAGrupo(@RequestParam Long idGrupo, HttpServletRequest request) {
+	public ModelAndView solicitarUnirseAGrupo(@RequestParam Long idGrupo, RedirectAttributes modelo, HttpServletRequest request) {
 		Usuario usuarioEnSesion = validarSesion(request);
-		ModelMap modelo = new ModelMap();
 
 		servicioSolicitud.solicitarInclusionAGrupo(idGrupo, usuarioEnSesion.getId());
 
-		modelo.put("mensaje", "Solicitud Enviada");
+		modelo.addFlashAttribute("mensaje", "Solicitud Enviada");
 
-		return new ModelAndView("redirect:/ir-a-home", modelo);
+		return new ModelAndView("redirect:/ir-a-home");
 	}
 
 	@RequestMapping("/aceptar-solicitud")
-	public ModelAndView aceptarUnaSolicitud(@RequestParam Long idSolicitudAceptada, HttpServletRequest request) {
+	public ModelAndView aceptarUnaSolicitud(@RequestParam Long idSolicitudAceptada, RedirectAttributes modelo, HttpServletRequest request) {
 		Usuario usuarioEnSesion = validarSesion(request);
-		ModelMap modelo = new ModelMap();
 
 		servicioSolicitud.aprobarSolicitud(idSolicitudAceptada, usuarioEnSesion.getId());
 
-		modelo.put("mensaje", "Solicitud Aceptada");
+		modelo.addFlashAttribute("mensaje", "Solicitud Aceptada");
 
-		return new ModelAndView("redirect:/solicitudes", modelo);
+		return new ModelAndView("redirect:/solicitudes");
 	}
 
 	@RequestMapping("/rechazar-solicitud")
-	public ModelAndView rechazarUnaSolicitud(@RequestParam Long idSolicitudRechazada, HttpServletRequest request) {
+	public ModelAndView rechazarUnaSolicitud(@RequestParam Long idSolicitudRechazada, RedirectAttributes modelo, HttpServletRequest request) {
 		Usuario usuarioEnSesion = validarSesion(request);
-		ModelMap modelo = new ModelMap();
 
 		servicioSolicitud.rechazarSolicitud(idSolicitudRechazada, usuarioEnSesion.getId());
 
-		modelo.put("mensaje", "Solicitud Rechazada");
+		modelo.addFlashAttribute("mensaje", "Solicitud Rechazada");
 
-		return new ModelAndView("redirect:/solicitudes", modelo);
+		return new ModelAndView("redirect:/solicitudes");
 	}
 
 	@RequestMapping(value = "/invitar", method = RequestMethod.POST)
-	public ModelAndView invitarAGrupo(HttpServletRequest request, @RequestParam String correo,
+	public ModelAndView invitarAGrupo(HttpServletRequest request , RedirectAttributes modelo, @RequestParam String correo,
 			@RequestParam Long grupo) {
 		Usuario anfitrion = (Usuario) request.getSession().getAttribute("USUARIO");
-		ModelMap modelo = new ModelMap();
 
 		servicioSolicitud.invitarUsuario(anfitrion.getId(), correo, grupo);
-		modelo.put("mensaje", "Solicitud Enviada");
+		modelo.addFlashAttribute("mensaje", "Solicitud Enviada");
 
-		return new ModelAndView("redirect:/grupos/" + grupo, modelo);
+		return new ModelAndView("redirect:/grupos/" + grupo);
 	}
 
 	private Usuario validarSesion(HttpServletRequest request) {

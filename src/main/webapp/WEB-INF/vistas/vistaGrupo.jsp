@@ -55,6 +55,11 @@
 					${error}
 				</div>
 	        </c:if>
+	        <c:if test="${mensaje != null}">
+	        	<div class="m-3 alert alert-success" role="alert">
+					${mensaje}
+				</div>
+	        </c:if>
 	        <!--   Agregar Import  -->
 	        <c:if test="${not empty formulario }">
 	            <jsp:include page="/templates/perfilMod.jsp"></jsp:include>

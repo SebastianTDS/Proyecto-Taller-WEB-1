@@ -35,7 +35,12 @@
                 <div class="m-3 alert alert-danger" role="alert">
                     ${error}
                 </div>
-		        </c:if>
+		    </c:if>
+		    <c:if test="${mensaje != null}">
+	        	<div class="m-3 alert alert-success" role="alert">
+					${mensaje}
+				</div>
+	        </c:if>
             <form action="solicitudes/aceptar-solicitud" method="POST" id="aceptarSolicitud"></form>
             <form action="solicitudes/rechazar-solicitud" method="POST" id="rechazarSolicitud"></form>
             <h1 class="mt-2">Solicitudes</h1>
